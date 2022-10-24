@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }} : {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<h1 class="h1">All available accounts:</h1>
+<div class="container-fluid mt-3">
+    {% if request.user.is_authenticated or user.is_staff %}
+    <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered text-center">
+            <thead>
+            <tr class="header">
+                <th scope="col">#</th>
+                <th scope="col">Account assigned</th>
+                <th scope="col">Platform</th>
+                <th scope="col">Type</th>
+                <th scope="col">Parent card</th>
+                <th scope="col">Card number</th>
+                <th scope="col">Exp.</th>
+                <th scope="col">CVV</th>
+                <th scope="col">Created by</th>
+                <th scope="col">Team</th>
+                <th scope="col">In TM</th>
+                <th scope="col">In tickets.com</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for account in accounts %}
+            <tr>
+                <th scope="row">{{ account.id }}</th>
+<!--                <td>{{ account.account_assigned }}</td>-->
+                <td><a href="{% url 'update_account' account.pk %}">{{ account.account_assigned }}</a></td>
+                <td>{{ account.platform }}</td>
+                <td>{{ account.type }}</td>
+                <td>{{ account.parent_card }}</td>
+                <td>{{ account.card_number }}</td>
+                <td>{{ account.expiration_date }}</td>
+                <td>{{ account.cvv_number }}</td>
+                <td>{{ account.created_by }}</td>
+                <td>{{ account.team }}</td>
+                <td>{{ account.in_tm }}</td>
+                <td>{{ account.in_tickets_com }}</td>
+
+                <td><a href="{% url 'delete_account' account.pk %}" class="btn btn-danger btn-sm">Delete</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <h3 class="h3 mt-5 text-center" style="color: #ff5346">YOU DON'T HAVE ACCESS TO THIS DATA!</h3>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

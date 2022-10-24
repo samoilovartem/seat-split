@@ -1,0 +1,12 @@
+from django.urls import path
+from .views import *
+
+urlpatterns = [
+    # path('', index, name='home'),
+    path('login/', log_in, name='login'),
+    path('logout/', log_out, name='logout'),
+    path('', AccountsView.as_view(), name='home'),
+    path('<int:pk>/edit/', UpdateAccounts.as_view(), name='update_account'),
+    path('add-account/', AddAccount.as_view(), name='add_account'),
+    path('<int:pk>/delete/', DeleteAccount.as_view(), name='delete_account')
+]
