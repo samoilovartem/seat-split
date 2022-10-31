@@ -13,21 +13,11 @@ from .pagination import AccountsApiListPagination
 
 from .models import Accounts
 
-from .tables import AccountsTable
-from django_tables2 import SingleTableView
 from .forms import AccountsForm, UserLoginForm
 from django.views.generic import ListView, UpdateView, CreateView, DeleteView
 
 import pandas as pd
 import gspread
-
-
-# class AccountsView(SingleTableView):
-#     model = Accounts
-#     table_class = AccountsTable
-#     template_name = 'accounts_team/gsheet_version.html'
-#     context_object_name = 'accounts'
-#     extra_context = {'title': 'All available accounts'}
 
 
 def log_in(request):

@@ -13,7 +13,7 @@ Edit account : {{ block.super }}
             <form method="post">
                 <table>
 
-                    {{ form.non_field_errors }}
+<!--                    {{ form.non_field_errors }}-->
                     {% csrf_token %}
                     {{ form.as_table }}
 

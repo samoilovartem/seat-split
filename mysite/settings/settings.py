@@ -1,24 +1,22 @@
+import environ
 import os.path
 from pathlib import Path
-from .local_settings import SECRET_KEY
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+from mysite.settings.local_settings import DB_ENGINE, DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = SECRET_KEY
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+# import pymysql
+# pymysql.install_as_MySQLdb()
 
 
-# Application definition
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+# env = environ.Env()
+# environ.Env.read_env()
+
+SECRET_KEY = os.environ['SECRET_KEY']
+DEBUG = os.environ['DEBUG']
+ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(',')
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -29,7 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_tables2',
     'rest_framework',
-    'accounts_team.apps.AccountsTeamConfig'
+    'debug_toolbar',
+    'accounts_team.apps.AccountsTeamConfig',
 ]
 
 MIDDLEWARE = [
@@ -40,6 +39,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -64,23 +64,56 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         # 'ENGINE': 'django.db.backends.sqlite3',
+#         # 'NAME': BASE_DIR / 'db.sqlite3',
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'db_lewanddowski',
+#         'USER': 'usr_devmysql',
+#         'PASSWORD': 'x5p5d43xsteD',
+#         'HOST': 'mysql.diseasediagnostic.com',
+#         'PORT': 3306
+#     }
+# }
+
+# POSTGRES
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'PASSWORD': 'postgres',
+#         'HOST': 'pgdb',
+#         'PORT': 5432
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': DB_ENGINE,
+#         'NAME': DB_NAME,
+#         'USER': DB_USER,
+#         'PASSWORD': DB_PASSWORD,
+#         'HOST': DB_HOST,
+#         'PORT': DB_PORT
+#     }
+# }
+
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'django',
-        # 'USER': 'root',
-        # 'PASSWORD': '',
-        # 'HOST': 'localhost'
+        'ENGINE': os.environ['DB_ENGINE'],
+        'NAME': os.environ['DB_NAME'],
+        'USER': os.environ['DB_USER'],
+        'PASSWORD': os.environ['DB_PASSWORD'],
+        'HOST': os.environ['DB_HOST'],
+        'PORT': os.environ['DB_PORT'],
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -98,9 +131,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -110,17 +140,19 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'mysite/static')
 ]
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
+
+INTERNAL_IPS = ["127.0.0.1"]
+APPEND_SLASH = False
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
+}

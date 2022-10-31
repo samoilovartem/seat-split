@@ -17,6 +17,8 @@ def clean_expiration_date(expiration_date):
         raise ValidationError('Please use only digits!')
     if expiration_date[2] != '/':
         raise ValidationError('Expiration date must be in format MM/YY')
+    if int(expiration_date[0]) >= 1 and int(expiration_date[0]) + int(expiration_date[1]) > 3:
+        raise ValidationError('Wrong expiration month!')
     return expiration_date
 
 
