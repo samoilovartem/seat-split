@@ -7,14 +7,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # IS_HEROKU = "DYNO" in os.environ
-# SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = os.environ['DEBUG']
 ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS']
 
 
-SECRET_KEY = 'django-insecure-yne8=gdjs4e555#ll)-149lm+%f6o2vi-%0l33#pk)ma!m@+o('
-if 'SECRET_KEY' in os.environ:
-    SECRET_KEY = os.environ["SECRET_KEY"]
+# SECRET_KEY = 'django-insecure-yne8=gdjs4e555#ll)-149lm+%f6o2vi-%0l33#pk)ma!m@+o('
+# if 'SECRET_KEY' in os.environ:
+#     SECRET_KEY = os.environ["SECRET_KEY"]
 
 # if IS_HEROKU:
 #     ALLOWED_HOSTS = ["*"]
