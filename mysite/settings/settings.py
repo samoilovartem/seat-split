@@ -1,6 +1,6 @@
 import os.path
 from pathlib import Path
-from . import local_settings
+# from . import local_settings
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 IS_HEROKU = "DYNO" in os.environ
 
-SECRET_KEY = local_settings.SECRET_KEY
+SECRET_KEY = os.environ["SECRET_KEY"]
 
 if 'SECRET_KEY' in os.environ:
     SECRET_KEY = os.environ["SECRET_KEY"]
