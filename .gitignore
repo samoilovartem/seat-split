@@ -62,7 +62,8 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 Gservice.json
-.DS_Store
+.DS_Store/
+.idea/
 
 # Flask stuff:
 instance/
@@ -115,6 +116,8 @@ env/
 ENV/
 env.bak/
 venv.bak/
+venv/
+*env
 
 # Spyder project settings
 .spyderproject
@@ -140,10 +143,8 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-docker-compose.yml
-docker_commands
-.dockerignore
-Dockerfile
 compose.txt
-mysite/settings/localdev.py
-mysite/settings/storage.py
+docker_commands
+docker-compose.yml
+Dockerfile
+gsheets_engine.py

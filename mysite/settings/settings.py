@@ -1,21 +1,16 @@
-import environ
 import os.path
 from pathlib import Path
+from .local_settings import SECRET_KEY, DB_ENGINE, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT
 
-from mysite.settings.local_settings import DB_ENGINE, DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
-
-# import pymysql
-# pymysql.install_as_MySQLdb()
-
-
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-
-# env = environ.Env()
-# environ.Env.read_env()
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = os.environ['DEBUG']
-ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(',')
+ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS']
+
+# SECRET_KEY = SECRET_KEY
+# DEBUG = True
+# ALLOWED_HOSTS = []
 
 
 INSTALLED_APPS = [
@@ -141,7 +136,7 @@ USE_TZ = True
 
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, '../static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'mysite/static')
 ]
@@ -153,6 +148,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INTERNAL_IPS = ["127.0.0.1"]
 APPEND_SLASH = False
 
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
-}
+# DEBUG_TOOLBAR_CONFIG = {
+#     'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
+# }
