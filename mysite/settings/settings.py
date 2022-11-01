@@ -160,7 +160,7 @@ STATIC_URL = 'static/'
 # ]
 
 # Enable WhiteNoise's GZip compression of static assets.
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
