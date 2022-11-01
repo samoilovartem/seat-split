@@ -4,13 +4,26 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ['SECRET_KEY']
-DEBUG = os.environ['DEBUG']
-ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS']
 
-# SECRET_KEY = SECRET_KEY
-# DEBUG = True
-# ALLOWED_HOSTS = []
+IS_HEROKU = "DYNO" in os.environ
+# SECRET_KEY = os.environ['SECRET_KEY']
+# DEBUG = os.environ['DEBUG']
+# ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS']
+
+
+SECRET_KEY = 'django-insecure-yne8=gdjs4e555#ll)-149lm+%f6o2vi-%0l33#pk)ma!m@+o('
+if 'SECRET_KEY' in os.environ:
+    SECRET_KEY = os.environ["SECRET_KEY"]
+
+if IS_HEROKU:
+    ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = []
+
+
+if not IS_HEROKU:
+    DEBUG = True
+
 
 
 INSTALLED_APPS = [
@@ -136,13 +149,15 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = 'static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'mysite/static')
-]
+STATIC_URL = 'static/'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'mysite/static')
+# ]
 
+# Enable WhiteNoise's GZip compression of static assets.
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
