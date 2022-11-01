@@ -1,6 +1,6 @@
 import os.path
 from pathlib import Path
-# from .local_settings import SECRET_KEY, DB_ENGINE, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT
+from . import local_settings
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -8,7 +8,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 IS_HEROKU = "DYNO" in os.environ
 
-SECRET_KEY = os.environ['SECRET_KEY']
+# SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = local_settings.SECRET_KEY
+
 if 'SECRET_KEY' in os.environ:
     SECRET_KEY = os.environ["SECRET_KEY"]
 
@@ -21,11 +23,6 @@ if not IS_HEROKU:
     DEBUG = True
 
 # ---- END OF HEROKU SETTINGS ----
-
-# SECRET_KEY = os.environ['SECRET_KEY']
-# DEBUG = os.environ['DEBUG']
-# ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS']
-
 
 
 INSTALLED_APPS = [
@@ -43,6 +40,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # USE WHITENOISE ONLY FOR HEROKU DEPLOYMENT!!!
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -102,17 +100,20 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 #     }
 # }
 
+# ---- DOCKER DB SETTINGS ----
 
 # DATABASES = {
 #     'default': {
-#         'ENGINE': DB_ENGINE,
-#         'NAME': DB_NAME,
-#         'USER': DB_USER,
-#         'PASSWORD': DB_PASSWORD,
-#         'HOST': DB_HOST,
-#         'PORT': DB_PORT,
+#         'ENGINE': local_settings.DB_ENGINE,
+#         'NAME': local_settings.DB_NAME,
+#         'USER': local_settings.DB_USER,
+#         'PASSWORD': local_settings.DB_PASSWORD,
+#         'HOST': local_settings.DB_HOST,
+#         'PORT': local_settings.DB_PORT,
 #     }
 # }
+
+# ---- END DOCKER DB SETTINGS ----
 
 
 # ---- HEROKU DB SETTINGS ----
@@ -159,16 +160,13 @@ USE_TZ = True
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = 'static/'
 
-# DON'T USE THIS ON HEROKU DEPLOY
+# USE IT ONLY FOR LOCAL / DOCKER DEVELOPMENT
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'mysite/static')
 # ]
 
-# Enable WhiteNoise's GZip compression of static assets.
-# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
 
 INTERNAL_IPS = ["127.0.0.1"]
 APPEND_SLASH = False
