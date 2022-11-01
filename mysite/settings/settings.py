@@ -8,8 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 IS_HEROKU = "DYNO" in os.environ
 
-# SECRET_KEY = os.environ['SECRET_KEY']
-SECRET_KEY = 'jango-insecure-yne8=gdjs4e555#ll)-149lm+%f6o2vi-%0l33#pk)ma!m@+o('
+SECRET_KEY = local_settings.SECRET_KEY
 
 if 'SECRET_KEY' in os.environ:
     SECRET_KEY = os.environ["SECRET_KEY"]
@@ -156,8 +155,8 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# STATIC_ROOT = BASE_DIR / "staticfiles"
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = 'static/'
 
 # USE IT ONLY FOR LOCAL / DOCKER DEVELOPMENT
