@@ -4,4 +4,4 @@ django-debug-toolbar
 djangorestframework
 psycopg2-binary
 mysqlclient
-django-on-heroku
+whitenoise
