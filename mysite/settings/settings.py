@@ -1,6 +1,6 @@
 import os.path
 from pathlib import Path
-from .local_settings import SECRET_KEY, DB_ENGINE, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT
+# from .local_settings import SECRET_KEY, DB_ENGINE, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
