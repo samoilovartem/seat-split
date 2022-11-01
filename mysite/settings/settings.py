@@ -1,18 +1,14 @@
 import os.path
 from pathlib import Path
-# from .local_settings import SECRET_KEY, DB_ENGINE, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT
+from .local_settings import SECRET_KEY, DB_ENGINE, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+# ---- HEROKU SETTINGS ----
 
 IS_HEROKU = "DYNO" in os.environ
-# SECRET_KEY = os.environ['SECRET_KEY']
-# DEBUG = os.environ['DEBUG']
-# ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS']
 
-
-SECRET_KEY = 'django-insecure-yne8=gdjs4e555#ll)-149lm+%f6o2vi-%0l33#pk)ma!m@+o('
+SECRET_KEY = SECRET_KEY
 if 'SECRET_KEY' in os.environ:
     SECRET_KEY = os.environ["SECRET_KEY"]
 
@@ -21,11 +17,14 @@ if IS_HEROKU:
 else:
     ALLOWED_HOSTS = []
 
-
-
-
 if not IS_HEROKU:
     DEBUG = True
+
+# ---- END OF HEROKU SETTINGS ----
+
+# SECRET_KEY = os.environ['SECRET_KEY']
+# DEBUG = os.environ['DEBUG']
+# ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS']
 
 
 
@@ -44,7 +43,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -103,6 +102,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 #     }
 # }
 
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': DB_ENGINE,
@@ -110,10 +110,12 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 #         'USER': DB_USER,
 #         'PASSWORD': DB_PASSWORD,
 #         'HOST': DB_HOST,
-#         'PORT': DB_PORT
+#         'PORT': DB_PORT,
 #     }
 # }
 
+
+# ---- HEROKU DB SETTINGS ----
 
 DATABASES = {
     'default': {
@@ -126,6 +128,7 @@ DATABASES = {
     }
 }
 
+# ---- END OF HEROKU DB SETTINGS ----
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -155,6 +158,8 @@ USE_TZ = True
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = 'static/'
+
+# DON'T USE THIS ON HEROKU DEPLOY
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'mysite/static')
 # ]
