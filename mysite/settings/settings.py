@@ -1,8 +1,13 @@
 import os.path
 from pathlib import Path
+
+# USE ONLY FOR LOCAL / DOCKER DEVELOPMENT
 # from . import local_settings
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# SECRET_KEY = local_settings.SECRET_KEY
+
 
 # ---- HEROKU SETTINGS ----
 

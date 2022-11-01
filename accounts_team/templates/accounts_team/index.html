@@ -6,13 +6,13 @@
 
 {% block content %}
 
-<h1 class="h1">All available accounts:</h1>
+<h1 class="text-center">All available accounts:</h1>
 <div class="container-fluid mt-3">
     {% if request.user.is_authenticated or user.is_staff %}
     <div class="table-responsive">
         <table class="table table-sm table-hover table-bordered text-center">
             <thead>
-            <tr class="header">
+            <tr class="header text-center">
                 <th scope="col">#</th>
                 <th scope="col">Account assigned</th>
                 <th scope="col">Platform</th>
