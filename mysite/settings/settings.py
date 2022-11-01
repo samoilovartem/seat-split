@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 IS_HEROKU = "DYNO" in os.environ
 
 # SECRET_KEY = os.environ['SECRET_KEY']
-SECRET_KEY = local_settings.SECRET_KEY
+SECRET_KEY = 'jango-insecure-yne8=gdjs4e555#ll)-149lm+%f6o2vi-%0l33#pk)ma!m@+o('
 
 if 'SECRET_KEY' in os.environ:
     SECRET_KEY = os.environ["SECRET_KEY"]
