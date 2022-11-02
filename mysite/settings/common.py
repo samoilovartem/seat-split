@@ -1,32 +1,8 @@
 import os.path
 from pathlib import Path
 
-# USE ONLY FOR LOCAL / DOCKER DEVELOPMENT
-# from . import local_settings
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-# SECRET_KEY = local_settings.SECRET_KEY
-
-
-# ---- HEROKU SETTINGS ----
-
-IS_HEROKU = "DYNO" in os.environ
-
-SECRET_KEY = os.environ["SECRET_KEY"]
-
-if 'SECRET_KEY' in os.environ:
-    SECRET_KEY = os.environ["SECRET_KEY"]
-
-if IS_HEROKU:
-    ALLOWED_HOSTS = ["*"]
-else:
-    ALLOWED_HOSTS = []
-
-if not IS_HEROKU:
-    DEBUG = True
-
-# ---- END OF HEROKU SETTINGS ----
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 INSTALLED_APPS = [
@@ -42,18 +18,6 @@ INSTALLED_APPS = [
     'accounts_team.apps.AccountsTeamConfig',
 ]
 
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    # USE WHITENOISE ONLY FOR HEROKU DEPLOYMENT!!!
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-]
 
 ROOT_URLCONF = 'mysite.urls'
 
@@ -116,16 +80,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # ---- HEROKU DB SETTINGS ----
 
-DATABASES = {
-    'default': {
-        'ENGINE': os.environ['DB_ENGINE'],
-        'NAME': os.environ['DB_NAME'],
-        'USER': os.environ['DB_USER'],
-        'PASSWORD': os.environ['DB_PASSWORD'],
-        'HOST': os.environ['DB_HOST'],
-        'PORT': os.environ['DB_PORT'],
-    }
-}
+
 
 # if "DATABASE_URL" in os.environ:
 #     # Configure Django for DATABASE_URL environment variable.
