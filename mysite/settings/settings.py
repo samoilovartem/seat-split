@@ -82,16 +82,10 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 #     'default': {
 #         # 'ENGINE': 'django.db.backends.sqlite3',
 #         # 'NAME': BASE_DIR / 'db.sqlite3',
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'db_lewanddowski',
-#         'USER': 'usr_devmysql',
-#         'PASSWORD': 'x5p5d43xsteD',
-#         'HOST': 'mysql.diseasediagnostic.com',
-#         'PORT': 3306
 #     }
 # }
 
-# POSTGRES
+# DOCKER POSTGRES
 
 # DATABASES = {
 #     'default': {
@@ -133,6 +127,16 @@ DATABASES = {
     }
 }
 
+# if "DATABASE_URL" in os.environ:
+#     # Configure Django for DATABASE_URL environment variable.
+#     DATABASES["default"] = dj_database_url.config(
+#         conn_max_age=MAX_CONN_AGE, ssl_require=True)
+#
+#     # Enable test database if found in CI environment.
+#     if "CI" in os.environ:
+#         DATABASES["default"]["TEST"] = DATABASES["default"]
+#
+
 # ---- END OF HEROKU DB SETTINGS ----
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -161,7 +165,6 @@ USE_TZ = True
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = 'static/'
 
 # USE IT ONLY FOR LOCAL / DOCKER DEVELOPMENT
