@@ -40,47 +40,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
-# Database
-
-# DATABASES = {
-#     'default': {
-#         # 'ENGINE': 'django.db.backends.sqlite3',
-#         # 'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-# DOCKER POSTGRES
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'postgres',
-#         'USER': 'postgres',
-#         'PASSWORD': 'postgres',
-#         'HOST': 'pgdb',
-#         'PORT': 5432
-#     }
-# }
-
-# ---- DOCKER DB SETTINGS ----
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': local_settings.DB_ENGINE,
-#         'NAME': local_settings.DB_NAME,
-#         'USER': local_settings.DB_USER,
-#         'PASSWORD': local_settings.DB_PASSWORD,
-#         'HOST': local_settings.DB_HOST,
-#         'PORT': local_settings.DB_PORT,
-#     }
-# }
-
-# ---- END DOCKER DB SETTINGS ----
-
-
-# ---- HEROKU DB SETTINGS ----
-
-
 
 # if "DATABASE_URL" in os.environ:
 #     # Configure Django for DATABASE_URL environment variable.
@@ -122,17 +81,8 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = 'static/'
 
-# USE IT ONLY FOR LOCAL / DOCKER DEVELOPMENT
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'mysite/static')
-# ]
-
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 INTERNAL_IPS = ["127.0.0.1"]
 APPEND_SLASH = False
-
-# DEBUG_TOOLBAR_CONFIG = {
-#     'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
-# }

@@ -29,6 +29,20 @@ class EmployeesAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'name',)
 
 
+class PlatformAdmin(admin.ModelAdmin):
+    save_as = True
+    list_display = ('id', 'name')
+    list_display_links = ('id', 'name')
+
+
+class TypeAdmin(admin.ModelAdmin):
+    save_as = True
+    list_display = ('id', 'name')
+    list_display_links = ('id', 'name')
+
+
 admin.site.register(Accounts, AccountsAdmin)
 admin.site.register(Employees, EmployeesAdmin)
 admin.site.register(Teams, TeamsAdmin)
+admin.site.register(Platform, PlatformAdmin)
+admin.site.register(Type, TypeAdmin)

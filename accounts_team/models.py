@@ -1,43 +1,17 @@
-import re
-
-from django.core.exceptions import ValidationError
 from django.db import models
-
-
-def clean_card_number(card_number):
-    if not re.match(r'^[0-9]+$', card_number) or len(card_number) < 16:
-        raise ValidationError('Card number must have 16 digits!')
-    return card_number
-
-
-def clean_expiration_date(expiration_date):
-    if len(expiration_date) < 5:
-        raise ValidationError('Expiration date must be in format MM/YY')
-    if not re.match(r'^[/0-9]+$', expiration_date):
-        raise ValidationError('Please use only digits!')
-    if expiration_date[2] != '/':
-        raise ValidationError('Expiration date must be in format MM/YY')
-    if int(expiration_date[0]) >= 1 and int(expiration_date[0]) + int(expiration_date[1]) > 3:
-        raise ValidationError('Wrong expiration month!')
-    return expiration_date
-
-
-def clean_cvv_number(cvv_number):
-    if len(cvv_number) < 3:
-        raise ValidationError('CVV number must have 3 digits!')
-    if not re.match(r'^[0-9]+$', cvv_number):
-        raise ValidationError('Please use only digits!')
-    return cvv_number
+from .validators import clean_card_number, clean_expiration_date, clean_cvv_number, clean_limit
+from django.db.models import UniqueConstraint
 
 
 class Accounts(models.Model):
-    account_assigned = models.EmailField(max_length=150, unique=True, db_index=True)
-    platform = models.CharField(max_length=150)
-    type = models.CharField(max_length=150)
+    account_assigned = models.EmailField(max_length=150, db_index=True)
+    platform = models.ForeignKey('Platform', on_delete=models.PROTECT)
+    type = models.ForeignKey('Type', on_delete=models.PROTECT)
     parent_card = models.CharField(max_length=150)
     card_number = models.CharField(max_length=16, validators=[clean_card_number])
     expiration_date = models.CharField(max_length=5, validators=[clean_expiration_date])
     cvv_number = models.CharField(max_length=3, validators=[clean_cvv_number])
+    limit = models.CharField(default='0', max_length=20, validators=[clean_limit])
     created_by = models.ForeignKey('Employees', on_delete=models.PROTECT)
     team = models.ForeignKey('Teams', on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -52,6 +26,13 @@ class Accounts(models.Model):
         verbose_name = 'Account'
         verbose_name_plural = 'Accounts'
         ordering = ['-created_at']
+        # constraints = [
+        #     UniqueConstraint(
+        #         fields=['account_assigned', 'platform'],
+        #         name='email_and_platform_unique',
+        #     ),
+        # ]
+        unique_together = ['account_assigned', 'platform']
 
 
 class Employees(models.Model):
@@ -81,3 +62,26 @@ class Teams(models.Model):
         verbose_name_plural = 'Teams'
         ordering = ['name']
 
+
+class Platform(models.Model):
+    name = models.CharField(max_length=150, db_index=True, verbose_name='Platform')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Platform'
+        verbose_name_plural = 'Platforms'
+        ordering = ['name']
+
+
+class Type(models.Model):
+    name = models.CharField(max_length=150, db_index=True, verbose_name='Type')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Type'
+        verbose_name_plural = 'Types'
+        ordering = ['name']
