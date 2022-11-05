@@ -15,6 +15,10 @@ INSTALLED_APPS = [
     'django_tables2',
     'rest_framework',
     'debug_toolbar',
+    'django_filters',
+    'crispy_bootstrap5',
+    'crispy_forms',
+    'bootstrap5',
     'accounts_team.apps.AccountsTeamConfig',
 ]
 

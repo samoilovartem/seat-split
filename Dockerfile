@@ -1,5 +1,5 @@
 # Indicating what image of Python it will be using (it will download it if doesn't have locally)
-FROM python:3.9-slim-buster
+FROM python:3.11
 
 #ENV APPDIR=/home/src
 #ENV PYTHONPATH=$PYTHONPATH:$APPDIR

@@ -4,20 +4,26 @@ from django.db.models import UniqueConstraint
 
 
 class Accounts(models.Model):
-    account_assigned = models.EmailField(max_length=150, db_index=True)
+    account_assigned = models.EmailField(max_length=150, db_index=True, verbose_name='Account')
     platform = models.ForeignKey('Platform', on_delete=models.PROTECT)
     type = models.ForeignKey('Type', on_delete=models.PROTECT)
-    parent_card = models.CharField(max_length=150)
+    parent_card = models.CharField(max_length=150, verbose_name='Parent')
     card_number = models.CharField(max_length=16, validators=[clean_card_number])
-    expiration_date = models.CharField(max_length=5, validators=[clean_expiration_date])
-    cvv_number = models.CharField(max_length=3, validators=[clean_cvv_number])
+    expiration_date = models.CharField(max_length=5,
+                                       validators=[clean_expiration_date],
+                                       verbose_name='Exp.date')
+    cvv_number = models.CharField(max_length=3,
+                                  validators=[clean_cvv_number],
+                                  verbose_name='CVV')
     limit = models.CharField(default='0', max_length=20, validators=[clean_limit])
-    created_by = models.ForeignKey('Employees', on_delete=models.PROTECT)
+    created_by = models.ForeignKey('Employees',
+                                   on_delete=models.PROTECT,
+                                   verbose_name='Responsible')
     team = models.ForeignKey('Teams', on_delete=models.PROTECT)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)  # auto_now - saving every time we update something
-    in_tm = models.BooleanField(verbose_name='Added in tickets.com')
-    in_tickets_com = models.BooleanField(verbose_name='Added in TM')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Updated')
+    in_tm = models.BooleanField(verbose_name='tickets.com')
+    in_tickets_com = models.BooleanField(verbose_name='TM')
 
     def __str__(self):
         return self.account_assigned

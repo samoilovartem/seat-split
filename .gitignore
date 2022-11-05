@@ -146,6 +146,4 @@ cython_debug/
 
 compose.txt
 docker_commands
-docker-compose.yml
-Dockerfile
 gsheets_engine.py

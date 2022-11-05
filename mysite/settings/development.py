@@ -23,12 +23,12 @@ MIDDLEWARE = [
 
 # Standard Database
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # DATABASES = {
@@ -57,12 +57,14 @@ MIDDLEWARE = [
 
 
 # USE IT ONLY FOR LOCAL / DOCKER DEVELOPMENT
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'mysite/static')
-# ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'mysite/static')
+]
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
 }
+
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
 
 

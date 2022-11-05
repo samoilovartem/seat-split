@@ -8,11 +8,16 @@ from .permissions import IsAdminOrReadOnly
 from .serializers import AccountsSerializer
 from .pagination import AccountsApiListPagination
 
-
 from .models import Accounts
 
 from .forms import AccountsForm, UserLoginForm
 from django.views.generic import ListView, UpdateView, CreateView, DeleteView
+
+from django_tables2 import SingleTableView, LazyPaginator
+from django_filters.views import FilterView
+
+from .tables import AccountsTable
+from .filters import AccountFilter
 
 
 def log_in(request):
@@ -36,7 +41,12 @@ class AccountsView(ListView):
     model = Accounts
     template_name = 'accounts_team/index.html'
     context_object_name = 'accounts'
-    extra_context = {'title': 'Lew & Dowski'}
+    # The wat we can get model field names:
+    # field_names = [f.name for f in Accounts._meta.get_fields()]
+    extra_context = {
+        'title': 'Lew & Dowski',
+        # 'field_names': field_names
+    }
     paginate_by = 15
     # permission_required = ''
 
@@ -89,6 +99,14 @@ class AccountsApiDestroyView(RetrieveDestroyAPIView):
     serializer_class = AccountsSerializer
     permission_classes = (IsAdminOrReadOnly,)
 
+
+class AccountsTableView(SingleTableView, FilterView):
+    table_class = AccountsTable
+    queryset = Accounts.objects.all()
+    paginate_by = 5
+    # paginator_class = LazyPaginator
+    filterset_class = AccountFilter
+    template_name = "accounts_team/index_table.html"
 
 
 
