@@ -32,6 +32,15 @@ Also, changes are made in `wsgi.py` and `manage.py`in order to use different set
 
 #### Useful notes:
 1. Heroku `python manage.py collectstatic` issue solution can be found [here](https://stackoverflow.com/questions/55330749/error-while-running-python-manage-py-collectstatic-noinput-after-changin).
+2. Django-tabulator-example is [here](https://github.com/cuauhtemoc-amdg/django-tabulator-example).
+3. Responsive tables using Django and htmx. The main article is [here](https://enzircle.com/responsive-table-with-django-and-htmx#comments-list). Github [source code](https://github.com/joashxu/dj-htmx-fun). 
+4. Django-tables2 [documentation](https://django-tables2.readthedocs.io/en/latest/index.html).
+5. Django-filter [documentation](https://django-filter.readthedocs.io/en/stable/index.html).
+6. Django-crispy-forms [documentation](https://django-crispy-forms.readthedocs.io/en/latest/index.html).
+7. Django Model meta [options](https://docs.djangoproject.com/en/4.1/ref/models/options/).
+8. Detailed Django Form [explanation](https://simpleisbetterthancomplex.com/article/2017/08/19/how-to-render-django-form-manually.html).
+9. Django Widget Tweaks is [here](https://simpleisbetterthancomplex.com/2015/12/04/package-of-the-week-django-widget-tweaks.html).
+10. Django permissions [detailed article](https://dandavies99.github.io/posts/2021/11/django-permissions/).
 
 
 #### Useful commands:

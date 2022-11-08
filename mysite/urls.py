@@ -12,6 +12,7 @@ urlpatterns = [
     path('api/v1/accounts/', AccountsApiList.as_view()),
     path('api/v1/accounts/<int:pk>/', AccountsApiUpdate.as_view()),
     path('api/v1/accounts/<int:pk>/delete/', AccountsApiDestroyView.as_view()),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
 
 if settings.DEBUG:

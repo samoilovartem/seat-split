@@ -1,10 +1,7 @@
 from django.urls import path
 from .views import *
-from django_filters.views import FilterView
 
 urlpatterns = [
-    path('login/', log_in, name='login'),
-    path('logout/', log_out, name='logout'),
     path('', AccountsView.as_view(), name='home'),
     # path('', AccountsTableView.as_view(), name='home'),
     path('<int:pk>/edit/', UpdateAccounts.as_view(), name='update_account'),

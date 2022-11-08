@@ -67,4 +67,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
 

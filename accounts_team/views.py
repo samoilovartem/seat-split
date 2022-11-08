@@ -29,7 +29,7 @@ def log_in(request):
             return redirect('home')
     else:
         form = UserLoginForm()
-    return render(request, 'accounts_team/log_in.html', {'form': form})
+    return render(request, 'registration/login.html', {'form': form})
 
 
 def log_out(request):
@@ -40,6 +40,7 @@ def log_out(request):
 class AccountsView(ListView):
     model = Accounts
     template_name = 'accounts_team/index.html'
+    # template_name = 'accounts_team/index_table.html'
     context_object_name = 'accounts'
     # The wat we can get model field names:
     # field_names = [f.name for f in Accounts._meta.get_fields()]
@@ -57,7 +58,7 @@ class UpdateAccounts(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = 'accounts_team/update_account.html'
     context_object_name = 'update_account_item'
     success_url = reverse_lazy('home')
-    login_url = '/login/'
+    login_url = '/accounts/login/'
     permission_required = ''
     # raise_exception = True
 
@@ -66,7 +67,7 @@ class AddAccount(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = AccountsForm
     template_name = 'accounts_team/add_account.html'
     success_url = reverse_lazy('home')
-    login_url = '/login/'
+    login_url = '/accounts/login/'
     permission_required = ''
     # raise_exception = True
 
@@ -75,7 +76,7 @@ class DeleteAccount(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Accounts
     template_name = 'accounts_team/delete_account.html'
     success_url = reverse_lazy('home')
-    login_url = '/login/'
+    login_url = '/accounts/login/'
     permission_required = ''
     context_object_name = 'delete_account_item'
 
