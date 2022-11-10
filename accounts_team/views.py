@@ -84,7 +84,7 @@ class DeleteAccount(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
 class AccountsApiList(ListCreateAPIView):
     queryset = Accounts.objects.all()
     serializer_class = AccountsSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
     pagination_class = AccountsApiListPagination
 
 
