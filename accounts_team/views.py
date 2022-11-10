@@ -39,8 +39,8 @@ def log_out(request):
 
 class AccountsView(ListView):
     model = Accounts
-    template_name = 'accounts_team/index.html'
-    # template_name = 'accounts_team/index_table.html'
+    # template_name = 'accounts_team/index.html'
+    template_name = 'accounts_team/index_table.html'
     context_object_name = 'accounts'
     # The wat we can get model field names:
     # field_names = [f.name for f in Accounts._meta.get_fields()]

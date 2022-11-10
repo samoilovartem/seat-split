@@ -18,15 +18,15 @@ class AccountsForm(forms.ModelForm):
                   'in_tickets_com']
         widgets = {
             'account_assigned': forms.TextInput(attrs={'class': 'form-control'}),
-            'platform': forms.Select(attrs={'class': 'form-control'}),
-            'type': forms.Select(attrs={'class': 'form-control'}),
+            'platform': forms.TextInput(attrs={'class': 'form-control'}),
+            'type': forms.TextInput(attrs={'class': 'form-control'}),
             'parent_card': forms.TextInput(attrs={'class': 'form-control'}),
             'card_number': forms.TextInput(attrs={'class': 'form-control'}),
             'expiration_date': forms.TextInput(attrs={'class': 'form-control'}),
             'cvv_number': forms.TextInput(attrs={'class': 'form-control'}),
             'limit': forms.TextInput(attrs={'class': 'form-control'}),
-            'created_by': forms.Select(attrs={'class': 'form-control'}),
-            'team': forms.Select(attrs={'class': 'form-control'}),
+            'created_by': forms.TextInput(attrs={'class': 'form-control'}),
+            'team': forms.TextInput(attrs={'class': 'form-control'}),
             'in_tm': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'in_tickets_com': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }

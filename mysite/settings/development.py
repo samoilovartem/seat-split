@@ -23,24 +23,24 @@ MIDDLEWARE = [
 
 # Standard Database
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': local.DB_ENGINE,
-#         'NAME': local.DB_NAME,
-#         'USER': local.DB_USER,
-#         'PASSWORD': local.DB_PASSWORD,
-#         'HOST': local.DB_HOST,
-#         'PORT': local.DB_PORT,
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': local.PSQL_ENGINE,
+        'NAME': local.PSQL_NAME,
+        'USER': local.PSQL_USER,
+        'PASSWORD': local.PSQL_PASSWORD,
+        'HOST': local.PSQL_HOST,
+        'PORT': local.PSQL_PORT,
+    }
+}
 
 # DOCKER POSTGRES
 
