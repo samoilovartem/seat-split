@@ -34,8 +34,8 @@ class Accounts(models.Model):
     team = models.CharField(max_length=255, verbose_name='Team', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Updated')
-    in_tm = models.BooleanField(verbose_name='tickets.com', null=True, blank=True)
-    in_tickets_com = models.BooleanField(verbose_name='TM', null=True, blank=True)
+    in_tm = models.BooleanField(verbose_name='tickets.com', default=False)
+    in_tickets_com = models.BooleanField(verbose_name='TM', default=False)
 
     def __str__(self):
         return self.account_assigned
