@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'crispy_forms',
     'bootstrap5',
+    'import_export',
     'accounts_team.apps.AccountsTeamConfig',
 ]
 

@@ -41,6 +41,7 @@ Also, changes are made in `wsgi.py` and `manage.py`in order to use different set
 8. Detailed Django Form [explanation](https://simpleisbetterthancomplex.com/article/2017/08/19/how-to-render-django-form-manually.html).
 9. Django Widget Tweaks is [here](https://simpleisbetterthancomplex.com/2015/12/04/package-of-the-week-django-widget-tweaks.html).
 10. Django permissions [detailed article](https://dandavies99.github.io/posts/2021/11/django-permissions/).
+11. If you ever you deleted [Django migrations](https://stackoverflow.com/questions/37603203/django-deleted-migrations-directory)
 
 
 #### Useful commands:
