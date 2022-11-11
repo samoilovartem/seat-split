@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 
-from .models import Accounts
+from .models import LawnsAccounts
 
 
 class UserLoginForm(AuthenticationForm):
@@ -12,10 +12,9 @@ class UserLoginForm(AuthenticationForm):
 class AccountsForm(forms.ModelForm):
 
     class Meta:
-        model = Accounts
+        model = LawnsAccounts
         fields = ['account_assigned', 'platform', 'type', 'parent_card', 'card_number',
-                  'expiration_date', 'cvv_number', 'limit', 'created_by', 'team', 'in_tm',
-                  'in_tickets_com']
+                  'expiration_date', 'cvv_number', 'in_tm']
         widgets = {
             'account_assigned': forms.TextInput(attrs={'class': 'form-control'}),
             'platform': forms.TextInput(attrs={'class': 'form-control'}),
@@ -24,10 +23,6 @@ class AccountsForm(forms.ModelForm):
             'card_number': forms.TextInput(attrs={'class': 'form-control'}),
             'expiration_date': forms.TextInput(attrs={'class': 'form-control'}),
             'cvv_number': forms.TextInput(attrs={'class': 'form-control'}),
-            'limit': forms.TextInput(attrs={'class': 'form-control'}),
-            'created_by': forms.TextInput(attrs={'class': 'form-control'}),
-            'team': forms.TextInput(attrs={'class': 'form-control'}),
             'in_tm': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'in_tickets_com': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 

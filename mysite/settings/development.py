@@ -31,16 +31,16 @@ MIDDLEWARE = [
 # }
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': local.PSQL_ENGINE,
-        'NAME': local.PSQL_NAME,
-        'USER': local.PSQL_USER,
-        'PASSWORD': local.PSQL_PASSWORD,
-        'HOST': local.PSQL_HOST,
-        'PORT': local.PSQL_PORT,
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': local.PSQL_ENGINE,
+#         'NAME': local.PSQL_NAME,
+#         'USER': local.PSQL_USER,
+#         'PASSWORD': local.PSQL_PASSWORD,
+#         'HOST': local.PSQL_HOST,
+#         'PORT': local.PSQL_PORT,
+#     }
+# }
 
 # DOCKER POSTGRES
 

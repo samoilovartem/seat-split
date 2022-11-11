@@ -3,17 +3,17 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-from .permissions import IsAdminOrReadOnly
+from rest_framework_api_key.permissions import HasAPIKey
+from rest_framework.permissions import IsAuthenticated
 from .serializers import AccountsSerializer
 from .pagination import AccountsApiListPagination
 
-from .models import Accounts
+from .models import LawnsAccounts
 
 from .forms import AccountsForm, UserLoginForm
 from django.views.generic import ListView, UpdateView, CreateView, DeleteView
 
-from django_tables2 import SingleTableView, LazyPaginator
+from django_tables2 import SingleTableView
 from django_filters.views import FilterView
 
 from .tables import AccountsTable
@@ -38,7 +38,7 @@ def log_out(request):
 
 
 class AccountsView(ListView):
-    model = Accounts
+    model = LawnsAccounts
     # template_name = 'accounts_team/index.html'
     template_name = 'accounts_team/index_table.html'
     context_object_name = 'accounts'
@@ -53,7 +53,7 @@ class AccountsView(ListView):
 
 
 class UpdateAccounts(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
-    model = Accounts
+    model = LawnsAccounts
     form_class = AccountsForm
     template_name = 'accounts_team/update_account.html'
     context_object_name = 'update_account_item'
@@ -73,37 +73,38 @@ class AddAccount(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
 
 class DeleteAccount(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
-    model = Accounts
+    model = LawnsAccounts
     template_name = 'accounts_team/delete_account.html'
     success_url = reverse_lazy('home')
     login_url = '/accounts/login/'
     permission_required = ''
     context_object_name = 'delete_account_item'
 
+# --- API VIEWS ---
+
 
 class AccountsApiList(ListCreateAPIView):
-    queryset = Accounts.objects.all()
+    queryset = LawnsAccounts.objects.all()
     serializer_class = AccountsSerializer
-    permission_classes = (IsAuthenticated,)
     pagination_class = AccountsApiListPagination
+    permission_classes = [HasAPIKey | IsAuthenticated]
 
 
 class AccountsApiUpdate(RetrieveUpdateAPIView):
-    queryset = Accounts.objects.all()
+    queryset = LawnsAccounts.objects.all()
     serializer_class = AccountsSerializer
-    permission_classes = (IsAuthenticated,)
-    # authentication_classes = (TokenAuthentication, )
+    permission_classes = [HasAPIKey | IsAuthenticated]
 
 
 class AccountsApiDestroyView(RetrieveDestroyAPIView):
-    queryset = Accounts.objects.all()
+    queryset = LawnsAccounts.objects.all()
     serializer_class = AccountsSerializer
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = [HasAPIKey | IsAuthenticated]
 
 
 class AccountsTableView(SingleTableView, FilterView):
     table_class = AccountsTable
-    queryset = Accounts.objects.all()
+    queryset = LawnsAccounts.objects.all()
     paginate_by = 5
     # paginator_class = LazyPaginator
     filterset_class = AccountFilter

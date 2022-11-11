@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
+from rest_framework.authtoken import views
 
 from accounts_team.views import AccountsApiList, AccountsApiUpdate, AccountsApiDestroyView
 
@@ -12,6 +13,7 @@ urlpatterns = [
     path('api/v1/accounts/', AccountsApiList.as_view()),
     path('api/v1/accounts/<int:pk>/', AccountsApiUpdate.as_view()),
     path('api/v1/accounts/<int:pk>/delete/', AccountsApiDestroyView.as_view()),
+    path('api/v1/accounts/token-auth/', views.obtain_auth_token),
     path('accounts/', include('django.contrib.auth.urls')),
 ]
 
