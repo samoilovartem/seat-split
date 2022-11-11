@@ -1,7 +1,7 @@
 import django_tables2 as tables
 from django_tables2 import A
 
-from .models import Accounts
+from .models import LawnsAccounts
 
 
 class AccountsTable(tables.Table):
@@ -12,5 +12,5 @@ class AccountsTable(tables.Table):
                              empty_values=())
 
     class Meta:
-        model = Accounts
+        model = LawnsAccounts
         exclude = ('created_at', 'updated_at')

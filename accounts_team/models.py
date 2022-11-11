@@ -1,9 +1,9 @@
 from django.db import models
-from .validators import clean_card_number, clean_expiration_date, clean_cvv_number, clean_limit
+from .validators import clean_card_number, clean_expiration_date, clean_cvv_number
 from django.db.models import UniqueConstraint
 
 
-class Accounts(models.Model):
+class LawnsAccounts(models.Model):
     account_assigned = models.EmailField(max_length=150,
                                          db_index=True,
                                          verbose_name='Account',
@@ -23,19 +23,9 @@ class Accounts(models.Model):
                                   verbose_name='CVV',
                                   null=True,
                                   blank=True)
-    limit = models.CharField(default='0',
-                             max_length=20,
-                             validators=[clean_limit],
-                             blank=True)
-    created_by = models.CharField(max_length=255,
-                                  verbose_name='Responsible',
-                                  null=True,
-                                  blank=True)
-    team = models.CharField(max_length=255, verbose_name='Team', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Updated')
-    in_tm = models.BooleanField(verbose_name='tickets.com', default=False)
-    in_tickets_com = models.BooleanField(verbose_name='TM', default=False)
+    in_tm = models.BooleanField(verbose_name='in TM', default=False)
 
     def __str__(self):
         return self.account_assigned

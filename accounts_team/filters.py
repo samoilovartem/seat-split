@@ -1,5 +1,5 @@
 import django_filters
-from .models import Accounts
+from .models import LawnsAccounts
 
 
 class AccountFilter(django_filters.FilterSet):
@@ -8,5 +8,5 @@ class AccountFilter(django_filters.FilterSet):
                                       label="Filter")
 
     class Meta:
-        model = Accounts
+        model = LawnsAccounts
         fields = ['account_assigned']
