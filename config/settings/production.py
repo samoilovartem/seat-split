@@ -35,4 +35,5 @@ DATABASES = {
 #         ssl_require=True, conn_max_age=600
 #     )
 
+SIMPLE_JWT['SIGNING_KEY'] = SECRET_KEY
 

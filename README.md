@@ -43,6 +43,7 @@ Also, changes are made in `wsgi.py` and `manage.py`in order to use different set
 10. Django permissions [detailed article](https://dandavies99.github.io/posts/2021/11/django-permissions/).
 11. If you ever you deleted [Django migrations](https://stackoverflow.com/questions/37603203/django-deleted-migrations-directory)
 12. Git Cheat [Sheet](http://res.cloudinary.com/hy4kyit2a/image/upload/SF_git_cheatsheet.pdf)
+13. JWT [decoding](https://jwt.io/)
 
 
 #### Useful commands:
