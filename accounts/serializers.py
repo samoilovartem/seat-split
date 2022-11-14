@@ -1,13 +1,12 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from .models import LawnsAccounts
+from .models import Accounts
 
 
 class AccountsSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = LawnsAccounts
+        model = Accounts
         fields = '__all__'
         # validators = [
         #     UniqueTogetherValidator(

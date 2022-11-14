@@ -23,12 +23,12 @@ MIDDLEWARE = [
 
 # Standard Database
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # DATABASES = {
@@ -58,7 +58,7 @@ MIDDLEWARE = [
 
 # USE IT ONLY FOR LOCAL / DOCKER DEVELOPMENT
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'mysite/static')
+    os.path.join(BASE_DIR, 'config/static')
 ]
 
 DEBUG_TOOLBAR_CONFIG = {
@@ -68,6 +68,8 @@ DEBUG_TOOLBAR_CONFIG = {
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+SIMPLE_JWT['SIGNING_KEY'] = SECRET_KEY
 
 
 
