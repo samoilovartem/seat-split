@@ -1,18 +1,20 @@
 from django.urls import path, include, re_path
-from rest_framework import routers
+from .routers import *
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
-
-from .views import *
 from rest_framework.authtoken import views
 
-router = routers.DefaultRouter()
-router.register(r'accounts', AccountsViewSet)
 
 urlpatterns = [
-    path('api/v1/authentication/', include('rest_framework.urls')),
-    # path('api/v1/accounts/', AccountsApiList.as_view()),
-    # path('api/v1/accounts/<int:pk>/', AccountsApiRetrieveUpdateDestroyView.as_view()),
-    path('api/v1/', include(router.urls)),
+    path('api/v1/base-auth/', include('rest_framework.urls')),
+    path('api/v1/', include(lawns_router.urls)),
+    path('api/v1/', include(presales_router.urls)),
+    path('api/v1/', include(mlb_router.urls)),
+    path('api/v1/', include(nba_router.urls)),
+    path('api/v1/', include(seasons_router.urls)),
+    path('api/v1/', include(smallvenues_router.urls)),
+    path('api/v1/', include(theatre_router.urls)),
+    path('api/v1/', include(othersports_router.urls)),
+    path('api/v1/', include(audrey_router.urls)),
     path('api/v1/accounts/token-auth/', views.obtain_auth_token),
     path('api/v1/auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
