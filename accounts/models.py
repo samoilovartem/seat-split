@@ -28,6 +28,7 @@ class Accounts(models.Model):
                                 validators=[clean_zip_code])
     in_tm = models.BooleanField(verbose_name='TM', default=False)
     in_tickets_com = models.BooleanField(verbose_name='tickets.com', default=False)
+    is_deleted = models.BooleanField(verbose_name='Deleted', default=False)
 
     def __str__(self):
         return self.account_assigned
