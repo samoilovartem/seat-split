@@ -49,4 +49,11 @@ Also, changes are made in `wsgi.py` and `manage.py`in order to use different set
 #### Useful commands:
 1. Access project's bash:\
 `heroku run bash -a <heroku app name>`
-    
+2. Check all releases:\
+`heroku releases`
+3. Check all info about particular release:\
+`heroku releases:info <release version number>`
+4. If ever we deployed buggy code or something goes wrong with current release:\
+`git revert`and redeploy it again.
+5. If we have some problems with heroku platform, then better to use:\
+`heroku rollback <release version number (optional)>`
