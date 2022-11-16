@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.response import Response
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.permissions import IsAuthenticated
 from .serializers import AccountsSerializer
@@ -22,11 +23,6 @@ class LawnsAccountsViewSet(viewsets.ModelViewSet):
     permission_classes = [HasAPIKey | IsAuthenticated]
     my_tags = ["Lawns accounts"]
 
-    """
-    get_queryset() allows us to redefine existing queryset method.
-    We can use it in case we want to filter or sort our fata.
-    """
-
     def get_queryset(self):
         pk = self.kwargs.get('pk')
 
@@ -34,16 +30,11 @@ class LawnsAccountsViewSet(viewsets.ModelViewSet):
             return Accounts.objects.filter(team__icontains='LAWNS')
         return Accounts.objects.filter(team__icontains='LAWNS', pk=pk)
 
-    """
-    @action allows us to set custom routes.
-    The function's name is url route itself. For example:
-    api/v1/accounts/presales_accounts/
-    """
-
-    # @action(methods=['get'], detail=False)
-    # def presales_accounts(self, request):
-    #     presales_accounts = Accounts.objects.filter(team__icontains='presales').values()
-    #     return Response({'results': presales_accounts})
+    @action(methods=['get'], detail=False)
+    def get_creators(self, request):
+        result = Accounts.objects.filter(team__icontains='LAWNS') \
+            .order_by().values_list('created_by', flat=True).distinct()
+        return Response({'results': {'All creators': result}})
 
 
 class PresalesAccountsViewSet(viewsets.ModelViewSet):
