@@ -2,8 +2,6 @@ import os.path
 from datetime import timedelta
 from pathlib import Path
 
-import dj_database_url
-
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 INSTALLED_APPS = [
@@ -22,7 +20,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_filters',
     'import_export',
-    'accounts.apps.AccountsTeamConfig',
+    'cards.apps.AccountsTeamConfig',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -87,7 +85,7 @@ APPEND_SLASH = False
 LOGIN_REDIRECT_URL = '/'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'accounts.pagination.AccountsApiListPagination',
+    'DEFAULT_PAGINATION_CLASS': 'cards.pagination.AccountsApiListPagination',
     'PAGE_SIZE': 20,
 
     'DEFAULT_RENDERER_CLASSES': [
@@ -137,4 +135,4 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
-SWAGGER_SETTINGS = {"DEFAULT_AUTO_SCHEMA_CLASS": "accounts.schemas.CustomAutoSchema"}
+SWAGGER_SETTINGS = {"DEFAULT_AUTO_SCHEMA_CLASS": "cards.schemas.CustomAutoSchema"}

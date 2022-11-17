@@ -57,3 +57,5 @@ Also, changes are made in `wsgi.py` and `manage.py`in order to use different set
 `git revert`and redeploy it again.
 5. If we have some problems with heroku platform, then better to use:\
 `heroku rollback <release version number (optional)>`
+6. Heroku app logs:\
+`heroku logs -n 1500`or `heroku logs -t`to maintain them live
