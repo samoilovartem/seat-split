@@ -3,23 +3,28 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.permissions import IsAuthenticated
-from .serializers import AccountsSerializer
-from .pagination import AccountsApiListPagination
+from .serializers import CardsSerializer
+from .pagination import CardsApiListPagination
 
 from .models import Cards
 
 
 class AllCardsViewSet(viewsets.ModelViewSet):
     queryset = Cards.objects.all()
-    serializer_class = AccountsSerializer
-    pagination_class = AccountsApiListPagination
+    serializer_class = CardsSerializer
+    pagination_class = CardsApiListPagination
     permission_classes = [HasAPIKey | IsAuthenticated]
     my_tags = ["All cards"]
 
+    @action(methods=['get'], detail=False)
+    def get_all_creators(self, request):
+        result = Cards.objects.order_by().values_list('created_by', flat=True).distinct()
+        return Response({'results': {'All creators': result}})
+
 
 class LawnsCardsViewSet(viewsets.ModelViewSet):
-    serializer_class = AccountsSerializer
-    pagination_class = AccountsApiListPagination
+    serializer_class = CardsSerializer
+    pagination_class = CardsApiListPagination
     permission_classes = [HasAPIKey | IsAuthenticated]
     my_tags = ["Lawns cards"]
 
@@ -38,8 +43,8 @@ class LawnsCardsViewSet(viewsets.ModelViewSet):
 
 
 class PresalesCardsViewSet(viewsets.ModelViewSet):
-    serializer_class = AccountsSerializer
-    pagination_class = AccountsApiListPagination
+    serializer_class = CardsSerializer
+    pagination_class = CardsApiListPagination
     permission_classes = [HasAPIKey | IsAuthenticated]
     my_tags = ["Presales cards"]
 
@@ -52,8 +57,8 @@ class PresalesCardsViewSet(viewsets.ModelViewSet):
 
 
 class MLBCardsViewSet(viewsets.ModelViewSet):
-    serializer_class = AccountsSerializer
-    pagination_class = AccountsApiListPagination
+    serializer_class = CardsSerializer
+    pagination_class = CardsApiListPagination
     permission_classes = [HasAPIKey | IsAuthenticated]
     my_tags = ["MLB cards"]
 
@@ -66,8 +71,8 @@ class MLBCardsViewSet(viewsets.ModelViewSet):
 
 
 class NBACardsViewSet(viewsets.ModelViewSet):
-    serializer_class = AccountsSerializer
-    pagination_class = AccountsApiListPagination
+    serializer_class = CardsSerializer
+    pagination_class = CardsApiListPagination
     permission_classes = [HasAPIKey | IsAuthenticated]
     my_tags = ["NBA cards"]
 
@@ -80,8 +85,8 @@ class NBACardsViewSet(viewsets.ModelViewSet):
 
 
 class SeasonsCardsViewSet(viewsets.ModelViewSet):
-    serializer_class = AccountsSerializer
-    pagination_class = AccountsApiListPagination
+    serializer_class = CardsSerializer
+    pagination_class = CardsApiListPagination
     permission_classes = [HasAPIKey | IsAuthenticated]
     my_tags = ["Seasons cards"]
 
@@ -94,8 +99,8 @@ class SeasonsCardsViewSet(viewsets.ModelViewSet):
 
 
 class SmallVenuesCardsViewSet(viewsets.ModelViewSet):
-    serializer_class = AccountsSerializer
-    pagination_class = AccountsApiListPagination
+    serializer_class = CardsSerializer
+    pagination_class = CardsApiListPagination
     permission_classes = [HasAPIKey | IsAuthenticated]
     my_tags = ["Small Venues cards"]
 
@@ -108,8 +113,8 @@ class SmallVenuesCardsViewSet(viewsets.ModelViewSet):
 
 
 class TheatreCardsViewSet(viewsets.ModelViewSet):
-    serializer_class = AccountsSerializer
-    pagination_class = AccountsApiListPagination
+    serializer_class = CardsSerializer
+    pagination_class = CardsApiListPagination
     permission_classes = [HasAPIKey | IsAuthenticated]
     my_tags = ["Theatre cards"]
 
@@ -122,8 +127,8 @@ class TheatreCardsViewSet(viewsets.ModelViewSet):
 
 
 class OtherSportsCardsViewSet(viewsets.ModelViewSet):
-    serializer_class = AccountsSerializer
-    pagination_class = AccountsApiListPagination
+    serializer_class = CardsSerializer
+    pagination_class = CardsApiListPagination
     permission_classes = [HasAPIKey | IsAuthenticated]
     my_tags = ["Other Sports cards"]
 
@@ -136,8 +141,8 @@ class OtherSportsCardsViewSet(viewsets.ModelViewSet):
 
 
 class AudreyCardsViewSet(viewsets.ModelViewSet):
-    serializer_class = AccountsSerializer
-    pagination_class = AccountsApiListPagination
+    serializer_class = CardsSerializer
+    pagination_class = CardsApiListPagination
     permission_classes = [HasAPIKey | IsAuthenticated]
     my_tags = ["Audrey cards"]
 
@@ -150,8 +155,8 @@ class AudreyCardsViewSet(viewsets.ModelViewSet):
 
 
 class OthersCardsViewSet(viewsets.ModelViewSet):
-    serializer_class = AccountsSerializer
-    pagination_class = AccountsApiListPagination
+    serializer_class = CardsSerializer
+    pagination_class = CardsApiListPagination
     permission_classes = [HasAPIKey | IsAuthenticated]
     my_tags = ["Others cards"]
 
