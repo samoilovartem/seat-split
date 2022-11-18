@@ -4,7 +4,7 @@ from rest_framework.validators import UniqueTogetherValidator
 from .models import Cards
 
 
-class AccountsSerializer(serializers.ModelSerializer):
+class CardsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cards
         fields = '__all__'

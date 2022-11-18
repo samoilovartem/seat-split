@@ -20,7 +20,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_filters',
     'import_export',
-    'cards.apps.AccountsTeamConfig',
+    'cards.apps.CardsConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -85,7 +86,7 @@ APPEND_SLASH = False
 LOGIN_REDIRECT_URL = '/'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'cards.pagination.AccountsApiListPagination',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20,
 
     'DEFAULT_RENDERER_CLASSES': [
