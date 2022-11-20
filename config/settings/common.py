@@ -5,12 +5,15 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 INSTALLED_APPS = [
+    # Django standard apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third party apps
     'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
@@ -20,6 +23,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_filters',
     'import_export',
+
+    # Project's apps
     'cards.apps.CardsConfig',
     'accounts.apps.AccountsConfig',
 ]

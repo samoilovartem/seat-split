@@ -10,7 +10,7 @@ class AccountsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('id', 'full_name', 'email')
     list_display_links = ('full_name', )
     search_fields = ('id', 'full_name', 'email', 'team', 'created_by')
-    list_filter = ('id', 'full_name', 'email', 'team', 'created_by')
+    list_filter = ('team', 'created_by')
     readonly_fields = ('created_at', 'updated_at')
 
 
