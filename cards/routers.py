@@ -15,5 +15,5 @@ cards_router.register(r'cards/theatre', TheatreCardsViewSet, basename='theatre-c
 cards_router.register(r'cards/othersports', OtherSportsCardsViewSet, basename='othersports-cards')
 cards_router.register(r'cards/audrey', AudreyCardsViewSet, basename='audrey-cards')
 cards_router.register(r'cards/others', OthersCardsViewSet, basename='others-cards')
-cards_router.register(r'cards/universal_filter', UniversalFilterViewSet, basename='universal_filter')
+cards_router.register(r'cards/universal_filter', CardsUniversalFilterViewSet, basename='cards_universal_filter')
 
