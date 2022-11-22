@@ -168,12 +168,14 @@ class OthersCardsViewSet(viewsets.ModelViewSet):
         return Cards.objects.filter(team__icontains='OTHERS', pk=pk)
 
 
-class UniversalFilterViewSet(viewsets.ModelViewSet):
+class CardsUniversalFilterViewSet(viewsets.ModelViewSet):
     serializer_class = CardsSerializer
     pagination_class = CardsApiListPagination
     permission_classes = [HasAPIKey | IsAuthenticated]
+    my_tags = ["Cards universal filter"]
 
     def get_queryset(self):
         filter_name = self.request.query_params.get('filter_name')
         value = self.request.query_params.get('value')
         return Cards.objects.filter(**{f"{filter_name}__icontains": value})
+
