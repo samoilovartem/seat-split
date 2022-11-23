@@ -18,4 +18,5 @@ class AccountsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 
 admin.site.register(Accounts, AccountsAdmin)
+admin.site.site_header = "Lew & Dowski"
 

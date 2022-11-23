@@ -5,6 +5,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 INSTALLED_APPS = [
+    # Third party apps that needs to be placed before standard apps
+
     # Django standard apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -27,6 +29,7 @@ INSTALLED_APPS = [
     # Project's apps
     'cards.apps.CardsConfig',
     'accounts.apps.AccountsConfig',
+    'sold_inventory.apps.SoldInventoryConfig',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -55,7 +58,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
