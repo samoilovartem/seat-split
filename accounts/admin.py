@@ -13,8 +13,8 @@ class AccountsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('id', 'first_name', 'last_name', 'email')
     list_display_links = ('first_name', 'last_name', 'email', )
     search_fields = ('id', 'first_name', 'last_name', 'email', 'team', 'created_by')
-    list_filter = ('team', 'created_by')
-    readonly_fields = ('created_at', 'last_opened')
+    list_filter = ('team', 'created_by', 'ld_computer_used')
+    readonly_fields = ('created_at', 'updated_at', 'last_opened')
 
 
 admin.site.register(Accounts, AccountsAdmin)

@@ -6,4 +6,5 @@ from .models import Accounts
 class AccountsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Accounts
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ('updated_at',)

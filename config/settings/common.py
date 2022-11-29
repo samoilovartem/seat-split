@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_filters',
     'import_export',
+    'django_truncate',
 
     # Project's apps
     'cards.apps.CardsConfig',
@@ -109,7 +110,10 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework_api_key.permissions.HasAPIKey',
     #     'rest_framework.permissions.IsAuthenticated',
-    # ]
+    # ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ]
 }
 
 SIMPLE_JWT = {

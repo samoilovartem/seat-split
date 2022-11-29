@@ -12,16 +12,5 @@ class AllAccountsViewSet(viewsets.ModelViewSet):
     serializer_class = AccountsSerializer
     pagination_class = AccountsApiListPagination
     permission_classes = [HasAPIKey | IsAuthenticated]
+    filterset_fields = '__all__'
     my_tags = ["All accounts"]
-
-
-class AccountsUniversalFilterViewSet(viewsets.ModelViewSet):
-    serializer_class = AccountsSerializer
-    pagination_class = AccountsApiListPagination
-    permission_classes = [HasAPIKey | IsAuthenticated]
-    my_tags = ["Accounts universal filter"]
-
-    def get_queryset(self):
-        filter_name = self.request.query_params.get('filter_name')
-        value = self.request.query_params.get('value')
-        return Accounts.objects.filter(**{f"{filter_name}__icontains": value})

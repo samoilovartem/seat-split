@@ -1,5 +1,6 @@
 asgiref==3.5.2
 beautifulsoup4==4.11.1
+cached-property==1.5.2
 certifi==2022.9.24
 cffi==1.15.1
 charset-normalizer==2.1.1
@@ -14,11 +15,13 @@ django-debug-toolbar==3.7.0
 django-filter==22.1
 django-import-export==3.0.1
 django-templated-mail==1.1.1
+django-truncate==0.1
 djangorestframework==3.14.0
 djangorestframework-api-key==2.2.0
 djangorestframework-simplejwt==4.8.0
 djoser==2.1.0
 drf-yasg==1.21.4
+enum-compat==0.0.3
 et-xmlfile==1.1.0
 gunicorn==20.1.0
 idna==3.4
