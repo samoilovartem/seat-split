@@ -4,7 +4,7 @@ from .models import *
 from import_export.admin import ImportExportModelAdmin
 
 
-class AccountsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+class CardsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     # prepopulated_fields = {'slug': ('title',)}
     save_as = True
     save_on_top = True
@@ -15,8 +15,8 @@ class AccountsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                      'card_number')
     list_filter = ('platform', 'type', 'updated_at', 'parent_card', 'in_tm', 'in_tickets_com',
                    'team')
-    readonly_fields = ('created_at', 'updated_at')
-    # fields = ('account_assigned', 'platform',)
+    # readonly_fields = ('created_at', 'updated_at',)
+    fields = ('created_at', 'updated_at')
 
 
-admin.site.register(Cards, AccountsAdmin)
+admin.site.register(Cards, CardsAdmin)

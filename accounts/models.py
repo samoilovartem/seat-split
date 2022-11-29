@@ -2,6 +2,8 @@ from django.db import models
 
 
 class Accounts(models.Model):
+    """Table that contains all company's accounts"""
+
     first_name = models.CharField(max_length=100, null=True, blank=True)
     last_name = models.CharField(max_length=100, null=True, blank=True)
     email = models.EmailField(max_length=150, db_index=True, null=True, blank=True)
@@ -35,8 +37,9 @@ class Accounts(models.Model):
     created_by = models.CharField(max_length=50, null=True, blank=True)
     edited_by = models.CharField(max_length=50, null=True, blank=True)
     ld_computer_used = models.CharField(max_length=50, null=True, blank=True)
-    created_at = models.DateTimeField(null=True, blank=True)
-    last_opened = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateField(null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+    last_opened = models.DateField(null=True, blank=True)
     comments = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -46,4 +49,3 @@ class Accounts(models.Model):
         verbose_name = 'Account'
         verbose_name_plural = 'Accounts'
         ordering = ['-created_at']
-

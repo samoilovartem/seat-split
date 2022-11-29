@@ -44,6 +44,7 @@ Also, changes are made in `wsgi.py` and `manage.py`in order to use different set
 11. If you ever you deleted [Django migrations](https://stackoverflow.com/questions/37603203/django-deleted-migrations-directory)
 12. Git Cheat [Sheet](http://res.cloudinary.com/hy4kyit2a/image/upload/SF_git_cheatsheet.pdf)
 13. JWT [decoding](https://jwt.io/)
+14. Using [dictionary](https://stackoverflow.com/questions/72623440/django-name-filter-name-icontains-is-not-defined) as filter value
 
 
 #### Useful commands:
@@ -59,3 +60,5 @@ Also, changes are made in `wsgi.py` and `manage.py`in order to use different set
 `heroku rollback <release version number (optional)>`
 6. Heroku app logs:\
 `heroku logs -n 1500`or `heroku logs -t`to maintain them live
+7. Safely delete all rows from database:\
+`python manage.py truncate --apps <app_name> --models <model_name>`
