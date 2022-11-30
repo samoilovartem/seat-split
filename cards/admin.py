@@ -15,8 +15,8 @@ class CardsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                      'card_number')
     list_filter = ('platform', 'type', 'updated_at', 'parent_card', 'in_tm', 'in_tickets_com',
                    'team')
-    # readonly_fields = ('created_at', 'updated_at',)
-    fields = ('created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at',)
+    # fields = ('created_at', 'updated_at')
 
 
 admin.site.register(Cards, CardsAdmin)
