@@ -56,10 +56,10 @@ df['last_opened'].replace(to_replace=['2022-11-1', '2022-11-2', '2022-11-3', '20
                                  '2022-11-05'], inplace=True)
 df.replace(to_replace=['N', 'Y'], value=[0, 1], inplace=True)  # replacing N and Y to 0 and 1
 df.fillna('NA', inplace=True)
-df1 = df.iloc[:3000]
-df2 = df.iloc[3000:6000]
-df3 = df.iloc[6000:]
-df1.to_excel('Mateen Gmail (prepared version) part 1.xlsx', index=False)
-df2.to_excel('Mateen Gmail (prepared version) part 2.xlsx', index=False)
-df3.to_excel('Mateen Gmail (prepared version) part 3.xlsx', index=False)
-# df.to_csv('Mateen Gmail (prepared version).csv', index=False)
+# df1 = df.iloc[:3000]
+# df2 = df.iloc[3000:6000]
+# df3 = df.iloc[6000:]
+# df1.to_excel('Mateen Gmail (prepared version) part 1.xlsx', index=False)
+# df2.to_excel('Mateen Gmail (prepared version) part 2.xlsx', index=False)
+# df3.to_excel('Mateen Gmail (prepared version) part 3.xlsx', index=False)
+df.to_csv('Mateen Gmail (prepared version).csv', index=False)

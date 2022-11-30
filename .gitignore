@@ -149,4 +149,5 @@ docker_commands
 gsheets_engine.py
 
 *.xlsx
-*.csv
+*.csv!
+binary_search.py

@@ -2,7 +2,6 @@ from rest_framework import viewsets
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.permissions import IsAuthenticated
 
-from accounts.models import Accounts
 from .filters import CardsFilterSet
 from .serializers import CardsSerializer
 from .pagination import CardsApiListPagination
