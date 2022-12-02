@@ -86,6 +86,9 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = 'static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 INTERNAL_IPS = ["127.0.0.1"]
@@ -148,3 +151,8 @@ SIMPLE_JWT = {
 }
 
 SWAGGER_SETTINGS = {"DEFAULT_AUTO_SCHEMA_CLASS": "cards.schemas.CustomAutoSchema"}
+
+IMPORT_EXPORT_EXPORT_PERMISSION_CODE = 'export'
+IMPORT_EXPORT_IMPORT_PERMISSION_CODE = 'import'
+IMPORT_EXPORT_TMP_STORAGE_CLASS = 'import_export.tmp_storages.MediaStorage'
+IMPORT_EXPORT_CHUNK_SIZE = 75

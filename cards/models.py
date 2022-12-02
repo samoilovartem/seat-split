@@ -39,3 +39,4 @@ class Cards(models.Model):
         #     ),
         # ]
         unique_together = ['account_assigned', 'platform']
+        permissions = (('import_cards', 'Can import'), ('export_cards', 'Can export'))

@@ -49,3 +49,4 @@ class Accounts(models.Model):
         verbose_name = 'Account'
         verbose_name_plural = 'Accounts'
         ordering = ['-created_at']
+        permissions = (('import_accounts', 'Can import'), ('export_accounts', 'Can export'))
