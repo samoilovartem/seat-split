@@ -1,4 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.db import models
+
+User = get_user_model()
 
 
 class Accounts(models.Model):
@@ -34,8 +37,12 @@ class Accounts(models.Model):
     forward_to = models.EmailField(max_length=150, db_index=True, null=True, blank=True)
     forward_email_password = models.CharField(max_length=32, null=True, blank=True)
     disabled = models.BooleanField(default=False)
-    created_by = models.CharField(max_length=50, null=True, blank=True)
-    edited_by = models.CharField(max_length=50, null=True, blank=True)
+    # created_by = models.CharField(max_length=50, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL,
+                                   related_name='created_by_accounts_set', null=True)
+    # edited_by = models.CharField(max_length=50, null=True, blank=True)
+    edited_by = models.ForeignKey(User, on_delete=models.SET_NULL,
+                                  related_name='edited_by_accounts_set', null=True)
     ld_computer_used = models.CharField(max_length=50, null=True, blank=True)
     created_at = models.DateField(null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)

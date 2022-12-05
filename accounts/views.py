@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_api_key.permissions import HasAPIKey
 
+from .filters import AccountsFilterSet
 from .models import Accounts
 from .pagination import AccountsApiListPagination
 from .serializers import AccountsSerializer
@@ -16,7 +17,11 @@ class AllAccountsViewSet(viewsets.ModelViewSet):
     serializer_class = AccountsSerializer
     pagination_class = AccountsApiListPagination
     permission_classes = [HasAPIKey | IsAuthenticated]
-    filterset_fields = '__all__'
+    # filterset_fields = '__all__'
+    filterset_class = AccountsFilterSet
+    search_fields = ['email', 'type', 'created_by__username', 'first_name', 'last_name']
+    ordering_fields = ['id', 'email', 'type', 'created_by__username', 'first_name', 'last_name', 'created_at',
+                       'recovery_email', 'ld_computer_used', 'last_opened', 'disabled']
     my_tags = ["All accounts"]
 
     @action(methods=['GET'], detail=False)
