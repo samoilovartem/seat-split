@@ -13,10 +13,13 @@ class AccountsAdmin(ImportExportModelAdmin):
     save_on_top = True
     list_display = ('id', 'first_name', 'last_name', 'email', 'disabled')
     list_display_links = ('first_name', 'last_name', 'email',)
-    search_fields = ('id', 'first_name', 'last_name', 'email', 'team', 'created_by')
-    list_filter = ('team', 'created_by', 'ld_computer_used', 'last_opened')
-    readonly_fields = ('created_at', 'updated_at', 'last_opened')
+    search_fields = ('id', 'first_name', 'last_name', 'email', 'team', 'created_by__username')
+    list_filter = ('team', 'created_by__username', 'ld_computer_used', 'last_opened')
+    # readonly_fields = ('created_at', 'updated_at', 'last_opened')
     actions = ['make_disabled', 'make_enabled']
+    # inlines = [
+    #     'UserInline',
+    # ]
 
     @admin.action(description='Mark selected accounts as disabled', permissions=['change'])
     def make_disabled(self, request, queryset):

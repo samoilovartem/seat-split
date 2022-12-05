@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.permissions import IsAuthenticated
 
-from .filters import CardsFilterSet
 from .serializers import CardsSerializer
 from .pagination import CardsApiListPagination
 
@@ -19,7 +18,10 @@ class AllCardsViewSet(viewsets.ModelViewSet):
     pagination_class = CardsApiListPagination
     permission_classes = [HasAPIKey | IsAuthenticated]
     filterset_fields = '__all__'
-    # filterset_class = CardsFilterSet
+    search_fields = ['account_assigned', 'type', 'platform', 'parent_card', 'team', 'created_by',
+                     'created_at']
+    ordering_fields = ['id', 'account_assigned', 'type', 'platform', 'parent_card', 'team', 'created_by',
+                       'created_at']
     my_tags = ["All cards"]
 
     @action(methods=['GET'], detail=False)
