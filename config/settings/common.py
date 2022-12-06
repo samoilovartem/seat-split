@@ -158,3 +158,7 @@ IMPORT_EXPORT_EXPORT_PERMISSION_CODE = 'export'
 IMPORT_EXPORT_IMPORT_PERMISSION_CODE = 'import'
 IMPORT_EXPORT_TMP_STORAGE_CLASS = 'import_export.tmp_storages.MediaStorage'
 IMPORT_EXPORT_CHUNK_SIZE = 75
+
+BOOL_LOOKUPS = ['exact']
+DATE_AND_ID_LOOKUPS = ['exact', 'range', 'in']
+CHAR_LOOKUPS = ['icontains', 'iexact', 'exact', 'startswith', 'contains', 'endswith']
