@@ -1,4 +1,5 @@
 from django_filters import rest_framework as filters
+from config.settings.common import CHAR_LOOKUPS, BOOL_LOOKUPS, DATE_AND_ID_LOOKUPS
 from .models import Cards
 
 
@@ -6,20 +7,23 @@ class CardsFilterSet(filters.FilterSet):
     class Meta:
         model = Cards
         fields = {
-            'id': ['exact', 'in', 'range'],
-            'created_at': ['exact', 'in', 'range', 'startswith', 'contains'],
+            'id': DATE_AND_ID_LOOKUPS,
+            'account_assigned': CHAR_LOOKUPS,
+            'platform': CHAR_LOOKUPS,
+            'type': CHAR_LOOKUPS,
+            'parent_card': CHAR_LOOKUPS,
+            'card_number': CHAR_LOOKUPS,
+            'expiration_date': CHAR_LOOKUPS,
+            'cvv_number': CHAR_LOOKUPS,
+            'created_at': DATE_AND_ID_LOOKUPS,
+            'updated_at': DATE_AND_ID_LOOKUPS,
+            'created_by': BOOL_LOOKUPS,
+            'team': CHAR_LOOKUPS,
+            'address': CHAR_LOOKUPS,
+            'city': CHAR_LOOKUPS,
+            'state': CHAR_LOOKUPS,
+            'zip_code': CHAR_LOOKUPS,
+            'in_tm': BOOL_LOOKUPS,
+            'in_tickets_com': BOOL_LOOKUPS,
+            'is_deleted': BOOL_LOOKUPS,
         }
-
-        # @classmethod
-        # def get_fields(cls):
-        #     fields = super().get_fields()
-        #     for field_name in fields.copy():
-        #         lookup_list = cls.Meta.model._meta.get_field(field_name).get_lookups().keys()
-        #         fields[field_name] = lookup_list
-        #     return fields
-
-    """
-    'range' = field__range=<start>,<end> (range of objects)
-    'in' = field__in=<object_1>,<object_2> etc (particular objects)
-    'exact' = field=<value> (one object match)
-    """

@@ -1,4 +1,5 @@
 from django.contrib import admin, messages
+from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ngettext
 
 from .Resource import AccountsResource
@@ -17,9 +18,6 @@ class AccountsAdmin(ImportExportModelAdmin):
     list_filter = ('team', 'created_by__username', 'ld_computer_used', 'last_opened')
     # readonly_fields = ('created_at', 'updated_at', 'last_opened')
     actions = ['make_disabled', 'make_enabled']
-    # inlines = [
-    #     'UserInline',
-    # ]
 
     @admin.action(description='Mark selected accounts as disabled', permissions=['change'])
     def make_disabled(self, request, queryset):
@@ -42,3 +40,13 @@ class AccountsAdmin(ImportExportModelAdmin):
 
 admin.site.register(Accounts, AccountsAdmin)
 admin.site.site_header = "Lew & Dowski"
+
+
+class CustomUserAdmin(UserAdmin):
+    list_display = ('id', 'username', 'first_name', 'last_name', 'email', 'is_staff')
+    list_display_links = ('username',)
+    readonly_fields = ('id', 'last_login', 'date_joined')
+
+
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)

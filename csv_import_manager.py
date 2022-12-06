@@ -55,12 +55,14 @@ df['last_opened'].replace(to_replace=['2022-11-1', '2022-11-2', '2022-11-3', '20
                           value=['2022-11-01', '2022-11-02', '2022-11-03', '2022-11-04',
                                  '2022-11-05'], inplace=True)
 df.replace(to_replace=['N', 'Y'], value=[0, 1], inplace=True)  # replacing N and Y to 0 and 1
-df.replace(to_replace='MATEEN', value=4, inplace=True)
+df.replace(to_replace='MATEEN', value=6, inplace=True)
 df.fillna('NA', inplace=True)
-# df1 = df.iloc[:1500].to_excel('Mateen Gmail (prepared version) part 1.xlsx', index=False)
+df1 = df.iloc[:3000].to_excel('Mateen Gmail (prepared version) part 1.xlsx', index=False)
+df2 = df.iloc[3000:6000].to_excel('Mateen Gmail (prepared version) part 2.xlsx', index=False)
+df3 = df.iloc[6000:].to_excel('Mateen Gmail (prepared version) part 3.xlsx', index=False)
 # df2 = df.iloc[1500:3000].to_excel('Mateen Gmail (prepared version) part 2.xlsx', index=False)
 # df3 = df.iloc[3000:4500].to_excel('Mateen Gmail (prepared version) part 3.xlsx', index=False)
 # df4 = df.iloc[4500:6000].to_excel('Mateen Gmail (prepared version) part 4.xlsx', index=False)
 # df5 = df.iloc[6000:7500].to_excel('Mateen Gmail (prepared version) part 5.xlsx', index=False)
 # df6 = df.iloc[7500:].to_excel('Mateen Gmail (prepared version) part 6.xlsx', index=False)
-df.to_csv('Mateen Gmail (prepared version).csv', index=False)
+# df.to_csv('Mateen Gmail (prepared version).csv', index=False)
