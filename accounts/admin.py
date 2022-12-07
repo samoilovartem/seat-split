@@ -2,20 +2,21 @@ from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ngettext
 
+from import_export.admin import ImportExportModelAdmin
+
 from .Resource import AccountsResource
 from .models import *
-
-from import_export.admin import ImportExportModelAdmin
 
 
 class AccountsAdmin(ImportExportModelAdmin):
     resource_classes = [AccountsResource]
     save_as = True
     save_on_top = True
-    list_display = ('id', 'first_name', 'last_name', 'email', 'disabled')
-    list_display_links = ('first_name', 'last_name', 'email',)
+    list_display = ('id', 'first_name', 'last_name',  'disabled', 'email', 'password', 'recovery_email',
+                    'ld_computer_used', 'last_opened', 'team', 'specific_team')
+    list_display_links = ('first_name', 'last_name',)
     search_fields = ('id', 'first_name', 'last_name', 'email', 'team', 'created_by__username')
-    list_filter = ('team', 'created_by__username', 'ld_computer_used', 'last_opened')
+    list_filter = ('team', 'specific_team', 'disabled', 'created_by__username', 'ld_computer_used', 'last_opened')
     # readonly_fields = ('created_at', 'updated_at', 'last_opened')
     actions = ['make_disabled', 'make_enabled']
 
