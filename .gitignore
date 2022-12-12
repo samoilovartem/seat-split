@@ -65,6 +65,7 @@ db.sqlite3-journal
 Gservice.json
 .DS_Store/
 .idea/
+media
 
 # Flask stuff:
 instance/
@@ -110,7 +111,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-config/settings/.env
 .venv
 env/
 ../venv/

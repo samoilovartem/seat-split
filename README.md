@@ -62,3 +62,8 @@ Also, changes are made in `wsgi.py` and `manage.py`in order to use different set
 `heroku logs -n 1500`or `heroku logs -t`to maintain them live
 7. Safely delete all rows from database:\
 `python manage.py truncate --apps <app_name> --models <model_name>`
+8. Reset PK in postgresql DB (apply only after deleting all info from the table):\
+`python manage.py sqlsequencereset <app_name> | python manage.py dbshell`
+9. Safely delete an app:\
+`python manage.py migrate <app_name> zero`\
+After running this command we can delete an app from INSTALLED_APPS and delete a corresponding directory
