@@ -1,5 +1,6 @@
 from django import forms
 
+
 class CardsForm(forms.ModelForm):
     def clean(self):
         cleaned_data = self.cleaned_data

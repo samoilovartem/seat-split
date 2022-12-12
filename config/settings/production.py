@@ -1,7 +1,6 @@
 from .common import *
-import dj_database_url
 
-SECRET_KEY = os.environ["SECRET_KEY"]
+SECRET_KEY = os.environ.get("SECRET_KEY")
 ALLOWED_HOSTS = ["*"]
 DEBUG = False
 
@@ -17,12 +16,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
-
-
-if "DATABASE_URL" in os.environ:
-    DATABASES["default"] = dj_database_url.config(
-        ssl_require=True, conn_max_age=600
-    )
 
 SIMPLE_JWT['SIGNING_KEY'] = SECRET_KEY
 
