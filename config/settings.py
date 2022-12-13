@@ -5,12 +5,15 @@ from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
 
-
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 dotenv_file = BASE_DIR / '.env'
 if os.path.isfile(dotenv_file):
     load_dotenv(dotenv_file)
+
+SECRET_KEY = os.environ.get('SECRET_KEY')
+DEBUG = os.environ.get('DEBUG', default=False) in ['True', 'true', '1']
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     # Third party apps that needs to be placed before standard apps
@@ -41,6 +44,19 @@ INSTALLED_APPS = [
 ]
 
 ROOT_URLCONF = 'config.urls'
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
+]
 
 TEMPLATES = [
     {
@@ -82,6 +98,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+if DEBUG:
+    DEBUG_TOOLBAR_CONFIG = {
+        'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
+    }
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'EST'
@@ -90,8 +112,8 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'config/static')
+STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -117,15 +139,25 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework_api_key.permissions.HasAPIKey',
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'config.permissions.CustomDjangoModelPermissions',
+        # 'rest_framework_api_key.permissions.HasAPIKey',
+        # 'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.DjangoModelPermissions',
+    ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
-    ]
+    ],
+    'EXCEPTION_HANDLER': 'rollbar.contrib.django_rest_framework.post_exception_handler'
+}
+
+ROLLBAR = {
+    'access_token': os.environ.get('ROLLBAR_ACCESS_TOKEN'),
+    'environment': 'development' if DEBUG else 'production',
+    'code_version': '1.0',
+    'root': BASE_DIR,
 }
 
 SIMPLE_JWT = {
@@ -135,6 +167,7 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
 
+    'SIGNING_KEY': SECRET_KEY,
     'ALGORITHM': 'HS256',
     'VERIFYING_KEY': None,
     'AUDIENCE': None,
@@ -164,7 +197,7 @@ SWAGGER_SETTINGS = {"DEFAULT_AUTO_SCHEMA_CLASS": "cards.schemas.CustomAutoSchema
 IMPORT_EXPORT_EXPORT_PERMISSION_CODE = 'export'
 IMPORT_EXPORT_IMPORT_PERMISSION_CODE = 'import'
 IMPORT_EXPORT_TMP_STORAGE_CLASS = 'import_export.tmp_storages.MediaStorage'
-IMPORT_EXPORT_CHUNK_SIZE = 75
+IMPORT_EXPORT_CHUNK_SIZE = 150 if DEBUG else 75
 
 BOOL_LOOKUPS = ['exact']
 DATE_AND_ID_LOOKUPS = ['exact', 'range', 'in']
