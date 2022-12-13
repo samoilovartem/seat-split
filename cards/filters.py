@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from config.settings.common import CHAR_LOOKUPS, BOOL_LOOKUPS, DATE_AND_ID_LOOKUPS
+from config.settings import CHAR_LOOKUPS, BOOL_LOOKUPS, DATE_AND_ID_LOOKUPS
 from .models import Cards
 
 

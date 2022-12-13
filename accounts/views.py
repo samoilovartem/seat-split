@@ -16,7 +16,7 @@ class AllAccountsViewSet(viewsets.ModelViewSet):
     queryset = Accounts.objects.all()
     serializer_class = AccountsSerializer
     pagination_class = AccountsApiListPagination
-    permission_classes = [HasAPIKey | IsAuthenticated]
+    # permission_classes = [HasAPIKey | IsAuthenticated]
     filterset_class = AccountsFilterSet
     search_fields = ['email', 'type', 'created_by__username', 'first_name', 'last_name']
     ordering_fields = ['id', 'email', 'type', 'created_by__username', 'first_name', 'last_name', 'created_at',

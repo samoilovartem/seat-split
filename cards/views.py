@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.permissions import IsAuthenticated
 
+from config.permissions import SpecificTeamObjectOnly
 from .filters import CardsFilterSet
 from .serializers import CardsSerializer
 from .pagination import CardsApiListPagination
@@ -17,7 +18,8 @@ class AllCardsViewSet(viewsets.ModelViewSet):
     queryset = Cards.objects.all()
     serializer_class = CardsSerializer
     pagination_class = CardsApiListPagination
-    permission_classes = [HasAPIKey | IsAuthenticated]
+    # permission_classes = [HasAPIKey | IsAuthenticated]
+    # permission_classes = [SpecificTeamObjectOnly]
     filterset_class = CardsFilterSet
     search_fields = ['account_assigned', 'type', 'platform', 'parent_card', 'team', 'created_by',
                      'created_at']
