@@ -1,10 +1,9 @@
-from django.contrib.auth import get_user_model
 from django.db import models
+from django.contrib.auth import get_user_model
 from .validators import clean_card_number, clean_expiration_date, clean_cvv_number, \
     clean_zip_code, clean_state, any_or_na
 
 # from django.db.models import UniqueConstraint
-
 
 User = get_user_model()
 

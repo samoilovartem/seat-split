@@ -45,6 +45,7 @@ Also, changes are made in `wsgi.py` and `manage.py`in order to use different set
 12. Git Cheat [Sheet](http://res.cloudinary.com/hy4kyit2a/image/upload/SF_git_cheatsheet.pdf)
 13. JWT [decoding](https://jwt.io/)
 14. Using [dictionary](https://stackoverflow.com/questions/72623440/django-name-filter-name-icontains-is-not-defined) as filter value
+15. Super useful approaches of how to get user and group permissions is [here](https://stackoverflow.com/questions/16573174/how-to-get-user-permissions)
 
 
 #### Useful commands:

@@ -8,7 +8,7 @@ from .Resource import AccountsResource
 from .models import *
 
 
-class AccountsAdmin(ImportExportModelAdmin):
+class AccountsAdminConfig(ImportExportModelAdmin):
     resource_classes = [AccountsResource]
     save_as = True
     save_on_top = True
@@ -39,15 +39,15 @@ class AccountsAdmin(ImportExportModelAdmin):
         ) % updated, messages.SUCCESS)
 
 
-admin.site.register(Accounts, AccountsAdmin)
+admin.site.register(Accounts, AccountsAdminConfig)
 admin.site.site_header = "Lew & Dowski"
 
-
-class CustomUserAdmin(UserAdmin):
-    list_display = ('id', 'username', 'first_name', 'last_name', 'email', 'is_staff')
-    list_display_links = ('username',)
-    readonly_fields = ('id', 'last_login', 'date_joined')
-
-
-admin.site.unregister(User)
-admin.site.register(User, CustomUserAdmin)
+#
+# class CustomUserAdminConfig(UserAdmin):
+#     list_display = ('id', 'username', 'first_name', 'last_name', 'email', 'is_staff')
+#     list_display_links = ('username',)
+#     readonly_fields = ('id', 'last_login', 'date_joined')
+#
+#
+# admin.site.unregister(User)
+# admin.site.register(User, CustomUserAdminConfig)
