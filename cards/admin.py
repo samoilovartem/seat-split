@@ -6,7 +6,7 @@ from import_export.admin import ImportExportModelAdmin
 from .models import *
 
 
-class CardsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+class CardsAdminConfig(ImportExportModelAdmin, admin.ModelAdmin):
     save_as = True
     save_on_top = True
     list_display = ('id', 'account_assigned', 'platform', 'type',
@@ -39,4 +39,4 @@ class CardsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         ) % updated, messages.SUCCESS)
 
 
-admin.site.register(Cards, CardsAdmin)
+admin.site.register(Cards, CardsAdminConfig)

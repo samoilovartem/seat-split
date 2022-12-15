@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # Project's apps
     'cards.apps.CardsConfig',
     'accounts.apps.AccountsConfig',
+    'users.apps.UsersConfig',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -79,8 +80,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # RENDER.COM POSTGRESQL DB
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('RENDER_POSTGRESQL'),
-        ssl_require=True, conn_max_age=600)
+        # default=os.environ.get('RENDER_POSTGRESQL'),
+        default='sqlite:///db.sqlite3',
+        ssl_require=False if DEBUG else True,
+        conn_max_age=600)
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -124,6 +127,8 @@ INTERNAL_IPS = ["127.0.0.1"]
 APPEND_SLASH = False
 
 LOGIN_REDIRECT_URL = '/'
+
+AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
