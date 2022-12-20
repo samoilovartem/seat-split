@@ -2,14 +2,10 @@ from django.db.models import Count
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework_api_key.permissions import HasAPIKey
-from rest_framework.permissions import IsAuthenticated
 
-from config.permissions import SpecificTeamObjectOnly
 from .filters import CardsFilterSet
 from .serializers import CardsSerializer
 from .pagination import CardsApiListPagination
-
 from .models import Cards
 from .utils import cards_per_value
 
@@ -18,10 +14,8 @@ class AllCardsViewSet(viewsets.ModelViewSet):
     queryset = Cards.objects.all()
     serializer_class = CardsSerializer
     pagination_class = CardsApiListPagination
-    # permission_classes = [HasAPIKey | IsAuthenticated]
-    # permission_classes = [SpecificTeamObjectOnly]
     filterset_class = CardsFilterSet
-    search_fields = ['account_assigned', 'type', 'platform', 'parent_card', 'team', 'created_by',
+    search_fields = ['account_assigned', 'type', 'platform', 'parent_card', 'team', 'created_by__username',
                      'created_at']
     ordering_fields = ['id', 'account_assigned', 'type', 'platform', 'parent_card', 'team', 'created_by',
                        'created_at']

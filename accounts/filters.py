@@ -44,5 +44,5 @@ class AccountsFilterSet(filters.FilterSet):
             'created_at': DATE_AND_ID_LOOKUPS,
             'updated_at': DATE_AND_ID_LOOKUPS,
             'last_opened': DATE_AND_ID_LOOKUPS,
-            'comments': CHAR_LOOKUPS
+            'comments': CHAR_LOOKUPS,
         }

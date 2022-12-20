@@ -1,9 +1,7 @@
 from django.db.models import Count
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework_api_key.permissions import HasAPIKey
 
 from .filters import AccountsFilterSet
 from .models import Accounts
@@ -16,10 +14,9 @@ class AllAccountsViewSet(viewsets.ModelViewSet):
     queryset = Accounts.objects.all()
     serializer_class = AccountsSerializer
     pagination_class = AccountsApiListPagination
-    # permission_classes = [HasAPIKey | IsAuthenticated]
     filterset_class = AccountsFilterSet
     search_fields = ['email', 'type', 'created_by__username', 'first_name', 'last_name']
-    ordering_fields = ['id', 'email', 'type', 'created_by__username', 'first_name', 'last_name', 'created_at',
+    ordering_fields = ['id', 'email', 'type', 'created_by', 'first_name', 'last_name', 'created_at',
                        'recovery_email', 'ld_computer_used', 'last_opened', 'disabled']
     my_tags = ["All accounts"]
 
