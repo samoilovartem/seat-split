@@ -102,9 +102,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 if DEBUG:
-    DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
-    }
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 LANGUAGE_CODE = 'en-us'
@@ -147,7 +144,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'config.permissions.CustomDjangoModelPermissions',
         # 'rest_framework_api_key.permissions.HasAPIKey',
-        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',
         # 'rest_framework.permissions.DjangoModelPermissions',
     ],
     'DEFAULT_FILTER_BACKENDS': [
@@ -180,7 +177,7 @@ SIMPLE_JWT = {
     'JWK_URL': None,
     'LEEWAY': 0,
 
-    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_TYPES': ('Bearer', 'JWT',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',

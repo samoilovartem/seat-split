@@ -9,14 +9,14 @@ from users.models import User
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ('id', 'name')
+        fields = '__all__'
 
 
 class GeneralUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ('password', 'role', 'team')
+        exclude = ('password', 'team')
         extra_kwargs = {
             'date_joined': {'read_only': True},
             'last_login': {'read_only': True},
@@ -27,26 +27,28 @@ class GeneralUserSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude = ('password',)
+        exclude = ('password', 'team')
         ref_name = 'UserDetailSerializer'
 
 
 class UserListSerializer(serializers.ModelSerializer):
-    groups = GroupSerializer(many=True, read_only=True)
-    user_permissions = serializers.SerializerMethodField()
+    # groups = GroupSerializer(many=True, read_only=True)
 
-    def get_user_permissions(self, obj):
-        if obj.is_superuser:
-            all_permissions = Permission.objects.all().order_by('id').values('id', 'name', 'codename')
-            return all_permissions
-        user_permissions = Permission.objects.filter(
-            Q(user=obj.id) | Q(group__user=obj.id)
-        ).order_by('id').values('id', 'name', 'codename')
-        return user_permissions
+    # -------- IF WE EVER NEED TO SHOW USER PERMISSIONS --------
+    # user_permissions = serializers.SerializerMethodField()
+    #
+    # def get_user_permissions(self, obj):
+    #     if obj.is_superuser:
+    #         all_permissions = Permission.objects.all().order_by('id').values('id', 'name', 'codename')
+    #         return all_permissions
+    #     user_permissions = Permission.objects.filter(
+    #         Q(user=obj.id) | Q(group__user=obj.id)
+    #     ).order_by('id').values('id', 'name', 'codename')
+    #     return user_permissions
 
     class Meta:
         model = User
-        exclude = ('password', 'role', 'team')
+        exclude = ('password', 'team', 'groups', 'user_permissions')
         ref_name = 'UserListSerializer'
 
 
@@ -58,6 +60,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password', 'groups',
-                  'is_active', 'is_staff', 'is_superuser')
+        exclude = ('date_joined', 'last_login', 'email', 'team',)
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
         ref_name = 'UserCreateSerializer'
