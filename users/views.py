@@ -1,6 +1,7 @@
 from django.contrib.auth.models import Permission, Group
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from .models import User
@@ -40,7 +41,4 @@ class UsersViewSet(viewsets.ModelViewSet):
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-
-    # def post(self, request, *args, **kwargs):
-    #     created = Group.objects.create(name=role_name)
-    #     return self.create(request, *args, **kwargs)
+    my_tags = ["All groups"]

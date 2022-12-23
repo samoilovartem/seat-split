@@ -152,7 +152,8 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
     ],
-    'EXCEPTION_HANDLER': 'rollbar.contrib.django_rest_framework.post_exception_handler'
+    'EXCEPTION_HANDLER': 'rollbar.contrib.django_rest_framework.post_exception_handler',
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 
 ROLLBAR = {

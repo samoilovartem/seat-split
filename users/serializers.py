@@ -16,7 +16,7 @@ class GeneralUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ('password', 'team')
+        exclude = ('password', )
         extra_kwargs = {
             'date_joined': {'read_only': True},
             'last_login': {'read_only': True},
@@ -27,7 +27,7 @@ class GeneralUserSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude = ('password', 'team')
+        exclude = ('password', )
         ref_name = 'UserDetailSerializer'
 
 
@@ -48,7 +48,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ('password', 'team', 'groups', 'user_permissions')
+        exclude = ('password', 'groups', 'user_permissions')
         ref_name = 'UserListSerializer'
 
 
@@ -60,7 +60,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ('date_joined', 'last_login', 'email', 'team',)
+        exclude = ('date_joined', 'last_login', 'email',)
         extra_kwargs = {
             'password': {'write_only': True},
         }
