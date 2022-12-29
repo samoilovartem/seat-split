@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from .views import *
+from cards.views import *
 
 cards_router = routers.SimpleRouter()
 

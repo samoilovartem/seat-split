@@ -4,15 +4,17 @@ from django.test import tag
 
 from users.models import User
 from users.serializers import GeneralUserSerializer, UserDetailSerializer, UserCreateSerializer
-from .settings import REQUIRED_SUPERUSER_DATA, USERS_LIST_URL, REQUIRED_USER_DATA, USER_DETAIL_URL, FULL_USER_DATA
+from users.tests.settings import REQUIRED_SUPERUSER_DATA, USERS_LIST_URL, REQUIRED_USER_DATA, \
+    USER_DETAIL_URL, FULL_USER_DATA
 
 
-@tag('users')
+@tag('users', 'authenticated', 'authorized')
 class UserTest(APITestCase):
     """
     User parent test class that inherits from APITestCase and has 'setUp' method
     that children classes can use without repetition
     """
+
     def setUp(self):
 
         # creating test superuser, hashing its password and checking if raw password matches hashed one
@@ -33,10 +35,10 @@ class CreateUserTest(UserTest):
     def setUp(self):
         super().setUp()
 
-    @tag('positive')
     def test_can_create_user(self):
         """
-        Checks if new user can be successfully created
+        Checks if a new user can be successfully created
+        Expected: True
         """
 
         response = self.client.post(path=USERS_LIST_URL, data=REQUIRED_USER_DATA)
@@ -45,22 +47,23 @@ class CreateUserTest(UserTest):
         self.assertEqual(User.objects.count(), 2)
         self.assertEqual(response.data, self.expected_output)
 
-    @tag('positive')
     def test_can_create_user_with_all_fields(self):
         """
-        Checks if new user can be successfully created with all fields (not only required) filled
+        Checks if a new user can be successfully created with all fields (not only required) filled
+        Expected: True
         """
+
         response = self.client.post(path=USERS_LIST_URL, data=FULL_USER_DATA)
         self.expected_output = UserCreateSerializer(User.objects.get(pk=2)).data
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 2)
         self.assertEqual(response.data, self.expected_output)
 
-    @tag('negative')
-    def test_cannot_create_user_without_required_fields(self):
+    def test_can_create_user_without_required_fields(self):
         """
-        Checks if new user can be successfully created without required fields:
+        Checks if a new user can be successfully created without required fields:
         - username, first_name, last_name, password
+        Expected: False
         """
 
         incomplete_data = {'username': REQUIRED_USER_DATA.get('username'),
@@ -74,6 +77,7 @@ class ReadUserTest(UserTest):
     Children class that contains all necessary methods to test
     if user list and user detail can be read
     """
+
     def setUp(self):
         super().setUp()
 
@@ -86,10 +90,10 @@ class ReadUserTest(UserTest):
         # Getting expected output to compare with response
         self.expected_output = UserDetailSerializer(self.user).data
 
-    @tag('positive')
     def test_can_read_user_list(self):
         """
         Checks if all users list can be received
+        Expected: True
         """
 
         response = self.client.get(path=USERS_LIST_URL)
@@ -98,10 +102,10 @@ class ReadUserTest(UserTest):
         self.assertEqual(User.objects.get(pk=1).first_name, REQUIRED_SUPERUSER_DATA.get('first_name'))
         self.assertEqual(User.objects.get(pk=2).first_name, REQUIRED_USER_DATA.get('first_name'))
 
-    @tag('positive')
     def test_can_read_user_detail(self):
         """
         Checks if particular user detail can be received
+        Expected: True
         """
 
         response = self.client.get(path=USER_DETAIL_URL)
@@ -112,8 +116,9 @@ class ReadUserTest(UserTest):
 class UpdateUserTest(UserTest):
     """
     Children class that contains all necessary methods to test
-    if user can be updated and partial updated
+    if user can be updated and partially updated
     """
+
     def setUp(self):
         super().setUp()
 
@@ -128,20 +133,20 @@ class UpdateUserTest(UserTest):
         self.data['first_name'] = 'PARTIALLY UPDATED'
         self.expected_output = self.data
 
-    @tag('positive')
     def test_can_partial_update_user(self):
         """
         Checks if particular user instance can be partially updated
+        Expected: True
         """
 
         response = self.client.patch(path=USER_DETAIL_URL, data={'first_name': 'PARTIALLY UPDATED'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, self.expected_output)
 
-    @tag('positive')
     def test_can_update_user(self):
         """
         Checks if particular user instance can be updated
+        Expected: True
         """
 
         data_to_update = {'first_name': 'UPDATED',
@@ -153,12 +158,13 @@ class UpdateUserTest(UserTest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, self.expected_output)
 
-    @tag('positive')
     def test_can_update_all_user_fields(self):
         """
         Checks if particular user instance can be completely updated
         with almost all available fields
+        Expected: True
         """
+
         data_to_update = FULL_USER_DATA
         data_to_update.pop('password', None)
         response = self.client.put(path=USER_DETAIL_URL,
@@ -171,6 +177,7 @@ class DeleteUserTest(UserTest):
     Children class that contains all necessary methods to test
     if user can be deleted
     """
+
     def setUp(self):
         super().setUp()
 
@@ -180,11 +187,12 @@ class DeleteUserTest(UserTest):
         self.user.save()
         self.assertTrue(self.user.check_password(REQUIRED_USER_DATA.get('password')))
 
-    @tag('positive')
     def test_can_delete_user(self):
         """
         Checks if a user can be deleted
+        Expected: True
         """
+
         response = self.client.delete(path=USER_DETAIL_URL)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 

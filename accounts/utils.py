@@ -1,6 +1,6 @@
 from django.db.models import Count
 
-from .models import Accounts
+from accounts.models import Accounts
 
 
 def accounts_per_value(filter_name):

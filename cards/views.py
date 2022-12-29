@@ -3,11 +3,11 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .filters import CardsFilterSet
-from .serializers import CardsSerializer
-from .pagination import CardsApiListPagination
-from .models import Cards
-from .utils import cards_per_value
+from cards.filters import CardsFilterSet
+from cards.serializers import CardsSerializer
+from cards.pagination import CardsApiListPagination
+from cards.models import Cards
+from cards.utils import cards_per_value
 
 
 class AllCardsViewSet(viewsets.ModelViewSet):

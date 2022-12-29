@@ -3,11 +3,11 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .filters import AccountsFilterSet
-from .models import Accounts
-from .pagination import AccountsApiListPagination
-from .serializers import AccountsSerializer
-from .utils import accounts_per_value
+from accounts.filters import AccountsFilterSet
+from accounts.models import Accounts
+from accounts.pagination import AccountsApiListPagination
+from accounts.serializers import AccountsSerializer
+from accounts.utils import accounts_per_value
 
 
 class AllAccountsViewSet(viewsets.ModelViewSet):

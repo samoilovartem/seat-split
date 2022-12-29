@@ -3,7 +3,7 @@ from django.utils.translation import ngettext
 
 from import_export.admin import ImportExportModelAdmin
 
-from .models import *
+from cards.models import *
 
 
 class CardsAdminConfig(ImportExportModelAdmin, admin.ModelAdmin):

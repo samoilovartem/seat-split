@@ -39,17 +39,15 @@ class Accounts(models.Model):
     forward_to = models.CharField(max_length=150, validators=[any_or_na])
     forward_email_password = models.CharField(max_length=32, validators=[any_or_na])
     disabled = models.BooleanField(default=False)
-    # created_by = models.CharField(max_length=50, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL,
                                    related_name='created_by_accounts_set', null=True)
-    # edited_by = models.CharField(max_length=50, null=True, blank=True)
     edited_by = models.ForeignKey(User, on_delete=models.SET_NULL,
                                   related_name='edited_by_accounts_set', null=True)
     ld_computer_used = models.CharField(max_length=50, validators=[any_or_na])
     created_at = models.DateField(null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
     last_opened = models.DateField(null=True, blank=True)
-    comments = models.TextField(null=True, blank=True)
+    comments = models.TextField(validators=[any_or_na])
 
     def __str__(self):
         return self.email

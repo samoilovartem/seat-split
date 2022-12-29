@@ -23,14 +23,6 @@ We have multiple tests (CRUD) for these categories:
 All tests are tagged by its own category to be able to run them separately. For example this command will run all tests tagged as "users":\
 `python manage.py test --tag=users`
 
-Also, there are "positive" and "negative" tests. 
-Positive tests are performed in order to check whether our service does exactly what it is expected to do.
-
-The purpose of negative tests is to ensure that our service does not crash and remains stable with invalid data inputs.
-
-We can also run "positive" or "negative" tests using tags in command:\
-`python manage.py test --tag=positive`
-
 In order to speed up all tests we can use threads:\
 `python manage.py test --parallel`
 

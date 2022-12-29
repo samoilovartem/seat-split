@@ -156,6 +156,25 @@ REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 
+DJOSER = {
+    'HIDE_USERS': False,
+    'PERMISSIONS': {
+        'activation': ['config.permissions.CustomDjangoModelPermissions'],
+        'password_reset': ['config.permissions.IsOwnerOrReadOnly'],
+        'password_reset_confirm': ['config.permissions.IsOwnerOrReadOnly'],
+        'set_password': ['config.permissions.IsOwnerOrReadOnly'],
+        'username_reset': ['config.permissions.IsOwnerOrReadOnly'],
+        'username_reset_confirm': ['rest_framework.permissions.AllowAny'],
+        'set_username': ['config.permissions.IsOwnerOrReadOnly'],
+        'user_create': ['config.permissions.CustomDjangoModelPermissions'],
+        'user_delete': ['config.permissions.CustomDjangoModelPermissions'],
+        'user': ['config.permissions.IsOwnerOrReadOnly'],
+        'user_list': ['config.permissions.CustomDjangoModelPermissions'],
+        'token_create': ['rest_framework.permissions.AllowAny'],
+        'token_destroy': ['rest_framework.permissions.AllowAny'],
+    }
+}
+
 ROLLBAR = {
     'access_token': os.environ.get('ROLLBAR_ACCESS_TOKEN'),
     'environment': 'development' if DEBUG else 'production',

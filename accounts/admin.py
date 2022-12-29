@@ -1,11 +1,10 @@
 from django.contrib import admin, messages
-from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ngettext
 
 from import_export.admin import ImportExportModelAdmin
 
-from .Resource import AccountsResource
-from .models import *
+from accounts.resource import AccountsResource
+from accounts.models import *
 
 
 class AccountsAdminConfig(ImportExportModelAdmin):
@@ -41,13 +40,3 @@ class AccountsAdminConfig(ImportExportModelAdmin):
 
 admin.site.register(Accounts, AccountsAdminConfig)
 admin.site.site_header = "Lew & Dowski"
-
-#
-# class CustomUserAdminConfig(UserAdmin):
-#     list_display = ('id', 'username', 'first_name', 'last_name', 'email', 'is_staff')
-#     list_display_links = ('username',)
-#     readonly_fields = ('id', 'last_login', 'date_joined')
-#
-#
-# admin.site.unregister(User)
-# admin.site.register(User, CustomUserAdminConfig)

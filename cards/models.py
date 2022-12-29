@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from .validators import clean_card_number, clean_expiration_date, clean_cvv_number, \
+from cards.validators import clean_card_number, clean_expiration_date, clean_cvv_number, \
     clean_zip_code, clean_state, any_or_na
 
 # from django.db.models import UniqueConstraint
@@ -20,7 +20,6 @@ class Cards(models.Model):
     cvv_number = models.CharField(max_length=4, validators=[clean_cvv_number])
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
-    # created_by = models.CharField(max_length=20)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL,
                                    related_name='created_by_cards_set', null=True)
     team = models.CharField(max_length=20)
