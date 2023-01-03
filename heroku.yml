@@ -1,5 +1,7 @@
 build:
   docker:
     web: Dockerfile
+  config:
+    DJANGO_SETTINGS_MODULE: config.settings
 run:
   web: gunicorn --bind 0.0.0.0:$PORT config.wsgi:application
