@@ -39,9 +39,9 @@ INSTALLED_APPS = [
     'django_truncate',
 
     # Project's apps
-    'cards.apps.CardsConfig',
-    'accounts.apps.AccountsConfig',
-    'users.apps.UsersConfig',
+    'apps.cards.apps.CardsConfig',
+    'apps.accounts.apps.AccountsConfig',
+    'apps.users.apps.UsersConfig',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -112,8 +112,12 @@ USE_I18N = True
 
 USE_TZ = True
 
+CSRF_TRUSTED_ORIGINS = ['https://*.herokuapp.com']
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'config/static')
 STATIC_URL = '/static/'
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -214,7 +218,7 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
-SWAGGER_SETTINGS = {"DEFAULT_AUTO_SCHEMA_CLASS": "cards.schemas.CustomAutoSchema"}
+SWAGGER_SETTINGS = {"DEFAULT_AUTO_SCHEMA_CLASS": "config.schemas.CustomAutoSchema"}
 
 IMPORT_EXPORT_EXPORT_PERMISSION_CODE = 'export'
 IMPORT_EXPORT_IMPORT_PERMISSION_CODE = 'import'

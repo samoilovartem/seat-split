@@ -68,6 +68,7 @@ Gservice.json
 .idea/
 media
 
+
 # Flask stuff:
 instance/
 .webassets-cache
@@ -152,3 +153,5 @@ gsheets_engine.py
 *.xlsx
 *.csv
 binary_search.py
+/media/
+/vue/

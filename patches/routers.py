@@ -1,7 +1,7 @@
 from rest_framework import routers
-from accounts.routers import accounts_router
-from cards.routers import cards_router
-from users.routers import users_router, groups_router
+from apps.accounts.routers import accounts_router
+from apps.cards.routers import cards_router
+from apps.users.routers import users_router, groups_router
 
 main_router = routers.DefaultRouter()
 

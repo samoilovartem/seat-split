@@ -1,45 +1,28 @@
-# Indicating what image of Python it will be using (it will download it if doesn't have locally)
-FROM python:3.11
+# pull official base image (platform must be linux/amd64 due to different CPU architecture between
+# local Mac M1 and server linux.
+# Alpine is not working for some reason
+FROM --platform=linux/amd64 python:3.11
 
-#ENV APPDIR=/home/src
-#ENV PYTHONPATH=$PYTHONPATH:$APPDIR
-#
-#RUN mkdir -p $APPDIR
-#
-#RUN apt-get update && \
-#    apt-get install gcc g++ make libffi-dev libssl-dev postgresql-client iputils-ping -y && mkdir -p $APPDIR
+# set work directory
+WORKDIR /app
 
-#WORKDIR $APPDIR
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV DEBUG 0
 
+# install dependencies
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
 
-
-# Indicating working directory
-WORKDIR /usr/src/app
-
-#COPY ./em $APPDIR/em
-#COPY ./manage.py $APPDIR/
-#COPY ./requirements.txt $APPDIR/
-COPY requirements.txt requirements.txt
-
-# Running commands that we might need. Example:
-RUN pip3 install -r requirements.txt
-
-# Copying everything from current directory to current directory in docker container
+# copy project
 COPY . .
 
-# Access to our env (if ever we need to get some data from there)
-#ENV TZ Europe/Moscow
+# collect static files
+RUN python manage.py collectstatic --noinput
 
+RUN adduser --disabled-password samoylovartem
+USER samoylovartem
 
-
-# RUN #pip install -r $APPDIR/requirements.txt --upgrade && rm $APPDIR/requirements.txt
-
-#EXPOSE 8000
-
-#CMD /usr/local/bin/gunicorn -b 0.0.0.0:8000 -w 3 --reload --access-logfile - em.wsgi:application --timeout 600
-
-# Indicates what to run in container
-CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
-
-
-
+# run gunicorn
+#CMD gunicorn --bind 0.0.0.0:$PORT config.wsgi:application

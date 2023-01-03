@@ -26,6 +26,13 @@ All tests are tagged by its own category to be able to run them separately. For 
 In order to speed up all tests we can use threads:\
 `python manage.py test --parallel`
 
+Though the better way to run tests is to use `coverage` package, which is already installed (check requirements.txt). 
+
+To get full detailed report with html output use this command:\
+`coverage run manage.py test -v 2 && coverage report && coverage html`
+
+HTML report can viewed in **_htmlcov/index.html_**
+
 
 #### Useful notes:
 1. Heroku `python manage.py collectstatic` issue solution can be found [here](https://stackoverflow.com/questions/55330749/error-while-running-python-manage-py-collectstatic-noinput-after-changin).
