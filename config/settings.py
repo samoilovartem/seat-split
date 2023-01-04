@@ -80,8 +80,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # RENDER.COM POSTGRESQL DB
 DATABASES = {
     'default': dj_database_url.config(
-        # default=os.environ.get('RENDER_POSTGRESQL'),
-        default='sqlite:///db.sqlite3',
+        default=os.environ.get('PGDB_URL') if os.environ.get('IS_DOCKER_RUNNING') else 'sqlite:///db.sqlite3',
         ssl_require=False if DEBUG else True,
         conn_max_age=600)
 }
@@ -125,6 +124,10 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 INTERNAL_IPS = ["127.0.0.1"]
+if DEBUG:
+    # showing django-debug-toolbar in docker development container
+    INTERNAL_IPS = type(str('c'), (), {'__contains__': lambda *a: True})()
+
 APPEND_SLASH = False
 
 LOGIN_REDIRECT_URL = '/'

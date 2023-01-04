@@ -1,7 +1,8 @@
 # Accounts-cards django project documentation
 
 
-### Deployment algorithm
+### Deployment to Heroku
+#### Using git:
 
 1. Add Config vars in Heroku app:
 * `DJANGO_SETTINGS_MODULE=mysite.settings`
@@ -12,6 +13,15 @@
 4. Push files to Heroku: `git push heroku main`
 5. If you encounter problems with Django collectstatic, please run `heroku config:set DISABLE_COLLECTSTATIC=1`and push everything again. Full guide is [here](https://stackoverflow.com/questions/55330749/error-while-running-python-manage-py-collectstatic-noinput-after-changin) for your reference. 
 
+#### Using Container Registry:
+
+1. Prepare correct Dockerfile
+2. Use this command to build the container:\
+`docker build -t registry.heroku.com/<app_name>/web .`
+3. Push the container to registry.heroku.com:\
+`docker push registry.heroku.com/<app_name>/web`
+4. Release the container to production:\
+`heroku container:release -a <app_name> web`
 
 ### Tests:
 We have multiple tests (CRUD) for these categories:

@@ -25,4 +25,4 @@ RUN adduser --disabled-password samoylovartem
 USER samoylovartem
 
 # run gunicorn
-#CMD gunicorn --bind 0.0.0.0:$PORT config.wsgi:application
+CMD gunicorn --bind 0.0.0.0:$PORT config.wsgi:application
