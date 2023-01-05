@@ -3,6 +3,7 @@ from datetime import timedelta
 from pathlib import Path
 
 import dj_database_url
+from django.core.management.utils import get_random_secret_key
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,7 +12,7 @@ dotenv_file = BASE_DIR / '.env'
 if os.path.isfile(dotenv_file):
     load_dotenv(dotenv_file)
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', default=get_random_secret_key())
 DEBUG = os.environ.get('DEBUG', default=False) in ['True', 'true', '1']
 ALLOWED_HOSTS = ["*"]
 
@@ -231,3 +232,28 @@ IMPORT_EXPORT_CHUNK_SIZE = 150 if DEBUG else 75
 BOOL_LOOKUPS = ['exact']
 DATE_AND_ID_LOOKUPS = ['exact', 'range', 'in']
 CHAR_LOOKUPS = ['icontains', 'iexact', 'exact', 'startswith', 'contains', 'endswith']
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        }
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'debug_sql.log',
+            'filters': ['require_debug_true'],
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}

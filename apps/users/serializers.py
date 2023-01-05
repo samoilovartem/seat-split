@@ -35,10 +35,11 @@ class UserListSerializer(serializers.ModelSerializer):
 
     # -------- IF WE EVER NEED TO SHOW USER PERMISSIONS --------
     # user_permissions = serializers.SerializerMethodField()
-    #
     # def get_user_permissions(self, obj):
     #     if obj.is_superuser:
-    #         all_permissions = Permission.objects.all().order_by('id').values('id', 'name', 'codename')
+    #         all_permissions = Permission.objects.all()\
+    #             .order_by('id')\
+    #             .values('id', 'name', 'codename')
     #         return all_permissions
     #     user_permissions = Permission.objects.filter(
     #         Q(user=obj.id) | Q(group__user=obj.id)
