@@ -5,9 +5,9 @@
 #### Using git:
 
 1. Add Config vars in Heroku app:
-* `DJANGO_SETTINGS_MODULE=mysite.settings`
-* `SECRET_KEY=our_secret_key`
-* `DEBUG=False`
+   * `DJANGO_SETTINGS_MODULE=mysite.settings`
+   * `SECRET_KEY=our_secret_key`
+   * `DEBUG=False`
 2. Make sure to add everything we don't want to be uploaded in `.gitignore` and run: `git add .`
 3. Add your commit: `git commit -m 'your commit'`
 4. Push files to Heroku: `git push heroku main`
@@ -22,6 +22,8 @@
 `docker push registry.heroku.com/<app_name>/web`
 4. Release the container to production:\
 `heroku container:release -a <app_name> web`
+
+Also, you can simply run `docker_deploy.sh`and script will complete these 3 commands for you.
 
 ### Tests:
 We have multiple tests (CRUD) for these categories:
@@ -41,7 +43,9 @@ Though the better way to run tests is to use `coverage` package, which is alread
 To get full detailed report with html output use this command:\
 `coverage run manage.py test -v 2 && coverage report && coverage html`
 
-HTML report can viewed in **_htmlcov/index.html_**
+HTML report can be viewed in **_htmlcov/index.html_**
+
+Also, you can simply run `run_tests.sh`and choose from provided options.
 
 
 #### Useful notes:
