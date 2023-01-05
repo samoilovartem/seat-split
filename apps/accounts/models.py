@@ -48,6 +48,12 @@ class Accounts(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
     last_opened = models.DateField(null=True, blank=True)
     comments = models.TextField(validators=[any_or_na])
+    phone = models.CharField(max_length=50, validators=[any_or_na], default='NA')
+    tickets_com_password = models.CharField(max_length=50, validators=[any_or_na], default='NA')
+    password_reset = models.BooleanField(default=False)
+    active_tickets_inside = models.BooleanField(default=False)
+    migrated_from = models.CharField(max_length=100, validators=[any_or_na], default='NA')
+    migrated_to = models.CharField(max_length=100, validators=[any_or_na], default='NA')
 
     def __str__(self):
         return self.email
