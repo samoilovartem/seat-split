@@ -4,13 +4,12 @@ from re import sub
 
 path_to_save = 'accounts/'
 
-
 # ================================= READING CSV FILE ======================================
 path_to_read = '/Users/samoylovartem/Documents/Data migration/Accounts/Summary of Accounts.csv'
 df = pd.read_csv(path_to_read, sep=',', keep_default_na=False)
 
 # =============================== DELETING SOME COLUMNS ====================================
-df.drop(df[df['ID'] == ''].index, inplace=True)
+# df.drop(df[df['ID'] == ''].index, inplace=True)
 df.drop(columns=['ID'], axis=1, inplace=True)
 
 
@@ -44,10 +43,8 @@ df = df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
 # =================================== REPLACING VALUES =======================================
 df['disabled'].replace(to_replace=['disable', 'Disable', 'Disabled', 'Disabed', 'y'],
                        value=1, regex=True, inplace=True)
-df['last_opened'].replace(to_replace=['2022-11-1', '2022-11-2', '2022-11-3', '2022-11-4',
-                                      '2022-11-5'],
-                          value=['2022-11-01', '2022-11-02', '2022-11-03', '2022-11-04',
-                                 '2022-11-05'], inplace=True)
+df['password_matching'].replace(to_replace=['Incorrect', 'Correct'],
+                                value=[0, 1], regex=True, inplace=True)
 df.replace(to_replace=['N', 'Y'], value=[0, 1], inplace=True)
 df.replace(to_replace='MATEEN', value=6, inplace=True)
 
@@ -72,6 +69,8 @@ df['secondary_password'].replace(r'^\s*$', np.nan, regex=True, inplace=True)
 df['first_name'].replace(r'^\s*$', np.nan, regex=True, inplace=True)
 df['last_name'].replace(r'^\s*$', np.nan, regex=True, inplace=True)
 df['forward_to'].replace(r'^\s*$', np.nan, regex=True, inplace=True)
+df['password_matching'].replace(r'^\s*$', np.nan, regex=True, inplace=True)
+df['seat_scouts_password'].replace(r'^\s*$', np.nan, regex=True, inplace=True)
 
 # =========================== FILLING ALL NaN FIELDS WITH NA =================================
 df.fillna('NA', inplace=True)
@@ -81,13 +80,14 @@ print(df)
 # =========================== SPLITTING DF TO SAVE IN A FEW CSV ===============================
 # df.to_excel('Accounts (prepared version).xlsx', index=False)
 
-df1 = df.iloc[:10000].to_excel(path_to_save + 'Accounts (prepared version) part 1.xlsx', index=False)
-df2 = df.iloc[10000:20000].to_excel(path_to_save + 'Accounts (prepared version) part 2.xlsx', index=False)
-df3 = df.iloc[20000:].to_excel(path_to_save + 'Accounts (prepared version) part 3.xlsx', index=False)
-
-# df2 = df.iloc[1500:3000].to_excel('Mateen Gmail (prepared version) part 2.xlsx', index=False)
-# df3 = df.iloc[3000:4500].to_excel('Mateen Gmail (prepared version) part 3.xlsx', index=False)
-# df4 = df.iloc[4500:6000].to_excel('Mateen Gmail (prepared version) part 4.xlsx', index=False)
-# df5 = df.iloc[6000:7500].to_excel('Mateen Gmail (prepared version) part 5.xlsx', index=False)
-# df6 = df.iloc[7500:].to_excel('Mateen Gmail (prepared version) part 6.xlsx', index=False)
-# df.to_csv('Mateen Gmail (prepared version).csv', index=False)
+df1 = df.iloc[:3000].to_excel(path_to_save + 'Accounts (prepared version) part 1.xlsx', index=False)
+df2 = df.iloc[3000:6000].to_excel(path_to_save + 'Accounts (prepared version) part 2.xlsx', index=False)
+df3 = df.iloc[6000:9000].to_excel(path_to_save + 'Accounts (prepared version) part 3.xlsx', index=False)
+df4 = df.iloc[9000:12000].to_excel(path_to_save + 'Accounts (prepared version) part 4.xlsx', index=False)
+df5 = df.iloc[12000:15000].to_excel(path_to_save + 'Accounts (prepared version) part 5.xlsx', index=False)
+df6 = df.iloc[15000:18000].to_excel(path_to_save + 'Accounts (prepared version) part 6.xlsx', index=False)
+df7 = df.iloc[18000:21000].to_excel(path_to_save + 'Accounts (prepared version) part 7.xlsx', index=False)
+df8 = df.iloc[21000:24000].to_excel(path_to_save + 'Accounts (prepared version) part 8.xlsx', index=False)
+df9 = df.iloc[24000:27000].to_excel(path_to_save + 'Accounts (prepared version) part 9.xlsx', index=False)
+df10 = df.iloc[27000:30000].to_excel(path_to_save + 'Accounts (prepared version) part 10.xlsx', index=False)
+df11 = df.iloc[30000:].to_excel(path_to_save + 'Accounts (prepared version) part 11.xlsx', index=False)

@@ -16,7 +16,6 @@ class AccountsTest(APITestCase):
     """
 
     def setUp(self):
-
         # Creating test user, hashing its password and checking if raw password matches hashed one
         self.user = User.objects.create(**FULL_USER_DATA)
         self.user.set_password(FULL_USER_DATA.get('password'))
@@ -502,7 +501,7 @@ class CreateAccountTest(AccountsTest):
 
     def test_can_create_account_with_incorrect_edited_by(self):
         """
-        Checks if a new account can be successfully created with an incorrect created_by
+        Checks if a new account can be successfully created with an incorrect edited_by
         Expected: False
         """
 
@@ -527,6 +526,78 @@ class CreateAccountTest(AccountsTest):
         ACCOUNTS_FULL_VALID_TEST_DATA_COPY.update({'edited_by': ''})
         response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA_COPY)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_can_create_account_with_empty_phone(self):
+        """
+        Checks if a new account can be successfully created with an empty phone
+        Expected: False
+        """
+
+        ACCOUNTS_FULL_VALID_TEST_DATA.update({'phone': ''})
+        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn(member='This field may not be blank.',
+                      container=response.data.get('phone'))
+
+    def test_can_create_account_with_empty_tickets_com_password(self):
+        """
+        Checks if a new account can be successfully created with an empty tickets_com_password
+        Expected: False
+        """
+
+        ACCOUNTS_FULL_VALID_TEST_DATA.update({'tickets_com_password': ''})
+        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn(member='This field may not be blank.',
+                      container=response.data.get('tickets_com_password'))
+
+    def test_can_create_account_with_incorrect_password_reset(self):
+        """
+        Checks if a new account can be successfully created with an incorrect password_reset
+        Expected: False
+        """
+
+        ACCOUNTS_FULL_VALID_TEST_DATA.update({'password_reset': 'test'})
+        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn(member='Must be a valid boolean.',
+                      container=response.data.get('password_reset'))
+
+    def test_can_create_account_with_incorrect_active_tickets_inside(self):
+        """
+        Checks if a new account can be successfully created with an incorrect active_tickets_inside
+        Expected: False
+        """
+
+        ACCOUNTS_FULL_VALID_TEST_DATA.update({'active_tickets_inside': 'test'})
+        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn(member='Must be a valid boolean.',
+                      container=response.data.get('active_tickets_inside'))
+
+    def test_can_create_account_with_empty_migrated_from(self):
+        """
+        Checks if a new account can be successfully created with an empty migrated_from
+        Expected: False
+        """
+
+        ACCOUNTS_FULL_VALID_TEST_DATA.update({'migrated_from': ''})
+        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn(member='This field may not be blank.',
+                      container=response.data.get('migrated_from'))
+
+    def test_can_create_account_with_empty_migrated_to(self):
+        """
+        Checks if a new account can be successfully created with an empty migrated_to
+        Expected: False
+        """
+
+        ACCOUNTS_FULL_VALID_TEST_DATA.update({'migrated_to': ''})
+        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn(member='This field may not be blank.',
+                      container=response.data.get('migrated_to'))
 
     def test_can_create_account_with_not_existing_fields_passed(self):
         """

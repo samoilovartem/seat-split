@@ -14,7 +14,7 @@ if [ "$number" -eq 1 ]
     coverage run manage.py test -v 2 && coverage report
 elif [ "$number" -eq 2 ]
   then
-    coverage run manage.py test -v 2 && coverage report && coverage report html
+    coverage run manage.py test -v 2 && coverage report && coverage html
 elif [ "$number" -eq 3 ]
   then
     python manage.py test

@@ -1,9 +1,10 @@
+from drf_queryfields import QueryFieldsMixin
 from rest_framework import serializers
 
 from apps.accounts.models import Accounts
 
 
-class AccountsSerializer(serializers.ModelSerializer):
+class AccountsSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = Accounts
         # fields = '__all__'

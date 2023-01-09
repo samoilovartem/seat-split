@@ -155,3 +155,4 @@ gsheets_engine.py
 binary_search.py
 /media/
 /vue/
+*.bin

@@ -38,6 +38,8 @@ class Accounts(models.Model):
     specific_team = models.CharField(max_length=255, validators=[any_or_na])
     forward_to = models.CharField(max_length=150, validators=[any_or_na])
     forward_email_password = models.CharField(max_length=32, validators=[any_or_na])
+    seat_scouts_password = models.CharField(max_length=32, validators=[any_or_na])
+    password_matching = models.BooleanField(default=False)
     disabled = models.BooleanField(default=False)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL,
                                    related_name='created_by_accounts_set', null=True)
