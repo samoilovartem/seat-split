@@ -14,8 +14,8 @@ class AccountsAdminConfig(ImportExportModelAdmin):
     list_display = ('id', 'first_name', 'last_name', 'disabled', 'email', 'password', 'recovery_email',
                     'ld_computer_used', 'last_opened', 'team', 'specific_team')
     list_display_links = ('first_name', 'last_name',)
-    search_fields = ('id', 'first_name', 'last_name', 'email', 'team', 'created_by__username')
-    list_filter = ('team', 'specific_team', 'disabled', 'created_by__username', 'ld_computer_used', 'last_opened')
+    search_fields = ('id', 'first_name', 'last_name', 'email', 'team', 'created_by')
+    list_filter = ('team', 'specific_team', 'disabled', 'created_by', 'ld_computer_used', 'last_opened')
     # readonly_fields = ('created_at', 'updated_at', 'last_opened')
     actions = ['make_disabled', 'make_enabled']
 

@@ -16,7 +16,7 @@ class AllAccountsViewSet(ModelViewSet):
     serializer_class = AccountsSerializer
     pagination_class = AccountsApiListPagination
     filterset_class = AccountsFilterSet
-    search_fields = ['email', 'type', 'created_by__username', 'first_name', 'last_name']
+    search_fields = ['email', 'type', 'created_by', 'first_name', 'last_name']
     ordering_fields = ['id', 'email', 'type', 'created_by', 'first_name', 'last_name', 'created_at',
                        'recovery_email', 'ld_computer_used', 'last_opened', 'disabled']
     my_tags = ["All accounts"]

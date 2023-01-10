@@ -1,8 +1,10 @@
 from django.contrib.auth.models import Permission, Group
+from rest_framework import status
 
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.users.models import User
 from apps.users.serializers import GeneralUserSerializer, UserDetailSerializer, UserListSerializer, \
@@ -36,6 +38,15 @@ class UsersViewSet(ModelViewSet):
             for group in Group.objects.prefetch_related('permissions')
         }
         return Response({'results': result})
+
+    # @action(methods=['POST'], detail=False)
+    # def blacklist_jwt(self, request):
+    #     try:
+    #         refresh_token = request.data.get('refresh_token')
+    #         token = RefreshToken(refresh_token)
+    #         token.blacklist()
+    #     except Exception as error:
+    #         return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': error})
 
 
 class GroupViewSet(ModelViewSet):

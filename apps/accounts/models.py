@@ -33,7 +33,6 @@ class Accounts(models.Model):
     secondary_password = models.CharField(max_length=32, validators=[any_or_na])
     seat_scouts_added = models.BooleanField(default=False)
     seat_scouts_status = models.BooleanField(default=False)
-    airfrance = models.BooleanField(default=False)
     team = models.CharField(max_length=255, validators=[any_or_na])
     specific_team = models.CharField(max_length=255, validators=[any_or_na])
     forward_to = models.CharField(max_length=150, validators=[any_or_na])
@@ -41,10 +40,8 @@ class Accounts(models.Model):
     seat_scouts_password = models.CharField(max_length=32, validators=[any_or_na])
     password_matching = models.BooleanField(default=False)
     disabled = models.BooleanField(default=False)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL,
-                                   related_name='created_by_accounts_set', null=True)
-    edited_by = models.ForeignKey(User, on_delete=models.SET_NULL,
-                                  related_name='edited_by_accounts_set', null=True)
+    created_by = models.CharField(max_length=32, validators=[any_or_na], default='MATEEN')
+    edited_by = models.CharField(max_length=32, validators=[any_or_na], default='NA')
     ld_computer_used = models.CharField(max_length=50, validators=[any_or_na])
     created_at = models.DateField(null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
