@@ -1,15 +1,12 @@
+from drf_queryfields import QueryFieldsMixin
 from rest_framework import serializers
 
+from apps.accounts.serializers import ConvertNoneToStringSerializerMixin
 from apps.cards.models import Cards
 
 
-class CardsSerializer(serializers.ModelSerializer):
+class CardsSerializer(ConvertNoneToStringSerializerMixin, QueryFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = Cards
         fields = '__all__'
-        # validators = [
-        #     UniqueTogetherValidator(
-        #         queryset=Accounts.objects.all(),
-        #         fields=['account_assigned', 'platform']
-        #     )
-        # ]
+        # none_to_str_fields = ('created_by',)

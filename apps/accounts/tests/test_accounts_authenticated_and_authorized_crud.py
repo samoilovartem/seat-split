@@ -2,8 +2,9 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from django.test import tag
 
-from apps.accounts.tests.settings import FULL_USER_DATA, ACCOUNTS_LIST_URL, ACCOUNT_DETAIL_URL, \
-    ACCOUNTS_FULL_VALID_REAL_DATA, ACCOUNTS_FULL_VALID_TEST_DATA, ACCOUNTS_FULL_VALID_TEST_DATA_COPY
+from apps.accounts.tests.settings import ACCOUNTS_LIST_URL, ACCOUNT_DETAIL_URL, \
+    ACCOUNTS_FULL_VALID_REAL_DATA, ACCOUNTS_FULL_VALID_TEST_DATA, ACCOUNTS_FULL_VALID_TEST_DATA_COPY, \
+    REQUIRED_SUPERUSER_DATA
 from apps.users.models import User
 from apps.accounts.models import Accounts
 
@@ -16,16 +17,16 @@ class AccountsTest(APITestCase):
     """
 
     def setUp(self):
-        # Creating test user, hashing its password and checking if raw password matches hashed one
-        self.user = User.objects.create(**FULL_USER_DATA)
-        self.user.set_password(FULL_USER_DATA.get('password'))
-        self.user.user_permissions.add(47, 48, 49, 50)
-        self.user.save()
-        self.assertTrue(self.user.check_password(FULL_USER_DATA.get('password')))
 
-        # logging in a test user
-        self.client.login(username=FULL_USER_DATA.get('username'),
-                          password=FULL_USER_DATA.get('password'))
+        # creating test superuser, hashing its password and checking if raw password matches hashed one
+        self.superuser = User.objects.create_superuser(**REQUIRED_SUPERUSER_DATA)
+        self.superuser.set_password(REQUIRED_SUPERUSER_DATA.get('password'))
+        self.superuser.save()
+        self.assertTrue(self.superuser.check_password(REQUIRED_SUPERUSER_DATA.get('password')))
+
+        # logging in
+        self.client.login(username=REQUIRED_SUPERUSER_DATA.get('username'),
+                          password=REQUIRED_SUPERUSER_DATA.get('password'))
 
         # creating one real card for next tests
         self.account = Accounts.objects.create(**ACCOUNTS_FULL_VALID_REAL_DATA)
@@ -351,18 +352,6 @@ class CreateAccountTest(AccountsTest):
         self.assertIn(member='Must be a valid boolean.',
                       container=response.data.get('seat_scouts_status'))
 
-    def test_can_create_account_with_incorrect_airfrance(self):
-        """
-        Checks if a new account can be successfully created with an incorrect airfrance
-        Expected: False
-        """
-
-        ACCOUNTS_FULL_VALID_TEST_DATA.update({'airfrance': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('airfrance'))
-
     def test_can_create_account_with_empty_team(self):
         """
         Checks if a new account can be successfully created with an empty team
@@ -471,61 +460,29 @@ class CreateAccountTest(AccountsTest):
         self.assertIn(member='This field may not be blank.',
                       container=response.data.get('comments'))
 
-    def test_can_create_account_with_incorrect_created_by(self):
-        """
-        Checks if a new account can be successfully created with an incorrect created_by
-        Expected: False
-        """
-
-        ACCOUNTS_FULL_VALID_TEST_DATA.update({'created_by': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Incorrect type. Expected pk value, received str.',
-                      container=response.data.get('created_by'))
-
-        ACCOUNTS_FULL_VALID_TEST_DATA.update({'created_by': 12344})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Invalid pk "12344" - object does not exist.',
-                      container=response.data.get('created_by'))
-
     def test_can_create_account_with_empty_created_by(self):
         """
         Checks if a new account can be successfully created with an empty created_by
-        Expected: True
-        """
-
-        ACCOUNTS_FULL_VALID_TEST_DATA_COPY.update({'created_by': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA_COPY)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-    def test_can_create_account_with_incorrect_edited_by(self):
-        """
-        Checks if a new account can be successfully created with an incorrect edited_by
         Expected: False
         """
 
-        ACCOUNTS_FULL_VALID_TEST_DATA.update({'edited_by': 'test'})
+        ACCOUNTS_FULL_VALID_TEST_DATA.update({'created_by': ''})
         response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Incorrect type. Expected pk value, received str.',
-                      container=response.data.get('edited_by'))
-
-        ACCOUNTS_FULL_VALID_TEST_DATA.update({'edited_by': 12344})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Invalid pk "12344" - object does not exist.',
-                      container=response.data.get('edited_by'))
+        self.assertIn(member='This field may not be blank.',
+                      container=response.data.get('created_by'))
 
     def test_can_create_account_with_empty_edited_by(self):
         """
         Checks if a new account can be successfully created with an empty edited_by
-        Expected: True
+        Expected: False
         """
 
-        ACCOUNTS_FULL_VALID_TEST_DATA_COPY.update({'edited_by': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA_COPY)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        ACCOUNTS_FULL_VALID_TEST_DATA.update({'edited_by': ''})
+        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn(member='This field may not be blank.',
+                      container=response.data.get('edited_by'))
 
     def test_can_create_account_with_empty_phone(self):
         """

@@ -10,7 +10,7 @@ df = pd.read_csv(path_to_read, sep=',', keep_default_na=False)
 
 # =============================== DELETING SOME COLUMNS ====================================
 # df.drop(df[df['ID'] == ''].index, inplace=True)
-df.drop(columns=['ID'], axis=1, inplace=True)
+df.drop(columns=['ID', 'AirFrance'], axis=1, inplace=True)
 
 
 # ======================== RENAMING ALL COLUMN AS A SNAKE_CASE ===============================

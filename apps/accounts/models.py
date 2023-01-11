@@ -20,6 +20,7 @@ class Accounts(models.Model):
     errors_failed = models.CharField(max_length=255, validators=[any_or_na])
     tm_created = models.BooleanField(default=False)
     tm_password = models.CharField(max_length=32, validators=[any_or_na])
+    tm_address = models.CharField(max_length=255, validators=[any_or_na], default='NA')
     axs_created = models.BooleanField(default=False)
     axs_password = models.CharField(max_length=32, validators=[any_or_na])
     sg_created = models.BooleanField(default=False)

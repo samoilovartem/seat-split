@@ -1,7 +1,9 @@
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group
+from drf_queryfields import QueryFieldsMixin
 from rest_framework import serializers
 
+from apps.accounts.serializers import ConvertNoneToStringSerializerMixin
 from apps.users.models import User
 
 
@@ -23,14 +25,15 @@ class GeneralUserSerializer(serializers.ModelSerializer):
         ref_name = 'GeneralUserSerializer'
 
 
-class UserDetailSerializer(serializers.ModelSerializer):
+class UserDetailSerializer(ConvertNoneToStringSerializerMixin, QueryFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = User
         exclude = ('password', )
+        none_to_str_fields = ('last_login', 'role', 'team', 'last_opened', 'email')
         ref_name = 'UserDetailSerializer'
 
 
-class UserListSerializer(serializers.ModelSerializer):
+class UserListSerializer(ConvertNoneToStringSerializerMixin, QueryFieldsMixin, serializers.ModelSerializer):
     # groups = GroupSerializer(many=True, read_only=True)
 
     # -------- IF WE EVER NEED TO SHOW USER PERMISSIONS --------
@@ -49,6 +52,7 @@ class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         exclude = ('password', 'groups', 'user_permissions')
+        none_to_str_fields = ('last_login', 'role', 'team', 'last_opened', 'email')
         ref_name = 'UserListSerializer'
 
 

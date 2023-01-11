@@ -1,11 +1,11 @@
+from django.test import tag
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.test import tag
 
-from apps.cards.tests.settings import FULL_USER_DATA, CARDS_LIST_URL, CARDS_FULL_VALID_TEST_DATA, \
-    CARDS_FULL_VALID_REAL_DATA, CARD_DETAIL_URL, CARDS_FULL_VALID_TEST_DATA_COPY
-from apps.users.models import User
 from apps.cards.models import Cards
+from apps.cards.tests.settings import CARDS_LIST_URL, CARDS_FULL_VALID_TEST_DATA, \
+    CARDS_FULL_VALID_REAL_DATA, CARD_DETAIL_URL, CARDS_FULL_VALID_TEST_DATA_COPY, REQUIRED_SUPERUSER_DATA
+from apps.users.models import User
 
 
 @tag('cards', 'authenticated')
@@ -17,16 +17,15 @@ class CardsTest(APITestCase):
 
     def setUp(self):
 
-        # Creating test user, hashing its password and checking if raw password matches hashed one
-        self.user = User.objects.create(**FULL_USER_DATA)
-        self.user.set_password(FULL_USER_DATA.get('password'))
-        self.user.user_permissions.add(41, 42, 43, 44)
-        self.user.save()
-        self.assertTrue(self.user.check_password(FULL_USER_DATA.get('password')))
+        # creating test superuser, hashing its password and checking if raw password matches hashed one
+        self.superuser = User.objects.create_superuser(**REQUIRED_SUPERUSER_DATA)
+        self.superuser.set_password(REQUIRED_SUPERUSER_DATA.get('password'))
+        self.superuser.save()
+        self.assertTrue(self.superuser.check_password(REQUIRED_SUPERUSER_DATA.get('password')))
 
-        # logging in a test user
-        self.client.login(username=FULL_USER_DATA.get('username'),
-                          password=FULL_USER_DATA.get('password'))
+        # logging in
+        self.client.login(username=REQUIRED_SUPERUSER_DATA.get('username'),
+                          password=REQUIRED_SUPERUSER_DATA.get('password'))
 
         # creating one real card for next tests
         self.card = Cards.objects.create(**CARDS_FULL_VALID_REAL_DATA)

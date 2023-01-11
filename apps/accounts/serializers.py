@@ -27,6 +27,5 @@ class AccountsSerializer(ConvertNoneToStringSerializerMixin, QueryFieldsMixin, s
 
     class Meta:
         model = Accounts
-        # fields = '__all__'
         exclude = ('updated_at',)
         none_to_str_fields = ('created_by', 'edited_by', 'created_at', 'last_opened')
