@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group
 from drf_queryfields import QueryFieldsMixin
 from rest_framework import serializers
 
-from apps.accounts.serializers import ConvertNoneToStringSerializerMixin
+from apps.serializers import ConvertNoneToStringSerializerMixin
 from apps.users.models import User
 
 

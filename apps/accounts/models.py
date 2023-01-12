@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from apps.cards.validators import any_or_na
+from apps.validators import any_or_na
 
 User = get_user_model()
 

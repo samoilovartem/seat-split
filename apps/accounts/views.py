@@ -6,7 +6,6 @@ from rest_framework.response import Response
 
 from apps.accounts.filters import AccountsFilterSet
 from apps.accounts.models import Accounts
-from apps.accounts.pagination import AccountsApiListPagination
 from apps.accounts.serializers import AccountsSerializer
 from apps.accounts.utils import accounts_per_value
 
@@ -14,11 +13,27 @@ from apps.accounts.utils import accounts_per_value
 class AllAccountsViewSet(ModelViewSet):
     queryset = Accounts.objects.all()
     serializer_class = AccountsSerializer
-    pagination_class = AccountsApiListPagination
     filterset_class = AccountsFilterSet
-    search_fields = ['email', 'type', 'created_by', 'first_name', 'last_name']
-    ordering_fields = ['id', 'email', 'type', 'created_by', 'first_name', 'last_name', 'created_at',
-                       'recovery_email', 'ld_computer_used', 'last_opened', 'disabled']
+    search_fields = [
+        'email',
+        'type',
+        'created_by',
+        'first_name',
+        'last_name'
+    ]
+    ordering_fields = [
+        'id',
+        'email',
+        'type',
+        'created_by',
+        'first_name',
+        'last_name',
+        'created_at',
+        'recovery_email',
+        'ld_computer_used',
+        'last_opened',
+        'disabled'
+    ]
     my_tags = ["All accounts"]
 
     @action(methods=['GET'], detail=False)

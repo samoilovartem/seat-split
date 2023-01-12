@@ -12,14 +12,15 @@ ENV PYTHONUNBUFFERED 1
 ENV DEBUG 0
 
 # install dependencies
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+COPY ./prod-requirements.txt .
+RUN pip install -r prod-requirements.txt
 
 # copy project
 COPY . .
 
 # collect static files
 RUN python manage.py collectstatic --noinput
+RUN python manage.py migrate
 
 RUN adduser --disabled-password samoylovartem
 USER samoylovartem

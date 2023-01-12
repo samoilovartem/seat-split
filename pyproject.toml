@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "django-accounts-cards"
+version = "1"
+authors = [
+    {name = "Artem Samoilov", email = "asamoilov@lewanddowski.com"},
+]
+description = "API based on DRF for accounts-cards"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "django",
+    "django-filter",
+    "dj-database-url",
+    "django-import-export",
+    "djangorestframework",
+    "django-truncate",
+    "django_debug_toolbar",
+    "djangorestframework-api-key",
+    "djangorestframework-queryfields",
+    "djangorestframework-simplejwt",
+    "djoser",
+    "drf-yasg",
+    "gunicorn",
+    "pip-tools",
+    "psycopg2",
+    "psycopg2-binary",
+    "python-dotenv",
+    "rollbar",
+    "whitenoise"
+]
+
+[project.optional-dependencies]
+dev = [
+    "sqlalchemy",
+    "coverage",
+    "pandas",
+    "beautifulsoup4",
+    "pygount"
+]

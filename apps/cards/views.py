@@ -6,7 +6,6 @@ from rest_framework.response import Response
 
 from apps.cards.filters import CardsFilterSet
 from apps.cards.serializers import CardsSerializer
-from apps.cards.pagination import CardsApiListPagination
 from apps.cards.models import Cards
 from apps.cards.utils import cards_per_value
 
@@ -14,12 +13,26 @@ from apps.cards.utils import cards_per_value
 class AllCardsViewSet(ModelViewSet):
     queryset = Cards.objects.all()
     serializer_class = CardsSerializer
-    pagination_class = CardsApiListPagination
     filterset_class = CardsFilterSet
-    search_fields = ['account_assigned', 'type', 'platform', 'parent_card', 'team', 'created_by__username',
-                     'created_at']
-    ordering_fields = ['id', 'account_assigned', 'type', 'platform', 'parent_card', 'team', 'created_by',
-                       'created_at']
+    search_fields = [
+        'account_assigned',
+        'type',
+        'platform',
+        'parent_card',
+        'team',
+        'created_by__username',
+        'created_at'
+    ]
+    ordering_fields = [
+        'id',
+        'account_assigned',
+        'type',
+        'platform',
+        'parent_card',
+        'team',
+        'created_by',
+        'created_at'
+    ]
     my_tags = ["All cards"]
 
     @action(methods=['GET'], detail=False)
