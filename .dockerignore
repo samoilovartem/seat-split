@@ -2,3 +2,4 @@
 */env/
 htmlcov/
 /db.sqlite3
+!/jwt_project_app/

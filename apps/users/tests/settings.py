@@ -7,8 +7,8 @@ GROUP_DETAIL_URL = reverse('all-groups-detail', kwargs={'pk': 1})
 
 API_ROOT_URL = reverse('api-root')
 SWAGGER_URL = reverse('schema-swagger-ui')
-USER_BASE_AUTH_LOGIN_URL = reverse('login')
-USER_BASE_AUTH_LOGOUT_URL = reverse('logout')
+# USER_BASE_AUTH_LOGIN_URL = reverse('login')
+# USER_BASE_AUTH_LOGOUT_URL = reverse('logout')
 
 REQUIRED_SUPERUSER_DATA = {
     "username": "superuser",

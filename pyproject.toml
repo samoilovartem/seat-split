@@ -30,7 +30,8 @@ dependencies = [
     "psycopg2-binary",
     "python-dotenv",
     "rollbar",
-    "whitenoise"
+    "whitenoise",
+    "django-cors-headers"
 ]
 
 [project.optional-dependencies]

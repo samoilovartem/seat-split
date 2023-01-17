@@ -16,6 +16,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', default=get_random_secret_key())
 DEBUG = os.environ.get('DEBUG', default=False) in ['True', 'true', '1']
 ALLOWED_HOSTS = ["*"]
 
+CORS_ALLOWED_ORIGINS = ['http://localhost:8080', 'http://127.0.0.1:8000']
+
 INSTALLED_APPS = [
     # Third party apps that needs to be placed before standard apps
 
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     'django_filters',
     'import_export',
     'django_truncate',
+    'corsheaders',
 
     # Project's apps
     'apps.cards.apps.CardsConfig',
@@ -50,6 +53,7 @@ ROOT_URLCONF = 'config.urls'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -146,10 +150,10 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'config.permissions.CustomDjangoModelPermissions',
@@ -176,7 +180,11 @@ DJOSER = {
         'username_reset': ['config.permissions.IsOwnerOrReadOnly'],
         'username_reset_confirm': ['rest_framework.permissions.AllowAny'],
         'set_username': ['config.permissions.IsOwnerOrReadOnly'],
-        'user_create': ['config.permissions.CustomDjangoModelPermissions'],
+        # 'user_create': ['config.permissions.CustomDjangoModelPermissions'],
+        'user_create': [
+            'rest_framework.permissions.AllowAny' if DEBUG else
+            'config.permissions.CustomDjangoModelPermissions'
+        ],
         'user_delete': ['config.permissions.CustomDjangoModelPermissions'],
         'user': ['config.permissions.IsOwnerOrReadOnly'],
         'user_list': ['config.permissions.CustomDjangoModelPermissions'],
@@ -193,7 +201,7 @@ ROLLBAR = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10) if DEBUG else timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1) if DEBUG else timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
