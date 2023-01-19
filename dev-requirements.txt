@@ -64,6 +64,8 @@ django-filter==22.1
     # via django-accounts-cards (pyproject.toml)
 django-import-export==3.0.2
     # via django-accounts-cards (pyproject.toml)
+django-querycount==0.8.3
+    # via django-accounts-cards (pyproject.toml)
 django-templated-mail==1.1.1
     # via djoser
 django-truncate==0.1

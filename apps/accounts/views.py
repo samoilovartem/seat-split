@@ -1,8 +1,8 @@
 from django.db.models import Count
 
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from apps.accounts.filters import AccountsFilterSet
 from apps.accounts.models import Accounts
@@ -38,8 +38,11 @@ class AllAccountsViewSet(ModelViewSet):
 
     @action(methods=['GET'], detail=False)
     def show_duplicates(self, request):
-        duplicates = Accounts.objects.values('email').annotate(Count('id')).order_by().filter(id__count__gt=1)
-        return Response({'results': duplicates})
+        duplicates = Accounts.objects.values('email') \
+            .annotate(Count('id')) \
+            .order_by() \
+            .filter(id__count__gt=1)
+        return Response({'count': len(duplicates), 'results': duplicates})
 
     @action(methods=['GET'], detail=False)
     def get_accounts_per_type(self, request):

@@ -11,7 +11,6 @@
 </template>
 
 <script>
-
 import axiosInstance from "@/axios";
 
 export default {
@@ -28,8 +27,6 @@ export default {
     }
   },
 }
-
-
 </script>
 
 <style lang="scss">

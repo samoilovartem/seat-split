@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from patches.routers import main_router
+from apps.routers import main_router
 
 urlpatterns = [
     path('api/v1/base-auth/', include('rest_framework.urls')),

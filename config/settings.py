@@ -63,6 +63,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
+    'querycount.middleware.QueryCountMiddleware',
 ]
 
 TEMPLATES = [
@@ -156,7 +157,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'config.permissions.CustomDjangoModelPermissions',
+        'apps.permissions.CustomDjangoModelPermissions',
         # 'rest_framework_api_key.permissions.HasAPIKey',
         'rest_framework.permissions.IsAuthenticated',
         # 'rest_framework.permissions.DjangoModelPermissions',
@@ -173,21 +174,21 @@ REST_FRAMEWORK = {
 DJOSER = {
     'HIDE_USERS': False,
     'PERMISSIONS': {
-        'activation': ['config.permissions.CustomDjangoModelPermissions'],
-        'password_reset': ['config.permissions.IsOwnerOrReadOnly'],
-        'password_reset_confirm': ['config.permissions.IsOwnerOrReadOnly'],
-        'set_password': ['config.permissions.IsOwnerOrReadOnly'],
-        'username_reset': ['config.permissions.IsOwnerOrReadOnly'],
+        'activation': ['apps.permissions.CustomDjangoModelPermissions'],
+        'password_reset': ['apps.permissions.IsOwnerOrReadOnly'],
+        'password_reset_confirm': ['apps.permissions.IsOwnerOrReadOnly'],
+        'set_password': ['apps.permissions.IsOwnerOrReadOnly'],
+        'username_reset': ['apps.permissions.IsOwnerOrReadOnly'],
         'username_reset_confirm': ['rest_framework.permissions.AllowAny'],
-        'set_username': ['config.permissions.IsOwnerOrReadOnly'],
+        'set_username': ['apps.permissions.IsOwnerOrReadOnly'],
         # 'user_create': ['config.permissions.CustomDjangoModelPermissions'],
         'user_create': [
             'rest_framework.permissions.AllowAny' if DEBUG else
-            'config.permissions.CustomDjangoModelPermissions'
+            'apps.permissions.CustomDjangoModelPermissions'
         ],
-        'user_delete': ['config.permissions.CustomDjangoModelPermissions'],
-        'user': ['config.permissions.IsOwnerOrReadOnly'],
-        'user_list': ['config.permissions.CustomDjangoModelPermissions'],
+        'user_delete': ['apps.permissions.CustomDjangoModelPermissions'],
+        'user': ['apps.permissions.IsOwnerOrReadOnly'],
+        'user_list': ['apps.permissions.CustomDjangoModelPermissions'],
         'token_create': ['rest_framework.permissions.AllowAny'],
         'token_destroy': ['rest_framework.permissions.AllowAny'],
     }
@@ -243,27 +244,15 @@ BOOL_LOOKUPS = ['exact']
 DATE_AND_ID_LOOKUPS = ['exact', 'range', 'in']
 CHAR_LOOKUPS = ['icontains', 'iexact', 'exact', 'startswith', 'contains', 'endswith']
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        }
+QUERYCOUNT = {
+    'THRESHOLDS': {
+        'MEDIUM': 50,
+        'HIGH': 200,
+        'MIN_TIME_TO_LOG': 0,
+        'MIN_QUERY_COUNT_TO_LOG': 0
     },
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'debug_sql.log',
-            'filters': ['require_debug_true'],
-        },
-    },
-    'loggers': {
-        'django.db.backends': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
+    'IGNORE_REQUEST_PATTERNS': [r'^/admin/'],
+    'IGNORE_SQL_PATTERNS': [r'NO SCROLL CURSOR WITH'],
+    'DISPLAY_DUPLICATES': 10,
+    'RESPONSE_HEADER': 'X-DjangoQueryCount-Count'
 }

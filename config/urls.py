@@ -7,7 +7,7 @@ from config.yasg import urlpatterns as swagger_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('patches.api_urls')),
+    path('', include('apps.urls')),
 ]
 
 urlpatterns += swagger_urls
