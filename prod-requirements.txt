@@ -41,12 +41,15 @@ django==4.1.5
     # via
     #   dj-database-url
     #   django-accounts-cards (pyproject.toml)
+    #   django-cors-headers
     #   django-debug-toolbar
     #   django-filter
     #   django-import-export
     #   djangorestframework
     #   djangorestframework-simplejwt
     #   drf-yasg
+django-cors-headers==3.13.0
+    # via django-accounts-cards (pyproject.toml)
 django-debug-toolbar==3.8.1
     # via django-accounts-cards (pyproject.toml)
 django-filter==22.1

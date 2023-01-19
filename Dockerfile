@@ -20,7 +20,6 @@ COPY . .
 
 # collect static files
 RUN python manage.py collectstatic --noinput
-RUN python manage.py migrate
 
 RUN adduser --disabled-password samoylovartem
 USER samoylovartem
