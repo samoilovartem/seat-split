@@ -1,12 +1,17 @@
+from django.test import tag
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.test import tag
 
-from apps.accounts.tests.settings import ACCOUNTS_LIST_URL, ACCOUNT_DETAIL_URL, \
-    ACCOUNTS_FULL_VALID_REAL_DATA, ACCOUNTS_FULL_VALID_TEST_DATA, ACCOUNTS_FULL_VALID_TEST_DATA_COPY, \
-    REQUIRED_SUPERUSER_DATA
-from apps.users.models import User
 from apps.accounts.models import Accounts
+from apps.accounts.tests.settings import (
+    ACCOUNT_DETAIL_URL,
+    ACCOUNTS_FULL_VALID_REAL_DATA,
+    ACCOUNTS_FULL_VALID_TEST_DATA,
+    ACCOUNTS_FULL_VALID_TEST_DATA_COPY,
+    ACCOUNTS_LIST_URL,
+    REQUIRED_SUPERUSER_DATA,
+)
+from apps.users.models import User
 
 
 @tag('accounts', 'authenticated', 'authorized')
@@ -17,16 +22,20 @@ class AccountsTest(APITestCase):
     """
 
     def setUp(self):
-
-        # creating test superuser, hashing its password and checking if raw password matches hashed one
+        # creating test superuser, hashing its password and checking
+        # if raw password matches hashed one
         self.superuser = User.objects.create_superuser(**REQUIRED_SUPERUSER_DATA)
         self.superuser.set_password(REQUIRED_SUPERUSER_DATA.get('password'))
         self.superuser.save()
-        self.assertTrue(self.superuser.check_password(REQUIRED_SUPERUSER_DATA.get('password')))
+        self.assertTrue(
+            self.superuser.check_password(REQUIRED_SUPERUSER_DATA.get('password'))
+        )
 
         # logging in
-        self.client.login(username=REQUIRED_SUPERUSER_DATA.get('username'),
-                          password=REQUIRED_SUPERUSER_DATA.get('password'))
+        self.client.login(
+            username=REQUIRED_SUPERUSER_DATA.get('username'),
+            password=REQUIRED_SUPERUSER_DATA.get('password'),
+        )
 
         # creating one real card for next tests
         self.account = Accounts.objects.create(**ACCOUNTS_FULL_VALID_REAL_DATA)
@@ -46,11 +55,14 @@ class CreateAccountTest(AccountsTest):
         Expected: True
         """
 
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Accounts.objects.count(), 2)
-        self.assertEqual(response.data.get('email'),
-                         ACCOUNTS_FULL_VALID_TEST_DATA.get('email'))
+        self.assertEqual(
+            response.data.get('email'), ACCOUNTS_FULL_VALID_TEST_DATA.get('email')
+        )
 
     def test_can_create_account_with_empty_first_name(self):
         """
@@ -59,10 +71,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'first_name': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('first_name'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('first_name'),
+        )
 
     def test_can_create_account_with_empty_last_name(self):
         """
@@ -71,10 +87,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'last_name': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('last_name'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('last_name'),
+        )
 
     def test_can_create_account_with_incorrect_email(self):
         """
@@ -83,10 +103,13 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'email': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Enter a valid email address.',
-                      container=response.data.get('email'))
+        self.assertIn(
+            member='Enter a valid email address.', container=response.data.get('email')
+        )
 
     def test_can_create_account_with_empty_email(self):
         """
@@ -95,10 +118,13 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'email': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('email'))
+        self.assertIn(
+            member='This field may not be blank.', container=response.data.get('email')
+        )
 
     def test_can_create_account_with_empty_type(self):
         """
@@ -107,10 +133,13 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'type': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('type'))
+        self.assertIn(
+            member='This field may not be blank.', container=response.data.get('type')
+        )
 
     def test_can_create_account_with_empty_password(self):
         """
@@ -119,10 +148,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'password': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('password'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('password'),
+        )
 
     def test_can_create_account_with_empty_recovery_email(self):
         """
@@ -131,10 +164,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'recovery_email': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('recovery_email'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('recovery_email'),
+        )
 
     def test_can_create_account_with_incorrect_email_forwarding(self):
         """
@@ -143,10 +180,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'email_forwarding': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('email_forwarding'))
+        self.assertIn(
+            member='Must be a valid boolean.',
+            container=response.data.get('email_forwarding'),
+        )
 
     def test_can_create_account_with_incorrect_auto_po_seats_scouts(self):
         """
@@ -155,10 +196,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'auto_po_seats_scouts': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('auto_po_seats_scouts'))
+        self.assertIn(
+            member='Must be a valid boolean.',
+            container=response.data.get('auto_po_seats_scouts'),
+        )
 
     def test_can_create_account_with_empty_errors_failed(self):
         """
@@ -167,10 +212,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'errors_failed': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('errors_failed'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('errors_failed'),
+        )
 
     def test_can_create_account_with_incorrect_tm_created(self):
         """
@@ -179,10 +228,13 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'tm_created': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('tm_created'))
+        self.assertIn(
+            member='Must be a valid boolean.', container=response.data.get('tm_created')
+        )
 
     def test_can_create_account_with_empty_tm_password(self):
         """
@@ -191,10 +243,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'tm_password': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('tm_password'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('tm_password'),
+        )
 
     def test_can_create_account_with_incorrect_axs_created(self):
         """
@@ -203,10 +259,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'axs_created': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('axs_created'))
+        self.assertIn(
+            member='Must be a valid boolean.',
+            container=response.data.get('axs_created'),
+        )
 
     def test_can_create_account_with_empty_axs_password(self):
         """
@@ -215,10 +275,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'axs_password': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('axs_password'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('axs_password'),
+        )
 
     def test_can_create_account_with_incorrect_sg_created(self):
         """
@@ -227,10 +291,13 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'sg_created': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('sg_created'))
+        self.assertIn(
+            member='Must be a valid boolean.', container=response.data.get('sg_created')
+        )
 
     def test_can_create_account_with_empty_sg_password(self):
         """
@@ -239,10 +306,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'sg_password': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('sg_password'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('sg_password'),
+        )
 
     def test_can_create_account_with_incorrect_tickets_com_created(self):
         """
@@ -251,10 +322,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'tickets_com_created': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('tickets_com_created'))
+        self.assertIn(
+            member='Must be a valid boolean.',
+            container=response.data.get('tickets_com_created'),
+        )
 
     def test_can_create_account_with_incorrect_eventbrite(self):
         """
@@ -263,10 +338,13 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'eventbrite': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('eventbrite'))
+        self.assertIn(
+            member='Must be a valid boolean.', container=response.data.get('eventbrite')
+        )
 
     def test_can_create_account_with_incorrect_etix(self):
         """
@@ -275,10 +353,13 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'etix': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('etix'))
+        self.assertIn(
+            member='Must be a valid boolean.', container=response.data.get('etix')
+        )
 
     def test_can_create_account_with_incorrect_ticket_web(self):
         """
@@ -287,10 +368,13 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'ticket_web': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('ticket_web'))
+        self.assertIn(
+            member='Must be a valid boolean.', container=response.data.get('ticket_web')
+        )
 
     def test_can_create_account_with_incorrect_big_tickets(self):
         """
@@ -299,10 +383,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'big_tickets': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('big_tickets'))
+        self.assertIn(
+            member='Must be a valid boolean.',
+            container=response.data.get('big_tickets'),
+        )
 
     def test_can_create_account_with_incorrect_amazon(self):
         """
@@ -311,10 +399,13 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'amazon': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('amazon'))
+        self.assertIn(
+            member='Must be a valid boolean.', container=response.data.get('amazon')
+        )
 
     def test_can_create_account_with_empty_secondary_password(self):
         """
@@ -323,10 +414,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'secondary_password': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('secondary_password'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('secondary_password'),
+        )
 
     def test_can_create_account_with_incorrect_seat_scouts_added(self):
         """
@@ -335,10 +430,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'seat_scouts_added': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('seat_scouts_added'))
+        self.assertIn(
+            member='Must be a valid boolean.',
+            container=response.data.get('seat_scouts_added'),
+        )
 
     def test_can_create_account_with_incorrect_seat_scouts_status(self):
         """
@@ -347,10 +446,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'seat_scouts_status': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('seat_scouts_status'))
+        self.assertIn(
+            member='Must be a valid boolean.',
+            container=response.data.get('seat_scouts_status'),
+        )
 
     def test_can_create_account_with_empty_team(self):
         """
@@ -359,10 +462,13 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'team': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('team'))
+        self.assertIn(
+            member='This field may not be blank.', container=response.data.get('team')
+        )
 
     def test_can_create_account_with_empty_specific_team(self):
         """
@@ -371,10 +477,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'specific_team': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('specific_team'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('specific_team'),
+        )
 
     def test_can_create_account_with_empty_forward_to(self):
         """
@@ -383,10 +493,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'forward_to': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('forward_to'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('forward_to'),
+        )
 
     def test_can_create_account_with_empty_forward_email_password(self):
         """
@@ -395,10 +509,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'forward_email_password': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('forward_email_password'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('forward_email_password'),
+        )
 
     def test_can_create_account_with_incorrect_disabled(self):
         """
@@ -407,10 +525,13 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'disabled': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('disabled'))
+        self.assertIn(
+            member='Must be a valid boolean.', container=response.data.get('disabled')
+        )
 
     def test_can_create_account_with_empty_ld_computer_used(self):
         """
@@ -419,10 +540,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'ld_computer_used': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('ld_computer_used'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('ld_computer_used'),
+        )
 
     def test_can_create_account_with_incorrect_created_at(self):
         """
@@ -431,10 +556,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'created_at': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Date has wrong format. Use one of these formats instead: YYYY-MM-DD.',
-                      container=response.data.get('created_at'))
+        self.assertIn(
+            member='Date has wrong format. Use one of these formats instead: YYYY-MM-DD.',
+            container=response.data.get('created_at'),
+        )
 
     def test_can_create_account_with_incorrect_last_opened(self):
         """
@@ -443,10 +572,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'last_opened': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Date has wrong format. Use one of these formats instead: YYYY-MM-DD.',
-                      container=response.data.get('last_opened'))
+        self.assertIn(
+            member='Date has wrong format. Use one of these formats instead: YYYY-MM-DD.',
+            container=response.data.get('last_opened'),
+        )
 
     def test_can_create_account_with_empty_comments(self):
         """
@@ -455,10 +588,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'comments': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('comments'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('comments'),
+        )
 
     def test_can_create_account_with_empty_created_by(self):
         """
@@ -467,10 +604,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'created_by': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('created_by'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('created_by'),
+        )
 
     def test_can_create_account_with_empty_edited_by(self):
         """
@@ -479,10 +620,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'edited_by': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('edited_by'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('edited_by'),
+        )
 
     def test_can_create_account_with_empty_phone(self):
         """
@@ -491,10 +636,13 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'phone': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('phone'))
+        self.assertIn(
+            member='This field may not be blank.', container=response.data.get('phone')
+        )
 
     def test_can_create_account_with_empty_tickets_com_password(self):
         """
@@ -503,10 +651,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'tickets_com_password': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('tickets_com_password'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('tickets_com_password'),
+        )
 
     def test_can_create_account_with_incorrect_password_reset(self):
         """
@@ -515,10 +667,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'password_reset': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('password_reset'))
+        self.assertIn(
+            member='Must be a valid boolean.',
+            container=response.data.get('password_reset'),
+        )
 
     def test_can_create_account_with_incorrect_active_tickets_inside(self):
         """
@@ -527,10 +683,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'active_tickets_inside': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='Must be a valid boolean.',
-                      container=response.data.get('active_tickets_inside'))
+        self.assertIn(
+            member='Must be a valid boolean.',
+            container=response.data.get('active_tickets_inside'),
+        )
 
     def test_can_create_account_with_empty_migrated_from(self):
         """
@@ -539,10 +699,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'migrated_from': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('migrated_from'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('migrated_from'),
+        )
 
     def test_can_create_account_with_empty_migrated_to(self):
         """
@@ -551,10 +715,14 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA.update({'migrated_to': ''})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(member='This field may not be blank.',
-                      container=response.data.get('migrated_to'))
+        self.assertIn(
+            member='This field may not be blank.',
+            container=response.data.get('migrated_to'),
+        )
 
     def test_can_create_account_with_not_existing_fields_passed(self):
         """
@@ -565,7 +733,9 @@ class CreateAccountTest(AccountsTest):
         """
 
         ACCOUNTS_FULL_VALID_TEST_DATA_COPY.update({'test_field': 'test'})
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA_COPY)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA_COPY
+        )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertFalse(response.data.get('test_field', False))
 
@@ -596,8 +766,9 @@ class ReadAccountTest(AccountsTest):
 
         response = self.client.get(path=ACCOUNT_DETAIL_URL)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Accounts.objects.get(pk=1).email,
-                         ACCOUNTS_FULL_VALID_REAL_DATA.get('email'))
+        self.assertEqual(
+            Accounts.objects.get(pk=1).email, ACCOUNTS_FULL_VALID_REAL_DATA.get('email')
+        )
 
 
 class UpdateAccountTest(AccountsTest):
@@ -618,8 +789,7 @@ class UpdateAccountTest(AccountsTest):
         data_to_update = {'email': 'PARTIALLY_UPDATED@test.com'}
         response = self.client.patch(path=ACCOUNT_DETAIL_URL, data=data_to_update)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Accounts.objects.get(pk=1).email,
-                         data_to_update.get('email'))
+        self.assertEqual(Accounts.objects.get(pk=1).email, data_to_update.get('email'))
 
     def test_can_update_account(self):
         """
@@ -631,8 +801,7 @@ class UpdateAccountTest(AccountsTest):
         data_to_update.update({'email': 'UPDATED@test.com'})
         response = self.client.put(path=ACCOUNT_DETAIL_URL, data=data_to_update)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Accounts.objects.get(pk=1).email,
-                         data_to_update.get('email'))
+        self.assertEqual(Accounts.objects.get(pk=1).email, data_to_update.get('email'))
 
     def test_can_update_all_account_fields(self):
         """
@@ -641,10 +810,14 @@ class UpdateAccountTest(AccountsTest):
         Expected: True
         """
 
-        response = self.client.put(path=ACCOUNT_DETAIL_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA_COPY)
+        response = self.client.put(
+            path=ACCOUNT_DETAIL_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA_COPY
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Accounts.objects.get(pk=1).email,
-                         ACCOUNTS_FULL_VALID_TEST_DATA_COPY.get('email'))
+        self.assertEqual(
+            Accounts.objects.get(pk=1).email,
+            ACCOUNTS_FULL_VALID_TEST_DATA_COPY.get('email'),
+        )
 
 
 class DeleteAccountTest(AccountsTest):

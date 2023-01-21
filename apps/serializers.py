@@ -1,5 +1,4 @@
 class ConvertNoneToStringSerializerMixin:
-
     def get_none_to_str_fields(self):
         meta = getattr(self, 'Meta', None)
         return getattr(meta, 'none_to_str_fields', [])

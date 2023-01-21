@@ -1,11 +1,14 @@
+from re import sub
+
 import numpy as np
 import pandas as pd
-from re import sub
 
 path_to_save = 'accounts/'
 
 # ================================= READING CSV FILE ======================================
-path_to_read = '/Users/samoylovartem/Documents/Data migration/Accounts/Summary of Accounts.csv'
+path_to_read = (
+    '/Users/samoylovartem/Documents/Data migration/Accounts/Summary of Accounts.csv'
+)
 df = pd.read_csv(path_to_read, sep=',', keep_default_na=False)
 
 # =============================== DELETING SOME COLUMNS ====================================
@@ -22,11 +25,15 @@ def camel_to_snake(item):
 
 
 df.columns = map(camel_to_snake, df.columns)
-df.rename(columns={
-    'air_france': 'airfrance',
-    'recovery_or_disabled': 'disabled',
-    'forward_email_pass': 'forward_email_password',
-    'date_created': 'created_at'}, inplace=True)
+df.rename(
+    columns={
+        'air_france': 'airfrance',
+        'recovery_or_disabled': 'disabled',
+        'forward_email_pass': 'forward_email_password',
+        'date_created': 'created_at',
+    },
+    inplace=True,
+)
 
 print(df.columns)
 

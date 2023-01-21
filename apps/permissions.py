@@ -1,4 +1,8 @@
-from rest_framework.permissions import DjangoModelPermissions, BasePermission, SAFE_METHODS
+from rest_framework.permissions import (
+    SAFE_METHODS,
+    BasePermission,
+    DjangoModelPermissions,
+)
 
 
 class CustomDjangoModelPermissions(DjangoModelPermissions):
@@ -32,6 +36,7 @@ class IsOwnerOrReadOnly(BasePermission):
 
 class SpecificTeamObjectOnly(BasePermission):
     """Gives access to an object if current user suits the condition"""
+
     def has_object_permission(self, request, view, obj):
         # if request.user.email == 'lawns@lawns.com':
         #     return obj.team == 'lawns'

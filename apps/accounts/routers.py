@@ -1,4 +1,5 @@
 from rest_framework import routers
+
 from apps.accounts.views import AllAccountsViewSet
 
 accounts_router = routers.SimpleRouter()

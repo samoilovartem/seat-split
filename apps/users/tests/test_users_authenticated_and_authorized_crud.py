@@ -1,14 +1,23 @@
+from django.test import tag
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.test import tag
 
 from apps.users.models import User
-from apps.users.serializers import GeneralUserSerializer, UserDetailSerializer, UserCreateSerializer
-from apps.users.tests.settings import REQUIRED_SUPERUSER_DATA, USERS_LIST_URL, REQUIRED_USER_DATA, \
-    USER_DETAIL_URL, FULL_USER_DATA
+from apps.users.serializers import (
+    GeneralUserSerializer,
+    UserCreateSerializer,
+    UserDetailSerializer,
+)
+from apps.users.tests.settings import (
+    FULL_USER_DATA,
+    REQUIRED_SUPERUSER_DATA,
+    REQUIRED_USER_DATA,
+    USER_DETAIL_URL,
+    USERS_LIST_URL,
+)
 
 
-@tag('users', 'authenticated', 'authorized')
+@tag("users", "authenticated", "authorized")
 class UserTest(APITestCase):
     """
     User parent test class that inherits from APITestCase and has 'setUp' method
@@ -19,19 +28,24 @@ class UserTest(APITestCase):
 
         # creating test superuser, hashing its password and checking if raw password matches hashed one
         self.superuser = User.objects.create_superuser(**REQUIRED_SUPERUSER_DATA)
-        self.superuser.set_password(REQUIRED_SUPERUSER_DATA.get('password'))
+        self.superuser.set_password(REQUIRED_SUPERUSER_DATA.get("password"))
         self.superuser.save()
-        self.assertTrue(self.superuser.check_password(REQUIRED_SUPERUSER_DATA.get('password')))
+        self.assertTrue(
+            self.superuser.check_password(REQUIRED_SUPERUSER_DATA.get("password"))
+        )
 
         # creating test superuser, hashing its password and checking if raw password matches hashed one
-        self.client.login(username=REQUIRED_SUPERUSER_DATA.get('username'),
-                          password=REQUIRED_SUPERUSER_DATA.get('password'))
+        self.client.login(
+            username=REQUIRED_SUPERUSER_DATA.get("username"),
+            password=REQUIRED_SUPERUSER_DATA.get("password"),
+        )
 
 
 class CreateUserTest(UserTest):
     """
     Children class that contains all necessary methods to test if user can be created
     """
+
     def setUp(self):
         super().setUp()
 
@@ -66,8 +80,10 @@ class CreateUserTest(UserTest):
         Expected: False
         """
 
-        incomplete_data = {'username': REQUIRED_USER_DATA.get('username'),
-                           'password': REQUIRED_USER_DATA.get('password')}
+        incomplete_data = {
+            "username": REQUIRED_USER_DATA.get("username"),
+            "password": REQUIRED_USER_DATA.get("password"),
+        }
         response = self.client.post(path=USERS_LIST_URL, data=incomplete_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -83,9 +99,9 @@ class ReadUserTest(UserTest):
 
         # Creating test user, hashing its password and checking if raw password matches hashed one
         self.user = User.objects.create(**REQUIRED_USER_DATA)
-        self.user.set_password(REQUIRED_USER_DATA.get('password'))
+        self.user.set_password(REQUIRED_USER_DATA.get("password"))
         self.user.save()
-        self.assertTrue(self.user.check_password(REQUIRED_USER_DATA.get('password')))
+        self.assertTrue(self.user.check_password(REQUIRED_USER_DATA.get("password")))
 
         # Getting expected output to compare with response
         self.expected_output = UserDetailSerializer(self.user).data
@@ -99,8 +115,12 @@ class ReadUserTest(UserTest):
         response = self.client.get(path=USERS_LIST_URL)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(User.objects.count(), 2)
-        self.assertEqual(User.objects.get(pk=1).first_name, REQUIRED_SUPERUSER_DATA.get('first_name'))
-        self.assertEqual(User.objects.get(pk=2).first_name, REQUIRED_USER_DATA.get('first_name'))
+        self.assertEqual(
+            User.objects.get(pk=1).first_name, REQUIRED_SUPERUSER_DATA.get("first_name")
+        )
+        self.assertEqual(
+            User.objects.get(pk=2).first_name, REQUIRED_USER_DATA.get("first_name")
+        )
 
     def test_can_read_user_detail(self):
         """
@@ -124,13 +144,13 @@ class UpdateUserTest(UserTest):
 
         # Creating test user, hashing its password and checking if raw password matches hashed one
         self.user = User.objects.create(**REQUIRED_USER_DATA)
-        self.user.set_password(REQUIRED_USER_DATA.get('password'))
+        self.user.set_password(REQUIRED_USER_DATA.get("password"))
         self.user.save()
-        self.assertTrue(self.user.check_password(REQUIRED_USER_DATA.get('password')))
+        self.assertTrue(self.user.check_password(REQUIRED_USER_DATA.get("password")))
 
         # Getting expected output to compare with response
         self.data = GeneralUserSerializer(self.user).data
-        self.data['first_name'] = 'PARTIALLY UPDATED'
+        self.data["first_name"] = "PARTIALLY UPDATED"
         self.expected_output = self.data
 
     def test_can_partial_update_user(self):
@@ -139,7 +159,9 @@ class UpdateUserTest(UserTest):
         Expected: True
         """
 
-        response = self.client.patch(path=USER_DETAIL_URL, data={'first_name': 'PARTIALLY UPDATED'})
+        response = self.client.patch(
+            path=USER_DETAIL_URL, data={"first_name": "PARTIALLY UPDATED"}
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, self.expected_output)
 
@@ -149,11 +171,12 @@ class UpdateUserTest(UserTest):
         Expected: True
         """
 
-        data_to_update = {'first_name': 'UPDATED',
-                          'last_name': 'UPDATED',
-                          'username': REQUIRED_USER_DATA.get('username')}
-        response = self.client.put(path=USER_DETAIL_URL,
-                                   data=data_to_update)
+        data_to_update = {
+            "first_name": "UPDATED",
+            "last_name": "UPDATED",
+            "username": REQUIRED_USER_DATA.get("username"),
+        }
+        response = self.client.put(path=USER_DETAIL_URL, data=data_to_update)
         self.expected_output.update(data_to_update)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, self.expected_output)
@@ -166,9 +189,8 @@ class UpdateUserTest(UserTest):
         """
 
         data_to_update = FULL_USER_DATA
-        data_to_update.pop('password', None)
-        response = self.client.put(path=USER_DETAIL_URL,
-                                   data=data_to_update)
+        data_to_update.pop("password", None)
+        response = self.client.put(path=USER_DETAIL_URL, data=data_to_update)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -183,9 +205,9 @@ class DeleteUserTest(UserTest):
 
         # Creating test user, hashing its password and checking if raw password matches hashed one
         self.user = User.objects.create(**REQUIRED_USER_DATA)
-        self.user.set_password(REQUIRED_USER_DATA.get('password'))
+        self.user.set_password(REQUIRED_USER_DATA.get("password"))
         self.user.save()
-        self.assertTrue(self.user.check_password(REQUIRED_USER_DATA.get('password')))
+        self.assertTrue(self.user.check_password(REQUIRED_USER_DATA.get("password")))
 
     def test_can_delete_user(self):
         """
@@ -195,5 +217,3 @@ class DeleteUserTest(UserTest):
 
         response = self.client.delete(path=USER_DETAIL_URL)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-

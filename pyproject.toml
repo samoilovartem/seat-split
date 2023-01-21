@@ -42,4 +42,6 @@ dev = [
     "beautifulsoup4",
     "pygount",
     "django-querycount",
+    "flake8",
+    "pre-commit",
 ]

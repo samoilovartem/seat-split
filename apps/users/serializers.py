@@ -14,10 +14,9 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class GeneralUserSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
-        exclude = ('password', )
+        exclude = ('password',)
         extra_kwargs = {
             'date_joined': {'read_only': True},
             'last_login': {'read_only': True},
@@ -25,15 +24,19 @@ class GeneralUserSerializer(serializers.ModelSerializer):
         ref_name = 'GeneralUserSerializer'
 
 
-class UserDetailSerializer(ConvertNoneToStringSerializerMixin, QueryFieldsMixin, serializers.ModelSerializer):
+class UserDetailSerializer(
+    ConvertNoneToStringSerializerMixin, QueryFieldsMixin, serializers.ModelSerializer
+):
     class Meta:
         model = User
-        exclude = ('password', )
+        exclude = ('password',)
         none_to_str_fields = ('last_login', 'role', 'team', 'last_opened', 'email')
         ref_name = 'UserDetailSerializer'
 
 
-class UserListSerializer(ConvertNoneToStringSerializerMixin, QueryFieldsMixin, serializers.ModelSerializer):
+class UserListSerializer(
+    ConvertNoneToStringSerializerMixin, QueryFieldsMixin, serializers.ModelSerializer
+):
     # groups = GroupSerializer(many=True, read_only=True)
 
     # -------- IF WE EVER NEED TO SHOW USER PERMISSIONS --------
@@ -57,14 +60,17 @@ class UserListSerializer(ConvertNoneToStringSerializerMixin, QueryFieldsMixin, s
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
-
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
         return super(UserCreateSerializer, self).create(validated_data)
 
     class Meta:
         model = User
-        exclude = ('date_joined', 'last_login', 'email',)
+        exclude = (
+            'date_joined',
+            'last_login',
+            'email',
+        )
         extra_kwargs = {
             'password': {'write_only': True},
         }

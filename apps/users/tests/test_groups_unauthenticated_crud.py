@@ -1,13 +1,12 @@
+from django.contrib.auth.models import Group
+from django.test import tag
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.test import tag
 
-from django.contrib.auth.models import Group
-
-from apps.users.tests.settings import GROUP_DATA, GROUPS_LIST_URL, GROUP_DETAIL_URL
+from apps.users.tests.settings import GROUP_DATA, GROUP_DETAIL_URL, GROUPS_LIST_URL
 
 
-@tag('groups', 'unauthenticated')
+@tag("groups", "unauthenticated")
 class GroupTestUnauthenticated(APITestCase):
     """
     Checks if unauthenticated user can get access to all CRUD methods of the API.
@@ -17,7 +16,7 @@ class GroupTestUnauthenticated(APITestCase):
     def setUp(self):
 
         # Creating a test group
-        self.group = Group.objects.create(name=GROUP_DATA.get('name'))
+        self.group = Group.objects.create(name=GROUP_DATA.get("name"))
 
     def test_can_create_group(self):
         """
@@ -25,7 +24,7 @@ class GroupTestUnauthenticated(APITestCase):
         Expected: False
         """
 
-        response = self.client.post(path=GROUPS_LIST_URL, data={'name': 'test_group'})
+        response = self.client.post(path=GROUPS_LIST_URL, data={"name": "test_group"})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_can_read_groups_list(self):
@@ -52,7 +51,9 @@ class GroupTestUnauthenticated(APITestCase):
         Expected: False
         """
 
-        response = self.client.patch(path=GROUP_DETAIL_URL, data={'name': 'PARTIALLY UPDATED'})
+        response = self.client.patch(
+            path=GROUP_DETAIL_URL, data={"name": "PARTIALLY UPDATED"}
+        )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_can_update_group(self):
@@ -61,10 +62,11 @@ class GroupTestUnauthenticated(APITestCase):
         Expected: False
         """
 
-        data_to_update = {'name': 'UPDATED',
-                          'permissions': GROUP_DATA.get('permissions')}
-        response = self.client.put(path=GROUP_DETAIL_URL,
-                                   data=data_to_update)
+        data_to_update = {
+            "name": "UPDATED",
+            "permissions": GROUP_DATA.get("permissions"),
+        }
+        response = self.client.put(path=GROUP_DETAIL_URL, data=data_to_update)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_can_delete_group(self):

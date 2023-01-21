@@ -8,13 +8,36 @@ class UserAdminConfig(UserAdmin):
     model = User
     save_as = True
     save_on_top = True
-    list_display = ('id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active',
-                    'team', 'role')
+    list_display = (
+        'id',
+        'username',
+        'first_name',
+        'last_name',
+        'email',
+        'is_staff',
+        'is_active',
+        'team',
+        'role',
+    )
     list_display_links = ('username',)
     readonly_fields = ('id', 'last_login', 'date_joined')
     fieldsets = (
-        ('Personal info', {'fields': ('first_name', 'last_name', 'email', 'username', 'password')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        (
+            'Personal info',
+            {'fields': ('first_name', 'last_name', 'email', 'username', 'password')},
+        ),
+        (
+            'Permissions',
+            {
+                'fields': (
+                    'is_active',
+                    'is_staff',
+                    'is_superuser',
+                    'groups',
+                    'user_permissions',
+                )
+            },
+        ),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
 

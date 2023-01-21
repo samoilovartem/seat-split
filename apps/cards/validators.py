@@ -1,4 +1,5 @@
 import re
+
 from django.core.exceptions import ValidationError
 
 
@@ -15,7 +16,10 @@ def clean_expiration_date(expiration_date):
         raise ValidationError('Please use only digits!')
     if expiration_date[2] != '/':
         raise ValidationError('Expiration date must be in format MM/YY')
-    if int(expiration_date[0]) >= 1 and int(expiration_date[0]) + int(expiration_date[1]) > 3:
+    if (
+        int(expiration_date[0]) >= 1
+        and int(expiration_date[0]) + int(expiration_date[1]) > 3
+    ):
         raise ValidationError('Wrong expiration month!')
     return expiration_date
 
@@ -44,5 +48,7 @@ def clean_zip_code(zip_code):
 
 def clean_state(state):
     if len(state) < 2 or not re.match(r'^[A-Z]+$', state):
-        raise ValidationError('State must have 2 letters only and be in the following format: XX!')
+        raise ValidationError(
+            'State must have 2 letters only and be in the following format: XX!'
+        )
     return state

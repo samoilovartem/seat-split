@@ -1,10 +1,15 @@
+from django.test import tag
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.test import tag
 
 from apps.cards.models import Cards
-from apps.cards.tests.settings import FULL_USER_DATA, CARDS_LIST_URL, CARDS_FULL_VALID_REAL_DATA, CARD_DETAIL_URL, \
-    CARDS_FULL_VALID_TEST_DATA
+from apps.cards.tests.settings import (
+    CARD_DETAIL_URL,
+    CARDS_FULL_VALID_REAL_DATA,
+    CARDS_FULL_VALID_TEST_DATA,
+    CARDS_LIST_URL,
+    FULL_USER_DATA,
+)
 from apps.users.models import User
 
 
@@ -24,8 +29,10 @@ class CardTestUnauthorized(APITestCase):
         self.assertTrue(self.user.check_password(FULL_USER_DATA.get('password')))
 
         # logging in a test user
-        self.client.login(username=FULL_USER_DATA.get('username'),
-                          password=FULL_USER_DATA.get('password'))
+        self.client.login(
+            username=FULL_USER_DATA.get('username'),
+            password=FULL_USER_DATA.get('password'),
+        )
 
         # creating one real card for next tests
         self.card = Cards.objects.create(**CARDS_FULL_VALID_REAL_DATA)
@@ -36,7 +43,9 @@ class CardTestUnauthorized(APITestCase):
         Expected: False
         """
 
-        response = self.client.post(path=CARDS_LIST_URL, data=CARDS_FULL_VALID_REAL_DATA)
+        response = self.client.post(
+            path=CARDS_LIST_URL, data=CARDS_FULL_VALID_REAL_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_can_read_cards_list(self):
@@ -63,8 +72,10 @@ class CardTestUnauthorized(APITestCase):
         Expected: False
         """
 
-        response = self.client.patch(path=CARD_DETAIL_URL,
-                                     data={'account_assigned': 'PARTIALLY_UPDATED@test.com'})
+        response = self.client.patch(
+            path=CARD_DETAIL_URL,
+            data={'account_assigned': 'PARTIALLY_UPDATED@test.com'},
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_can_update_card(self):
@@ -73,8 +84,9 @@ class CardTestUnauthorized(APITestCase):
         Expected: False
         """
 
-        response = self.client.put(path=CARD_DETAIL_URL,
-                                   data=CARDS_FULL_VALID_TEST_DATA)
+        response = self.client.put(
+            path=CARD_DETAIL_URL, data=CARDS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_can_delete_card(self):
@@ -85,4 +97,3 @@ class CardTestUnauthorized(APITestCase):
 
         response = self.client.delete(path=CARD_DETAIL_URL)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        

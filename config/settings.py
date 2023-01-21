@@ -20,7 +20,6 @@ CORS_ALLOWED_ORIGINS = ['http://localhost:8080', 'http://127.0.0.1:8000']
 
 INSTALLED_APPS = [
     # Third party apps that needs to be placed before standard apps
-
     # Django standard apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,7 +27,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     # Third party apps
     'drf_yasg',
     'rest_framework',
@@ -42,7 +40,6 @@ INSTALLED_APPS = [
     'import_export',
     'django_truncate',
     'corsheaders',
-
     # Project's apps
     'apps.cards.apps.CardsConfig',
     'apps.accounts.apps.AccountsConfig',
@@ -89,9 +86,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # RENDER.COM POSTGRESQL DB
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('PGDB_URL') if os.environ.get('IS_DOCKER_RUNNING') else 'sqlite:///db.sqlite3',
+        default=os.environ.get('PGDB_URL')
+        if os.environ.get('IS_DOCKER_RUNNING')
+        else 'sqlite:///db.sqlite3',
         ssl_require=False if DEBUG else True,
-        conn_max_age=600)
+        conn_max_age=600,
+    )
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -132,7 +132,7 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-INTERNAL_IPS = ["127.0.0.1"]
+INTERNAL_IPS = ['127.0.0.1']
 if DEBUG:
     # showing django-debug-toolbar in docker development container
     INTERNAL_IPS = type(str('c'), (), {'__contains__': lambda *a: True})()
@@ -147,7 +147,6 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_PAGINATION_CLASS': 'apps.pagination.CustomPagination',
     'PAGE_SIZE': 20,
-
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
@@ -185,15 +184,16 @@ DJOSER = {
         'set_username': ['apps.permissions.IsOwnerOrReadOnly'],
         # 'user_create': ['config.permissions.CustomDjangoModelPermissions'],
         'user_create': [
-            'rest_framework.permissions.AllowAny' if DEBUG else
-            'apps.permissions.CustomDjangoModelPermissions'
+            'rest_framework.permissions.AllowAny'
+            if DEBUG
+            else 'apps.permissions.CustomDjangoModelPermissions'
         ],
         'user_delete': ['apps.permissions.CustomDjangoModelPermissions'],
         'user': ['apps.permissions.IsOwnerOrReadOnly'],
         'user_list': ['apps.permissions.CustomDjangoModelPermissions'],
         'token_create': ['rest_framework.permissions.AllowAny'],
         'token_destroy': ['rest_framework.permissions.AllowAny'],
-    }
+    },
 }
 
 ROLLBAR = {
@@ -209,7 +209,6 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
-
     'SIGNING_KEY': SECRET_KEY,
     'ALGORITHM': 'HS256',
     'VERIFYING_KEY': None,
@@ -217,25 +216,24 @@ SIMPLE_JWT = {
     'ISSUER': None,
     'JWK_URL': None,
     'LEEWAY': 0,
-
-    'AUTH_HEADER_TYPES': ('Bearer', 'JWT',),
+    'AUTH_HEADER_TYPES': (
+        'Bearer',
+        'JWT',
+    ),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
     'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
-
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
     'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
-
     'JTI_CLAIM': 'jti',
-
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
-SWAGGER_SETTINGS = {"DEFAULT_AUTO_SCHEMA_CLASS": "config.schemas.CustomAutoSchema"}
+SWAGGER_SETTINGS = {'DEFAULT_AUTO_SCHEMA_CLASS': 'config.schemas.CustomAutoSchema'}
 
 IMPORT_EXPORT_EXPORT_PERMISSION_CODE = 'export'
 IMPORT_EXPORT_IMPORT_PERMISSION_CODE = 'import'
@@ -251,10 +249,10 @@ QUERYCOUNT = {
         'MEDIUM': 50,
         'HIGH': 200,
         'MIN_TIME_TO_LOG': 0,
-        'MIN_QUERY_COUNT_TO_LOG': 0
+        'MIN_QUERY_COUNT_TO_LOG': 0,
     },
     'IGNORE_REQUEST_PATTERNS': [r'^/admin/'],
     'IGNORE_SQL_PATTERNS': [r'NO SCROLL CURSOR WITH'],
     'DISPLAY_DUPLICATES': 10,
-    'RESPONSE_HEADER': 'X-DjangoQueryCount-Count'
+    'RESPONSE_HEADER': 'X-DjangoQueryCount-Count',
 }

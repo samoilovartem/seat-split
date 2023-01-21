@@ -24,4 +24,3 @@ elif [ "$number" -eq 4 ]
 else
     echo "Wrong input. Please try again"
 fi
-

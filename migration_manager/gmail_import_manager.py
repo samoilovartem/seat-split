@@ -1,6 +1,7 @@
+from re import sub
+
 import numpy as np
 import pandas as pd
-from re import sub
 
 path_to_save = 'accounts/gmail/'
 
@@ -11,8 +12,17 @@ df = pd.read_csv(path_to_read, sep=',', keep_default_na=False)
 
 # =============================== DELETING SOME COLUMNS ====================================
 df.drop(df[df['ID'] == ''].index, inplace=True)
-df.drop(columns=['Secondary Password', 'SeatScoutsPassword', 'PasswordMatching',
-                 'TicketID', 'ID'], axis=1, inplace=True)
+df.drop(
+    columns=[
+        'Secondary Password',
+        'SeatScoutsPassword',
+        'PasswordMatching',
+        'TicketID',
+        'ID',
+    ],
+    axis=1,
+    inplace=True,
+)
 
 
 # ======================== RENAMING ALL COLUMN AS A SNAKE_CASE ===============================
@@ -24,11 +34,15 @@ def camel_to_snake(item):
 
 
 df.columns = map(camel_to_snake, df.columns)
-df.rename(columns={
-    'air_france': 'airfrance',
-    'recovery_or_disabled': 'disabled',
-    'forward_email_pass': 'forward_email_password',
-    'date_created': 'created_at'}, inplace=True)
+df.rename(
+    columns={
+        'air_france': 'airfrance',
+        'recovery_or_disabled': 'disabled',
+        'forward_email_pass': 'forward_email_password',
+        'date_created': 'created_at',
+    },
+    inplace=True,
+)
 
 print(df.columns)
 
@@ -40,15 +54,20 @@ df['type'] = 'gmail'
 
 
 # ============================= STRIPPING WHITESPACES IN CELLS ===============================
-df = df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
+df = df.apply(lambda x: x.str.strip() if x.dtype == 'object' else x)
 
 # =================================== REPLACING VALUES =======================================
-df['disabled'].replace(to_replace=['disable', 'Disable', 'Disabled', 'Disabed', 'y'],
-                       value=1, regex=True, inplace=True)
-df['last_opened'].replace(to_replace=['2022-11-1', '2022-11-2', '2022-11-3', '2022-11-4',
-                                      '2022-11-5'],
-                          value=['2022-11-01', '2022-11-02', '2022-11-03', '2022-11-04',
-                                 '2022-11-05'], inplace=True)
+df['disabled'].replace(
+    to_replace=['disable', 'Disable', 'Disabled', 'Disabed', 'y'],
+    value=1,
+    regex=True,
+    inplace=True,
+)
+df['last_opened'].replace(
+    to_replace=['2022-11-1', '2022-11-2', '2022-11-3', '2022-11-4', '2022-11-5'],
+    value=['2022-11-01', '2022-11-02', '2022-11-03', '2022-11-04', '2022-11-05'],
+    inplace=True,
+)
 df.replace(to_replace=['N', 'Y'], value=[0, 1], inplace=True)
 df.replace(to_replace='MATEEN', value=6, inplace=True)
 
@@ -70,7 +89,9 @@ print(df)
 
 # =========================== SPLITTING DF TO SAVE IN A FEW CSV ===============================
 df1 = df.iloc[:3000].to_excel(path_to_save + 'Gmail accounts part 1.xlsx', index=False)
-df2 = df.iloc[3000:6000].to_excel(path_to_save + 'Gmail accounts part 2.xlsx', index=False)
+df2 = df.iloc[3000:6000].to_excel(
+    path_to_save + 'Gmail accounts part 2.xlsx', index=False
+)
 df3 = df.iloc[6000:].to_excel(path_to_save + 'Gmail accounts part 3.xlsx', index=False)
 
 # df2 = df.iloc[1500:3000].to_excel('Mateen Gmail (prepared version) part 2.xlsx', index=False)

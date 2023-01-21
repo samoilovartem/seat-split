@@ -1,5 +1,4 @@
 from django.db.models import Count
-
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -14,13 +13,7 @@ class AllAccountsViewSet(ModelViewSet):
     queryset = Accounts.objects.all()
     serializer_class = AccountsSerializer
     filterset_class = AccountsFilterSet
-    search_fields = [
-        'email',
-        'type',
-        'created_by',
-        'first_name',
-        'last_name'
-    ]
+    search_fields = ['email', 'type', 'created_by', 'first_name', 'last_name']
     ordering_fields = [
         'id',
         'email',
@@ -32,16 +25,18 @@ class AllAccountsViewSet(ModelViewSet):
         'recovery_email',
         'ld_computer_used',
         'last_opened',
-        'disabled'
+        'disabled',
     ]
-    my_tags = ["All accounts"]
+    my_tags = ['All accounts']
 
     @action(methods=['GET'], detail=False)
     def show_duplicates(self, request):
-        duplicates = Accounts.objects.values('email') \
-            .annotate(Count('id')) \
-            .order_by() \
+        duplicates = (
+            Accounts.objects.values('email')
+            .annotate(Count('id'))
+            .order_by()
             .filter(id__count__gt=1)
+        )
         return Response({'count': len(duplicates), 'results': duplicates})
 
     @action(methods=['GET'], detail=False)

@@ -7,7 +7,7 @@ REQUIRED_SUPERUSER_DATA = {
     "username": "superuser",
     "first_name": "Super",
     "last_name": "User",
-    "password": "super_user_password"
+    "password": "super_user_password",
 }
 
 FULL_USER_DATA = {
@@ -56,14 +56,14 @@ ACCOUNTS_FULL_VALID_REAL_DATA = {
     "password_matching": True,
     "ld_computer_used": "LD11",
     "created_at": "2022-11-30",
-    "last_opened": '2022-12-28',
+    "last_opened": "2022-12-28",
     "comments": "NA",
     "phone": "NA",
     "tickets_com_password": "NA",
     "password_reset": False,
     "active_tickets_inside": False,
     "migrated_from": "NA",
-    "migrated_to": "NA"
+    "migrated_to": "NA",
 }
 
 ACCOUNTS_FULL_VALID_TEST_DATA = {
@@ -109,7 +109,7 @@ ACCOUNTS_FULL_VALID_TEST_DATA = {
     "password_reset": False,
     "active_tickets_inside": False,
     "migrated_from": "NA",
-    "migrated_to": "NA"
+    "migrated_to": "NA",
 }
 
 ACCOUNTS_FULL_VALID_TEST_DATA_COPY = {
@@ -155,5 +155,5 @@ ACCOUNTS_FULL_VALID_TEST_DATA_COPY = {
     "password_reset": False,
     "active_tickets_inside": False,
     "migrated_from": "NA",
-    "migrated_to": "NA"
+    "migrated_to": "NA",
 }

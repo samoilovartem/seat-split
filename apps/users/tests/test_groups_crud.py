@@ -1,15 +1,19 @@
+from django.contrib.auth.models import Group
+from django.test import tag
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.test import tag
 
 from apps.users.models import User
-from django.contrib.auth.models import Group
-
 from apps.users.serializers import GroupSerializer
-from apps.users.tests.settings import REQUIRED_SUPERUSER_DATA, GROUPS_LIST_URL, GROUP_DATA, GROUP_DETAIL_URL
+from apps.users.tests.settings import (
+    GROUP_DATA,
+    GROUP_DETAIL_URL,
+    GROUPS_LIST_URL,
+    REQUIRED_SUPERUSER_DATA,
+)
 
 
-@tag('groups', 'authenticated', 'authorized')
+@tag("groups", "authenticated", "authorized")
 class GroupTest(APITestCase):
     """
     Group parent test class that inherits from APITestCase and has 'setUp' method
@@ -20,13 +24,17 @@ class GroupTest(APITestCase):
 
         # creating test superuser, hashing its password and checking if raw password matches hashed one
         self.superuser = User.objects.create_superuser(**REQUIRED_SUPERUSER_DATA)
-        self.superuser.set_password(REQUIRED_SUPERUSER_DATA.get('password'))
+        self.superuser.set_password(REQUIRED_SUPERUSER_DATA.get("password"))
         self.superuser.save()
-        self.assertTrue(self.superuser.check_password(REQUIRED_SUPERUSER_DATA.get('password')))
+        self.assertTrue(
+            self.superuser.check_password(REQUIRED_SUPERUSER_DATA.get("password"))
+        )
 
         # logging in
-        self.client.login(username=REQUIRED_SUPERUSER_DATA.get('username'),
-                          password=REQUIRED_SUPERUSER_DATA.get('password'))
+        self.client.login(
+            username=REQUIRED_SUPERUSER_DATA.get("username"),
+            password=REQUIRED_SUPERUSER_DATA.get("password"),
+        )
 
 
 class CreateGroupTest(GroupTest):
@@ -44,7 +52,7 @@ class CreateGroupTest(GroupTest):
         Expected: True
         """
 
-        response = self.client.post(path=GROUPS_LIST_URL, data={'name': 'Managers'})
+        response = self.client.post(path=GROUPS_LIST_URL, data={"name": "Managers"})
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_can_create_group_with_permissions(self):
@@ -67,11 +75,11 @@ class ReadGroupTest(GroupTest):
         super().setUp()
 
         # Creating test group
-        self.group = Group.objects.create(name=GROUP_DATA.get('name'))
+        self.group = Group.objects.create(name=GROUP_DATA.get("name"))
 
         # Getting expected output to compare with response
         self.expected_output = GroupSerializer(self.group).data
-        self.expected_output.update({'id': 1})
+        self.expected_output.update({"id": 1})
 
     def test_can_read_group_list(self):
         """
@@ -82,7 +90,7 @@ class ReadGroupTest(GroupTest):
         response = self.client.get(path=GROUPS_LIST_URL)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(User.objects.count(), 1)
-        self.assertEqual(Group.objects.get(pk=1).name, GROUP_DATA.get('name'))
+        self.assertEqual(Group.objects.get(pk=1).name, GROUP_DATA.get("name"))
 
     def test_can_read_group_detail(self):
         """
@@ -105,11 +113,11 @@ class UpdateGroupTest(GroupTest):
         super().setUp()
 
         # Creating test group
-        self.group = Group.objects.create(name=GROUP_DATA.get('name'))
+        self.group = Group.objects.create(name=GROUP_DATA.get("name"))
 
         # Getting expected output to compare with response
         self.expected_output = GroupSerializer(self.group).data
-        self.expected_output.update({'id': 1, 'name': 'PARTIALLY UPDATED'})
+        self.expected_output.update({"id": 1, "name": "PARTIALLY UPDATED"})
 
     def test_can_partial_update_group(self):
         """
@@ -117,7 +125,9 @@ class UpdateGroupTest(GroupTest):
         Expected: True
         """
 
-        response = self.client.patch(path=GROUP_DETAIL_URL, data={'name': 'PARTIALLY UPDATED'})
+        response = self.client.patch(
+            path=GROUP_DETAIL_URL, data={"name": "PARTIALLY UPDATED"}
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, self.expected_output)
 
@@ -127,7 +137,10 @@ class UpdateGroupTest(GroupTest):
         Expected: True
         """
 
-        data_to_update = {'name': 'UPDATED', 'permissions': GROUP_DATA.get('permissions')}
+        data_to_update = {
+            "name": "UPDATED",
+            "permissions": GROUP_DATA.get("permissions"),
+        }
         response = self.client.put(path=GROUP_DETAIL_URL, data=data_to_update)
         self.expected_output.update(data_to_update)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -144,7 +157,7 @@ class DeleteGroupTest(GroupTest):
         super().setUp()
 
         # Creating test group
-        self.group = Group.objects.create(name=GROUP_DATA.get('name'))
+        self.group = Group.objects.create(name=GROUP_DATA.get("name"))
 
     def test_can_delete_group(self):
         """
@@ -154,7 +167,3 @@ class DeleteGroupTest(GroupTest):
 
         response = self.client.delete(path=GROUP_DETAIL_URL)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-
-
-

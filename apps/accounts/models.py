@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 
 from apps.validators import any_or_na
 
@@ -41,7 +41,9 @@ class Accounts(models.Model):
     seat_scouts_password = models.CharField(max_length=32, validators=[any_or_na])
     password_matching = models.BooleanField(default=False)
     disabled = models.BooleanField(default=False)
-    created_by = models.CharField(max_length=32, validators=[any_or_na], default='MATEEN')
+    created_by = models.CharField(
+        max_length=32, validators=[any_or_na], default='MATEEN'
+    )
     edited_by = models.CharField(max_length=32, validators=[any_or_na], default='NA')
     ld_computer_used = models.CharField(max_length=50, validators=[any_or_na])
     created_at = models.DateField(null=True, blank=True)
@@ -49,10 +51,14 @@ class Accounts(models.Model):
     last_opened = models.DateField(null=True, blank=True)
     comments = models.TextField(validators=[any_or_na])
     phone = models.CharField(max_length=50, validators=[any_or_na], default='NA')
-    tickets_com_password = models.CharField(max_length=50, validators=[any_or_na], default='NA')
+    tickets_com_password = models.CharField(
+        max_length=50, validators=[any_or_na], default='NA'
+    )
     password_reset = models.BooleanField(default=False)
     active_tickets_inside = models.BooleanField(default=False)
-    migrated_from = models.CharField(max_length=100, validators=[any_or_na], default='NA')
+    migrated_from = models.CharField(
+        max_length=100, validators=[any_or_na], default='NA'
+    )
     migrated_to = models.CharField(max_length=100, validators=[any_or_na], default='NA')
 
     def __str__(self):
@@ -62,4 +68,7 @@ class Accounts(models.Model):
         verbose_name = 'Account'
         verbose_name_plural = 'Accounts'
         ordering = ['-created_at']
-        permissions = (('import_accounts', 'Can import'), ('export_accounts', 'Can export'))
+        permissions = (
+            ('import_accounts', 'Can import'),
+            ('export_accounts', 'Can export'),
+        )

@@ -5,9 +5,8 @@ from rest_framework.test import APITestCase
 from apps.users.tests.settings import API_ROOT_URL, SWAGGER_URL
 
 
-@tag('access')
+@tag("access")
 class AccessTest(APITestCase):
-
     def test_can_access_api_root_if_unauthenticated(self):
         """
         Checks if unauthenticated user can get access to api root
@@ -25,6 +24,3 @@ class AccessTest(APITestCase):
 
         response = self.client.get(path=SWAGGER_URL)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-
-

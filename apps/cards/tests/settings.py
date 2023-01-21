@@ -7,14 +7,14 @@ REQUIRED_SUPERUSER_DATA = {
     "username": "superuser",
     "first_name": "Super",
     "last_name": "User",
-    "password": "super_user_password"
+    "password": "super_user_password",
 }
 
 REQUIRED_USER_DATA = {
     "username": "mike",
     "first_name": "Mike",
     "last_name": "Tyson",
-    "password": "mike_tyson_password"
+    "password": "mike_tyson_password",
 }
 
 FULL_USER_DATA = {
@@ -66,7 +66,7 @@ CARDS_FULL_VALID_TEST_DATA_COPY = {
     "in_tm": True,
     "in_tickets_com": False,
     "is_deleted": False,
-    "created_by": 1
+    "created_by": 1,
 }
 
 CARDS_FULL_VALID_REAL_DATA = {

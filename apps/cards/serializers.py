@@ -1,11 +1,13 @@
 from drf_queryfields import QueryFieldsMixin
 from rest_framework import serializers
 
-from apps.serializers import ConvertNoneToStringSerializerMixin
 from apps.cards.models import Cards
+from apps.serializers import ConvertNoneToStringSerializerMixin
 
 
-class CardsSerializer(ConvertNoneToStringSerializerMixin, QueryFieldsMixin, serializers.ModelSerializer):
+class CardsSerializer(
+    ConvertNoneToStringSerializerMixin, QueryFieldsMixin, serializers.ModelSerializer
+):
     class Meta:
         model = Cards
         fields = '__all__'

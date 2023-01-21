@@ -11,7 +11,7 @@
 2. Make sure to add everything we don't want to be uploaded in `.gitignore` and run: `git add .`
 3. Add your commit: `git commit -m 'your commit'`
 4. Push files to Heroku: `git push heroku main`
-5. If you encounter problems with Django collectstatic, please run `heroku config:set DISABLE_COLLECTSTATIC=1`and push everything again. Full guide is [here](https://stackoverflow.com/questions/55330749/error-while-running-python-manage-py-collectstatic-noinput-after-changin) for your reference. 
+5. If you encounter problems with Django collectstatic, please run `heroku config:set DISABLE_COLLECTSTATIC=1`and push everything again. Full guide is [here](https://stackoverflow.com/questions/55330749/error-while-running-python-manage-py-collectstatic-noinput-after-changin) for your reference.
 
 #### Using Container Registry:
 
@@ -38,7 +38,7 @@ All tests are tagged by its own category to be able to run them separately. For 
 In order to speed up all tests we can use threads:\
 `python manage.py test --parallel`
 
-Though the better way to run tests is to use `coverage` package, which is already installed (check requirements.txt). 
+Though the better way to run tests is to use `coverage` package, which is already installed (check requirements.txt).
 
 To get full detailed report with html output use this command:\
 `coverage run manage.py test -v 2 && coverage report && coverage html`
@@ -51,7 +51,7 @@ Also, you can simply run `run_tests.sh`and choose from provided options.
 #### Useful notes:
 1. Heroku `python manage.py collectstatic` issue solution can be found [here](https://stackoverflow.com/questions/55330749/error-while-running-python-manage-py-collectstatic-noinput-after-changin).
 2. Django-tabulator-example is [here](https://github.com/cuauhtemoc-amdg/django-tabulator-example).
-3. Responsive tables using Django and htmx. The main article is [here](https://enzircle.com/responsive-table-with-django-and-htmx#comments-list). Github [source code](https://github.com/joashxu/dj-htmx-fun). 
+3. Responsive tables using Django and htmx. The main article is [here](https://enzircle.com/responsive-table-with-django-and-htmx#comments-list). Github [source code](https://github.com/joashxu/dj-htmx-fun).
 4. Django-tables2 [documentation](https://django-tables2.readthedocs.io/en/latest/index.html).
 5. Django-filter [documentation](https://django-filter.readthedocs.io/en/stable/index.html).
 6. Django-crispy-forms [documentation](https://django-crispy-forms.readthedocs.io/en/latest/index.html).
@@ -88,3 +88,5 @@ Also, you can simply run `run_tests.sh`and choose from provided options.
 After running this command we can delete an app from INSTALLED_APPS and delete a corresponding directory
 10. Automatically upgrade all requirements:\
 `pur -r requirements.txt`
+11. Check project's files with flake8 and black before making commit:\
+`pre-commit run --all-files`

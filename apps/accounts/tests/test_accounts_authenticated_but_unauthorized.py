@@ -1,11 +1,16 @@
+from django.test import tag
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.test import tag
 
-from apps.accounts.tests.settings import FULL_USER_DATA, ACCOUNTS_LIST_URL, ACCOUNT_DETAIL_URL, \
-    ACCOUNTS_FULL_VALID_REAL_DATA, ACCOUNTS_FULL_VALID_TEST_DATA
-from apps.users.models import User
 from apps.accounts.models import Accounts
+from apps.accounts.tests.settings import (
+    ACCOUNT_DETAIL_URL,
+    ACCOUNTS_FULL_VALID_REAL_DATA,
+    ACCOUNTS_FULL_VALID_TEST_DATA,
+    ACCOUNTS_LIST_URL,
+    FULL_USER_DATA,
+)
+from apps.users.models import User
 
 
 @tag('accounts', 'authenticated', 'unauthorized')
@@ -24,8 +29,10 @@ class AccountTestUnauthorized(APITestCase):
         self.assertTrue(self.user.check_password(FULL_USER_DATA.get('password')))
 
         # logging in a test user
-        self.client.login(username=FULL_USER_DATA.get('username'),
-                          password=FULL_USER_DATA.get('password'))
+        self.client.login(
+            username=FULL_USER_DATA.get('username'),
+            password=FULL_USER_DATA.get('password'),
+        )
 
         # creating one real card for next tests
         self.card = Accounts.objects.create(**ACCOUNTS_FULL_VALID_REAL_DATA)
@@ -36,7 +43,9 @@ class AccountTestUnauthorized(APITestCase):
         Expected: False
         """
 
-        response = self.client.post(path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.post(
+            path=ACCOUNTS_LIST_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_can_read_accounts_list(self):
@@ -63,8 +72,9 @@ class AccountTestUnauthorized(APITestCase):
         Expected: False
         """
 
-        response = self.client.patch(path=ACCOUNT_DETAIL_URL,
-                                     data={'email': 'PARTIALLY_UPDATED@test.com'})
+        response = self.client.patch(
+            path=ACCOUNT_DETAIL_URL, data={'email': 'PARTIALLY_UPDATED@test.com'}
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_can_update_account(self):
@@ -73,8 +83,9 @@ class AccountTestUnauthorized(APITestCase):
         Expected: False
         """
 
-        response = self.client.put(path=ACCOUNT_DETAIL_URL,
-                                   data=ACCOUNTS_FULL_VALID_TEST_DATA)
+        response = self.client.put(
+            path=ACCOUNT_DETAIL_URL, data=ACCOUNTS_FULL_VALID_TEST_DATA
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_can_delete_account(self):
@@ -85,4 +96,3 @@ class AccountTestUnauthorized(APITestCase):
 
         response = self.client.delete(path=ACCOUNT_DETAIL_URL)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-

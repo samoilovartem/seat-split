@@ -5,8 +5,9 @@ from apps.accounts.models import Accounts
 from apps.serializers import ConvertNoneToStringSerializerMixin
 
 
-class AccountsSerializer(ConvertNoneToStringSerializerMixin, QueryFieldsMixin, serializers.ModelSerializer):
-
+class AccountsSerializer(
+    ConvertNoneToStringSerializerMixin, QueryFieldsMixin, serializers.ModelSerializer
+):
     class Meta:
         model = Accounts
         exclude = ('updated_at',)

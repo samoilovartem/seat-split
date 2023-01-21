@@ -1,6 +1,7 @@
 from django_filters import rest_framework as filters
-from config.settings import CHAR_LOOKUPS, BOOL_LOOKUPS, DATE_AND_ID_LOOKUPS
+
 from apps.cards.models import Cards
+from config.settings import BOOL_LOOKUPS, CHAR_LOOKUPS, DATE_AND_ID_LOOKUPS
 
 
 class CardsFilterSet(filters.FilterSet):

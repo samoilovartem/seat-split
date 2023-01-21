@@ -1,5 +1,6 @@
 from rest_framework import routers
-from apps.users.views import UsersViewSet, GroupViewSet
+
+from apps.users.views import GroupViewSet, UsersViewSet
 
 users_router = routers.SimpleRouter()
 groups_router = routers.SimpleRouter()
