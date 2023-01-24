@@ -15,10 +15,6 @@ services:
             - .env
         environment:
             - IS_DOCKER_RUNNING=True
-#            - DB_HOST=pgdb
-#            - DB_NAME=postgres
-#            - DB_USER=postgres
-#            - DB_PASSWORD=postgres
         depends_on:
             - pgdb
     pgdb:

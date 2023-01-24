@@ -152,8 +152,7 @@ gsheets_engine.py
 
 *.xlsx
 *.csv
-binary_search.py
 /media/
 /vue/
 *.bin
-raw_data_import.py
+others/

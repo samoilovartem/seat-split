@@ -1,8 +1,30 @@
 # Accounts-cards django project documentation
 
+### Project structure:
+#### Directories:
+
+- **apps** - contains all existing django applications and common (among them) files.
+- **config** - contains standard Django settings files.
+- **instruction_files** - contains a simple. instruction for using admin panel and all necessary screenshots.
+- **jwt_project_app** - contains Vue framework files and all related axios files for JWT authentication test.
+- **migration_manager** - contains all necessary `.py` files for cleaning data and preparing it for migration from CSV to Postgresql using Django admin panel.
+- **shell_scripts** - contains all shell commands that can make our life much easier.
+- **static** - contains static files of all django custom apps, standard apps and installed libraries.
+- **templates** - contains Django admin template settings.
+
+#### Separated files:
+
+- **.dockerignore** - list of files or directories that are excluded from getting into docker container.
+- **.flake8** - custom settings for flake8 linter.
+- **.gitignore** - list of files or directories that are excluded from getting into git repository.
+- **.pre-commit-config.yaml** - custom settings for flake8, black and isort linters hooks.
+- **docker-compose.yml** - file-constructor, that allows to build docker container. Used for local development only.
+- **Dockerfile** - file-instruction of how to build docker image for Heroku deployment. Used for production only.
+- **Dockerfile-dev** - file-instruction of how to build docker image for local development. This is the file, that `docker-compose.yml` is using for building docker container to run it locally.
+- **pyproject.toml** - custom project's settings. This file contains all necessary information about the project itself, dev and prod dependencies. Used to create `dev-requirements.txt` and `prod-requirements.txt` files.
 
 ### Deployment to Heroku
-#### Using git:
+#### Using git (not recommended):
 
 1. Add Config vars in Heroku app:
    * `DJANGO_SETTINGS_MODULE=mysite.settings`
@@ -13,7 +35,7 @@
 4. Push files to Heroku: `git push heroku main`
 5. If you encounter problems with Django collectstatic, please run `heroku config:set DISABLE_COLLECTSTATIC=1`and push everything again. Full guide is [here](https://stackoverflow.com/questions/55330749/error-while-running-python-manage-py-collectstatic-noinput-after-changin) for your reference.
 
-#### Using Container Registry:
+#### Using Container Registry (preferred):
 
 1. Prepare correct Dockerfile
 2. Use this command to build the container:\

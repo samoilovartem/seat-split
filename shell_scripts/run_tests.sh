@@ -1,5 +1,8 @@
 #! /bin/sh
 
+NC='\033[0m'
+GREEN='\033[0;32m'
+
 echo "Type only number:
 1. Run coverage tests, provide report
 2. Run coverage tests, provide report and save it as HTML
@@ -8,6 +11,8 @@ echo "Type only number:
 
 # shellcheck disable=SC2162
 read number
+
+cd ..
 
 if [ "$number" -eq 1 ]
   then
@@ -22,5 +27,5 @@ elif [ "$number" -eq 4 ]
   then
     python manage.py test --parallel
 else
-    echo "Wrong input. Please try again"
+    echo "${GREEN}Wrong input. Please try again${NC}"
 fi
