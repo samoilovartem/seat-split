@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class PhoneDashboardConfig(AppConfig):
+class MobileNumbersConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.phone_dashboard'
+    name = 'apps.mobile_numbers'

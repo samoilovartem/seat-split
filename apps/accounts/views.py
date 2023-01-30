@@ -13,7 +13,13 @@ class AllAccountsViewSet(ModelViewSet):
     queryset = Accounts.objects.all()
     serializer_class = AccountsSerializer
     filterset_class = AccountsFilterSet
-    search_fields = ['email', 'type', 'created_by', 'first_name', 'last_name']
+    search_fields = [
+        'email',
+        'type',
+        'created_by',
+        'first_name',
+        'last_name',
+    ]
     ordering_fields = [
         'id',
         'email',

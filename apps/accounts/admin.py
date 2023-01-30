@@ -27,7 +27,14 @@ class AccountsAdminConfig(ImportExportModelAdmin):
         'first_name',
         'last_name',
     )
-    search_fields = ('id', 'first_name', 'last_name', 'email', 'team', 'created_by')
+    search_fields = (
+        'id',
+        'first_name',
+        'last_name',
+        'email',
+        'team',
+        'created_by',
+    )
     list_filter = (
         'team',
         'specific_team',
@@ -36,8 +43,10 @@ class AccountsAdminConfig(ImportExportModelAdmin):
         'ld_computer_used',
         'last_opened',
     )
-    # readonly_fields = ('created_at', 'updated_at', 'last_opened')
-    actions = ['make_disabled', 'make_enabled']
+    actions = (
+        'make_disabled',
+        'make_enabled',
+    )
 
     @admin.action(
         description='Mark selected accounts as disabled', permissions=['change']

@@ -4,7 +4,7 @@ version: "3.8"
 services:
     django:
         build:
-            dockerfile: 'Dockerfile-dev'
+            dockerfile: "Dockerfile-dev"
         container_name: django
         command: python manage.py runserver 0.0.0.0:8000
         volumes:
@@ -20,11 +20,16 @@ services:
     pgdb:
         image: postgres
         container_name: pgdb
-        environment:
-            - POSTGRES_DB=postgres
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=postgres
+        env_file:
+            - .env
         volumes:
             - pgdata:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+            interval: 10s
+            timeout: 3s
+            retries: 3
+            start_period: 10s
+        restart: unless-stopped
 volumes:
     pgdata:

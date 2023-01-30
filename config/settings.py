@@ -5,6 +5,7 @@ from pathlib import Path
 import dj_database_url
 from django.core.management.utils import get_random_secret_key
 from dotenv import load_dotenv
+from split_settings.tools import include
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -12,11 +13,24 @@ dotenv_file = BASE_DIR / '.env'
 if os.path.isfile(dotenv_file):
     load_dotenv(dotenv_file)
 
+
 SECRET_KEY = os.environ.get('SECRET_KEY', default=get_random_secret_key())
 DEBUG = os.environ.get('DEBUG', default=False) in ['True', 'true', '1']
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS')]
 
-CORS_ALLOWED_ORIGINS = ['http://localhost:8080', 'http://127.0.0.1:8000']
+CORS_ALLOWED_ORIGINS = [os.environ.get('CORS_ALLOWED_ORIGINS')]
+
+include(
+    'components/rest_framework.py',
+    'components/internationalization.py',
+    'components/djoser.py',
+    'components/rollbar.py',
+    'components/simple_jwt.py',
+    'components/import_export.py',
+    'components/query_count.py',
+    'components/django-filters.py',
+    'components/swagger.py',
+)
 
 INSTALLED_APPS = [
     # Third party apps that needs to be placed before standard apps
@@ -40,10 +54,12 @@ INSTALLED_APPS = [
     'import_export',
     'django_truncate',
     'corsheaders',
+    'phone_field',
     # Project's apps
     'apps.cards.apps.CardsConfig',
     'apps.accounts.apps.AccountsConfig',
     'apps.users.apps.UsersConfig',
+    'apps.mobile_numbers.apps.MobileNumbersConfig',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -58,12 +74,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 ]
 
 if DEBUG:
     MIDDLEWARE.append('querycount.middleware.QueryCountMiddleware')
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 TEMPLATES = [
     {
@@ -83,12 +99,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# RENDER.COM POSTGRESQL DB
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('PGDB_URL')
         if os.environ.get('IS_DOCKER_RUNNING')
-        else 'sqlite:///db.sqlite3',
+        else os.environ.get('SQLITE_PATH'),
         ssl_require=False if DEBUG else True,
         conn_max_age=600,
     )
@@ -112,15 +127,8 @@ AUTH_PASSWORD_VALIDATORS = [
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'EST'
-
-USE_I18N = True
-
-USE_TZ = True
-
-CSRF_TRUSTED_ORIGINS = ['https://*.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = [os.environ.get('CSRF_TRUSTED_ORIGINS')]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'config/static')
 STATIC_URL = '/static/'
@@ -132,127 +140,11 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-INTERNAL_IPS = ['127.0.0.1']
+INTERNAL_IPS = [os.environ.get('INTERNAL_IPS')]
 if DEBUG:
     # showing django-debug-toolbar in docker development container
     INTERNAL_IPS = type(str('c'), (), {'__contains__': lambda *a: True})()
 
 APPEND_SLASH = False
 
-LOGIN_REDIRECT_URL = '/'
-
 AUTH_USER_MODEL = 'users.User'
-
-REST_FRAMEWORK = {
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'DEFAULT_PAGINATION_CLASS': 'apps.pagination.CustomPagination',
-    'PAGE_SIZE': 20,
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'apps.permissions.CustomDjangoModelPermissions',
-        # 'rest_framework_api_key.permissions.HasAPIKey',
-        'rest_framework.permissions.IsAuthenticated',
-        # 'rest_framework.permissions.DjangoModelPermissions',
-    ],
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend',
-        'rest_framework.filters.SearchFilter',
-        'rest_framework.filters.OrderingFilter',
-    ],
-    'EXCEPTION_HANDLER': 'rollbar.contrib.django_rest_framework.post_exception_handler',
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
-}
-
-DJOSER = {
-    'HIDE_USERS': False,
-    'PERMISSIONS': {
-        'activation': ['apps.permissions.CustomDjangoModelPermissions'],
-        'password_reset': ['apps.permissions.IsOwnerOrReadOnly'],
-        'password_reset_confirm': ['apps.permissions.IsOwnerOrReadOnly'],
-        'set_password': ['apps.permissions.IsOwnerOrReadOnly'],
-        'username_reset': ['apps.permissions.IsOwnerOrReadOnly'],
-        'username_reset_confirm': ['rest_framework.permissions.AllowAny'],
-        'set_username': ['apps.permissions.IsOwnerOrReadOnly'],
-        # 'user_create': ['config.permissions.CustomDjangoModelPermissions'],
-        'user_create': [
-            'rest_framework.permissions.AllowAny'
-            if DEBUG
-            else 'apps.permissions.CustomDjangoModelPermissions'
-        ],
-        'user_delete': ['apps.permissions.CustomDjangoModelPermissions'],
-        'user': ['apps.permissions.IsOwnerOrReadOnly'],
-        'user_list': ['apps.permissions.CustomDjangoModelPermissions'],
-        'token_create': ['rest_framework.permissions.AllowAny'],
-        'token_destroy': ['rest_framework.permissions.AllowAny'],
-    },
-}
-
-ROLLBAR = {
-    'access_token': os.environ.get('ROLLBAR_ACCESS_TOKEN'),
-    'environment': 'development' if DEBUG else 'production',
-    'code_version': '1.0',
-    'root': BASE_DIR,
-}
-
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1) if DEBUG else timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
-    'UPDATE_LAST_LOGIN': False,
-    'SIGNING_KEY': SECRET_KEY,
-    'ALGORITHM': 'HS256',
-    'VERIFYING_KEY': None,
-    'AUDIENCE': None,
-    'ISSUER': None,
-    'JWK_URL': None,
-    'LEEWAY': 0,
-    'AUTH_HEADER_TYPES': (
-        'Bearer',
-        'JWT',
-    ),
-    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
-    'USER_ID_FIELD': 'id',
-    'USER_ID_CLAIM': 'user_id',
-    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-    'TOKEN_TYPE_CLAIM': 'token_type',
-    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
-    'JTI_CLAIM': 'jti',
-    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
-}
-
-SWAGGER_SETTINGS = {'DEFAULT_AUTO_SCHEMA_CLASS': 'config.schemas.CustomAutoSchema'}
-
-IMPORT_EXPORT_EXPORT_PERMISSION_CODE = 'export'
-IMPORT_EXPORT_IMPORT_PERMISSION_CODE = 'import'
-IMPORT_EXPORT_TMP_STORAGE_CLASS = 'import_export.tmp_storages.MediaStorage'
-IMPORT_EXPORT_CHUNK_SIZE = 150 if DEBUG else 75
-
-BOOL_LOOKUPS = ['exact']
-DATE_AND_ID_LOOKUPS = ['exact', 'range', 'in']
-CHAR_LOOKUPS = ['icontains', 'iexact', 'exact', 'startswith', 'contains', 'endswith']
-
-QUERYCOUNT = {
-    'THRESHOLDS': {
-        'MEDIUM': 50,
-        'HIGH': 200,
-        'MIN_TIME_TO_LOG': 0,
-        'MIN_QUERY_COUNT_TO_LOG': 0,
-    },
-    'IGNORE_REQUEST_PATTERNS': [r'^/admin/'],
-    'IGNORE_SQL_PATTERNS': [r'NO SCROLL CURSOR WITH'],
-    'DISPLAY_DUPLICATES': 10,
-    'RESPONSE_HEADER': 'X-DjangoQueryCount-Count',
-}

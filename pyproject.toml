@@ -32,6 +32,9 @@ dependencies = [
     "rollbar",
     "whitenoise",
     "django-cors-headers",
+    "jsonrpcserver",
+    "django-split-settings",
+    "django-phone-field",
 ]
 
 [project.optional-dependencies]
