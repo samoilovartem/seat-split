@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'djoser',
-    'debug_toolbar',
     'django_filters',
     'import_export',
     'django_truncate',
@@ -60,6 +59,9 @@ INSTALLED_APPS = [
     'apps.users.apps.UsersConfig',
     'apps.mobile_numbers.apps.MobileNumbersConfig',
 ]
+
+if DEBUG:
+    INSTALLED_APPS.append('debug_toolbar')
 
 ROOT_URLCONF = 'config.urls'
 
