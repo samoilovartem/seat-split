@@ -1,7 +1,7 @@
 from django.db.models import Count
+from rest_flex_fields import FlexFieldsModelViewSet, is_expanded
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 
 from apps.cards.filters import CardsFilterSet
 from apps.cards.models import Cards
@@ -9,8 +9,15 @@ from apps.cards.serializers import CardsSerializer
 from apps.cards.utils import cards_per_value
 
 
-class AllCardsViewSet(ModelViewSet):
-    queryset = Cards.objects.all()
+class AllCardsViewSet(FlexFieldsModelViewSet):
+    permit_list_expands = ['created_by']
+
+    def get_queryset(self):
+        queryset = Cards.objects.all()
+        if is_expanded(self.request, 'created_by'):
+            queryset = queryset.select_related('created_by')
+        return queryset
+
     serializer_class = CardsSerializer
     filterset_class = CardsFilterSet
     search_fields = [

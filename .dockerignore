@@ -1,5 +1,6 @@
 */venv
 */env/
 htmlcov/
-/db.sqlite3
-!/jwt_project_app/
+db.sqlite3
+jwt_project_app/
+instruction_files/

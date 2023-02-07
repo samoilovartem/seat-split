@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'import_export',
     'django_truncate',
     'corsheaders',
-    'phone_field',
     # Project's apps
     'apps.cards.apps.CardsConfig',
     'apps.accounts.apps.AccountsConfig',

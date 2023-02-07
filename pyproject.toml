@@ -12,15 +12,16 @@ description = "API based on DRF for accounts-cards"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+#    "django >= 3.2.17",
     "django",
     "django-filter",
     "dj-database-url",
     "django-import-export",
+#    "djangorestframework >= 3.13.1",
     "djangorestframework",
     "django-truncate",
     "django_debug_toolbar",
     "djangorestframework-api-key",
-    "djangorestframework-queryfields",
     "djangorestframework-simplejwt",
     "djoser",
     "drf-yasg",
@@ -32,9 +33,8 @@ dependencies = [
     "rollbar",
     "whitenoise",
     "django-cors-headers",
-    "jsonrpcserver",
     "django-split-settings",
-    "django-phone-field",
+    "drf-flex-fields",
 ]
 
 [project.optional-dependencies]

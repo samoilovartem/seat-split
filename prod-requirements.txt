@@ -39,7 +39,7 @@ diff-match-patch==20200713
     # via django-import-export
 dj-database-url==1.2.0
     # via django-accounts-cards (pyproject.toml)
-django==4.1.5
+django==3.2.17
     # via
     #   dj-database-url
     #   django-accounts-cards (pyproject.toml)
@@ -47,7 +47,6 @@ django==4.1.5
     #   django-debug-toolbar
     #   django-filter
     #   django-import-export
-    #   django-phone-field
     #   djangorestframework
     #   djangorestframework-simplejwt
     #   drf-yasg
@@ -59,15 +58,13 @@ django-filter==22.1
     # via django-accounts-cards (pyproject.toml)
 django-import-export==3.0.2
     # via django-accounts-cards (pyproject.toml)
-django-phone-field==1.8.1
-    # via django-accounts-cards (pyproject.toml)
 django-split-settings==1.2.0
     # via django-accounts-cards (pyproject.toml)
 django-templated-mail==1.1.1
     # via djoser
 django-truncate==0.1
     # via django-accounts-cards (pyproject.toml)
-djangorestframework==3.14.0
+djangorestframework==3.13.1
     # via
     #   django-accounts-cards (pyproject.toml)
     #   djangorestframework-simplejwt
@@ -81,6 +78,8 @@ djangorestframework-simplejwt==4.8.0
     #   django-accounts-cards (pyproject.toml)
     #   djoser
 djoser==2.1.0
+    # via django-accounts-cards (pyproject.toml)
+drf-flex-fields==1.0.0
     # via django-accounts-cards (pyproject.toml)
 drf-yasg==1.21.4
     # via django-accounts-cards (pyproject.toml)
@@ -140,6 +139,7 @@ python3-openid==3.2.0
     # via social-auth-core
 pytz==2022.7
     # via
+    #   django
     #   djangorestframework
     #   drf-yasg
 pyyaml==6.0

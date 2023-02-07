@@ -2,7 +2,6 @@ import uuid
 
 from django.contrib.auth import get_user_model
 from django.db import models
-from phone_field import PhoneField
 
 from apps.accounts.models import Accounts
 
@@ -24,26 +23,24 @@ class UUIDMixin(models.Model):
         abstract = True
 
 
-class MobileNumberStorage(UUIDMixin, TimeStampedMixin):
-    phone = PhoneField(blank=True, unique=True, E164_only=True)
-    email = models.ForeignKey(Accounts, on_delete=models.PROTECT)
-
-    class StatusChoice(models.TextChoices):
-        ASSIGNED = 'assigned'
-        NOT_ASSIGNED = 'not assigned'
-
-    status = models.TextField(choices=StatusChoice.choices, blank=False)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
-    last_time_used = models.DateTimeField(blank=True)
-    session_data = models.JSONField(blank=True)
+class MobileNumberTransaction(UUIDMixin, TimeStampedMixin):
+    phone = models.CharField(max_length=20, blank=True)
+    email = models.ForeignKey(Accounts, on_delete=models.PROTECT, blank=True)
+    service_name = models.CharField(max_length=50, blank=True)
+    order_id = models.CharField(max_length=100, blank=True)
+    service_id = models.CharField(max_length=100, blank=True)
+    requested_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    service_main_response = models.JSONField(blank=True)
+    account_created = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.phone}'
+        return self.phone
 
     class Meta:
-        verbose_name = 'Mobile Number Storage'
-        verbose_name_plural = 'Mobile Numbers Storage'
+        verbose_name = 'Mobile Number Transaction'
+        verbose_name_plural = 'Mobile Number Transactions'
         ordering = ['-created_at']
+        unique_together = ['phone', 'order_id']
         permissions = (
             ('import_accounts', 'Can import'),
             ('export_accounts', 'Can export'),

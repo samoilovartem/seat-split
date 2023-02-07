@@ -1,13 +1,10 @@
-from drf_queryfields import QueryFieldsMixin
-from rest_framework import serializers
+from rest_flex_fields import FlexFieldsModelSerializer
 
 from apps.accounts.models import Accounts
 from apps.serializers import ConvertNoneToStringSerializerMixin
 
 
-class AccountsSerializer(
-    ConvertNoneToStringSerializerMixin, QueryFieldsMixin, serializers.ModelSerializer
-):
+class AccountsSerializer(ConvertNoneToStringSerializerMixin, FlexFieldsModelSerializer):
     class Meta:
         model = Accounts
         exclude = ('updated_at',)

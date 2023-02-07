@@ -1,19 +1,18 @@
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group
-from drf_queryfields import QueryFieldsMixin
-from rest_framework import serializers
+from rest_flex_fields import FlexFieldsModelSerializer
 
 from apps.serializers import ConvertNoneToStringSerializerMixin
 from apps.users.models import User
 
 
-class GroupSerializer(serializers.ModelSerializer):
+class GroupSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Group
         fields = '__all__'
 
 
-class GeneralUserSerializer(serializers.ModelSerializer):
+class GeneralUserSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = User
         exclude = ('password',)
@@ -25,7 +24,7 @@ class GeneralUserSerializer(serializers.ModelSerializer):
 
 
 class UserDetailSerializer(
-    ConvertNoneToStringSerializerMixin, QueryFieldsMixin, serializers.ModelSerializer
+    ConvertNoneToStringSerializerMixin, FlexFieldsModelSerializer
 ):
     class Meta:
         model = User
@@ -34,9 +33,7 @@ class UserDetailSerializer(
         ref_name = 'UserDetailSerializer'
 
 
-class UserListSerializer(
-    ConvertNoneToStringSerializerMixin, QueryFieldsMixin, serializers.ModelSerializer
-):
+class UserListSerializer(ConvertNoneToStringSerializerMixin, FlexFieldsModelSerializer):
     # groups = GroupSerializer(many=True, read_only=True)
 
     # -------- IF WE EVER NEED TO SHOW USER PERMISSIONS --------
@@ -59,7 +56,7 @@ class UserListSerializer(
         ref_name = 'UserListSerializer'
 
 
-class UserCreateSerializer(serializers.ModelSerializer):
+class UserCreateSerializer(FlexFieldsModelSerializer):
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
         return super(UserCreateSerializer, self).create(validated_data)
