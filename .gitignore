@@ -157,3 +157,4 @@ gsheets_engine.py
 *.bin
 others/
 useful_notes.txt
+static/

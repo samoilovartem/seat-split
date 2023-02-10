@@ -26,6 +26,8 @@ class Accounts(models.Model):
     sg_created = models.BooleanField(default=False)
     sg_password = models.CharField(max_length=32, validators=[any_or_na])
     tickets_com_created = models.BooleanField(default=False)
+    facebook_created = models.BooleanField(default=False)
+    twitter_created = models.BooleanField(default=False)
     eventbrite = models.BooleanField(default=False)
     etix = models.BooleanField(default=False)
     ticket_web = models.BooleanField(default=False)
@@ -72,3 +74,8 @@ class Accounts(models.Model):
             ('import_accounts', 'Can import'),
             ('export_accounts', 'Can export'),
         )
+        # indexes = [
+        #     models.Index(fields=('last_name', 'first_name',), name='accounts_last_first_name_idx'),
+        #     models.Index(fields=('email',), name='accounts_email_idx'),
+        #     models.Index(fields=('last_opened',), name='accounts_last_opened_idx'),
+        # ]

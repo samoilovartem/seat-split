@@ -1,6 +1,13 @@
-*/venv
-*/env/
 htmlcov/
 db.sqlite3
 jwt_project_app/
 instruction_files/
+docker-compose.yml
+Dockerfile-dev
+README.md
+others/
+useful_notes.txt
+shell_scripts/
+pyproject.toml
+migration_manager/
+__pycache__/

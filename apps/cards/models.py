@@ -10,8 +10,6 @@ from apps.cards.validators import (
 )
 from apps.validators import any_or_na
 
-# from django.db.models import UniqueConstraint
-
 User = get_user_model()
 
 
@@ -47,11 +45,9 @@ class Cards(models.Model):
         verbose_name = 'Card'
         verbose_name_plural = 'Cards'
         ordering = ['-created_at']
-        # constraints = [
-        #     UniqueConstraint(
-        #         fields=['account_assigned', 'platform'],
-        #         name='email_and_platform_unique',
-        #     ),
-        # ]
         unique_together = ['account_assigned', 'platform']
         permissions = (('import_cards', 'Can import'), ('export_cards', 'Can export'))
+        # indexes = [
+        #     models.Index(fields=('account_assigned',), name='cards_account_assigned_idx'),
+        #     models.Index(fields=('card_number',), name='cards_card_number_idx'),
+        # ]

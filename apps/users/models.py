@@ -53,10 +53,10 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser):
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
-    email = models.EmailField(max_length=255, null=True, blank=True)
+    email = models.EmailField(max_length=255, blank=True)
     password = models.CharField(max_length=255)
-    role = models.CharField(max_length=50, null=True, blank=True)
-    team = models.CharField(max_length=50, null=True, blank=True)
+    role = models.CharField(max_length=50, blank=True)
+    team = models.CharField(max_length=50, blank=True)
 
     objects = CustomUserManager()
 
