@@ -67,6 +67,7 @@ class Accounts(models.Model):
         return self.email
 
     class Meta:
+        db_table = "content\".\"accounts"
         verbose_name = 'Account'
         verbose_name_plural = 'Accounts'
         ordering = ['-created_at']

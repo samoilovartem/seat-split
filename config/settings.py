@@ -13,12 +13,11 @@ dotenv_file = BASE_DIR / '.env'
 if os.path.isfile(dotenv_file):
     load_dotenv(dotenv_file)
 
-
 SECRET_KEY = os.environ.get('SECRET_KEY', default=get_random_secret_key())
 DEBUG = os.environ.get('DEBUG', default=False) in ['True', 'true', '1']
-ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS')]
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(', ')
 
-CORS_ALLOWED_ORIGINS = [os.environ.get('CORS_ALLOWED_ORIGINS')]
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS').split(', ')
 
 include(
     'components/rest_framework.py',
@@ -128,7 +127,6 @@ AUTH_PASSWORD_VALIDATORS = [
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-
 CSRF_TRUSTED_ORIGINS = [os.environ.get('CSRF_TRUSTED_ORIGINS')]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -141,7 +139,7 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-INTERNAL_IPS = [os.environ.get('INTERNAL_IPS')]
+INTERNAL_IPS = os.environ.get('INTERNAL_IPS').split(', ')
 if DEBUG:
     # showing django-debug-toolbar in docker development container
     INTERNAL_IPS = type(str('c'), (), {'__contains__': lambda *a: True})()

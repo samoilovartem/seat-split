@@ -37,6 +37,7 @@ class MobileNumberTransaction(UUIDMixin, TimeStampedMixin):
         return self.phone
 
     class Meta:
+        db_table = "content\".\"mobile_number_transactions"
         verbose_name = 'Mobile Number Transaction'
         verbose_name_plural = 'Mobile Number Transactions'
         ordering = ['-created_at']

@@ -17,6 +17,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunSQL(
+            sql="""CREATE SCHEMA IF NOT EXISTS content;""",
+            reverse_sql="""DROP SCHEMA IF EXISTS content CASCADE;""",
+        ),
         migrations.CreateModel(
             name='MobileNumberTransaction',
             fields=[
@@ -54,6 +58,7 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
+                'db_table': 'content"."mobile_number_transactions',
                 'verbose_name': 'Mobile Number Transaction',
                 'verbose_name_plural': 'Mobile Number Transactions',
                 'ordering': ['-created_at'],

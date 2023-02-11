@@ -42,6 +42,7 @@ class Cards(models.Model):
         return self.account_assigned
 
     class Meta:
+        db_table = "content\".\"cards"
         verbose_name = 'Card'
         verbose_name_plural = 'Cards'
         ordering = ['-created_at']
