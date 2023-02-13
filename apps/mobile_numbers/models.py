@@ -2,6 +2,7 @@ import uuid
 
 from django.contrib.auth import get_user_model
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 from apps.accounts.models import Accounts
 
@@ -32,6 +33,7 @@ class MobileNumberTransaction(UUIDMixin, TimeStampedMixin):
     requested_by = models.ForeignKey(User, on_delete=models.PROTECT)
     service_main_response = models.JSONField(blank=True)
     account_created = models.BooleanField(default=False)
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.phone

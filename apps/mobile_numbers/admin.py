@@ -1,10 +1,11 @@
 from django.contrib import admin
-from import_export.admin import ImportExportModelAdmin
+from import_export.admin import ImportExportMixin
+from simple_history.admin import SimpleHistoryAdmin
 
 from apps.mobile_numbers.models import MobileNumberTransaction
 
 
-class MobileNumberAdminConfig(ImportExportModelAdmin):
+class MobileNumberAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
     save_as = True
     save_on_top = True
     autocomplete_fields = ('email',)
@@ -34,6 +35,7 @@ class MobileNumberAdminConfig(ImportExportModelAdmin):
         'created_at',
         'updated_at',
     )
+    history_list_display = ('status',)
 
 
 admin.site.register(MobileNumberTransaction, MobileNumberAdminConfig)

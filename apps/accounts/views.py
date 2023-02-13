@@ -39,11 +39,21 @@ class AllAccountsViewSet(ModelViewSet):
     def show_duplicates(self, request):
         duplicates = (
             Accounts.objects.values('email')
-            .annotate(Count('id'))
+            .annotate(duplicates=Count('id'))
             .order_by()
-            .filter(id__count__gt=1)
+            .filter(duplicates__gt=1)
         )
-        return Response({'count': len(duplicates), 'results': duplicates})
+        unique_accounts_number = Accounts.objects.values('email').distinct().count()
+        unique_duplicates_number = len(duplicates)
+        return Response(
+            {
+                'total number of accounts': unique_duplicates_number
+                + unique_accounts_number,
+                'total number of unique duplicate accounts': unique_duplicates_number,
+                'total number of unique accounts': unique_accounts_number,
+                'all duplicate accounts': duplicates,
+            }
+        )
 
     @action(methods=['GET'], detail=False)
     def get_accounts_per_type(self, request):

@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 from apps.cards.validators import (
     clean_card_number,
@@ -37,6 +38,7 @@ class Cards(models.Model):
     in_tm = models.BooleanField(default=False)
     in_tickets_com = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.account_assigned

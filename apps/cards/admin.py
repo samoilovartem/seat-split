@@ -1,11 +1,12 @@
 from django.contrib import admin, messages
 from django.utils.translation import ngettext
-from import_export.admin import ImportExportModelAdmin
+from import_export.admin import ImportExportMixin
+from simple_history.admin import SimpleHistoryAdmin
 
 from apps.cards.models import Cards
 
 
-class CardsAdminConfig(ImportExportModelAdmin):
+class CardsAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
     save_as = True
     save_on_top = True
     list_display = (
@@ -48,6 +49,7 @@ class CardsAdminConfig(ImportExportModelAdmin):
         'updated_at',
     )
     actions = ['mark_deleted', 'mark_not_deleted']
+    history_list_display = ('status',)
 
     @admin.action(description='Mark selected cards as deleted', permissions=['change'])
     def mark_deleted(self, request, queryset):

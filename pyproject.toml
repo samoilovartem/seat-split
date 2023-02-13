@@ -35,6 +35,7 @@ dependencies = [
     "django-cors-headers",
     "django-split-settings",
     "drf-flex-fields",
+    "django-simple-history",
 ]
 
 [project.optional-dependencies]

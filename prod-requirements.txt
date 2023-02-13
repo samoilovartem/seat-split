@@ -8,8 +8,6 @@ asgiref==3.6.0
     # via
     #   django
     #   djoser
-attrs==22.2.0
-    # via jsonschema
 build==0.10.0
     # via pip-tools
 certifi==2022.12.7
@@ -58,6 +56,8 @@ django-filter==22.1
     # via django-accounts-cards (pyproject.toml)
 django-import-export==3.0.2
     # via django-accounts-cards (pyproject.toml)
+django-simple-history==3.2.0
+    # via django-accounts-cards (pyproject.toml)
 django-split-settings==1.2.0
     # via django-accounts-cards (pyproject.toml)
 django-templated-mail==1.1.1
@@ -70,8 +70,6 @@ djangorestframework==3.13.1
     #   djangorestframework-simplejwt
     #   drf-yasg
 djangorestframework-api-key==2.2.0
-    # via django-accounts-cards (pyproject.toml)
-djangorestframework-queryfields==1.0.0
     # via django-accounts-cards (pyproject.toml)
 djangorestframework-simplejwt==4.8.0
     # via
@@ -95,10 +93,6 @@ itypes==1.2.0
     # via coreapi
 jinja2==3.1.2
     # via coreschema
-jsonrpcserver==5.0.9
-    # via django-accounts-cards (pyproject.toml)
-jsonschema==4.17.3
-    # via jsonrpcserver
 markuppy==1.14
     # via tablib
 markupsafe==2.1.1
@@ -111,8 +105,6 @@ odfpy==1.4.1
     # via tablib
 openpyxl==3.0.10
     # via tablib
-oslash==0.6.3
-    # via jsonrpcserver
 packaging==23.0
     # via
     #   build
@@ -131,8 +123,6 @@ pyjwt==2.6.0
     #   social-auth-core
 pyproject-hooks==1.0.0
     # via build
-pyrsistent==0.19.3
-    # via jsonschema
 python-dotenv==0.21.0
     # via django-accounts-cards (pyproject.toml)
 python3-openid==3.2.0
@@ -170,8 +160,6 @@ sqlparse==0.4.3
     #   django-debug-toolbar
 tablib[html,ods,xls,xlsx,yaml]==3.3.0
     # via django-import-export
-typing-extensions==4.4.0
-    # via oslash
 uritemplate==4.1.1
     # via
     #   coreapi

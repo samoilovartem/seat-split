@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 from apps.validators import any_or_na
 
@@ -62,6 +63,7 @@ class Accounts(models.Model):
         max_length=100, validators=[any_or_na], default='NA'
     )
     migrated_to = models.CharField(max_length=100, validators=[any_or_na], default='NA')
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.email

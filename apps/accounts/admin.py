@@ -1,12 +1,13 @@
 from django.contrib import admin, messages
 from django.utils.translation import ngettext
-from import_export.admin import ImportExportModelAdmin
+from import_export.admin import ImportExportMixin
+from simple_history.admin import SimpleHistoryAdmin
 
 from apps.accounts.models import Accounts
 from apps.accounts.resource import AccountsResource
 
 
-class AccountsAdminConfig(ImportExportModelAdmin):
+class AccountsAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
     resource_classes = [AccountsResource]
     save_as = True
     save_on_top = True
@@ -47,6 +48,7 @@ class AccountsAdminConfig(ImportExportModelAdmin):
         'make_disabled',
         'make_enabled',
     )
+    history_list_display = ('status',)
 
     @admin.action(
         description='Mark selected accounts as disabled', permissions=['change']

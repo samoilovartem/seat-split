@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'import_export',
     'django_truncate',
     'corsheaders',
+    'simple_history',
     # Project's apps
     'apps.cards.apps.CardsConfig',
     'apps.accounts.apps.AccountsConfig',
@@ -75,6 +76,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 if DEBUG:
