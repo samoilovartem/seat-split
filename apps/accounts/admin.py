@@ -1,10 +1,12 @@
 from django.contrib import admin, messages
+from django.utils.html import format_html
 from django.utils.translation import ngettext
 from import_export.admin import ImportExportMixin
 from simple_history.admin import SimpleHistoryAdmin
 
 from apps.accounts.models import Accounts
 from apps.accounts.resource import AccountsResource
+from apps.utils import show_changed_fields
 
 
 class AccountsAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
@@ -48,7 +50,20 @@ class AccountsAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
         'make_disabled',
         'make_enabled',
     )
-    history_list_display = ('status',)
+    history_list_display = ('changed_fields', 'list_changes', 'status')
+
+    def changed_fields(self, obj):
+        if obj.prev_record:
+            delta = obj.diff_against(obj.prev_record)
+            return delta.changed_fields
+        return None
+
+    def list_changes(self, obj):
+        fields = ''
+        if obj.prev_record:
+            fields = show_changed_fields(obj, fields)
+            return format_html(fields)
+        return None
 
     @admin.action(
         description='Mark selected accounts as disabled', permissions=['change']
