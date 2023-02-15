@@ -25,6 +25,8 @@ class AccountsAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
         'last_opened',
         'team',
         'specific_team',
+        'updated_at',
+        'created_at',
     )
     list_display_links = (
         'first_name',
@@ -45,6 +47,8 @@ class AccountsAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
         'created_by',
         'ld_computer_used',
         'last_opened',
+        'updated_at',
+        'created_at',
     )
     actions = (
         'make_disabled',
