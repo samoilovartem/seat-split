@@ -1,4 +1,5 @@
 from django.contrib.auth.models import Group, Permission
+from rest_flex_fields import FlexFieldsModelViewSet
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -16,8 +17,8 @@ from apps.users.serializers import (
 )
 
 
-class UsersViewSet(ModelViewSet):
-    queryset = User.objects.all()
+class UsersViewSet(FlexFieldsModelViewSet):
+    queryset = User.objects.all().prefetch_related('groups', 'user_permissions')
     serializer_class = GeneralUserSerializer
     my_tags = ['All users']
     serializer_class_by_action = {

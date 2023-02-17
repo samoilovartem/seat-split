@@ -1,23 +1,23 @@
 DJOSER = {
     'HIDE_USERS': False,
     'PERMISSIONS': {
-        'activation': ['apps.permissions.CustomDjangoModelPermissions'],
-        'password_reset': ['apps.permissions.IsOwnerOrReadOnly'],
-        'password_reset_confirm': ['apps.permissions.IsOwnerOrReadOnly'],
-        'set_password': ['apps.permissions.IsOwnerOrReadOnly'],
-        'username_reset': ['apps.permissions.IsOwnerOrReadOnly'],
-        'username_reset_confirm': ['rest_framework.permissions.AllowAny'],
-        'set_username': ['apps.permissions.IsOwnerOrReadOnly'],
-        # 'user_create': ['config.permissions.CustomDjangoModelPermissions'],
-        'user_create': [
-            'rest_framework.permissions.AllowAny'
-            if DEBUG
-            else 'apps.permissions.CustomDjangoModelPermissions'
-        ],
+        'activation': ['rest_framework.permissions.IsAuthenticated'],
+        'password_reset': ['rest_framework.permissions.IsAuthenticated'],
+        'password_reset_confirm': ['rest_framework.permissions.IsAuthenticated'],
+        'set_password': ['rest_framework.permissions.IsAuthenticated'],
+        'username_reset': ['rest_framework.permissions.IsAuthenticated'],
+        'username_reset_confirm': ['rest_framework.permissions.IsAuthenticated'],
+        'set_username': ['rest_framework.permissions.IsAuthenticated'],
+        'user_create': ['apps.permissions.CustomDjangoModelPermissions'],
         'user_delete': ['apps.permissions.CustomDjangoModelPermissions'],
-        'user': ['apps.permissions.IsOwnerOrReadOnly'],
+        'user': ['rest_framework.permissions.IsAuthenticated'],
         'user_list': ['apps.permissions.CustomDjangoModelPermissions'],
-        'token_create': ['rest_framework.permissions.AllowAny'],
-        'token_destroy': ['rest_framework.permissions.AllowAny'],
+        'token_create': ['rest_framework.permissions.IsAuthenticated'],
+        'token_destroy': ['rest_framework.permissions.IsAuthenticated'],
+    },
+    'SERIALIZERS': {
+        'current_user': 'apps.users.serializers.DjoserUserSerializer',
+        'user': 'apps.users.serializers.DjoserUserSerializer',
+        'user_create': 'apps.users.serializers.UserCreateSerializer',
     },
 }

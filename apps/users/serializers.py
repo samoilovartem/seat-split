@@ -1,9 +1,27 @@
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 from rest_flex_fields import FlexFieldsModelSerializer
 
 from apps.serializers import ConvertNoneToStringSerializerMixin
 from apps.users.models import User
+
+
+class UserPermissionsSerializer(FlexFieldsModelSerializer):
+    class Meta:
+        model = Permission
+        fields = (
+            'id',
+            'name',
+        )
+
+
+class UserGroupSerializer(FlexFieldsModelSerializer):
+    class Meta:
+        model = Group
+        fields = (
+            'id',
+            'name',
+        )
 
 
 class GroupSerializer(FlexFieldsModelSerializer):
@@ -31,27 +49,19 @@ class UserDetailSerializer(
         exclude = ('password',)
         none_to_str_fields = ('last_login', 'role', 'team', 'last_opened', 'email')
         ref_name = 'UserDetailSerializer'
+        expandable_fields = {
+            'user_permissions': (UserPermissionsSerializer, {'many': True}),
+            'groups': (UserGroupSerializer, {'many': True}),
+        }
 
 
 class UserListSerializer(ConvertNoneToStringSerializerMixin, FlexFieldsModelSerializer):
-    # groups = GroupSerializer(many=True, read_only=True)
-
-    # -------- IF WE EVER NEED TO SHOW USER PERMISSIONS --------
-    # user_permissions = serializers.SerializerMethodField()
-    # def get_user_permissions(self, obj):
-    #     if obj.is_superuser:
-    #         all_permissions = Permission.objects.all()\
-    #             .order_by('id')\
-    #             .values('id', 'name', 'codename')
-    #         return all_permissions
-    #     user_permissions = Permission.objects.filter(
-    #         Q(user=obj.id) | Q(group__user=obj.id)
-    #     ).order_by('id').values('id', 'name', 'codename')
-    #     return user_permissions
+    user_permissions = UserPermissionsSerializer(many=True)
+    groups = UserGroupSerializer(many=True)
 
     class Meta:
         model = User
-        exclude = ('password', 'groups', 'user_permissions')
+        exclude = ('password',)
         none_to_str_fields = ('last_login', 'role', 'team', 'last_opened', 'email')
         ref_name = 'UserListSerializer'
 
@@ -66,9 +76,26 @@ class UserCreateSerializer(FlexFieldsModelSerializer):
         exclude = (
             'date_joined',
             'last_login',
-            'email',
         )
         extra_kwargs = {
             'password': {'write_only': True},
         }
         ref_name = 'UserCreateSerializer'
+
+
+class DjoserUserSerializer(FlexFieldsModelSerializer):
+    class Meta:
+        model = User
+        exclude = ('password', 'groups', 'user_permissions')
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'username': {'read_only': True},
+            'last_login': {'read_only': True},
+            'date_joined': {'read_only': True},
+            'is_superuser': {'read_only': True},
+            'is_staff': {'read_only': True},
+            'is_active': {'read_only': True},
+            'role': {'read_only': True},
+            'team': {'read_only': True},
+        }
+        ref_name = 'DjoserUserSerializer'

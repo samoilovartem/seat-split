@@ -1,4 +1,4 @@
-from rest_flex_fields import FlexFieldsModelViewSet, is_expanded
+from rest_flex_fields import FlexFieldsModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -9,19 +9,12 @@ from apps.mobile_numbers.utils import mobile_numbers_per_value
 
 
 class AllMobileNumbersViewSet(FlexFieldsModelViewSet):
+    queryset = MobileNumberTransaction.objects.all().select_related(
+        'email', 'requested_by'
+    )
     permit_list_expands = ['email', 'requested_by']
     serializer_class = MobileNumbersSerializer
     filterset_class = MobileNumbersFilterSet
-
-    def get_queryset(self):
-        queryset = MobileNumberTransaction.objects.all()
-        if is_expanded(self.request, 'email'):
-            queryset = queryset.select_related('email')
-        elif is_expanded(self.request, 'requested_by'):
-            queryset = queryset.select_related('requested_by')
-        else:
-            queryset = queryset.select_related('requested_by', 'email')
-        return queryset
 
     search_fields = (
         'email',

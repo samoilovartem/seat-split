@@ -15,6 +15,9 @@ class Accounts(models.Model):
     email = models.EmailField(max_length=150, db_index=True)
     type = models.CharField(max_length=100, validators=[any_or_na])
     password = models.CharField(max_length=32, validators=[any_or_na])
+    delta_password = models.CharField(
+        max_length=32, validators=[any_or_na], default='NA'
+    )
     recovery_email = models.EmailField(max_length=150)
     email_forwarding = models.BooleanField(default=False)
     auto_po_seats_scouts = models.BooleanField(default=False)
