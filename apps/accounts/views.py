@@ -19,6 +19,7 @@ class AllAccountsViewSet(ModelViewSet):
         'created_by',
         'first_name',
         'last_name',
+        'comments',
     ]
     ordering_fields = [
         'id',
