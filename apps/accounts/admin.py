@@ -29,6 +29,7 @@ class AccountsAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
         'created_at',
     )
     list_display_links = (
+        'id',
         'first_name',
         'last_name',
     )

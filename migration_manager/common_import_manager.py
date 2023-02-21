@@ -86,41 +86,42 @@ df.fillna('NA', inplace=True)
 # print(df)
 
 # =========================== SPLITTING DF TO SAVE IN A FEW CSV ===============================
-df.to_excel('Accounts (prepared version).xlsx', index=False)
+# df.iloc[:10].to_csv('Accounts (prepared version).csv', index=False)
+df.iloc[:1000].to_csv('test.csv', index=False)
 
-df1 = df.iloc[:3000].to_excel(
-    path_to_save + 'Accounts (prepared version) part 1.xlsx', index=False
-)
-df2 = df.iloc[3000:6000].to_excel(
-    path_to_save + 'Accounts (prepared version) part 2.xlsx', index=False
-)
-df3 = df.iloc[6000:9000].to_excel(
-    path_to_save + 'Accounts (prepared version) part 3.xlsx', index=False
-)
-df4 = df.iloc[9000:12000].to_excel(
-    path_to_save + 'Accounts (prepared version) part 4.xlsx', index=False
-)
-df5 = df.iloc[12000:15000].to_excel(
-    path_to_save + 'Accounts (prepared version) part 5.xlsx', index=False
-)
-df6 = df.iloc[15000:18000].to_excel(
-    path_to_save + 'Accounts (prepared version) part 6.xlsx', index=False
-)
-df7 = df.iloc[18000:21000].to_excel(
-    path_to_save + 'Accounts (prepared version) part 7.xlsx', index=False
-)
-df8 = df.iloc[21000:24000].to_excel(
-    path_to_save + 'Accounts (prepared version) part 8.xlsx', index=False
-)
-df9 = df.iloc[24000:27000].to_excel(
-    path_to_save + 'Accounts (prepared version) part 9.xlsx', index=False
-)
-df10 = df.iloc[27000:30000].to_excel(
-    path_to_save + 'Accounts (prepared version) part 10.xlsx', index=False
-)
-df11 = df.iloc[30000:33000].to_excel(
-    path_to_save + 'Accounts (prepared version) part 11.xlsx', index=False
-)
-df12 = df.iloc[33000:].to_excel(
-    path_to_save + 'Accounts (prepared version) part 12.xlsx', index=False
-)
+# df1 = df.iloc[:3000].to_excel(
+#     path_to_save + 'Accounts (prepared version) part 1.xlsx', index=False
+# )
+# df2 = df.iloc[3000:6000].to_excel(
+#     path_to_save + 'Accounts (prepared version) part 2.xlsx', index=False
+# )
+# df3 = df.iloc[6000:9000].to_excel(
+#     path_to_save + 'Accounts (prepared version) part 3.xlsx', index=False
+# )
+# df4 = df.iloc[9000:12000].to_excel(
+#     path_to_save + 'Accounts (prepared version) part 4.xlsx', index=False
+# )
+# df5 = df.iloc[12000:15000].to_excel(
+#     path_to_save + 'Accounts (prepared version) part 5.xlsx', index=False
+# )
+# df6 = df.iloc[15000:18000].to_excel(
+#     path_to_save + 'Accounts (prepared version) part 6.xlsx', index=False
+# )
+# df7 = df.iloc[18000:21000].to_excel(
+#     path_to_save + 'Accounts (prepared version) part 7.xlsx', index=False
+# )
+# df8 = df.iloc[21000:24000].to_excel(
+#     path_to_save + 'Accounts (prepared version) part 8.xlsx', index=False
+# )
+# df9 = df.iloc[24000:27000].to_excel(
+#     path_to_save + 'Accounts (prepared version) part 9.xlsx', index=False
+# )
+# df10 = df.iloc[27000:30000].to_excel(
+#     path_to_save + 'Accounts (prepared version) part 10.xlsx', index=False
+# )
+# df11 = df.iloc[30000:33000].to_excel(
+#     path_to_save + 'Accounts (prepared version) part 11.xlsx', index=False
+# )
+# df12 = df.iloc[33000:].to_excel(
+#     path_to_save + 'Accounts (prepared version) part 12.xlsx', index=False
+# )
