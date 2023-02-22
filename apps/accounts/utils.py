@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.db.models import Count
 
 from apps.accounts.models import Accounts
@@ -29,3 +30,11 @@ def get_validation_errors(email_column, invalid_rows):
         email = invalid_row.values[email_column + 1]
         error_messages.append(f'Errors in email {email}. Columns: {invalid_row.error}')
     return error_messages
+
+
+def get_accounts_fields():
+    Accounts = apps.get_model('accounts', 'Accounts')
+    field_names = [field.name for field in Accounts._meta.fields]
+    field_names.remove('id')
+    field_names.remove('updated_at')
+    return field_names

@@ -10,6 +10,7 @@ from apps.accounts.resource import AccountsResource
 from apps.accounts.serializers import AccountsSerializer
 from apps.accounts.utils import (
     accounts_per_value,
+    get_accounts_fields,
     get_existing_emails,
     get_validation_errors,
 )
@@ -78,14 +79,22 @@ class AllAccountsViewSet(ModelViewSet):
         if not file:
             return Response({'success': False, 'error': 'No file was uploaded.'})
 
-        # Check if any of the emails in the CSV file already exist in the database
+        expected_columns = get_accounts_fields()
         dataset = Dataset().load(file.read().decode('utf-8'), format='csv')
-        email_column = dataset.headers.index('email')
+
+        csv_columns = dataset.headers
+        missing_columns = set(expected_columns) - set(csv_columns)
+
+        if missing_columns:
+            error_message = f'CSV file is missing the following columns: {", ".join(missing_columns)}'
+            return Response({'success': False, 'error': error_message})
+
+        email_column = csv_columns.index('email')
         existing_emails = get_existing_emails(email_column, dataset)
+
         if existing_emails:
             return Response({'success': False, 'errors': existing_emails})
 
-        # Validate the CSV file
         resource = AccountsResource()
         result = resource.import_data(dataset, dry_run=True)
 
