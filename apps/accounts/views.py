@@ -75,7 +75,7 @@ class AllAccountsViewSet(ModelViewSet):
         return Response({'results': result})
 
     @action(methods=['POST'], detail=False)
-    def import_csv(self, request):
+    def import_file(self, request):
         file = request.FILES.get('file')
         if not file:
             return Response({'success': False, 'error': 'No file was uploaded.'})
