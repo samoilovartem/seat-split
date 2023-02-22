@@ -1,5 +1,6 @@
 from django.apps import apps
 from django.db.models import Count
+from tablib import Dataset, UnsupportedFormat
 
 from apps.accounts.models import Accounts
 
@@ -38,3 +39,13 @@ def get_accounts_fields():
     field_names.remove('id')
     field_names.remove('updated_at')
     return field_names
+
+
+def load_dataset_from_file(file):
+    if file.name.endswith('.xlsx'):
+        dataset = Dataset().load(file.read(), format='xlsx')
+    elif file.name.endswith('.csv'):
+        dataset = Dataset().load(file.read().decode('utf-8'), format='csv')
+    else:
+        raise UnsupportedFormat('Unsupported file format.')
+    return dataset

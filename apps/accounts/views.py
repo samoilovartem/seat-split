@@ -2,7 +2,7 @@ from django.db.models import Count
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from tablib import Dataset
+from tablib import UnsupportedFormat
 
 from apps.accounts.filters import AccountsFilterSet
 from apps.accounts.models import Accounts
@@ -13,6 +13,7 @@ from apps.accounts.utils import (
     get_accounts_fields,
     get_existing_emails,
     get_validation_errors,
+    load_dataset_from_file,
 )
 
 
@@ -79,9 +80,12 @@ class AllAccountsViewSet(ModelViewSet):
         if not file:
             return Response({'success': False, 'error': 'No file was uploaded.'})
 
-        expected_columns = get_accounts_fields()
-        dataset = Dataset().load(file.read().decode('utf-8'), format='csv')
+        try:
+            dataset = load_dataset_from_file(file)
+        except UnsupportedFormat:
+            return Response({'success': False, 'error': 'Unsupported file format.'})
 
+        expected_columns = get_accounts_fields()
         csv_columns = dataset.headers
         missing_columns = set(expected_columns) - set(csv_columns)
 
