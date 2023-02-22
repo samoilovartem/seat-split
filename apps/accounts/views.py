@@ -8,7 +8,11 @@ from apps.accounts.filters import AccountsFilterSet
 from apps.accounts.models import Accounts
 from apps.accounts.resource import AccountsResource
 from apps.accounts.serializers import AccountsSerializer
-from apps.accounts.utils import accounts_per_value
+from apps.accounts.utils import (
+    accounts_per_value,
+    get_existing_emails,
+    get_validation_errors,
+)
 
 
 class AllAccountsViewSet(ModelViewSet):
@@ -74,20 +78,24 @@ class AllAccountsViewSet(ModelViewSet):
         if not file:
             return Response({'success': False, 'error': 'No file was uploaded.'})
 
-        resource = AccountsResource()
+        # Check if any of the emails in the CSV file already exist in the database
         dataset = Dataset().load(file.read().decode('utf-8'), format='csv')
-        dry_run_result = resource.import_data(dataset, dry_run=True)
+        email_column = dataset.headers.index('email')
+        existing_emails = get_existing_emails(email_column, dataset)
+        if existing_emails:
+            return Response({'success': False, 'errors': existing_emails})
 
-        if dry_run_result.has_validation_errors():
-            invalid_rows = dry_run_result.invalid_rows
-            error_messages = []
-            for invalid_row in invalid_rows:
-                email = invalid_row.values[3]
-                error_messages.append(f'Errors in email "{email}": {invalid_row.error}')
+        # Validate the CSV file
+        resource = AccountsResource()
+        result = resource.import_data(dataset, dry_run=True)
+
+        if result.has_validation_errors():
+            invalid_rows = result.invalid_rows
+            error_messages = get_validation_errors(email_column, invalid_rows)
             return Response({'success': False, 'errors': error_messages})
 
-        elif dry_run_result.has_errors():
-            return Response({'success': False, 'errors': dry_run_result.row_errors()})
+        elif result.has_errors():
+            return Response({'success': False, 'errors': result.row_errors()})
 
         else:
             resource.import_data(dataset, dry_run=False)

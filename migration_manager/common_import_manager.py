@@ -32,6 +32,10 @@ df.rename(
     inplace=True,
 )
 
+# ================================= ADDING NEW COLUMNS ======================================
+df['delta_password'] = 'NA'
+df['tm_address'] = 'NA'
+
 print(df.columns)
 
 # ============================== CONVERT DTYPES (if needed) =================================
@@ -87,7 +91,7 @@ df.fillna('NA', inplace=True)
 
 # =========================== SPLITTING DF TO SAVE IN A FEW CSV ===============================
 # df.iloc[:10].to_csv('Accounts (prepared version).csv', index=False)
-df.iloc[:1000].to_csv('test.csv', index=False)
+df.iloc[:3].to_csv('test.csv', index=False)
 
 # df1 = df.iloc[:3000].to_excel(
 #     path_to_save + 'Accounts (prepared version) part 1.xlsx', index=False
