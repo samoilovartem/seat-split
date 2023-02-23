@@ -1,5 +1,12 @@
 # Accounts-cards django project documentation
 
+### Installation:
+
+1. Clone the repository from GitHub.
+2. Create `.env` in the main project's directory (together with `manage.py` file) using `.example.env`.
+3. Install Docker and launch it.
+4. Run `docker compose up`.
+
 ### Project structure:
 #### Directories:
 
