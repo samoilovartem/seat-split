@@ -23,8 +23,6 @@ class AllAccountsViewSet(ModelViewSet):
     filterset_class = AccountsFilterSet
     search_fields = [
         'email',
-        'type',
-        'created_by',
         'first_name',
         'last_name',
         'comments',
