@@ -31,6 +31,20 @@ class MobileNumberTransaction(UUIDMixin, TimeStampedMixin):
     order_id = models.CharField(max_length=100, blank=True)
     service_id = models.CharField(max_length=100, blank=True)
     requested_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    price = models.IntegerField(blank=True, default=0)
+    expiration_date = models.DateTimeField(null=True, blank=True)
+
+    class StatusChoice(models.TextChoices):
+        EXPIRING_SOON = 'expiring soon'
+        EXPIRED = 'expired'
+        OFFLINE = 'offline'
+        ONLINE = 'online'
+        NOT_APPLICABLE = 'not applicable'
+
+    status = models.TextField(
+        choices=StatusChoice.choices, default=StatusChoice.NOT_APPLICABLE
+    )
+    awake_until = models.DateTimeField(null=True, blank=True)
     service_main_response = models.JSONField(blank=True)
     account_created = models.BooleanField(default=False)
     history = HistoricalRecords()

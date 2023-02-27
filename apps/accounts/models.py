@@ -12,7 +12,7 @@ class Accounts(models.Model):
 
     first_name = models.CharField(max_length=100, validators=[any_or_na])
     last_name = models.CharField(max_length=100, validators=[any_or_na])
-    email = models.EmailField(max_length=150, db_index=True)
+    email = models.EmailField(max_length=150)
     type = models.CharField(max_length=100, validators=[any_or_na])
     password = models.CharField(max_length=32, validators=[any_or_na])
     delta_password = models.CharField(

@@ -1,3 +1,10 @@
+from django.db.models import QuerySet
+from pygments import highlight
+from pygments.formatters import TerminalFormatter
+from pygments.lexers import PostgresLexer
+from sqlparse import format
+
+
 def show_changed_fields(obj, fields):
     delta = obj.diff_against(obj.prev_record)
 
@@ -7,3 +14,8 @@ def show_changed_fields(obj, fields):
             f'</span> to <span style="background-color:#92BF0F">{change.new}</span> . <br/>'
         )
     return fields
+
+
+def print_sql(queryset: QuerySet):
+    formatted = format(str(queryset.query), reindent=True)
+    print(highlight(formatted, PostgresLexer(), TerminalFormatter()))
