@@ -36,6 +36,8 @@ dependencies = [
     "django-split-settings",
     "drf-flex-fields",
     "django-simple-history",
+    "pygount",
+    "newrelic",
 ]
 
 [project.optional-dependencies]
@@ -44,7 +46,6 @@ dev = [
     "coverage",
     "pandas",
     "beautifulsoup4",
-    "pygount",
     "django-querycount",
     "flake8",
     "pre-commit",

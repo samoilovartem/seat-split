@@ -119,6 +119,8 @@ markupsafe==2.1.1
     # via jinja2
 mccabe==0.7.0
     # via flake8
+newrelic==8.7.0
+    # via django-accounts-cards (pyproject.toml)
 nodeenv==1.7.0
     # via pre-commit
 numpy==1.24.1

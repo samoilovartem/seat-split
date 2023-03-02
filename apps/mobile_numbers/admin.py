@@ -19,23 +19,6 @@ class MobileNumberAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
         'order_id',
         'requested_by',
     )
-    fields = (
-        'id',
-        'phone',
-        'email',
-        'requested_by',
-        'service_name',
-        'order_id',
-        'service_id',
-        'price',
-        'expiration_date',
-        'status',
-        'awake_until',
-        'service_main_response',
-        'account_created',
-        'created_at',
-        'updated_at',
-    )
     readonly_fields = (
         'id',
         'created_at',

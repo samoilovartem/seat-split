@@ -30,6 +30,15 @@ class MobileNumberTransaction(UUIDMixin, TimeStampedMixin):
     service_name = models.CharField(max_length=50, blank=True)
     order_id = models.CharField(max_length=100, blank=True)
     service_id = models.CharField(max_length=100, blank=True)
+
+    class TypeChoice(models.TextChoices):
+        TEMPORARY = 'temporary'
+        RENTAL = 'rental'
+        NOT_APPLICABLE = 'not applicable'
+
+    type = models.TextField(
+        choices=TypeChoice.choices, default=TypeChoice.NOT_APPLICABLE
+    )
     requested_by = models.ForeignKey(User, on_delete=models.PROTECT)
     price = models.IntegerField(blank=True, default=0)
     expiration_date = models.DateTimeField(null=True, blank=True)

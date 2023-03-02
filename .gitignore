@@ -159,3 +159,4 @@ others/
 useful_notes.txt
 static/
 !/.example.env
+newrelic.ini

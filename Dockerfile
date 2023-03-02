@@ -7,9 +7,12 @@ FROM --platform=linux/amd64 python:3.11
 WORKDIR /app
 
 # set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-ENV DEBUG 0
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    NEW_RELIC_CONFIG_FILE=newrelic.ini \
+    NEW_RELIC_ENVIRONMENT=production \
+    NEW_RELIC_LOG=stdout \
+    NEW_RELIC_LOG_LEVEL=info
 
 # install dependencies
 COPY ./prod-requirements.txt .
@@ -25,4 +28,5 @@ RUN adduser --disabled-password samoylovartem
 USER samoylovartem
 
 # run gunicorn
-CMD python manage.py migrate --noinput && gunicorn --bind 0.0.0.0:$PORT config.wsgi:application
+CMD python manage.py migrate --noinput && \
+    newrelic-admin run-program gunicorn --bind 0.0.0.0:$PORT config.wsgi:application
