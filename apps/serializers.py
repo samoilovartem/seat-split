@@ -1,3 +1,8 @@
+from rest_flex_fields import FlexFieldsModelSerializer
+
+from apps.users.models import User
+
+
 class ConvertNoneToStringSerializerMixin:
     def get_none_to_str_fields(self):
         meta = getattr(self, 'Meta', None)
@@ -14,3 +19,12 @@ class ConvertNoneToStringSerializerMixin:
             if field in data and data[field] is None:
                 data[field] = 'NA'
         return data
+
+
+class UserSerializer(FlexFieldsModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'username',
+        )

@@ -87,6 +87,8 @@ drf-yasg==1.21.4
     # via django-accounts-cards (pyproject.toml)
 et-xmlfile==1.1.0
     # via openpyxl
+faker==17.6.0
+    # via django-accounts-cards (pyproject.toml)
 gunicorn==20.1.0
     # via django-accounts-cards (pyproject.toml)
 idna==3.4
@@ -135,6 +137,8 @@ pyjwt==2.6.0
     #   social-auth-core
 pyproject-hooks==1.0.0
     # via build
+python-dateutil==2.8.2
+    # via faker
 python-dotenv==0.21.0
     # via django-accounts-cards (pyproject.toml)
 python3-openid==3.2.0
@@ -162,6 +166,7 @@ ruamel-yaml==0.17.21
     # via drf-yasg
 six==1.16.0
     # via
+    #   python-dateutil
     #   rollbar
     #   social-auth-app-django
 social-auth-app-django==4.0.0

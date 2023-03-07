@@ -38,6 +38,7 @@ dependencies = [
     "django-simple-history",
     "pygount",
     "newrelic",
+    "faker",
 ]
 
 [project.optional-dependencies]

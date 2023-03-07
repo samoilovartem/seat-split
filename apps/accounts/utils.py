@@ -49,3 +49,20 @@ def load_dataset_from_file(file):
     else:
         raise UnsupportedFormat('Unsupported file format.')
     return dataset
+
+
+def get_dataset_to_export():
+    queryset = Accounts.objects.all()
+    if not queryset.exists():
+        return None
+    headers = ['email', 'first_name', 'last_name', 'created_at']
+    rows = [
+        [
+            account.email,
+            account.first_name,
+            account.last_name,
+            account.created_at.strftime('%Y-%m-%d'),
+        ]
+        for account in queryset
+    ]
+    return SimpleDataSource(headers=headers, data=rows)

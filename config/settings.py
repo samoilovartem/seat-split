@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'apps.accounts.apps.AccountsConfig',
     'apps.users.apps.UsersConfig',
     'apps.mobile_numbers.apps.MobileNumbersConfig',
+    'apps.email_domains.apps.EmailDomainsConfig',
 ]
 
 if DEBUG:

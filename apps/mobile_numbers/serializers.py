@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from apps.accounts.models import Accounts
 from apps.mobile_numbers.models import MobileNumberTransaction
+from apps.serializers import UserSerializer
 from apps.users.models import User
 
 
@@ -12,15 +13,6 @@ class AccountSerializer(FlexFieldsModelSerializer):
         fields = (
             'id',
             'email',
-        )
-
-
-class UserSerializer(FlexFieldsModelSerializer):
-    class Meta:
-        model = User
-        fields = (
-            'id',
-            'username',
         )
 
 
