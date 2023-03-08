@@ -6,7 +6,7 @@ from apps.serializers import ConvertNoneToStringSerializerMixin
 from apps.users.models import User
 
 
-class UserPermissionsSerializer(FlexFieldsModelSerializer):
+class PermissionsSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Permission
         fields = (
@@ -28,6 +28,9 @@ class GroupSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Group
         fields = '__all__'
+        expandable_fields = {
+            'permissions': (PermissionsSerializer, {'many': True}),
+        }
 
 
 class GeneralUserSerializer(FlexFieldsModelSerializer):
@@ -50,20 +53,21 @@ class UserDetailSerializer(
         none_to_str_fields = ('last_login', 'role', 'team', 'last_opened', 'email')
         ref_name = 'UserDetailSerializer'
         expandable_fields = {
-            'user_permissions': (UserPermissionsSerializer, {'many': True}),
+            'user_permissions': (PermissionsSerializer, {'many': True}),
             'groups': (UserGroupSerializer, {'many': True}),
         }
 
 
 class UserListSerializer(ConvertNoneToStringSerializerMixin, FlexFieldsModelSerializer):
-    user_permissions = UserPermissionsSerializer(many=True)
-    groups = UserGroupSerializer(many=True)
-
     class Meta:
         model = User
         exclude = ('password',)
         none_to_str_fields = ('last_login', 'role', 'team', 'last_opened', 'email')
         ref_name = 'UserListSerializer'
+        expandable_fields = {
+            'user_permissions': (PermissionsSerializer, {'many': True}),
+            'groups': (UserGroupSerializer, {'many': True}),
+        }
 
 
 class UserCreateSerializer(FlexFieldsModelSerializer):

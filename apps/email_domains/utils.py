@@ -1,5 +1,8 @@
+from random import randint
+
 from django.db.models import Count
 
+from apps.accounts.models import Accounts
 from apps.email_domains.models import EmailDomains
 
 
@@ -15,7 +18,13 @@ def email_domains_per_value(filter_name):
 def generate_data(fake, domain_name, state_abbr=None):
     first_name = fake.first_name()
     last_name = fake.last_name()
-    email = f'{first_name.lower()}.{last_name.lower()}@{domain_name}'
+    email_prefix = f'{first_name.lower()}.{last_name.lower()}'
+
+    while True:
+        random_number = str(randint(1, 10 ** randint(2, 5) - 1))
+        email = f'{email_prefix}.{random_number}@{domain_name}'
+        if not Accounts.objects.filter(email=email).exists():
+            break
 
     street_address = fake.street_address()
     city = fake.city()
