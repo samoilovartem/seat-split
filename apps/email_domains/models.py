@@ -41,6 +41,7 @@ class EmailDomains(UUIDMixin, TimeStampedMixin):
     is_default_route = models.BooleanField(default=False)
     is_second_domain = models.BooleanField(default=False)
     type = models.CharField(max_length=30, blank=True)
+    forwarding_account = models.EmailField(blank=True)
 
     created_by = models.ForeignKey(User, on_delete=models.PROTECT)
     history = HistoricalRecords()

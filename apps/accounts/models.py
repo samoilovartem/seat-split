@@ -15,7 +15,28 @@ class Accounts(models.Model):
     email = models.EmailField(max_length=150)
     type = models.CharField(max_length=100, validators=[any_or_na])
     password = models.CharField(max_length=32, validators=[any_or_na])
+    delta_created = models.BooleanField(default=False)
     delta_password = models.CharField(
+        max_length=32, validators=[any_or_na], default='NA'
+    )
+    air_france_created = models.BooleanField(default=False)
+    air_france_password = models.CharField(
+        max_length=32, validators=[any_or_na], default='NA'
+    )
+    aeromexico_created = models.BooleanField(default=False)
+    aeromexico_password = models.CharField(
+        max_length=32, validators=[any_or_na], default='NA'
+    )
+    avianca_created = models.BooleanField(default=False)
+    avianca_password = models.CharField(
+        max_length=32, validators=[any_or_na], default='NA'
+    )
+    korean_air_created = models.BooleanField(default=False)
+    korean_air_password = models.CharField(
+        max_length=32, validators=[any_or_na], default='NA'
+    )
+    china_airlines_created = models.BooleanField(default=False)
+    china_airlines_password = models.CharField(
         max_length=32, validators=[any_or_na], default='NA'
     )
     recovery_email = models.EmailField(max_length=150)
