@@ -8,6 +8,8 @@ asgiref==3.6.0
     # via
     #   django
     #   djoser
+async-timeout==4.0.2
+    # via redis
 beautifulsoup4==4.11.1
     # via django-accounts-cards (pyproject.toml)
 build==0.10.0
@@ -53,13 +55,17 @@ django==3.2.17
     # via
     #   dj-database-url
     #   django-accounts-cards (pyproject.toml)
+    #   django-cachalot
     #   django-cors-headers
     #   django-debug-toolbar
     #   django-filter
     #   django-import-export
+    #   django-redis
     #   djangorestframework
     #   djangorestframework-simplejwt
     #   drf-yasg
+django-cachalot==2.5.2
+    # via django-accounts-cards (pyproject.toml)
 django-cors-headers==3.13.0
     # via django-accounts-cards (pyproject.toml)
 django-debug-toolbar==3.8.1
@@ -69,6 +75,8 @@ django-filter==22.1
 django-import-export==3.0.2
     # via django-accounts-cards (pyproject.toml)
 django-querycount==0.8.3
+    # via django-accounts-cards (pyproject.toml)
+django-redis==5.2.0
     # via django-accounts-cards (pyproject.toml)
 django-simple-history==3.2.0
     # via django-accounts-cards (pyproject.toml)
@@ -187,6 +195,8 @@ pyyaml==6.0
     # via
     #   pre-commit
     #   tablib
+redis==4.5.1
+    # via django-redis
 requests==2.28.1
     # via
     #   coreapi

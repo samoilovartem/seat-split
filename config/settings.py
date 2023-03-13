@@ -29,6 +29,7 @@ include(
     'components/query_count.py',
     'components/django-filters.py',
     'components/swagger.py',
+    'components/redis.py',
 )
 
 INSTALLED_APPS = [
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'django_truncate',
     'corsheaders',
     'simple_history',
+    'cachalot',
     # Project's apps
     'apps.cards.apps.CardsConfig',
     'apps.accounts.apps.AccountsConfig',

@@ -39,6 +39,8 @@ dependencies = [
     "pygount",
     "newrelic",
     "faker",
+    "django-cachalot",
+    "django-redis",
 ]
 
 [project.optional-dependencies]
