@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from faker import Faker
 from rest_flex_fields import FlexFieldsModelViewSet
 from rest_framework.decorators import action
@@ -6,10 +7,16 @@ from rest_framework.response import Response
 from apps.email_domains.models import EmailDomains
 from apps.email_domains.serializers import EmailDomainsSerializer
 from apps.email_domains.utils import email_domains_per_value, generate_data
+from apps.users.models import User
 
 
 class AllEmailDomainsViewSet(FlexFieldsModelViewSet):
-    queryset = EmailDomains.objects.all().select_related('created_by')
+    def get_queryset(self):
+        queryset = EmailDomains.objects.all().prefetch_related(
+            Prefetch('created_by', queryset=User.objects.only('id', 'username'))
+        )
+        return queryset
+
     permit_list_expands = ['created_by']
     serializer_class = EmailDomainsSerializer
 

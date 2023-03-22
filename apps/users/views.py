@@ -1,4 +1,5 @@
 from django.contrib.auth.models import Group, Permission
+from django.db.models import Prefetch
 from rest_flex_fields import FlexFieldsModelViewSet
 from rest_framework import status
 from rest_framework.decorators import action
@@ -17,7 +18,10 @@ from apps.users.serializers import (
 
 
 class UsersViewSet(FlexFieldsModelViewSet):
-    queryset = User.objects.all().prefetch_related('groups', 'user_permissions')
+    queryset = User.objects.all().prefetch_related(
+        Prefetch('groups', queryset=Group.objects.only('id', 'name')),
+        Prefetch('user_permissions', queryset=Permission.objects.only('id', 'name')),
+    )
     serializer_class = GeneralUserSerializer
     permit_list_expands = ['groups', 'user_permissions']
     my_tags = ['All users']

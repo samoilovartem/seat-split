@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'django_truncate',
     'corsheaders',
     'simple_history',
-    'cachalot',
     # Project's apps
     'apps.cards.apps.CardsConfig',
     'apps.accounts.apps.AccountsConfig',
@@ -65,6 +64,9 @@ INSTALLED_APPS = [
 
 if DEBUG:
     INSTALLED_APPS.append('debug_toolbar')
+
+if not DEBUG:
+    INSTALLED_APPS.append('cachalot')
 
 ROOT_URLCONF = 'config.urls'
 

@@ -1,17 +1,34 @@
-from rest_flex_fields import FlexFieldsModelViewSet
+from django.db.models import Prefetch
+from rest_flex_fields import FlexFieldsModelViewSet, is_expanded
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from apps.accounts.models import Accounts
 from apps.mobile_numbers.filters import MobileNumbersFilterSet
 from apps.mobile_numbers.models import MobileNumberTransaction
 from apps.mobile_numbers.serializers import MobileNumbersSerializer
 from apps.mobile_numbers.utils import mobile_numbers_per_value
+from apps.users.models import User
 
 
 class AllMobileNumbersViewSet(FlexFieldsModelViewSet):
-    queryset = MobileNumberTransaction.objects.all().select_related(
-        'email', 'requested_by'
-    )
+    def get_queryset(self):
+        queryset = MobileNumberTransaction.objects.all()
+        if is_expanded(self.request, '*'):
+            queryset = queryset.prefetch_related(
+                Prefetch('email', queryset=Accounts.objects.only('id', 'email')),
+                Prefetch('requested_by', queryset=User.objects.only('id', 'username')),
+            )
+        elif is_expanded(self.request, 'email'):
+            queryset = queryset.prefetch_related(
+                Prefetch('email', queryset=Accounts.objects.only('id', 'email'))
+            )
+        elif is_expanded(self.request, 'requested_by'):
+            queryset = queryset.prefetch_related(
+                Prefetch('requested_by', queryset=User.objects.only('id', 'username'))
+            )
+        return queryset
+
     permit_list_expands = ['email', 'requested_by']
     serializer_class = MobileNumbersSerializer
     filterset_class = MobileNumbersFilterSet

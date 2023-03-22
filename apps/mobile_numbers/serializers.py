@@ -1,10 +1,8 @@
 from rest_flex_fields import FlexFieldsModelSerializer
-from rest_framework import serializers
 
 from apps.accounts.models import Accounts
 from apps.mobile_numbers.models import MobileNumberTransaction
 from apps.serializers import UserSerializer
-from apps.users.models import User
 
 
 class AccountSerializer(FlexFieldsModelSerializer):
@@ -17,13 +15,6 @@ class AccountSerializer(FlexFieldsModelSerializer):
 
 
 class MobileNumbersSerializer(FlexFieldsModelSerializer):
-    email = serializers.PrimaryKeyRelatedField(
-        read_only=False, queryset=Accounts.objects.all()
-    )
-    requested_by = serializers.PrimaryKeyRelatedField(
-        read_only=False, queryset=User.objects.all()
-    )
-
     class Meta:
         model = MobileNumberTransaction
         fields = '__all__'
