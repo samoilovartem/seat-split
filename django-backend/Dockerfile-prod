@@ -18,14 +18,21 @@ ENV PYTHONUNBUFFERED=1 \
 COPY ./prod-requirements.txt .
 RUN pip install --no-cache-dir -r prod-requirements.txt
 
+# create django_group and django_user
+RUN groupadd -r django_group && \
+    useradd -r -g django_group django_user
+
 # copy project
 COPY . .
+
+# change ownership to django_user and django_group
+RUN chown -R django_user:django_group /app
 
 # collect static files
 RUN python manage.py collectstatic --noinput
 
-RUN adduser --disabled-password samoylovartem
-USER samoylovartem
+# set user to django_user
+USER django_user
 
 # run gunicorn
 CMD python manage.py migrate --noinput && \
