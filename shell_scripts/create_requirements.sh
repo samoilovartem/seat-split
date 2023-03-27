@@ -16,14 +16,14 @@ cd ..
 
 if [ "$number" -eq 1 ]
   then
-    pip-compile --extra dev -o dev-requirements.txt pyproject.toml
+    pip-compile --extra dev -o django-backend/dev-requirements.txt pyproject.toml
 elif [ "$number" -eq 2 ]
   then
-    pip-compile -o prod-requirements.txt pyproject.toml
+    pip-compile -o django-backend/prod-requirements.txt pyproject.toml
 elif [ "$number" -eq 3 ]
   then
-    pip-compile -o prod-requirements.txt pyproject.toml
-    pip-compile --extra dev -o dev-requirements.txt pyproject.toml
+    pip-compile -o django-backend/prod-requirements.txt pyproject.toml
+    pip-compile --extra dev -o django-backend/dev-requirements.txt pyproject.toml
 else
     echo "${GREEN}Wrong input. Please try again${NC}"
 fi

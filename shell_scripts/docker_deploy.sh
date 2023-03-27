@@ -4,7 +4,7 @@ set -e
 NC='\033[0m'
 GREEN='\033[0;32m'
 
-cd ..
+cd .. && cd django-backend
 
 docker build -t registry.heroku.com/django-docker/web .
 echo -e "${GREEN}Docker image has been successfully built${NC}"

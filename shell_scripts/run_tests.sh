@@ -12,7 +12,7 @@ echo "Type only number:
 # shellcheck disable=SC2162
 read number
 
-cd ..
+cd .. && cd django-backend
 
 if [ "$number" -eq 1 ]
   then

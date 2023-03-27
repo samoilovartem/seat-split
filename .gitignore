@@ -61,7 +61,7 @@ cover/
 local_settings.py
 local.py
 *.sqlite3
-db.sqlite3
+django-backend/db.sqlite3
 db.sqlite3-journal
 Gservice.json
 .DS_Store/
@@ -158,5 +158,6 @@ gsheets_engine.py
 others/
 useful_notes.txt
 static/
-!/.example.env
-newrelic.ini
+django-backend/newrelic.ini
+django-backend/.env.dev
+django-backend/.env.prod

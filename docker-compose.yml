@@ -4,14 +4,15 @@ version: "3.8"
 services:
   django:
     build:
+      context: ./django-backend/
       dockerfile: "Dockerfile-dev"
     container_name: django
-    volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
     env_file:
-      - .env
+      - ./django-backend/.env.dev
+    volumes:
+      - ./django-backend:/app
+    ports:
+      - "${DJANGO_PORT_HOST}:${DJANGO_PORT_CONTAINER}"
     depends_on:
       - pgdb
     networks:
@@ -21,7 +22,7 @@ services:
     image: postgres
     container_name: pgdb
     env_file:
-      - .env
+      - ./django-backend/.env.dev
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -31,16 +32,8 @@ services:
       retries: 3
       start_period: 10s
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT_HOST}:${POSTGRES_PORT_CONTAINER}"
     restart: unless-stopped
-    networks:
-      - backend
-
-  redis:
-    image: redis
-    container_name: redis
-    ports:
-      - "6379:6379"
     networks:
       - backend
 
