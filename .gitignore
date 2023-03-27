@@ -64,7 +64,7 @@ local.py
 django-backend/db.sqlite3
 db.sqlite3-journal
 Gservice.json
-.DS_Store/
+*/.DS_Store/*
 .idea/
 media
 
