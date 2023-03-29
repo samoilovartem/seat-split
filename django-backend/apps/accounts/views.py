@@ -50,7 +50,7 @@ class AllAccountsViewSet(ModelViewSet):
             .filter(duplicates__gt=1)
         )
         unique_accounts_number = Accounts.objects.values('email').distinct().count()
-        unique_duplicates_number = len(duplicates)
+        unique_duplicates_number = duplicates.count()
         return Response(
             {
                 'total number of accounts': unique_duplicates_number
