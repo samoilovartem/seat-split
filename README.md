@@ -17,6 +17,7 @@
   - **templates** - contains Django admin template settings.
 - **instruction_files** - contains a simple. instruction for using admin panel and all necessary screenshots.
 - **migration_manager** - contains all necessary `.py` files for cleaning data and preparing it for migration from CSV to Postgresql using Django admin panel.
+- **nginx** - contains all necessary files for nginx configuration.
 - **shell_scripts** - contains all shell commands that can make our life much easier.
    - **create_requirements.sh** - creates `dev-requirements.txt` and `prod-requirements.txt` files.
    - **docker_deploy.sh** - builds docker container and pushes it to Heroku.
