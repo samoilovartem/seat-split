@@ -1,23 +1,30 @@
-# Accounts-cards django project documentation
+# CRM django backend documentation
 
 ### Installation:
 
 1. Clone the repository from GitHub.
-2. Create `.env` in the main project's directory (together with `manage.py` file) using `.example.env`.
-3. Install Docker and launch it.
-4. Run `docker compose up`.
+2. Create `.env.prod` and `.env.dev` in django-backend directory using `.env.prod.example` and `.env.dev.example`.
+3. Install Docker and launch the daemon.
+4. Cd to project's root and run `docker compose up`.
 
 ### Project structure:
 #### Directories:
 
-- **apps** - contains all existing django applications and common (among them) files.
-- **config** - contains standard Django settings files.
+- **django-backend** - contains all necessary files for Django backend.
+  - **apps** - contains all existing django applications and common (among them) files.
+  - **config** - contains standard Django settings files.
+  - **static** - contains static files of all django custom apps, standard apps and installed libraries.
+  - **templates** - contains Django admin template settings.
 - **instruction_files** - contains a simple. instruction for using admin panel and all necessary screenshots.
-- **jwt_project_app** - contains Vue framework files and all related axios files for JWT authentication test.
 - **migration_manager** - contains all necessary `.py` files for cleaning data and preparing it for migration from CSV to Postgresql using Django admin panel.
 - **shell_scripts** - contains all shell commands that can make our life much easier.
-- **static** - contains static files of all django custom apps, standard apps and installed libraries.
-- **templates** - contains Django admin template settings.
+   - **create_requirements.sh** - creates `dev-requirements.txt` and `prod-requirements.txt` files.
+   - **docker_deploy.sh** - builds docker container and pushes it to Heroku.
+   - **run_tests.sh** - runs all tests and creates html report.
+   - **make_project_structure.sh** - creates project structure.
+   - **heroku_backup.sh** - contains all necessary commands to backup Heroku database.
+   - **count_lines_of_code.sh** - counts all lines of code in the project.
+
 
 #### Separated files:
 
@@ -26,8 +33,9 @@
 - **.gitignore** - list of files or directories that are excluded from getting into git repository.
 - **.pre-commit-config.yaml** - custom settings for flake8, black and isort linters hooks.
 - **docker-compose.yml** - file-constructor, that allows to build docker container. Used for local development only.
-- **Dockerfile** - file-instruction of how to build docker image for Heroku deployment. Used for production only.
+- **Dockerfile** - file-instruction of how to build docker image for Heroku deployment. Used for production on Heroku only.
 - **Dockerfile-dev** - file-instruction of how to build docker image for local development. This is the file, that `docker-compose.yml` is using for building docker container to run it locally.
+- **Dockerfile-prod** - file-instruction of how to build docker image for production deployment. Used for production only.
 - **pyproject.toml** - custom project's settings. This file contains all necessary information about the project itself, dev and prod dependencies. Used to create `dev-requirements.txt` and `prod-requirements.txt` files.
 
 ### Deployment to Heroku
