@@ -27,6 +27,11 @@ COPY . .
 
 # change ownership to django_user and django_group
 RUN chown -R django_user:django_group /app
+RUN mkdir -p /app/media/django-import-export && \
+    chown -R django_user:django_group /app/media && \
+    chmod -R 775 /app/media && \
+    chown -R django_user:django_group /app/media/django-import-export && \
+    chmod -R 775 /app/media/django-import-export
 
 # collect static files
 RUN python manage.py collectstatic --noinput
