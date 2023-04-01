@@ -1,3 +1,8 @@
+from django.contrib.auth.models import Group
+from django.test import tag
+from rest_framework import status
+from rest_framework.test import APITestCase
+
 from apps.users.models import User
 from apps.users.serializers import GroupSerializer
 from apps.users.tests.settings import (
@@ -6,10 +11,6 @@ from apps.users.tests.settings import (
     GROUPS_LIST_URL,
     REQUIRED_SUPERUSER_DATA,
 )
-from django.contrib.auth.models import Group
-from django.test import tag
-from rest_framework import status
-from rest_framework.test import APITestCase
 
 
 @tag("groups", "authenticated", "authorized")
@@ -20,7 +21,6 @@ class GroupTest(APITestCase):
     """
 
     def setUp(self):
-
         # creating test superuser, hashing its password and checking if raw password matches hashed one
         self.superuser = User.objects.create_superuser(**REQUIRED_SUPERUSER_DATA)
         self.superuser.set_password(REQUIRED_SUPERUSER_DATA.get("password"))

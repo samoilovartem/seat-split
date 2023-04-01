@@ -1,12 +1,13 @@
-from apps.email_domains.models import EmailDomains
-from apps.email_domains.serializers import EmailDomainsSerializer
-from apps.email_domains.utils import email_domains_per_value, generate_data
-from apps.users.models import User
 from django.db.models import Prefetch
 from faker import Faker
 from rest_flex_fields import FlexFieldsModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
+from apps.email_domains.models import EmailDomains
+from apps.email_domains.serializers import EmailDomainsSerializer
+from apps.email_domains.utils import email_domains_per_value, generate_data
+from apps.users.models import User
 
 
 class AllEmailDomainsViewSet(FlexFieldsModelViewSet):

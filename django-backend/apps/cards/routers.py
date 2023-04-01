@@ -1,5 +1,6 @@
-from apps.cards.views import AllCardsViewSet
 from rest_framework import routers
+
+from apps.cards.views import AllCardsViewSet
 
 cards_router = routers.SimpleRouter()
 

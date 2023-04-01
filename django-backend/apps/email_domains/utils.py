@@ -1,8 +1,9 @@
 from random import randint
 
+from django.db.models import Count
+
 from apps.accounts.models import Accounts
 from apps.email_domains.models import EmailDomains
-from django.db.models import Count
 
 
 def email_domains_per_value(filter_name):

@@ -1,6 +1,7 @@
-from apps.mobile_numbers.models import MobileNumberTransaction
 from config.settings import BOOL_LOOKUPS, CHAR_LOOKUPS
 from django_filters import rest_framework as filters
+
+from apps.mobile_numbers.models import MobileNumberTransaction
 
 
 class MobileNumbersFilterSet(filters.FilterSet):

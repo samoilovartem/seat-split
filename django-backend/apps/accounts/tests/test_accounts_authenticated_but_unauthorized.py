@@ -1,3 +1,7 @@
+from django.test import tag
+from rest_framework import status
+from rest_framework.test import APITestCase
+
 from apps.accounts.models import Accounts
 from apps.accounts.tests.settings import (
     ACCOUNT_DETAIL_URL,
@@ -7,9 +11,6 @@ from apps.accounts.tests.settings import (
     FULL_USER_DATA,
 )
 from apps.users.models import User
-from django.test import tag
-from rest_framework import status
-from rest_framework.test import APITestCase
 
 
 @tag('accounts', 'authenticated', 'unauthorized')
@@ -20,7 +21,6 @@ class AccountTestUnauthorized(APITestCase):
     """
 
     def setUp(self):
-
         # creating test user, hashing its password and checking if raw password matches hashed one
         self.user = User.objects.create(**FULL_USER_DATA)
         self.user.set_password(FULL_USER_DATA.get('password'))

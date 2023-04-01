@@ -1,8 +1,9 @@
-from apps.users.tests.settings import GROUP_DATA, GROUP_DETAIL_URL, GROUPS_LIST_URL
 from django.contrib.auth.models import Group
 from django.test import tag
 from rest_framework import status
 from rest_framework.test import APITestCase
+
+from apps.users.tests.settings import GROUP_DATA, GROUP_DETAIL_URL, GROUPS_LIST_URL
 
 
 @tag("groups", "unauthenticated")
@@ -13,7 +14,6 @@ class GroupTestUnauthenticated(APITestCase):
     """
 
     def setUp(self):
-
         # Creating a test group
         self.group = Group.objects.create(name=GROUP_DATA.get("name"))
 

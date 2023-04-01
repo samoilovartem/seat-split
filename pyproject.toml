@@ -51,3 +51,7 @@ dev = [
     "flake8",
     "pre-commit",
 ]
+
+[tool.isort]
+known_first_party = "apps"
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "DJANGO", "FIRSTPARTY", "LOCALFOLDER"]

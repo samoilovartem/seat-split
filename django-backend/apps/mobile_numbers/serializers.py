@@ -1,7 +1,8 @@
+from rest_flex_fields import FlexFieldsModelSerializer
+
 from apps.accounts.models import Accounts
 from apps.mobile_numbers.models import MobileNumberTransaction
 from apps.serializers import UserSerializer
-from rest_flex_fields import FlexFieldsModelSerializer
 
 
 class AccountSerializer(FlexFieldsModelSerializer):

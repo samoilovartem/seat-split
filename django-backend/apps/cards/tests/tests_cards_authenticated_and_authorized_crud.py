@@ -1,3 +1,7 @@
+from django.test import tag
+from rest_framework import status
+from rest_framework.test import APITestCase
+
 from apps.cards.models import Cards
 from apps.cards.tests.settings import (
     CARD_DETAIL_URL,
@@ -8,9 +12,6 @@ from apps.cards.tests.settings import (
     REQUIRED_SUPERUSER_DATA,
 )
 from apps.users.models import User
-from django.test import tag
-from rest_framework import status
-from rest_framework.test import APITestCase
 
 
 @tag('cards', 'authenticated')
@@ -21,7 +22,6 @@ class CardsTest(APITestCase):
     """
 
     def setUp(self):
-
         # creating test superuser, hashing its password and checking if raw password matches hashed one
         self.superuser = User.objects.create_superuser(**REQUIRED_SUPERUSER_DATA)
         self.superuser.set_password(REQUIRED_SUPERUSER_DATA.get("password"))

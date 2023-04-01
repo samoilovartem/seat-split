@@ -1,3 +1,7 @@
+from django.test import tag
+from rest_framework import status
+from rest_framework.test import APITestCase
+
 from apps.users.models import User
 from apps.users.serializers import (
     GeneralUserSerializer,
@@ -11,9 +15,6 @@ from apps.users.tests.settings import (
     USER_DETAIL_URL,
     USERS_LIST_URL,
 )
-from django.test import tag
-from rest_framework import status
-from rest_framework.test import APITestCase
 
 
 @tag("users", "authenticated", "authorized")
@@ -24,7 +25,6 @@ class UserTest(APITestCase):
     """
 
     def setUp(self):
-
         # creating test superuser, hashing its password and checking if raw password matches hashed one
         self.superuser = User.objects.create_superuser(**REQUIRED_SUPERUSER_DATA)
         self.superuser.set_password(REQUIRED_SUPERUSER_DATA.get("password"))

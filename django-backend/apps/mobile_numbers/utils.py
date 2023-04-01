@@ -1,5 +1,6 @@
-from apps.mobile_numbers.models import MobileNumberTransaction
 from django.db.models import Count
+
+from apps.mobile_numbers.models import MobileNumberTransaction
 
 
 def mobile_numbers_per_value(filter_name):

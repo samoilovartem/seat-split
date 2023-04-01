@@ -1,6 +1,7 @@
+from rest_flex_fields import FlexFieldsModelSerializer
+
 from apps.cards.models import Cards
 from apps.serializers import ConvertNoneToStringSerializerMixin, UserSerializer
-from rest_flex_fields import FlexFieldsModelSerializer
 
 
 class CardsSerializer(ConvertNoneToStringSerializerMixin, FlexFieldsModelSerializer):

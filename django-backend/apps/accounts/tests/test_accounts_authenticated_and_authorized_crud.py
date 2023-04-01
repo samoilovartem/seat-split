@@ -1,3 +1,7 @@
+from django.test import tag
+from rest_framework import status
+from rest_framework.test import APITestCase
+
 from apps.accounts.models import Accounts
 from apps.accounts.tests.settings import (
     ACCOUNT_DETAIL_URL,
@@ -8,9 +12,6 @@ from apps.accounts.tests.settings import (
     REQUIRED_SUPERUSER_DATA,
 )
 from apps.users.models import User
-from django.test import tag
-from rest_framework import status
-from rest_framework.test import APITestCase
 
 
 @tag('accounts', 'authenticated', 'authorized')

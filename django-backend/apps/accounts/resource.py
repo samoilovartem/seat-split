@@ -1,6 +1,7 @@
-from apps.accounts.models import Accounts
 from django.core.exceptions import ValidationError
 from import_export import resources
+
+from apps.accounts.models import Accounts
 
 
 class AccountsResource(resources.ModelResource):

@@ -1,3 +1,7 @@
+from django.contrib.auth import get_user_model
+from django.db import models
+from simple_history.models import HistoricalRecords
+
 from apps.cards.validators import (
     clean_card_number,
     clean_cvv_number,
@@ -6,9 +10,6 @@ from apps.cards.validators import (
     clean_zip_code,
 )
 from apps.validators import any_or_na
-from django.contrib.auth import get_user_model
-from django.db import models
-from simple_history.models import HistoricalRecords
 
 User = get_user_model()
 

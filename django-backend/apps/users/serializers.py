@@ -1,8 +1,9 @@
-from apps.serializers import ConvertNoneToStringSerializerMixin
-from apps.users.models import User
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group, Permission
 from rest_flex_fields import FlexFieldsModelSerializer
+
+from apps.serializers import ConvertNoneToStringSerializerMixin
+from apps.users.models import User
 
 
 class PermissionsSerializer(FlexFieldsModelSerializer):

@@ -1,6 +1,7 @@
-from apps.accounts.models import Accounts
 from config.settings import BOOL_LOOKUPS, CHAR_LOOKUPS, DATE_AND_ID_LOOKUPS
 from django_filters import rest_framework as filters
+
+from apps.accounts.models import Accounts
 
 
 class AccountsFilterSet(filters.FilterSet):

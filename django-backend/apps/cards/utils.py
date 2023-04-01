@@ -1,5 +1,6 @@
-from apps.cards.models import Cards
 from django.db.models import Count
+
+from apps.cards.models import Cards
 
 
 def cards_per_value(filter_name):

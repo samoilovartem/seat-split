@@ -1,11 +1,12 @@
-from apps.accounts.models import Accounts
-from apps.accounts.resource import AccountsResource
-from apps.utils import show_changed_fields
 from django.contrib import admin, messages
 from django.utils.html import format_html
 from django.utils.translation import ngettext
 from import_export.admin import ImportExportMixin
 from simple_history.admin import SimpleHistoryAdmin
+
+from apps.accounts.models import Accounts
+from apps.accounts.resource import AccountsResource
+from apps.utils import show_changed_fields
 
 
 class AccountsAdminConfig(ImportExportMixin, SimpleHistoryAdmin):

@@ -1,6 +1,7 @@
+from rest_flex_fields import FlexFieldsModelSerializer
+
 from apps.accounts.models import Accounts
 from apps.serializers import ConvertNoneToStringSerializerMixin
-from rest_flex_fields import FlexFieldsModelSerializer
 
 
 class AccountsSerializer(ConvertNoneToStringSerializerMixin, FlexFieldsModelSerializer):
