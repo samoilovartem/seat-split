@@ -1,6 +1,7 @@
+from simple_history.models import HistoricalRecords
+
 from django.contrib.auth import get_user_model
 from django.db import models
-from simple_history.models import HistoricalRecords
 
 from apps.validators import any_or_na
 

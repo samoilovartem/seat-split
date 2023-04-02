@@ -1,8 +1,9 @@
 import uuid
 
+from simple_history.models import HistoricalRecords
+
 from django.contrib.auth import get_user_model
 from django.db import models
-from simple_history.models import HistoricalRecords
 
 from apps.accounts.models import Accounts
 

@@ -1,6 +1,7 @@
-from django.test import tag
 from rest_framework import status
 from rest_framework.test import APITestCase
+
+from django.test import tag
 
 from apps.cards.models import Cards
 from apps.cards.tests.settings import (

@@ -1,7 +1,8 @@
-from django.db.models import Count, Prefetch
 from rest_flex_fields import FlexFieldsModelViewSet, is_expanded
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
+from django.db.models import Count, Prefetch
 
 from apps.cards.filters import CardsFilterSet
 from apps.cards.models import Cards

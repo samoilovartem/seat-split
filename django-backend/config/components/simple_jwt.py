@@ -1,3 +1,7 @@
+from datetime import timedelta
+
+from config.global_settings import DEBUG, SECRET_KEY
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1) if DEBUG else timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),

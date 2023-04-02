@@ -1,8 +1,9 @@
-from django.db.models import Prefetch
 from faker import Faker
 from rest_flex_fields import FlexFieldsModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
+from django.db.models import Prefetch
 
 from apps.email_domains.models import EmailDomains
 from apps.email_domains.serializers import EmailDomainsSerializer

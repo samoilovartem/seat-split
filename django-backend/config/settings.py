@@ -1,21 +1,18 @@
 import os.path
-from datetime import timedelta
-from pathlib import Path
 
 import dj_database_url
-from django.core.management.utils import get_random_secret_key
 from dotenv import load_dotenv
 from split_settings.tools import include
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-DEBUG = os.environ.get('DEBUG', default=False) in ['True', 'true', '1']
+from config.global_settings import BASE_DIR, DEBUG, SECRET_KEY
 
 dotenv_file = BASE_DIR / ('.env.dev' if DEBUG else '.env.prod')
 if os.path.isfile(dotenv_file):
     load_dotenv(dotenv_file)
 
-SECRET_KEY = os.environ.get('SECRET_KEY', default=get_random_secret_key())
+DEBUG = DEBUG
+SECRET_KEY = SECRET_KEY
+
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(', ')
 
 CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', '').split(', ')

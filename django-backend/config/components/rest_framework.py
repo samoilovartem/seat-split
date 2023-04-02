@@ -1,3 +1,5 @@
+from config.global_settings import DEBUG
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'apps.pagination.CustomPagination',
     'PAGE_SIZE': 20,

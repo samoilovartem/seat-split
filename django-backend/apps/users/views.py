@@ -1,11 +1,12 @@
-from django.contrib.auth.models import Group, Permission
-from django.db.models import Prefetch
 from rest_flex_fields import FlexFieldsModelViewSet
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+
+from django.contrib.auth.models import Group, Permission
+from django.db.models import Prefetch
 
 from apps.users.models import User
 from apps.users.serializers import (

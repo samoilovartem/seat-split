@@ -1,8 +1,9 @@
-from django.urls import re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_api_key.permissions import HasAPIKey
+
+from django.urls import re_path
 
 schema_view = get_schema_view(
     openapi.Info(

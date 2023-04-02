@@ -1,6 +1,5 @@
 from re import sub
 
-import numpy as np
 import pandas as pd
 
 path_to_save = 'domains/'
@@ -8,6 +7,7 @@ path_to_save = 'domains/'
 # ================================= READING CSV FILE ======================================
 path_to_read = '/Users/samoylovartem/Documents/Data migration/catchall_Registration_info - lddomains.csv'
 df = pd.read_csv(path_to_read, sep=',', keep_default_na=False)
+
 
 # =============================== DELETING SOME COLUMNS ====================================
 # df.drop(df[df['ID'] == ''].index, inplace=True)

@@ -1,7 +1,8 @@
-from django.contrib.auth.models import Group
-from django.test import tag
 from rest_framework import status
 from rest_framework.test import APITestCase
+
+from django.contrib.auth.models import Group
+from django.test import tag
 
 from apps.users.tests.settings import GROUP_DATA, GROUP_DETAIL_URL, GROUPS_LIST_URL
 

@@ -1,7 +1,8 @@
-from django.contrib import admin
-from django.utils.html import format_html
 from import_export.admin import ImportExportMixin
 from simple_history.admin import SimpleHistoryAdmin
+
+from django.contrib import admin
+from django.utils.html import format_html
 
 from apps.email_domains.models import EmailDomains
 from apps.email_domains.resource import EmailDomainsResource
