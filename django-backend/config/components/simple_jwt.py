@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from config.global_settings import DEBUG, SECRET_KEY
+from config.components.global_settings import DEBUG, SECRET_KEY
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1) if DEBUG else timedelta(minutes=15),

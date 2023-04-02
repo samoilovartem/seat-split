@@ -4,7 +4,7 @@ import dj_database_url
 from dotenv import load_dotenv
 from split_settings.tools import include
 
-from config.global_settings import BASE_DIR, DEBUG
+from config.components.global_settings import BASE_DIR, DEBUG
 
 dotenv_file = BASE_DIR / ('.env.dev' if DEBUG else '.env.prod')
 if os.path.isfile(dotenv_file):

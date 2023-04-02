@@ -1,4 +1,4 @@
-from config.global_settings import DEBUG
+from config.components.global_settings import DEBUG
 
 IMPORT_EXPORT_EXPORT_PERMISSION_CODE = 'export'
 IMPORT_EXPORT_IMPORT_PERMISSION_CODE = 'import'
