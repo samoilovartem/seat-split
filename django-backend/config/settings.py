@@ -4,14 +4,11 @@ import dj_database_url
 from dotenv import load_dotenv
 from split_settings.tools import include
 
-from config.global_settings import BASE_DIR, DEBUG, SECRET_KEY
+from config.global_settings import BASE_DIR, DEBUG
 
 dotenv_file = BASE_DIR / ('.env.dev' if DEBUG else '.env.prod')
 if os.path.isfile(dotenv_file):
     load_dotenv(dotenv_file)
-
-DEBUG = DEBUG
-SECRET_KEY = SECRET_KEY
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(', ')
 
