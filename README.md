@@ -1,5 +1,9 @@
 # CRM django backend documentation
 
+### Description:
+
+This project is a CRM Django backend that provides API endpoints and functionalities for managing users, groups, accounts, cards and mobile transactions. It uses Django as the framework, Django Rest Framework for API creation, and Simple JWT for authentication.
+
 ### Installation:
 
 1. Clone the repository from GitHub.
@@ -13,7 +17,7 @@
 - **django-backend** - contains all necessary files for Django backend.
   - **apps** - contains all existing django applications and common (among them) files.
   - **config** - contains standard Django settings files.
-  - **static** - contains static files of all django custom apps, standard apps and installed libraries.
+  - **static** - contains static files of all django custom apps, standard apps and installed libraries (not available in git repository).
   - **templates** - contains Django admin template settings.
 - **instruction_files** - contains a simple. instruction for using admin panel and all necessary screenshots.
 - **migration_manager** - contains all necessary `.py` files for cleaning data and preparing it for migration from CSV to Postgresql using Django admin panel.
