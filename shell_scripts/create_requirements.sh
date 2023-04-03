@@ -6,24 +6,23 @@ GREEN='\033[0;32m'
 echo "Type only number:
 1. Create dev-requirements.txt
 2. Create prod-requirements.txt
-3. Update both
+3. Update dependencies
 "
 
 # shellcheck disable=SC2162
 read number
 
-cd ..
+cd .. && cd django-backend
 
 if [ "$number" -eq 1 ]
   then
-    pip-compile --extra dev -o django-backend/dev-requirements.txt pyproject.toml
+    poetry export -f requirements.txt --output dev-requirements.txt --without-hashes --with dev
 elif [ "$number" -eq 2 ]
   then
-    pip-compile -o django-backend/prod-requirements.txt pyproject.toml
+    poetry export -f requirements.txt --output prod-requirements.txt
 elif [ "$number" -eq 3 ]
   then
-    pip-compile -o django-backend/prod-requirements.txt pyproject.toml
-    pip-compile --extra dev -o django-backend/dev-requirements.txt pyproject.toml
+    poetry update
 else
     echo "${GREEN}Wrong input. Please try again${NC}"
 fi

@@ -3,29 +3,28 @@
 # Alpine is not working for some reason
 FROM --platform=linux/amd64 python:3.11
 
-# set work directory
 WORKDIR /app
 
-# set environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     NEW_RELIC_CONFIG_FILE=newrelic.ini \
     NEW_RELIC_ENVIRONMENT=production \
     NEW_RELIC_LOG=stdout \
-    NEW_RELIC_LOG_LEVEL=info
+    NEW_RELIC_LOG_LEVEL=info \
+    POETRY_VERSION=1.4.2
 
-# install dependencies
-COPY ./prod-requirements.txt .
-RUN pip install --no-cache-dir -r prod-requirements.txt
+RUN pip install "poetry==$POETRY_VERSION"
 
-# create django_group and django_user
+COPY poetry.lock pyproject.toml ./
+
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-dev
+
 RUN groupadd -r django_group && \
     useradd -r -g django_group django_user
 
-# copy project
 COPY . .
 
-# change ownership to django_user and django_group
 RUN chown -R django_user:django_group /app
 RUN mkdir -p /app/media/django-import-export && \
     chown -R django_user:django_group /app/media && \
@@ -33,12 +32,9 @@ RUN mkdir -p /app/media/django-import-export && \
     chown -R django_user:django_group /app/media/django-import-export && \
     chmod -R 775 /app/media/django-import-export
 
-# collect static files
 RUN python manage.py collectstatic --noinput
 
-# set user to django_user
 USER django_user
 
-# run gunicorn
 CMD python manage.py migrate --noinput && \
     gunicorn config.wsgi:application --bind 0.0.0.0:8000

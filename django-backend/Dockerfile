@@ -3,30 +3,29 @@
 # Alpine is not working for some reason
 FROM --platform=linux/amd64 python:3.11
 
-# set work directory
 WORKDIR /app
 
-# set environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     NEW_RELIC_CONFIG_FILE=newrelic.ini \
     NEW_RELIC_ENVIRONMENT=production \
     NEW_RELIC_LOG=stdout \
-    NEW_RELIC_LOG_LEVEL=info
+    NEW_RELIC_LOG_LEVEL=info \
+    POETRY_VERSION=1.4.2
 
-# install dependencies
-COPY ./prod-requirements.txt .
-RUN pip install -r prod-requirements.txt
+RUN pip install "poetry==$POETRY_VERSION"
 
-# copy project
+COPY poetry.lock pyproject.toml ./
+
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-dev
+
 COPY . .
 
-# collect static files
 RUN python manage.py collectstatic --noinput
 
 RUN adduser --disabled-password samoylovartem
 USER samoylovartem
 
-# run gunicorn
 CMD python manage.py migrate --noinput && \
     newrelic-admin run-program gunicorn --bind 0.0.0.0:$PORT config.wsgi:application
