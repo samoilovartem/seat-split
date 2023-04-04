@@ -7,7 +7,7 @@ from django.db.models import Prefetch
 
 from apps.email_domains.models import EmailDomains
 from apps.email_domains.serializers import EmailDomainsSerializer
-from apps.email_domains.utils import email_domains_per_value, generate_data
+from apps.email_domains.utils import DataGenerator, email_domains_per_value
 from apps.users.models import User
 
 
@@ -43,12 +43,14 @@ class AllEmailDomainsViewSet(FlexFieldsModelViewSet):
         if not domain_name:
             return Response({'error': 'Domain name is required'})
 
+        generator = DataGenerator(fake, domain_name, state)
+
         if not state:
-            data = generate_data(fake, domain_name)
+            data = generator.generate_data()
             return Response(data)
 
         try:
-            data = generate_data(fake, domain_name, state)
+            data = generator.generate_data()
         except Exception as e:
             return Response({'error': str(e)})
 
@@ -66,6 +68,7 @@ class AllEmailDomainsViewSet(FlexFieldsModelViewSet):
         if not domain_name:
             return Response({'error': 'No email domains are available'})
 
-        data = generate_data(fake, domain_name)
+        generator = DataGenerator(fake, domain_name)
+        data = generator.generate_data()
 
         return Response(data)

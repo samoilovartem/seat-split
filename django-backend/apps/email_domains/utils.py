@@ -1,4 +1,4 @@
-from random import randint
+from random import choice, randint
 
 from django.db.models import Count
 
@@ -15,31 +15,67 @@ def email_domains_per_value(filter_name):
     return result
 
 
-def generate_data(fake, domain_name, state_abbr=None):
-    first_name = fake.first_name()
-    last_name = fake.last_name()
-    email_prefix = f'{first_name.lower()}.{last_name.lower()}'
+class DataGenerator:
+    def __init__(self, fake, domain_name, state_abbr=None):
+        self.fake = fake
+        self.domain_name = domain_name
+        self.state_abbr = state_abbr
 
-    while True:
-        random_number = str(randint(1, 10 ** randint(2, 5) - 1))
-        email = f'{email_prefix}.{random_number}@{domain_name}'
-        if not Accounts.objects.filter(email=email).exists():
-            break
+    @staticmethod
+    def generate_transformed_name_parts(first_name, last_name):
+        transformations = [
+            (lambda s: s),
+            (lambda s: s[0] if s else ''),
+            (lambda s: f'.{s}' if s else ''),
+        ]
 
-    street_address = fake.street_address()
-    city = fake.city()
-    state = fake.state_abbr() if not state_abbr else state_abbr
-    zip_code = (
-        fake.zipcode() if not state_abbr else fake.zipcode_in_state(state_abbr=state)
-    )
+        transformed_first = choice(transformations)(first_name.lower())
+        transformed_last = choice(transformations)(last_name.lower())
 
-    full_address = f'{street_address}, {city}, {state} {zip_code}'
+        if transformed_first[0] == '.':
+            transformed_first = transformed_first[1:]
 
-    data = {
-        'first_name': first_name,
-        'last_name': last_name,
-        'email': email,
-        'address': full_address,
-    }
+        return transformed_first, transformed_last
 
-    return data
+    def generate_email(self, first_name, last_name):
+        transformed_first, transformed_last = self.generate_transformed_name_parts(
+            first_name, last_name
+        )
+
+        random_number = str(randint(1, 99999))
+        if choice([True, False]):
+            return f'{random_number}{transformed_first}{transformed_last}@{self.domain_name}'
+        else:
+            return f'{transformed_first}{transformed_last}{random_number}@{self.domain_name}'
+
+    def generate_unique_email(self):
+        while True:
+            first_name = self.fake.first_name()
+            last_name = self.fake.last_name()
+            email = self.generate_email(first_name, last_name)
+            if not Accounts.objects.filter(email=email).exists():
+                break
+        return first_name, last_name, email
+
+    def generate_data(self):
+        first_name, last_name, email = self.generate_unique_email()
+
+        street_address = self.fake.street_address()
+        city = self.fake.city()
+        state = self.fake.state_abbr() if not self.state_abbr else self.state_abbr
+        zip_code = (
+            self.fake.zipcode()
+            if not self.state_abbr
+            else self.fake.zipcode_in_state(state_abbr=state)
+        )
+
+        full_address = f'{street_address}, {city}, {state} {zip_code}'
+
+        data = {
+            'first_name': first_name,
+            'last_name': last_name,
+            'email': email,
+            'address': full_address,
+        }
+
+        return data
