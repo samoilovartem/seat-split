@@ -1,5 +1,7 @@
 from random import choice, randint
 
+from faker import Faker
+
 from django.db.models import Count
 
 from apps.accounts.models import Accounts
@@ -16,13 +18,13 @@ def email_domains_per_value(filter_name):
 
 
 class DataGenerator:
-    def __init__(self, fake, domain_name, state_abbr=None):
-        self.fake = fake
+    def __init__(self, domain_name: str, state_abbr: str = None):
+        self.fake = Faker('en_US')
         self.domain_name = domain_name
         self.state_abbr = state_abbr
 
     @staticmethod
-    def generate_transformed_name_parts(first_name, last_name):
+    def generate_transformed_name_parts(first_name: str, last_name: str):
         transformations = [
             (lambda s: s),
             (lambda s: s[0] if s else ''),
@@ -37,7 +39,7 @@ class DataGenerator:
 
         return transformed_first, transformed_last
 
-    def generate_email(self, first_name, last_name):
+    def generate_email(self, first_name: str, last_name: str):
         transformed_first, transformed_last = self.generate_transformed_name_parts(
             first_name, last_name
         )

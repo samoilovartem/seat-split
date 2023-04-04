@@ -1,4 +1,3 @@
-from faker import Faker
 from rest_flex_fields import FlexFieldsModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -35,15 +34,13 @@ class AllEmailDomainsViewSet(FlexFieldsModelViewSet):
 
     @action(methods=['POST'], detail=False)
     def generate_random_data_with_provided_domain_or_state(self, request):
-        fake = Faker('en_US')
-
         domain_name = request.data.get('domain_name')
         state = request.data.get('state')
 
         if not domain_name:
             return Response({'error': 'Domain name is required'})
 
-        generator = DataGenerator(fake, domain_name, state)
+        generator = DataGenerator(domain_name, state)
 
         if not state:
             data = generator.generate_data()
@@ -58,8 +55,6 @@ class AllEmailDomainsViewSet(FlexFieldsModelViewSet):
 
     @action(methods=['GET'], detail=False)
     def generate_random_data(self, request):
-        fake = Faker('en_US')
-
         domain_name = (
             EmailDomains.objects.values_list('domain_name', flat=True)
             .order_by('?')
@@ -68,7 +63,7 @@ class AllEmailDomainsViewSet(FlexFieldsModelViewSet):
         if not domain_name:
             return Response({'error': 'No email domains are available'})
 
-        generator = DataGenerator(fake, domain_name)
+        generator = DataGenerator(domain_name)
         data = generator.generate_data()
 
         return Response(data)
