@@ -117,27 +117,43 @@ class AllAccountsViewSet(ModelViewSet):
     @action(methods=['POST'], detail=False)
     def export_file(self, request):
         exclude_fields = request.data.get('exclude_fields', [])
+        include_fields = request.data.get('fields', None)
 
         all_fields = get_model_fields(app_name='accounts', model_name='Accounts')
-        invalid_fields = set(exclude_fields) - set(all_fields)
-
-        if invalid_fields:
+        invalid_exclude_fields = set(exclude_fields) - set(all_fields)
+        if invalid_exclude_fields:
             return Response(
                 {
                     'success': False,
-                    'error': f'Invalid field(s): {", ".join(invalid_fields)}',
+                    'error': f'Invalid exclude_field(s): {", ".join(invalid_exclude_fields)}',
                 },
                 status=HTTP_400_BAD_REQUEST,
             )
 
-        dataset = Dataset()
-        dataset.headers = get_model_fields(
-            app_name='accounts', model_name='Accounts', exclude_fields=exclude_fields
-        )
+        if include_fields:
+            invalid_include_fields = set(include_fields) - set(all_fields)
+            if invalid_include_fields:
+                return Response(
+                    {
+                        'success': False,
+                        'error': f'Invalid field(s): {", ".join(invalid_include_fields)}',
+                    },
+                    status=HTTP_400_BAD_REQUEST,
+                )
+            dataset_headers = include_fields
+        else:
+            dataset_headers = get_model_fields(
+                app_name='accounts',
+                model_name='Accounts',
+                exclude_fields=exclude_fields,
+            )
 
-        accounts = Accounts.objects.all().order_by('created_at').iterator()
+        dataset = Dataset()
+        dataset.headers = dataset_headers
+
+        accounts = Accounts.objects.values(*dataset.headers).order_by('id').iterator()
         for account in accounts:
-            row = [getattr(account, field) for field in dataset.headers]
+            row = [account.get(field) for field in dataset.headers]
             dataset.append(row)
 
         export_format = 'csv'
