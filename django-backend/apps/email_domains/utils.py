@@ -2,19 +2,7 @@ from random import choice, randint
 
 from faker import Faker
 
-from django.db.models import Count
-
 from apps.accounts.models import Accounts
-from apps.email_domains.models import EmailDomains
-
-
-def email_domains_per_value(filter_name):
-    result = (
-        EmailDomains.objects.values(filter_name)
-        .order_by(filter_name)
-        .annotate(count=Count(filter_name))
-    )
-    return result
 
 
 class DataGenerator:

@@ -1,21 +1,22 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.viewsets import ModelViewSet
-from tablib import UnsupportedFormat
+from tablib import Dataset, UnsupportedFormat
 
 from django.db.models import Count
+from django.http import StreamingHttpResponse
 
 from apps.accounts.filters import AccountsFilterSet
 from apps.accounts.models import Accounts
 from apps.accounts.resource import AccountsResource
 from apps.accounts.serializers import AccountsSerializer
 from apps.accounts.utils import (
-    accounts_per_value,
-    get_accounts_fields,
     get_existing_emails,
     get_validation_errors,
     load_dataset_from_file,
 )
+from apps.utils import get_model_fields, records_per_value
 
 
 class AllAccountsViewSet(ModelViewSet):
@@ -65,12 +66,12 @@ class AllAccountsViewSet(ModelViewSet):
 
     @action(methods=['GET'], detail=False)
     def get_accounts_per_type(self, request):
-        result = accounts_per_value('type')
+        result = records_per_value(Accounts, 'type')
         return Response({'results': result})
 
     @action(methods=['GET'], detail=False)
     def get_accounts_per_team(self, request):
-        result = accounts_per_value('team')
+        result = records_per_value(Accounts, 'team')
         return Response({'results': result})
 
     @action(methods=['POST'], detail=False)
@@ -84,7 +85,7 @@ class AllAccountsViewSet(ModelViewSet):
         except UnsupportedFormat:
             return Response({'success': False, 'error': 'Unsupported file format.'})
 
-        expected_columns = get_accounts_fields()
+        expected_columns = get_model_fields(app_name='accounts', model_name='Accounts')
         csv_columns = dataset.headers
         missing_columns = set(expected_columns) - set(csv_columns)
 
@@ -112,3 +113,57 @@ class AllAccountsViewSet(ModelViewSet):
         else:
             resource.import_data(dataset, dry_run=False)
             return Response({'success': True, 'message': 'Data uploaded successfully.'})
+
+    @action(methods=['POST'], detail=False)
+    def export_file(self, request):
+        exclude_fields = request.data.get('exclude_fields', [])
+        include_fields = request.data.get('fields', None)
+
+        all_fields = get_model_fields(app_name='accounts', model_name='Accounts')
+        invalid_exclude_fields = set(exclude_fields) - set(all_fields)
+        if invalid_exclude_fields:
+            return Response(
+                {
+                    'success': False,
+                    'error': f'Invalid exclude_field(s): {", ".join(invalid_exclude_fields)}',
+                },
+                status=HTTP_400_BAD_REQUEST,
+            )
+
+        if include_fields:
+            invalid_include_fields = set(include_fields) - set(all_fields)
+            if invalid_include_fields:
+                return Response(
+                    {
+                        'success': False,
+                        'error': f'Invalid field(s): {", ".join(invalid_include_fields)}',
+                    },
+                    status=HTTP_400_BAD_REQUEST,
+                )
+            dataset_headers = include_fields
+        else:
+            dataset_headers = get_model_fields(
+                app_name='accounts',
+                model_name='Accounts',
+                exclude_fields=exclude_fields,
+            )
+
+        dataset = Dataset()
+        dataset.headers = dataset_headers
+
+        accounts = Accounts.objects.values(*dataset.headers).order_by('id').iterator()
+        for account in accounts:
+            row = [account.get(field) for field in dataset.headers]
+            dataset.append(row)
+
+        export_format = 'csv'
+        content_type = 'text/csv'
+
+        response = StreamingHttpResponse(
+            dataset.export(export_format), content_type=content_type
+        )
+        response[
+            'Content-Disposition'
+        ] = f'attachment; filename=accounts.{export_format}'
+
+        return response

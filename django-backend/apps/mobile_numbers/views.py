@@ -8,8 +8,8 @@ from apps.accounts.models import Accounts
 from apps.mobile_numbers.filters import MobileNumbersFilterSet
 from apps.mobile_numbers.models import MobileNumberTransaction
 from apps.mobile_numbers.serializers import MobileNumbersSerializer
-from apps.mobile_numbers.utils import mobile_numbers_per_value
 from apps.users.models import User
+from apps.utils import records_per_value
 
 
 class AllMobileNumbersViewSet(FlexFieldsModelViewSet):
@@ -46,5 +46,5 @@ class AllMobileNumbersViewSet(FlexFieldsModelViewSet):
 
     @action(methods=['GET'], detail=False)
     def get_mobile_numbers_per_service(self, request):
-        result = mobile_numbers_per_value('service_name')
+        result = records_per_value(MobileNumberTransaction, 'service_name')
         return Response({'results': result})

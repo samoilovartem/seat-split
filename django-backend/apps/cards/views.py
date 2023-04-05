@@ -7,8 +7,8 @@ from django.db.models import Count, Prefetch
 from apps.cards.filters import CardsFilterSet
 from apps.cards.models import Cards
 from apps.cards.serializers import CardsSerializer
-from apps.cards.utils import cards_per_value
 from apps.users.models import User
+from apps.utils import records_per_value
 
 
 class AllCardsViewSet(FlexFieldsModelViewSet):
@@ -56,5 +56,5 @@ class AllCardsViewSet(FlexFieldsModelViewSet):
 
     @action(methods=['GET'], detail=False)
     def get_cards_per_team(self, request):
-        result = cards_per_value('team')
+        result = records_per_value(Cards, 'team')
         return Response({'results': result})
