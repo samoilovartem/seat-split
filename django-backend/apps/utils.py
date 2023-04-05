@@ -3,7 +3,31 @@ from pygments.formatters import TerminalFormatter
 from pygments.lexers import PostgresLexer
 from sqlparse import format
 
-from django.db.models import QuerySet
+from django.apps import apps
+from django.db.models import Count, QuerySet
+
+
+def records_per_value(model, filter_name):
+    result = (
+        model.objects.values(filter_name)
+        .order_by(filter_name)
+        .annotate(count=Count(filter_name))
+    )
+    return result
+
+
+def get_model_fields(app_name, model_name, exclude_fields=None):
+    if exclude_fields is None:
+        exclude_fields = []
+
+    model = apps.get_model(app_name, model_name)
+    field_names = [field.name for field in model._meta.fields]
+
+    for field in exclude_fields:
+        if field in field_names:
+            field_names.remove(field)
+
+    return field_names
 
 
 def show_changed_fields(obj, fields):

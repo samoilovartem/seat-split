@@ -6,8 +6,9 @@ from django.db.models import Prefetch
 
 from apps.email_domains.models import EmailDomains
 from apps.email_domains.serializers import EmailDomainsSerializer
-from apps.email_domains.utils import DataGenerator, email_domains_per_value
+from apps.email_domains.utils import DataGenerator
 from apps.users.models import User
+from apps.utils import records_per_value
 
 
 class AllEmailDomainsViewSet(FlexFieldsModelViewSet):
@@ -29,7 +30,7 @@ class AllEmailDomainsViewSet(FlexFieldsModelViewSet):
 
     @action(methods=['GET'], detail=False)
     def get_email_domains_per_type(self, request):
-        result = email_domains_per_value('type')
+        result = records_per_value(EmailDomains, 'type')
         return Response({'results': result})
 
     @action(methods=['POST'], detail=False)

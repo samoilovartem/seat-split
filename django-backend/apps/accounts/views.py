@@ -1,21 +1,21 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from tablib import UnsupportedFormat
+from tablib import Dataset, UnsupportedFormat
 
 from django.db.models import Count
+from django.http import StreamingHttpResponse
 
 from apps.accounts.filters import AccountsFilterSet
 from apps.accounts.models import Accounts
 from apps.accounts.resource import AccountsResource
 from apps.accounts.serializers import AccountsSerializer
 from apps.accounts.utils import (
-    accounts_per_value,
-    get_accounts_fields,
     get_existing_emails,
     get_validation_errors,
     load_dataset_from_file,
 )
+from apps.utils import get_model_fields, records_per_value
 
 
 class AllAccountsViewSet(ModelViewSet):
@@ -65,12 +65,12 @@ class AllAccountsViewSet(ModelViewSet):
 
     @action(methods=['GET'], detail=False)
     def get_accounts_per_type(self, request):
-        result = accounts_per_value('type')
+        result = records_per_value(Accounts, 'type')
         return Response({'results': result})
 
     @action(methods=['GET'], detail=False)
     def get_accounts_per_team(self, request):
-        result = accounts_per_value('team')
+        result = records_per_value(Accounts, 'team')
         return Response({'results': result})
 
     @action(methods=['POST'], detail=False)
@@ -84,7 +84,7 @@ class AllAccountsViewSet(ModelViewSet):
         except UnsupportedFormat:
             return Response({'success': False, 'error': 'Unsupported file format.'})
 
-        expected_columns = get_accounts_fields()
+        expected_columns = get_model_fields(app_name='accounts', model_name='Accounts')
         csv_columns = dataset.headers
         missing_columns = set(expected_columns) - set(csv_columns)
 
@@ -112,3 +112,40 @@ class AllAccountsViewSet(ModelViewSet):
         else:
             resource.import_data(dataset, dry_run=False)
             return Response({'success': True, 'message': 'Data uploaded successfully.'})
+
+    @action(methods=['GET'], detail=False)
+    def export_file(self, request):
+        accounts = Accounts.objects.all()
+        dataset = Dataset()
+        dataset.headers = get_model_fields(app_name='accounts', model_name='Accounts')
+
+        for account in accounts:
+            row = [getattr(account, field) for field in dataset.headers]
+            dataset.append(row)
+
+        export_format = request.GET.get('format', 'csv')
+        if export_format not in ('csv', 'xls', 'xlsx', 'ods', 'json'):
+            return Response({'success': False, 'error': 'Unsupported export format.'})
+
+        file_extension = export_format
+        if export_format == 'ods':
+            file_extension = 'odt'
+
+        content_type_mapping = {
+            'csv': 'text/csv',
+            'xls': 'application/vnd.ms-excel',
+            'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'ods': 'application/vnd.oasis.opendocument.spreadsheet',
+            'json': 'application/json',
+        }
+
+        content_type = content_type_mapping.get(export_format, 'text/csv')
+
+        response = StreamingHttpResponse(
+            dataset.export(export_format), content_type=content_type
+        )
+        response[
+            'Content-Disposition'
+        ] = f'attachment; filename=accounts.{file_extension}'
+
+        return response
