@@ -16,18 +16,28 @@ def records_per_value(model, filter_name):
     return result
 
 
+# def get_model_fields(app_name, model_name, exclude_fields=None):
+#     if exclude_fields is None:
+#         exclude_fields = []
+#
+#     model = apps.get_model(app_name, model_name)
+#     field_names = [field.name for field in model._meta.fields]
+#
+#     for field in exclude_fields:
+#         if field in field_names:
+#             field_names.remove(field)
+#
+#     return field_names
+
+
 def get_model_fields(app_name, model_name, exclude_fields=None):
-    if exclude_fields is None:
-        exclude_fields = []
-
     model = apps.get_model(app_name, model_name)
-    field_names = [field.name for field in model._meta.fields]
+    fields = [field.name for field in model._meta.fields]
 
-    for field in exclude_fields:
-        if field in field_names:
-            field_names.remove(field)
+    if exclude_fields:
+        fields = [field for field in fields if field not in exclude_fields]
 
-    return field_names
+    return fields
 
 
 def show_changed_fields(obj, fields):

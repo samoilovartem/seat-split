@@ -1,5 +1,6 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.viewsets import ModelViewSet
 from tablib import Dataset, UnsupportedFormat
 
@@ -113,39 +114,40 @@ class AllAccountsViewSet(ModelViewSet):
             resource.import_data(dataset, dry_run=False)
             return Response({'success': True, 'message': 'Data uploaded successfully.'})
 
-    @action(methods=['GET'], detail=False)
+    @action(methods=['POST'], detail=False)
     def export_file(self, request):
-        accounts = Accounts.objects.all()
-        dataset = Dataset()
-        dataset.headers = get_model_fields(app_name='accounts', model_name='Accounts')
+        exclude_fields = request.data.get('exclude_fields', [])
 
+        all_fields = get_model_fields(app_name='accounts', model_name='Accounts')
+        invalid_fields = set(exclude_fields) - set(all_fields)
+
+        if invalid_fields:
+            return Response(
+                {
+                    'success': False,
+                    'error': f'Invalid field(s): {", ".join(invalid_fields)}',
+                },
+                status=HTTP_400_BAD_REQUEST,
+            )
+
+        dataset = Dataset()
+        dataset.headers = get_model_fields(
+            app_name='accounts', model_name='Accounts', exclude_fields=exclude_fields
+        )
+
+        accounts = Accounts.objects.all().order_by('created_at').iterator()
         for account in accounts:
             row = [getattr(account, field) for field in dataset.headers]
             dataset.append(row)
 
-        export_format = request.GET.get('format', 'csv')
-        if export_format not in ('csv', 'xls', 'xlsx', 'ods', 'json'):
-            return Response({'success': False, 'error': 'Unsupported export format.'})
-
-        file_extension = export_format
-        if export_format == 'ods':
-            file_extension = 'odt'
-
-        content_type_mapping = {
-            'csv': 'text/csv',
-            'xls': 'application/vnd.ms-excel',
-            'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'ods': 'application/vnd.oasis.opendocument.spreadsheet',
-            'json': 'application/json',
-        }
-
-        content_type = content_type_mapping.get(export_format, 'text/csv')
+        export_format = 'csv'
+        content_type = 'text/csv'
 
         response = StreamingHttpResponse(
             dataset.export(export_format), content_type=content_type
         )
         response[
             'Content-Disposition'
-        ] = f'attachment; filename=accounts.{file_extension}'
+        ] = f'attachment; filename=accounts.{export_format}'
 
         return response
