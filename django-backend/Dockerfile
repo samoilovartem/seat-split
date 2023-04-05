@@ -11,7 +11,8 @@ ENV PYTHONUNBUFFERED=1 \
     NEW_RELIC_ENVIRONMENT=production \
     NEW_RELIC_LOG=stdout \
     NEW_RELIC_LOG_LEVEL=info \
-    POETRY_VERSION=1.4.2
+    POETRY_VERSION=1.4.2 \
+    GUNICORN_TIMEOUT=30
 
 RUN pip install "poetry==$POETRY_VERSION"
 
@@ -28,4 +29,4 @@ RUN adduser --disabled-password samoylovartem
 USER samoylovartem
 
 CMD python manage.py migrate --noinput && \
-    newrelic-admin run-program gunicorn --bind 0.0.0.0:$PORT config.wsgi:application
+    newrelic-admin run-program gunicorn --timeout $GUNICORN_TIMEOUT --bind 0.0.0.0:$PORT config.wsgi:application

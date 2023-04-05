@@ -11,7 +11,8 @@ ENV PYTHONUNBUFFERED=1 \
     NEW_RELIC_ENVIRONMENT=production \
     NEW_RELIC_LOG=stdout \
     NEW_RELIC_LOG_LEVEL=info \
-    POETRY_VERSION=1.4.2
+    POETRY_VERSION=1.4.2 \
+    GUNICORN_TIMEOUT=30
 
 RUN pip install "poetry==$POETRY_VERSION"
 
@@ -37,4 +38,4 @@ RUN python manage.py collectstatic --noinput
 USER django_user
 
 CMD python manage.py migrate --noinput && \
-    gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    gunicorn config.wsgi:application --bind 0.0.0.0:8000 --timeout $GUNICORN_TIMEOUT

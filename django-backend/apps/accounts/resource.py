@@ -21,3 +21,6 @@ class AccountsResource(resources.ModelResource):
             'created_at': {'format': '%Y-%m-%d'},
             'last_opened': {'format': '%Y-%m-%d'},
         }
+
+    def export_data(self, queryset, *args, **kwargs):
+        return self.export(*args, queryset=queryset, **kwargs)

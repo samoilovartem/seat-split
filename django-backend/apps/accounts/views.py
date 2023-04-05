@@ -1,11 +1,14 @@
+import csv
+import io
+
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.viewsets import ModelViewSet
-from tablib import Dataset, UnsupportedFormat
+from tablib import UnsupportedFormat
 
 from django.db.models import Count
-from django.http import StreamingHttpResponse
+from django.http import HttpResponse
 
 from apps.accounts.filters import AccountsFilterSet
 from apps.accounts.models import Accounts
@@ -148,22 +151,22 @@ class AllAccountsViewSet(ModelViewSet):
                 exclude_fields=exclude_fields,
             )
 
-        dataset = Dataset()
-        dataset.headers = dataset_headers
+        def generate_csv():
+            output = io.StringIO()
+            writer = csv.DictWriter(output, fieldnames=dataset_headers)
 
-        accounts = Accounts.objects.values(*dataset.headers).order_by('id').iterator()
-        for account in accounts:
-            row = [account.get(field) for field in dataset.headers]
-            dataset.append(row)
+            writer.writeheader()
 
-        export_format = 'csv'
-        content_type = 'text/csv'
+            accounts = (
+                Accounts.objects.values(*dataset_headers).order_by('id').iterator()
+            )
+            for account in accounts:
+                writer.writerow(account)
 
-        response = StreamingHttpResponse(
-            dataset.export(export_format), content_type=content_type
-        )
-        response[
-            'Content-Disposition'
-        ] = f'attachment; filename=accounts.{export_format}'
+            return output.getvalue()
 
+        csv_data = generate_csv()
+
+        response = HttpResponse(csv_data, content_type="text/csv")
+        response["Content-Disposition"] = "attachment; filename=accounts.csv"
         return response
