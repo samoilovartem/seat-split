@@ -2,11 +2,12 @@ from rest_flex_fields import FlexFieldsModelViewSet, is_expanded
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from django.db.models import Count, Prefetch
+from django.db.models import Prefetch
 
 from apps.cards.filters import CardsFilterSet
 from apps.cards.models import Cards
 from apps.cards.serializers import CardsSerializer
+from apps.duplicate_checker import DuplicateChecker
 from apps.users.models import User
 from apps.utils import records_per_value
 
@@ -28,16 +29,10 @@ class AllCardsViewSet(FlexFieldsModelViewSet):
         'type',
         'platform',
         'parent_card',
-        'team',
-        'created_by__username',
-        'created_at',
     ]
     ordering_fields = [
         'id',
         'account_assigned',
-        'type',
-        'platform',
-        'parent_card',
         'team',
         'created_by',
         'created_at',
@@ -46,13 +41,8 @@ class AllCardsViewSet(FlexFieldsModelViewSet):
 
     @action(methods=['GET'], detail=False)
     def show_duplicates(self, request):
-        duplicates = (
-            Cards.objects.values('account_assigned')
-            .annotate(Count('id'))
-            .order_by()
-            .filter(id__count__gt=1)
-        )
-        return Response({'results': duplicates})
+        duplicate_checker = DuplicateChecker(model=Cards, field='account_assigned')
+        return duplicate_checker.get_duplicate_summary()
 
     @action(methods=['GET'], detail=False)
     def get_cards_per_team(self, request):

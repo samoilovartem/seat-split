@@ -2,12 +2,13 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from django.db.models import Count
-
 from apps.accounts.filters import AccountsFilterSet
 from apps.accounts.models import Accounts
+from apps.accounts.resource import AccountsResource
 from apps.accounts.serializers import AccountsSerializer
-from apps.accounts.utils import AccountsCSVExporter, AccountsCSVImporter
+from apps.duplicate_checker import DuplicateChecker
+from apps.file_exporter import CSVExporter
+from apps.file_importer import CSVImporter
 from apps.utils import records_per_value
 
 
@@ -34,23 +35,8 @@ class AllAccountsViewSet(ModelViewSet):
 
     @action(methods=['GET'], detail=False)
     def show_duplicates(self, request):
-        duplicates = (
-            Accounts.objects.values('email')
-            .annotate(duplicates=Count('id'))
-            .order_by()
-            .filter(duplicates__gt=1)
-        )
-        unique_accounts_number = Accounts.objects.values('email').distinct().count()
-        unique_duplicates_number = duplicates.count()
-        return Response(
-            {
-                'total number of accounts': unique_duplicates_number
-                + unique_accounts_number,
-                'total number of unique duplicate accounts': unique_duplicates_number,
-                'total number of unique accounts': unique_accounts_number,
-                'all duplicate accounts': duplicates,
-            }
-        )
+        duplicate_checker = DuplicateChecker(model=Accounts, field='email')
+        return duplicate_checker.get_duplicate_summary()
 
     @action(methods=['GET'], detail=False)
     def get_accounts_per_type(self, request):
@@ -64,10 +50,17 @@ class AllAccountsViewSet(ModelViewSet):
 
     @action(methods=['POST'], detail=False)
     def import_file(self, request):
-        importer = AccountsCSVImporter(request)
-        return importer.import_file()
+        csv_importer = CSVImporter(
+            request,
+            app_name='accounts',
+            model_name='Accounts',
+            resource=AccountsResource,
+            duplicate_check_column='email',
+        )
+        response = csv_importer.import_file()
+        return response
 
     @action(methods=['POST'], detail=False)
     def export_file(self, request):
-        exporter = AccountsCSVExporter(request)
-        return exporter.export_file()
+        csv_exporter = CSVExporter(request, app_name='accounts', model_name='Accounts')
+        return csv_exporter.export_file()
