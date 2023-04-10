@@ -20,6 +20,8 @@ class Accounts(models.Model):
     delta_password = models.CharField(
         max_length=32, validators=[any_or_na], default='NA'
     )
+    delta_miles = models.CharField(max_length=100, default='NA')
+    flyingblue_miles = models.CharField(max_length=100, default='NA')
     air_france_created = models.BooleanField(default=False)
     air_france_password = models.CharField(
         max_length=32, validators=[any_or_na], default='NA'
