@@ -6,7 +6,7 @@ from django.utils.html import format_html
 
 from apps.email_domains.models import EmailDomains
 from apps.email_domains.resource import EmailDomainsResource
-from apps.utils import show_changed_fields
+from apps.utils.utils import show_changed_fields
 
 
 class EmailDomainsAdminConfig(ImportExportMixin, SimpleHistoryAdmin):

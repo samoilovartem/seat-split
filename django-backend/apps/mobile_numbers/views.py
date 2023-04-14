@@ -9,7 +9,7 @@ from apps.mobile_numbers.filters import MobileNumbersFilterSet
 from apps.mobile_numbers.models import MobileNumberTransaction
 from apps.mobile_numbers.serializers import MobileNumbersSerializer
 from apps.users.models import User
-from apps.utils import records_per_value
+from apps.utils.utils import records_per_value
 
 
 class AllMobileNumbersViewSet(FlexFieldsModelViewSet):

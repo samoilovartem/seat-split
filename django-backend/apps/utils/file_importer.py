@@ -3,7 +3,7 @@ from tablib import Dataset, UnsupportedFormat
 
 from django.apps import apps
 
-from apps.utils import get_model_fields
+from apps.utils.utils import get_model_fields
 
 
 class CSVImporter:

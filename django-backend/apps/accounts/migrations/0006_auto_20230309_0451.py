@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 
-import apps.validators
+import apps.utils.validators
 
 
 class Migration(migrations.Migration):
@@ -20,7 +20,9 @@ class Migration(migrations.Migration):
             model_name='accounts',
             name='aeromexico_password',
             field=models.CharField(
-                default='NA', max_length=32, validators=[apps.validators.any_or_na]
+                default='NA',
+                max_length=32,
+                validators=[apps.utils.validators.any_or_na],
             ),
         ),
         migrations.AddField(
@@ -32,7 +34,9 @@ class Migration(migrations.Migration):
             model_name='accounts',
             name='air_france_password',
             field=models.CharField(
-                default='NA', max_length=32, validators=[apps.validators.any_or_na]
+                default='NA',
+                max_length=32,
+                validators=[apps.utils.validators.any_or_na],
             ),
         ),
         migrations.AddField(
@@ -44,7 +48,9 @@ class Migration(migrations.Migration):
             model_name='accounts',
             name='avianca_password',
             field=models.CharField(
-                default='NA', max_length=32, validators=[apps.validators.any_or_na]
+                default='NA',
+                max_length=32,
+                validators=[apps.utils.validators.any_or_na],
             ),
         ),
         migrations.AddField(
@@ -56,7 +62,9 @@ class Migration(migrations.Migration):
             model_name='accounts',
             name='china_airlines_password',
             field=models.CharField(
-                default='NA', max_length=32, validators=[apps.validators.any_or_na]
+                default='NA',
+                max_length=32,
+                validators=[apps.utils.validators.any_or_na],
             ),
         ),
         migrations.AddField(
@@ -73,7 +81,9 @@ class Migration(migrations.Migration):
             model_name='accounts',
             name='korean_air_password',
             field=models.CharField(
-                default='NA', max_length=32, validators=[apps.validators.any_or_na]
+                default='NA',
+                max_length=32,
+                validators=[apps.utils.validators.any_or_na],
             ),
         ),
         migrations.AddField(
@@ -85,7 +95,9 @@ class Migration(migrations.Migration):
             model_name='historicalaccounts',
             name='aeromexico_password',
             field=models.CharField(
-                default='NA', max_length=32, validators=[apps.validators.any_or_na]
+                default='NA',
+                max_length=32,
+                validators=[apps.utils.validators.any_or_na],
             ),
         ),
         migrations.AddField(
@@ -97,7 +109,9 @@ class Migration(migrations.Migration):
             model_name='historicalaccounts',
             name='air_france_password',
             field=models.CharField(
-                default='NA', max_length=32, validators=[apps.validators.any_or_na]
+                default='NA',
+                max_length=32,
+                validators=[apps.utils.validators.any_or_na],
             ),
         ),
         migrations.AddField(
@@ -109,7 +123,9 @@ class Migration(migrations.Migration):
             model_name='historicalaccounts',
             name='avianca_password',
             field=models.CharField(
-                default='NA', max_length=32, validators=[apps.validators.any_or_na]
+                default='NA',
+                max_length=32,
+                validators=[apps.utils.validators.any_or_na],
             ),
         ),
         migrations.AddField(
@@ -121,7 +137,9 @@ class Migration(migrations.Migration):
             model_name='historicalaccounts',
             name='china_airlines_password',
             field=models.CharField(
-                default='NA', max_length=32, validators=[apps.validators.any_or_na]
+                default='NA',
+                max_length=32,
+                validators=[apps.utils.validators.any_or_na],
             ),
         ),
         migrations.AddField(
@@ -138,7 +156,9 @@ class Migration(migrations.Migration):
             model_name='historicalaccounts',
             name='korean_air_password',
             field=models.CharField(
-                default='NA', max_length=32, validators=[apps.validators.any_or_na]
+                default='NA',
+                max_length=32,
+                validators=[apps.utils.validators.any_or_na],
             ),
         ),
     ]

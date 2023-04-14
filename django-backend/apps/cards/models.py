@@ -10,7 +10,7 @@ from apps.cards.validators import (
     clean_state,
     clean_zip_code,
 )
-from apps.validators import any_or_na
+from apps.utils.validators import any_or_na
 
 User = get_user_model()
 

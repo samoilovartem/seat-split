@@ -7,9 +7,9 @@ from django.db.models import Prefetch
 from apps.cards.filters import CardsFilterSet
 from apps.cards.models import Cards
 from apps.cards.serializers import CardsSerializer
-from apps.duplicate_checker import DuplicateChecker
 from apps.users.models import User
-from apps.utils import records_per_value
+from apps.utils.duplicate_checker import DuplicateChecker
+from apps.utils.utils import records_per_value
 
 
 class AllCardsViewSet(FlexFieldsModelViewSet):

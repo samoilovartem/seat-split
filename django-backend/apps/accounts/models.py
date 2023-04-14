@@ -3,7 +3,7 @@ from simple_history.models import HistoricalRecords
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from apps.validators import any_or_na
+from apps.utils.validators import any_or_na
 
 User = get_user_model()
 

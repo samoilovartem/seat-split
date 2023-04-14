@@ -8,7 +8,7 @@ from apps.email_domains.models import EmailDomains
 from apps.email_domains.serializers import EmailDomainsSerializer
 from apps.email_domains.utils import DataGenerator
 from apps.users.models import User
-from apps.utils import records_per_value
+from apps.utils.utils import records_per_value
 
 
 class AllEmailDomainsViewSet(FlexFieldsModelViewSet):

@@ -6,7 +6,7 @@ import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
 
-import apps.validators
+import apps.utils.validators
 
 
 class Migration(migrations.Migration):
@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
                 (
                     'parent_card',
                     models.CharField(
-                        max_length=150, validators=[apps.validators.any_or_na]
+                        max_length=150, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 (
@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
                 (
                     'specific_team',
                     models.CharField(
-                        max_length=100, validators=[apps.validators.any_or_na]
+                        max_length=100, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 ('address', models.CharField(max_length=255)),

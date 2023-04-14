@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from apps.mobile_numbers.models import MobileNumberTransaction
-from apps.utils import show_changed_fields
+from apps.utils.utils import show_changed_fields
 
 
 class MobileNumberAdminConfig(ImportExportMixin, SimpleHistoryAdmin):

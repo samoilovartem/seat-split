@@ -7,7 +7,7 @@ from django.utils.translation import ngettext
 
 from apps.accounts.models import Accounts
 from apps.accounts.resource import AccountsResource
-from apps.utils import show_changed_fields
+from apps.utils.utils import show_changed_fields
 
 
 class AccountsAdminConfig(ImportExportMixin, SimpleHistoryAdmin):

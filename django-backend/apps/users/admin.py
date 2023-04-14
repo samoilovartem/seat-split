@@ -35,6 +35,8 @@ class UserAdminConfig(UserAdmin):
                     'is_superuser',
                     'groups',
                     'user_permissions',
+                    'team',
+                    'role',
                 )
             },
         ),

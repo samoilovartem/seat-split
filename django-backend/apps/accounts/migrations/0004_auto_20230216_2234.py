@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 
-import apps.validators
+import apps.utils.validators
 
 
 class Migration(migrations.Migration):
@@ -15,14 +15,18 @@ class Migration(migrations.Migration):
             model_name='accounts',
             name='delta_password',
             field=models.CharField(
-                default='NA', max_length=32, validators=[apps.validators.any_or_na]
+                default='NA',
+                max_length=32,
+                validators=[apps.utils.validators.any_or_na],
             ),
         ),
         migrations.AddField(
             model_name='historicalaccounts',
             name='delta_password',
             field=models.CharField(
-                default='NA', max_length=32, validators=[apps.validators.any_or_na]
+                default='NA',
+                max_length=32,
+                validators=[apps.utils.validators.any_or_na],
             ),
         ),
     ]

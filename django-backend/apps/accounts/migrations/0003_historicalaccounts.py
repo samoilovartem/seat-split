@@ -6,7 +6,7 @@ import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
 
-import apps.validators
+import apps.utils.validators
 
 
 class Migration(migrations.Migration):
@@ -28,26 +28,26 @@ class Migration(migrations.Migration):
                 (
                     'first_name',
                     models.CharField(
-                        max_length=100, validators=[apps.validators.any_or_na]
+                        max_length=100, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 (
                     'last_name',
                     models.CharField(
-                        max_length=100, validators=[apps.validators.any_or_na]
+                        max_length=100, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 ('email', models.EmailField(db_index=True, max_length=150)),
                 (
                     'type',
                     models.CharField(
-                        max_length=100, validators=[apps.validators.any_or_na]
+                        max_length=100, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 (
                     'password',
                     models.CharField(
-                        max_length=32, validators=[apps.validators.any_or_na]
+                        max_length=32, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 ('recovery_email', models.EmailField(max_length=150)),
@@ -56,14 +56,14 @@ class Migration(migrations.Migration):
                 (
                     'errors_failed',
                     models.CharField(
-                        max_length=255, validators=[apps.validators.any_or_na]
+                        max_length=255, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 ('tm_created', models.BooleanField(default=False)),
                 (
                     'tm_password',
                     models.CharField(
-                        max_length=32, validators=[apps.validators.any_or_na]
+                        max_length=32, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 (
@@ -71,21 +71,21 @@ class Migration(migrations.Migration):
                     models.CharField(
                         default='NA',
                         max_length=255,
-                        validators=[apps.validators.any_or_na],
+                        validators=[apps.utils.validators.any_or_na],
                     ),
                 ),
                 ('axs_created', models.BooleanField(default=False)),
                 (
                     'axs_password',
                     models.CharField(
-                        max_length=32, validators=[apps.validators.any_or_na]
+                        max_length=32, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 ('sg_created', models.BooleanField(default=False)),
                 (
                     'sg_password',
                     models.CharField(
-                        max_length=32, validators=[apps.validators.any_or_na]
+                        max_length=32, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 ('tickets_com_created', models.BooleanField(default=False)),
@@ -99,7 +99,7 @@ class Migration(migrations.Migration):
                 (
                     'secondary_password',
                     models.CharField(
-                        max_length=32, validators=[apps.validators.any_or_na]
+                        max_length=32, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 ('seat_scouts_added', models.BooleanField(default=False)),
@@ -107,31 +107,31 @@ class Migration(migrations.Migration):
                 (
                     'team',
                     models.CharField(
-                        max_length=255, validators=[apps.validators.any_or_na]
+                        max_length=255, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 (
                     'specific_team',
                     models.CharField(
-                        max_length=255, validators=[apps.validators.any_or_na]
+                        max_length=255, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 (
                     'forward_to',
                     models.CharField(
-                        max_length=150, validators=[apps.validators.any_or_na]
+                        max_length=150, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 (
                     'forward_email_password',
                     models.CharField(
-                        max_length=32, validators=[apps.validators.any_or_na]
+                        max_length=32, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 (
                     'seat_scouts_password',
                     models.CharField(
-                        max_length=32, validators=[apps.validators.any_or_na]
+                        max_length=32, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 ('password_matching', models.BooleanField(default=False)),
@@ -141,7 +141,7 @@ class Migration(migrations.Migration):
                     models.CharField(
                         default='MATEEN',
                         max_length=32,
-                        validators=[apps.validators.any_or_na],
+                        validators=[apps.utils.validators.any_or_na],
                     ),
                 ),
                 (
@@ -149,13 +149,13 @@ class Migration(migrations.Migration):
                     models.CharField(
                         default='NA',
                         max_length=32,
-                        validators=[apps.validators.any_or_na],
+                        validators=[apps.utils.validators.any_or_na],
                     ),
                 ),
                 (
                     'ld_computer_used',
                     models.CharField(
-                        max_length=50, validators=[apps.validators.any_or_na]
+                        max_length=50, validators=[apps.utils.validators.any_or_na]
                     ),
                 ),
                 ('created_at', models.DateField(blank=True, null=True)),
@@ -164,13 +164,16 @@ class Migration(migrations.Migration):
                     models.DateTimeField(blank=True, editable=False, null=True),
                 ),
                 ('last_opened', models.DateField(blank=True, null=True)),
-                ('comments', models.TextField(validators=[apps.validators.any_or_na])),
+                (
+                    'comments',
+                    models.TextField(validators=[apps.utils.validators.any_or_na]),
+                ),
                 (
                     'phone',
                     models.CharField(
                         default='NA',
                         max_length=50,
-                        validators=[apps.validators.any_or_na],
+                        validators=[apps.utils.validators.any_or_na],
                     ),
                 ),
                 (
@@ -178,7 +181,7 @@ class Migration(migrations.Migration):
                     models.CharField(
                         default='NA',
                         max_length=50,
-                        validators=[apps.validators.any_or_na],
+                        validators=[apps.utils.validators.any_or_na],
                     ),
                 ),
                 ('password_reset', models.BooleanField(default=False)),
@@ -188,7 +191,7 @@ class Migration(migrations.Migration):
                     models.CharField(
                         default='NA',
                         max_length=100,
-                        validators=[apps.validators.any_or_na],
+                        validators=[apps.utils.validators.any_or_na],
                     ),
                 ),
                 (
@@ -196,7 +199,7 @@ class Migration(migrations.Migration):
                     models.CharField(
                         default='NA',
                         max_length=100,
-                        validators=[apps.validators.any_or_na],
+                        validators=[apps.utils.validators.any_or_na],
                     ),
                 ),
                 ('history_id', models.AutoField(primary_key=True, serialize=False)),
