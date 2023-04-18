@@ -6,6 +6,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+RUN apt-get update && \
+    apt-get install -y binutils libproj-dev gdal-bin
+
 RUN pip install "poetry==$POETRY_VERSION"
 
 COPY poetry.lock pyproject.toml ./

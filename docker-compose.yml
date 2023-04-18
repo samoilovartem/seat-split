@@ -1,6 +1,5 @@
 version: "3.8"
 
-
 services:
   django:
     build:
@@ -19,7 +18,7 @@ services:
       - backend
 
   pgdb:
-    image: postgres
+    image: postgis/postgis
     container_name: pgdb
     env_file:
       - ./django-backend/.env.dev

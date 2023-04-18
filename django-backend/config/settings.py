@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     # Third party apps
     'drf_yasg',
     'rest_framework',
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     'apps.users.apps.UsersConfig',
     'apps.mobile_numbers.apps.MobileNumbersConfig',
     'apps.email_domains.apps.EmailDomainsConfig',
+    'apps.us_addresses.apps.UsAddressesConfig',
 ]
 
 if DEBUG:
@@ -107,6 +109,7 @@ DATABASES = {
         else os.environ.get('SQLITE_PATH'),
         ssl_require=False if DEBUG else True,
         conn_max_age=600,
+        engine='django.contrib.gis.db.backends.postgis',
     )
 }
 

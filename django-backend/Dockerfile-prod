@@ -14,6 +14,9 @@ ENV PYTHONUNBUFFERED=1 \
     POETRY_VERSION=1.4.2 \
     GUNICORN_TIMEOUT=30
 
+RUN apt-get update && \
+    apt-get install -y binutils libproj-dev gdal-bin
+
 RUN pip install "poetry==$POETRY_VERSION"
 
 COPY poetry.lock pyproject.toml ./
