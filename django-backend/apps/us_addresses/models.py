@@ -47,6 +47,7 @@ class USAddresses(UUIDMixin, TimeStampedMixin, models.Model):
         verbose_name = 'US Address'
         verbose_name_plural = 'US Addresses'
         ordering = ['state']
+        unique_together = ['line', 'city']
         permissions = (
             ('import_accounts', 'Can import'),
             ('export_accounts', 'Can export'),

@@ -25,6 +25,7 @@ include(
     'components/django-filters.py',
     'components/swagger.py',
     'components/redis.py',
+    'components/logger.py',
 )
 
 INSTALLED_APPS = [
@@ -81,7 +82,6 @@ MIDDLEWARE = [
 ]
 
 if DEBUG:
-    MIDDLEWARE.append('querycount.middleware.QueryCountMiddleware')
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 TEMPLATES = [

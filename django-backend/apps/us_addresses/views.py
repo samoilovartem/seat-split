@@ -11,6 +11,7 @@ from apps.us_addresses.utils import AddressesWithinDistanceHandler
 class AddressesWithinDistanceViewSet(GenericViewSet, ListAPIView):
     queryset = USAddresses.objects.all()
     serializer_class = USAddressSerializer
+    my_tags = ['US addresses within a distance']
 
     def list(self, request, *args, **kwargs):
         coordinates = request.query_params.get('coordinates')

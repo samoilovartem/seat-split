@@ -51,7 +51,3 @@ class Cards(models.Model):
         ordering = ['-created_at']
         unique_together = ['account_assigned', 'platform']
         permissions = (('import_cards', 'Can import'), ('export_cards', 'Can export'))
-        # indexes = [
-        #     models.Index(fields=('account_assigned',), name='cards_account_assigned_idx'),
-        #     models.Index(fields=('card_number',), name='cards_card_number_idx'),
-        # ]
