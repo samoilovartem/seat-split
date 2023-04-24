@@ -24,7 +24,6 @@ include(
     'components/query_count.py',
     'components/django-filters.py',
     'components/swagger.py',
-    'components/redis.py',
     'components/logger.py',
 )
 
@@ -61,9 +60,6 @@ INSTALLED_APPS = [
 
 if DEBUG:
     INSTALLED_APPS.append('debug_toolbar')
-
-if not DEBUG:
-    INSTALLED_APPS.append('cachalot')
 
 ROOT_URLCONF = 'config.urls'
 
