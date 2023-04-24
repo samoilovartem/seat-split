@@ -26,7 +26,14 @@ class AddressCollector:
     def fetch_addresses(self, offset: int = 0):
         payload = self._build_payload(offset)
         response = requests.post(self.url, json=payload, headers=self.headers)
+
+        if response.headers.get("Content-Type") != "application/json":
+            print(f"Error: Unexpected content type at offset {offset}")
+            return {'data': {'home_search': {'total': 0, 'results': []}}}
+
         data = response.json()
+        if data is None or data.get('data', None) is None:
+            return {'data': {'home_search': {'total': 0, 'results': []}}}
         return data
 
     def _build_payload(self, offset: int):
@@ -34,6 +41,8 @@ class AddressCollector:
             'limit': self.limit,
             'offset': offset,
             'state_code': self.state_code,
+            # 'cats': True,
+            # 'dogs': True,
             'status': ['for_rent'],
             'type': [
                 'condos',
@@ -47,10 +56,18 @@ class AddressCollector:
                 'condop',
                 'coop',
             ],
-            'sort': {'direction': 'desc', 'field': 'list_date'},
+            'sort': {'direction': 'asc', 'field': 'list_date'},
         }
 
+    def get_total_records(self):
+        data = self.fetch_addresses(offset=0)
+        total_records = data.get('data', {}).get('home_search', {}).get('total', 0)
+        return total_records
+
     def collect_all_addresses(self):
+        total_available_records = self.get_total_records()
+        print(f'Total available records: {total_available_records}')
+
         offset = 0
         total_records = 0
         more_records = True
@@ -133,8 +150,8 @@ if __name__ == '__main__':
         url=api_url,
         state_code='TX',
         headers=api_headers,
-        file_name='addresses',
-        max_records=200,
+        file_name='addresses_2',
+        max_records=40000,
     )
     total_records = collector.collect_all_addresses()
     print(f'Total records collected: {total_records}')

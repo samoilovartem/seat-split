@@ -24,9 +24,12 @@ class AddressesWithinDistanceViewSet(GenericViewSet, ListAPIView):
                 status=HTTP_400_BAD_REQUEST,
             )
 
-        handler = AddressesWithinDistanceHandler(self, coordinates, distance, random)
-
         try:
+            handler = AddressesWithinDistanceHandler(
+                self, coordinates, distance, random
+            )
             return handler.handle_request()
+        except ValueError as e:
+            return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({'error': str(e)}, status=HTTP_500_INTERNAL_SERVER_ERROR)

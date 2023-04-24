@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_404_NOT_FOUND
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import GEOSGeometry
@@ -16,10 +16,19 @@ class AddressesWithinDistanceHandler:
 
     @staticmethod
     def parse_coordinates(coordinates: str) -> GEOSGeometry:
-        coordinates_list = [float(coord.strip()) for coord in coordinates.split(',')]
-        return GEOSGeometry(
-            f'POINT({coordinates_list[0]} {coordinates_list[1]})', srid=4326
-        )
+        try:
+            coordinates_list = [
+                float(coord.strip()) for coord in coordinates.split(',')
+            ]
+            if len(coordinates_list) != 2:
+                raise ValueError(
+                    'Invalid coordinates input. Expected format: "longitude,latitude"'
+                )
+            return GEOSGeometry(
+                f'POINT({coordinates_list[0]} {coordinates_list[1]})', srid=4326
+            )
+        except ValueError as e:
+            raise ValueError(f'Error parsing coordinates: {str(e)}')
 
     def get_random_address(self) -> USAddresses:
         return (
@@ -44,14 +53,17 @@ class AddressesWithinDistanceHandler:
         return Response(serializer.data, status=HTTP_200_OK)
 
     def handle_request(self) -> Response:
-        if self.random:
-            address = self.get_random_address()
-            if address is None:
-                return Response(
-                    {'error': 'No address found within specified distance'},
-                    status=HTTP_404_NOT_FOUND,
-                )
-            serializer = self.view.get_serializer(address)
-            return Response(serializer.data, status=HTTP_200_OK)
-        else:
-            return self.get_paginated_addresses()
+        try:
+            if self.random:
+                address = self.get_random_address()
+                if address is None:
+                    return Response(
+                        {'error': 'No address found within specified distance'},
+                        status=HTTP_404_NOT_FOUND,
+                    )
+                serializer = self.view.get_serializer(address)
+                return Response(serializer.data, status=HTTP_200_OK)
+            else:
+                return self.get_paginated_addresses()
+        except ValueError as e:
+            return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
