@@ -56,6 +56,7 @@ class AllAccountsViewSet(ModelViewSet):
             model_name='Accounts',
             resource=AccountsResource,
             duplicate_check_column='email',
+            exclude_fields=['updated_at'],
         )
         response = csv_importer.import_file()
         return response

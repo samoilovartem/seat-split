@@ -14,6 +14,8 @@ class AddressCollector:
         state_code: str,
         headers: dict[str, str],
         file_name: str,
+        status: list[str],
+        sort: str,
         max_records: int = None,
     ):
         self.url = url
@@ -22,6 +24,8 @@ class AddressCollector:
         self.state_code = state_code
         self.file_name = f'{self.state_code}_{file_name}.csv'
         self.max_records = max_records
+        self.status = status
+        self.sort = sort
 
     def fetch_addresses(self, offset: int = 0):
         payload = self._build_payload(offset)
@@ -41,9 +45,7 @@ class AddressCollector:
             'limit': self.limit,
             'offset': offset,
             'state_code': self.state_code,
-            # 'cats': True,
-            # 'dogs': True,
-            'status': ['for_rent'],
+            'status': self.status,
             'type': [
                 'condos',
                 'condo_townhome_rowhome_coop',
@@ -56,7 +58,7 @@ class AddressCollector:
                 'condop',
                 'coop',
             ],
-            'sort': {'direction': 'asc', 'field': 'list_date'},
+            'sort': {'direction': self.sort, 'field': 'list_date'},
         }
 
     def get_total_records(self):
@@ -139,7 +141,7 @@ class AddressCollector:
 
 
 if __name__ == '__main__':
-    api_url = 'https://realty-in-us.p.rapidapi.com/properties/v3/list'
+    api_url = os.environ.get('RAPID_API_URL')
     api_headers = {
         'content-type': 'application/json',
         'X-RapidAPI-Key': os.environ.get('RAPID_API_KEY'),
@@ -148,10 +150,12 @@ if __name__ == '__main__':
 
     collector = AddressCollector(
         url=api_url,
-        state_code='TX',
+        state_code='WY',
         headers=api_headers,
-        file_name='addresses_2',
-        max_records=40000,
+        file_name='addresses',
+        max_records=20000,
+        status=['for_rent'],
+        sort='desc',
     )
     total_records = collector.collect_all_addresses()
     print(f'Total records collected: {total_records}')

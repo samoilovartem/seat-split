@@ -7,7 +7,15 @@ from apps.utils.utils import get_model_fields
 
 
 class CSVImporter:
-    def __init__(self, request, app_name, model_name, resource, duplicate_check_column):
+    def __init__(
+        self,
+        request,
+        app_name,
+        model_name,
+        resource,
+        duplicate_check_column=None,
+        exclude_fields=None,
+    ):
         self.request = request
         self.file = request.FILES.get('file')
         self.app_name = app_name
@@ -15,6 +23,7 @@ class CSVImporter:
         self.model = apps.get_model(app_label=app_name, model_name=model_name)
         self.resource = resource
         self.duplicate_check_column = duplicate_check_column
+        self.exclude_fields = exclude_fields
 
     def import_file(self):
         if not self.file:
@@ -28,7 +37,7 @@ class CSVImporter:
         expected_columns = get_model_fields(
             app_name=self.app_name,
             model_name=self.model_name,
-            exclude_fields=['updated_at'],
+            exclude_fields=self.exclude_fields or ['updated_at'],
         )
         csv_columns = dataset.headers
         missing_columns = set(expected_columns) - set(csv_columns)
@@ -37,22 +46,29 @@ class CSVImporter:
             error_message = f'CSV file is missing the following columns: {", ".join(missing_columns)}'
             return Response({'success': False, 'error': error_message})
 
-        duplicate_check_column_index = csv_columns.index(self.duplicate_check_column)
-        existing_records = self._get_existing_records(
-            duplicate_check_column_index, dataset
-        )
+        if self.duplicate_check_column:
+            duplicate_check_column_index = csv_columns.index(
+                self.duplicate_check_column
+            )
+            existing_records = self._get_existing_records(
+                duplicate_check_column_index, dataset
+            )
 
-        if existing_records:
-            return Response({'success': False, 'errors': existing_records})
+            if existing_records:
+                return Response({'success': False, 'errors': existing_records})
 
         resource_instance = self.resource()
         result = resource_instance.import_data(dataset, dry_run=True)
 
         if result.has_validation_errors():
-            invalid_rows = result.invalid_rows
-            error_messages = self._get_validation_errors(
-                duplicate_check_column_index, invalid_rows
-            )
+            if self.duplicate_check_column:
+                invalid_rows = result.invalid_rows
+                error_messages = self._get_validation_errors(
+                    duplicate_check_column_index, invalid_rows
+                )
+            else:
+                error_messages = result.invalid_rows
+
             return Response({'success': False, 'errors': error_messages})
 
         elif result.has_errors():
@@ -63,6 +79,9 @@ class CSVImporter:
             return Response({'success': True, 'message': 'Data uploaded successfully.'})
 
     def _get_existing_records(self, duplicate_check_column_index, dataset):
+        if not self.duplicate_check_column:
+            return []
+
         duplicate_check_values = [row[duplicate_check_column_index] for row in dataset]
         existing_records = self.model.objects.filter(
             **{f"{self.duplicate_check_column}__in": duplicate_check_values}
