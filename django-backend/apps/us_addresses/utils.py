@@ -1,8 +1,11 @@
+from random import randint
+
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.gis.measure import D
 
 from apps.us_addresses.models import USAddresses
 
@@ -30,19 +33,24 @@ class AddressesWithinDistanceHandler:
         except ValueError as e:
             raise ValueError(f'Error parsing coordinates: {str(e)}')
 
-    def get_random_address(self) -> USAddresses:
-        return (
-            USAddresses.objects.filter(
-                location__distance_lte=(self.point, self.distance)
-            )
-            .order_by('?')
-            .first()
-        )
+    def get_random_address(self) -> USAddresses | None:
+        queryset = USAddresses.objects.annotate(
+            distance=Distance('location', self.point)
+        ).filter(location__dwithin=(self.point, D(m=self.distance)))
+        count = queryset.count()
+
+        if count == 0:
+            return None
+
+        random_offset = randint(0, count - 1)
+        return queryset.order_by('distance')[random_offset : random_offset + 1].first()
 
     def get_paginated_addresses(self) -> Response:
-        queryset = USAddresses.objects.filter(
-            location__distance_lte=(self.point, self.distance)
-        ).annotate(distance=Distance('location', self.point))
+        queryset = (
+            USAddresses.objects.annotate(distance=Distance('location', self.point))
+            .filter(location__dwithin=(self.point, D(m=self.distance)))
+            .order_by('distance')
+        )
         queryset = self.view.filter_queryset(queryset)
         page = self.view.paginate_queryset(queryset)
         if page is not None:

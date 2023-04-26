@@ -21,6 +21,12 @@ class USAddressesAdminConfig(ImportExportMixin, admin.ModelAdmin):
         'created_at',
         'updated_at',
     )
+    search_fields = (
+        'line',
+        'city',
+        'state',
+    )
+    list_filter = ('state',)
 
 
 admin.site.register(USAddresses, USAddressesAdminConfig)

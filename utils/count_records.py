@@ -15,8 +15,7 @@ def count_csv_records(directory):
     return total_records
 
 
-# Replace 'your_directory_path' with the path to the directory containing the CSV files
-directory_path = '/Users/samoylovartem/Documents/Data/Addresses'
+directory_path = '/Users/samoylovartem/Documents/Data/Splitted addresses'
 total_records = count_csv_records(directory_path)
 
 print(f'Total records in all CSV files: {total_records}')

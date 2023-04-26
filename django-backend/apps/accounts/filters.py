@@ -61,4 +61,10 @@ class AccountsFilterSet(filters.FilterSet):
             'phone': CHAR_LOOKUPS,
             'password_reset': BOOL_LOOKUPS,
             'active_tickets_inside': BOOL_LOOKUPS,
+            'delta_created': BOOL_LOOKUPS,
+            'air_france_created': BOOL_LOOKUPS,
+            'aeromexico_created': BOOL_LOOKUPS,
+            'avianca_created': BOOL_LOOKUPS,
+            'korean_air_created': BOOL_LOOKUPS,
+            'china_airlines_created': BOOL_LOOKUPS,
         }
