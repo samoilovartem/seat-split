@@ -69,6 +69,6 @@ class MobileNumberTransaction(UUIDMixin, TimeStampedMixin):
         ordering = ['-created_at']
         unique_together = ['phone', 'order_id']
         permissions = (
-            ('import_accounts', 'Can import'),
-            ('export_accounts', 'Can export'),
+            ('import_mobile_numbers', 'Can import'),
+            ('export_mobile_numbers', 'Can export'),
         )

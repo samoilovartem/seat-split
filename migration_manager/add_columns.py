@@ -3,7 +3,7 @@ import pandas as pd
 path_to_save = 'prepared_accounts/'
 
 # ================================= READING CSV FILE ======================================
-path_to_read = '/Users/samoylovartem/Documents/Data migration/1000aged accounts -clean (997 rows).csv'
+path_to_read = '/Users/samoylovartem/Documents/Data migration/500 aged hotmail.csv'
 df = pd.read_csv(path_to_read, sep=',', keep_default_na=False)
 
 
@@ -21,6 +21,8 @@ keys_to_add = {
     "first_name": "NA",
     "last_name": "NA",
     "type": "TMVERIFIEDACCOUNT",
+    "delta_miles": "NA",
+    "flyingblue_miles": "NA",
     "delta_created": False,
     "delta_password": "NA",
     "air_france_created": False,
@@ -63,9 +65,9 @@ keys_to_add = {
     "created_by": "Muhammad Mateen",
     "edited_by": "Muhammad Mateen",
     "ld_computer_used": "NA",
-    "created_at": "2023-04-07",
-    "last_opened": "2023-04-07",
-    "comments": "997 TM verified accounts",
+    "created_at": "2023-04-27",
+    "last_opened": "2023-04-27",
+    "comments": "500 TM verified accounts",
     "phone": "NA",
     "tickets_com_password": "NA",
     "password_reset": True,
@@ -81,4 +83,4 @@ df = df.assign(**keys_to_add)
 df['recovery_email'] = df['forward_to']
 
 
-df.to_csv(path_to_save + '997 accounts.csv', index=False)
+df.to_csv(path_to_save + '500 accounts.csv', index=False)

@@ -49,6 +49,6 @@ class USAddresses(UUIDMixin, TimeStampedMixin, models.Model):
         ordering = ['state']
         unique_together = ['line', 'city']
         permissions = (
-            ('import_accounts', 'Can import'),
-            ('export_accounts', 'Can export'),
+            ('import_us_addresses', 'Can import'),
+            ('export_us_addresses', 'Can export'),
         )

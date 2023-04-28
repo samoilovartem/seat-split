@@ -22,7 +22,7 @@ include(
     'components/simple_jwt.py',
     'components/import_export.py',
     'components/query_count.py',
-    'components/django-filters.py',
+    'components/django_filters.py',
     'components/swagger.py',
     'components/logger.py',
 )
@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'apps.mobile_numbers.apps.MobileNumbersConfig',
     'apps.email_domains.apps.EmailDomainsConfig',
     'apps.us_addresses.apps.UsAddressesConfig',
+    'apps.venues.apps.VenuesConfig',
 ]
 
 if DEBUG:

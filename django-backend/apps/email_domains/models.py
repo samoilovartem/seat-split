@@ -56,6 +56,6 @@ class EmailDomains(UUIDMixin, TimeStampedMixin):
         verbose_name_plural = 'Email Domains'
         ordering = ['-created_at']
         permissions = (
-            ('import_accounts', 'Can import'),
-            ('export_accounts', 'Can export'),
+            ('import_email_domains', 'Can import'),
+            ('export_email_domains', 'Can export'),
         )

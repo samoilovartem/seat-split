@@ -18,8 +18,6 @@ class AllAccountsViewSet(ModelViewSet):
     filterset_class = AccountsFilterSet
     search_fields = [
         'email',
-        'first_name',
-        'last_name',
         'comments',
     ]
     ordering_fields = [
@@ -56,7 +54,7 @@ class AllAccountsViewSet(ModelViewSet):
             model_name='Accounts',
             resource=AccountsResource,
             duplicate_check_column='email',
-            exclude_fields=['updated_at'],
+            exclude_fields=['updated_at', 'id'],
         )
         response = csv_importer.import_file()
         return response
