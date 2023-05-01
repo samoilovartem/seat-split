@@ -28,7 +28,7 @@ include(
 )
 
 INSTALLED_APPS = [
-    # Django standard apps
+    # ---- Django standard apps ---- #
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
-    # Third party apps
+    # ---- Third party apps ---- #
     'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django_truncate',
     'corsheaders',
     'simple_history',
-    # Project's apps
+    # ---- Project's apps ---- #
     'apps.cards.apps.CardsConfig',
     'apps.accounts.apps.AccountsConfig',
     'apps.users.apps.UsersConfig',

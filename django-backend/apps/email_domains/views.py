@@ -4,11 +4,15 @@ from rest_framework.response import Response
 
 from django.db.models import Prefetch
 
+from apps.common_services.utils import records_per_value
 from apps.email_domains.models import EmailDomains
 from apps.email_domains.serializers import EmailDomainsSerializer
-from apps.email_domains.utils import DataGenerator
+from apps.email_domains.services.data_generator import DataGenerator
+from apps.email_domains.services.utils import (
+    generate_random_email_data,
+    get_random_domain_name,
+)
 from apps.users.models import User
-from apps.utils.utils import records_per_value
 
 
 class AllEmailDomainsViewSet(FlexFieldsModelViewSet):
@@ -56,15 +60,11 @@ class AllEmailDomainsViewSet(FlexFieldsModelViewSet):
 
     @action(methods=['GET'], detail=False)
     def generate_random_data(self, request):
-        domain_name = (
-            EmailDomains.objects.values_list('domain_name', flat=True)
-            .order_by('?')
-            .first()
-        )
+        domain_name = get_random_domain_name()
+
         if not domain_name:
             return Response({'error': 'No email domains are available'})
 
-        generator = DataGenerator(domain_name)
-        data = generator.generate_data()
+        data = generate_random_email_data(domain_name)
 
         return Response(data)

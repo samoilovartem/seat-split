@@ -2,8 +2,8 @@ from import_export.resources import modelresource_factory
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 
-from apps.utils.duplicate_checker import DuplicateChecker
-from apps.utils.file_importer import CSVImporter
+from apps.common_services.duplicate_checker import DuplicateChecker
+from apps.common_services.file_importer import CSVImporter
 from apps.venues.models import Venues
 from apps.venues.serializers import VenuesSerializer
 

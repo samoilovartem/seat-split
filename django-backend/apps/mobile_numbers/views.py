@@ -5,11 +5,11 @@ from rest_framework.response import Response
 from django.db.models import Prefetch
 
 from apps.accounts.models import Accounts
+from apps.common_services.utils import records_per_value
 from apps.mobile_numbers.filters import MobileNumbersFilterSet
 from apps.mobile_numbers.models import MobileNumberTransaction
 from apps.mobile_numbers.serializers import MobileNumbersSerializer
 from apps.users.models import User
-from apps.utils.utils import records_per_value
 
 
 class AllMobileNumbersViewSet(FlexFieldsModelViewSet):

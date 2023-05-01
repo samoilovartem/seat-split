@@ -6,7 +6,7 @@ import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
 
-import apps.utils.validators
+import apps.common_services.validators
 
 
 class Migration(migrations.Migration):
@@ -31,28 +31,31 @@ class Migration(migrations.Migration):
                 (
                     'parent_card',
                     models.CharField(
-                        max_length=150, validators=[apps.utils.validators.any_or_na]
+                        max_length=150,
+                        validators=[apps.common_services.validators.any_or_na],
                     ),
                 ),
                 (
                     'card_number',
                     models.CharField(
                         max_length=16,
-                        validators=[apps.cards.validators.clean_card_number],
+                        validators=[apps.cards.services.validators.clean_card_number],
                     ),
                 ),
                 (
                     'expiration_date',
                     models.CharField(
                         max_length=5,
-                        validators=[apps.cards.validators.clean_expiration_date],
+                        validators=[
+                            apps.cards.services.validators.clean_expiration_date
+                        ],
                     ),
                 ),
                 (
                     'cvv_number',
                     models.CharField(
                         max_length=4,
-                        validators=[apps.cards.validators.clean_cvv_number],
+                        validators=[apps.cards.services.validators.clean_cvv_number],
                     ),
                 ),
                 ('created_at', models.DateField(blank=True, editable=False)),
@@ -61,7 +64,8 @@ class Migration(migrations.Migration):
                 (
                     'specific_team',
                     models.CharField(
-                        max_length=100, validators=[apps.utils.validators.any_or_na]
+                        max_length=100,
+                        validators=[apps.common_services.validators.any_or_na],
                     ),
                 ),
                 ('address', models.CharField(max_length=255)),
@@ -69,13 +73,15 @@ class Migration(migrations.Migration):
                 (
                     'state',
                     models.CharField(
-                        max_length=2, validators=[apps.cards.validators.clean_state]
+                        max_length=2,
+                        validators=[apps.cards.services.validators.clean_state],
                     ),
                 ),
                 (
                     'zip_code',
                     models.CharField(
-                        max_length=5, validators=[apps.cards.validators.clean_zip_code]
+                        max_length=5,
+                        validators=[apps.cards.services.validators.clean_zip_code],
                     ),
                 ),
                 ('in_tm', models.BooleanField(default=False)),

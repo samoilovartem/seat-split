@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 
-import apps.utils.validators
+import apps.common_services.validators
 
 
 class Migration(migrations.Migration):
@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             field=models.CharField(
                 default='NA',
                 max_length=32,
-                validators=[apps.utils.validators.any_or_na],
+                validators=[apps.common_services.validators.any_or_na],
             ),
         ),
         migrations.AddField(
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
             field=models.CharField(
                 default='NA',
                 max_length=32,
-                validators=[apps.utils.validators.any_or_na],
+                validators=[apps.common_services.validators.any_or_na],
             ),
         ),
     ]

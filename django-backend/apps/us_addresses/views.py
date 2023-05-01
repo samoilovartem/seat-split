@@ -5,10 +5,12 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR
 from rest_framework.viewsets import GenericViewSet
 
+from apps.common_services.file_importer import CSVImporter
 from apps.us_addresses.models import USAddresses
 from apps.us_addresses.serializers import USAddressSerializer
-from apps.us_addresses.utils import AddressesWithinDistanceHandler
-from apps.utils.file_importer import CSVImporter
+from apps.us_addresses.services.get_address_within_distance import (
+    AddressesWithinDistanceHandler,
+)
 
 
 class AddressesWithinDistanceViewSet(GenericViewSet, ListAPIView):
