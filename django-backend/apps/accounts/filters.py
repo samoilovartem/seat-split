@@ -1,13 +1,12 @@
-from django_filters import rest_framework as filters
+from django_filters import LookupChoiceFilter
+from django_filters.rest_framework import FilterSet
 
 from apps.accounts.models import Accounts
 from config.settings import BOOL_LOOKUPS, CHAR_LOOKUPS, DATE_AND_ID_LOOKUPS
 
 
-class AccountsFilterSet(filters.FilterSet):
-    phone = filters.LookupChoiceFilter(
-        field_name='phone', lookup_choices=[('exclude', 'NA')]
-    )
+class AccountsFilterSet(FilterSet):
+    phone = LookupChoiceFilter(field_name='phone', lookup_choices=[('exclude', 'NA')])
 
     class Meta:
         model = Accounts
