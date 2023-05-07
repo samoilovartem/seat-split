@@ -16,16 +16,16 @@ cd .. && cd django-backend
 
 if [ "$number" -eq 1 ]
   then
-    coverage run manage.py test -v 2 && coverage report
+    docker exec -it django bash -c "coverage run manage.py test -v 2 && coverage report"
 elif [ "$number" -eq 2 ]
   then
-    coverage run manage.py test -v 2 && coverage report && coverage html
+    docker exec -it django bash -c "coverage run manage.py test -v 2 && coverage report && coverage html"
 elif [ "$number" -eq 3 ]
   then
-    python manage.py test
+    docker exec -it django bash -c "python manage.py test"
 elif [ "$number" -eq 4 ]
   then
-    python manage.py test --parallel
+    docker exec -it django bash -c "python manage.py test --parallel"
 else
     echo "${GREEN}Wrong input. Please try again${NC}"
 fi

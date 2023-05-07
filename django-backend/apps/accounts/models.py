@@ -1,11 +1,8 @@
 from simple_history.models import HistoricalRecords
 
-from django.contrib.auth import get_user_model
 from django.db import models
 
 from apps.common_services.validators import any_or_na
-
-User = get_user_model()
 
 
 class Accounts(models.Model):
@@ -104,8 +101,3 @@ class Accounts(models.Model):
             ('import_accounts', 'Can import'),
             ('export_accounts', 'Can export'),
         )
-        # indexes = [
-        #     models.Index(fields=('last_name', 'first_name',), name='accounts_last_first_name_idx'),
-        #     models.Index(fields=('email',), name='accounts_email_idx'),
-        #     models.Index(fields=('last_opened',), name='accounts_last_opened_idx'),
-        # ]
