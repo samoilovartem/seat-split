@@ -1,10 +1,10 @@
-from django_filters import rest_framework as filters
+from django_filters.rest_framework import FilterSet
 
 from apps.cards.models import Cards
 from config.settings import BOOL_LOOKUPS, CHAR_LOOKUPS, DATE_AND_ID_LOOKUPS
 
 
-class CardsFilterSet(filters.FilterSet):
+class CardsFilterSet(FilterSet):
     class Meta:
         model = Cards
         fields = {

@@ -30,7 +30,10 @@ class AccountsTest(APITestCase):
     @classmethod
     def setUpTestData(cls):
         call_command('loaddata', 'apps/accounts/tests/fixtures/accounts_fixture.json')
-        call_command('loaddata', 'apps/accounts/tests/fixtures/superuser_fixture.json')
+        call_command(
+            'loaddata',
+            'apps/common_services/common_test_fixtures/superuser_fixture.json',
+        )
 
     def setUp(self):
         self.superuser = get_user_model().objects.get(pk=1)
