@@ -1,4 +1,3 @@
-from rest_framework import status
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
@@ -67,6 +66,7 @@ class CreateAccountTest(AccountsTest):
         Expected: True
         """
         response = self.client.get(path=ACCOUNT_DETAIL_URL)
+
         self.assertEqual(response.status_code, HTTP_200_OK)
         self.assertEqual(self.account.email, ACCOUNTS_FULL_VALID_TEST_DATA.get('email'))
 
@@ -85,7 +85,9 @@ class CreateAccountTest(AccountsTest):
             with self.subTest(field=field):
                 invalid_data = ACCOUNTS_FULL_VALID_TEST_DATA.copy()
                 invalid_data.update({field: ''})
+
                 response = self.client.post(path=ACCOUNTS_LIST_URL, data=invalid_data)
+
                 self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
                 self.assertIn(
                     member='This field may not be blank.',
@@ -107,8 +109,10 @@ class CreateAccountTest(AccountsTest):
             with self.subTest(field=field):
                 invalid_data = ACCOUNTS_FULL_VALID_TEST_DATA.copy()
                 invalid_data.update({field: 'test'})
+
                 response = self.client.post(path=ACCOUNTS_LIST_URL, data=invalid_data)
-                self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+                self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
                 self.assertIn(
                     member='Must be a valid boolean.',
                     container=response.data.get(field),
@@ -126,9 +130,11 @@ class CreateAccountTest(AccountsTest):
             # Test with an empty date field
             data_with_empty_date = ACCOUNTS_FULL_VALID_TEST_DATA.copy()
             data_with_empty_date[field] = ''
+
             response = self.client.post(
                 path=ACCOUNTS_LIST_URL, data=data_with_empty_date
             )
+
             self.assertEqual(
                 response.status_code,
                 HTTP_400_BAD_REQUEST,
@@ -138,9 +144,11 @@ class CreateAccountTest(AccountsTest):
             # Test with an invalid date format
             data_with_invalid_date = ACCOUNTS_FULL_VALID_TEST_DATA.copy()
             data_with_invalid_date[field] = 'invalid_date'
+
             response = self.client.post(
                 path=ACCOUNTS_LIST_URL, data=data_with_invalid_date
             )
+
             self.assertEqual(
                 response.status_code,
                 HTTP_400_BAD_REQUEST,
@@ -150,9 +158,11 @@ class CreateAccountTest(AccountsTest):
             # Test with a valid date
             data_with_valid_date = ACCOUNTS_FULL_VALID_TEST_DATA.copy()
             data_with_valid_date[field] = '2023-05-07'
+
             response = self.client.post(
                 path=ACCOUNTS_LIST_URL, data=data_with_valid_date
             )
+
             self.assertEqual(
                 response.status_code,
                 HTTP_201_CREATED,
@@ -183,6 +193,7 @@ class ReadAccountTest(AccountsTest):
         Expected: True
         """
         response = self.client.get(path=ACCOUNT_DETAIL_URL)
+
         self.assertEqual(response.status_code, HTTP_200_OK)
         self.assertEqual(self.account.email, ACCOUNTS_FULL_VALID_TEST_DATA.get('email'))
 
@@ -202,7 +213,9 @@ class UpdateAccountTest(AccountsTest):
         Expected: True
         """
         data_to_update = {'email': 'PARTIALLY_UPDATED@test.com'}
+
         response = self.client.patch(path=ACCOUNT_DETAIL_URL, data=data_to_update)
+
         self.assertEqual(response.status_code, HTTP_200_OK)
         self.assertEqual(Accounts.objects.get(pk=1).email, data_to_update.get('email'))
 
@@ -213,7 +226,9 @@ class UpdateAccountTest(AccountsTest):
         """
         data_to_update = ACCOUNTS_FULL_VALID_TEST_DATA
         data_to_update.update({'email': 'UPDATED@test.com'})
+
         response = self.client.put(path=ACCOUNT_DETAIL_URL, data=data_to_update)
+
         self.assertEqual(response.status_code, HTTP_200_OK)
         self.assertEqual(Accounts.objects.get(pk=1).email, data_to_update.get('email'))
 
@@ -233,5 +248,6 @@ class DeleteAccountTest(AccountsTest):
         Expected: True
         """
         response = self.client.delete(path=ACCOUNT_DETAIL_URL)
+
         self.assertEqual(response.status_code, HTTP_204_NO_CONTENT)
         self.assertEqual(Accounts.objects.all().count(), 0)

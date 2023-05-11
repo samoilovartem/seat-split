@@ -14,11 +14,9 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'apps.common_services.permissions.CustomDjangoModelPermissions',
-        # 'rest_framework_api_key.permissions.HasAPIKey',
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend',
         'apps.filters.NotEqualFilterBackend',
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',

@@ -3,6 +3,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 class NotEqualFilterBackend(DjangoFilterBackend):
     def filter_queryset(self, request, queryset, view):
+        queryset = super().filter_queryset(request, queryset, view)
+
         exclude_columns = request.query_params.get('exclude_columns', '')
         exclude_values = request.query_params.get('exclude_values', '')
 
