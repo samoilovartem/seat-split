@@ -6,5 +6,5 @@ us_address_router = SimpleRouter()
 us_address_router.register(
     r'addresses_within_distance',
     AddressesWithinDistanceViewSet,
-    basename='addresses_within_distance',
+    basename='addresses-within-distance',
 )
