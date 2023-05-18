@@ -1,4 +1,5 @@
 import pandas as pd
+from loguru import logger
 
 
 def merge_files(files: list[str], output_file: str):
@@ -17,9 +18,9 @@ def merge_files(files: list[str], output_file: str):
 
     unique_df.to_csv(output_file, index=False)
 
-    print(f'Merged {len(files)} files into {output_file} with no duplicates.')
-    print(f'Number of duplicates: {num_duplicates}')
-    print(f'Number of unique records: {num_unique_records}')
+    logger.info('Merged {} files into {} with no duplicates.', len(files), output_file)
+    logger.info('Number of duplicates: {}', num_duplicates)
+    logger.info('Number of unique records: {}', num_unique_records)
 
 
 if __name__ == '__main__':

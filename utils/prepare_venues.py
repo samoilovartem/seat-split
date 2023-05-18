@@ -2,6 +2,10 @@ import os
 from re import match
 
 import pandas as pd
+from dotenv import load_dotenv
+from loguru import logger
+
+load_dotenv()
 
 
 def remove_scientific_notation(value):
@@ -10,7 +14,7 @@ def remove_scientific_notation(value):
     return value
 
 
-file_path = '/Users/samoylovartem/Documents/Data/Venues/Skybox_Venues.csv'
+file_path = os.environ.get('PREPARE_VENUES_FILE_PATH')
 data = pd.read_csv(file_path)
 
 data['phone'] = data['phone'].replace('#ERROR!', '')
@@ -38,4 +42,4 @@ for i in range(num_files):
     output_file_path = os.path.join(input_directory, output_file_name)
     data_slice.to_csv(output_file_path, index=False)
 
-print(f'Data processed and saved to {num_files} files.')
+logger.info('Data processed and saved to {} files.', num_files)

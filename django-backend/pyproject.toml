@@ -41,6 +41,8 @@ whitenoise = "^6.3.0"
 coverage = "^7.2"
 pre-commit = "^3.2"
 pandas = "^2.0"
+aiohttp = "^3.8.4"
+loguru = "^0.7.0"
 
 
 [tool.isort]

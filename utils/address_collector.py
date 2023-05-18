@@ -3,6 +3,7 @@ import os
 
 import requests
 from dotenv import find_dotenv, load_dotenv
+from loguru import logger
 
 load_dotenv(find_dotenv())
 
@@ -31,8 +32,8 @@ class AddressCollector:
         payload = self._build_payload(offset)
         response = requests.post(self.url, json=payload, headers=self.headers)
 
-        if response.headers.get("Content-Type") != "application/json":
-            print(f"Error: Unexpected content type at offset {offset}")
+        if response.headers.get('Content-Type') != 'application/json':
+            logger.error('Unexpected content type at offset {}', offset)
             return {'data': {'home_search': {'total': 0, 'results': []}}}
 
         data = response.json()
@@ -68,7 +69,7 @@ class AddressCollector:
 
     def collect_all_addresses(self):
         total_available_records = self.get_total_records()
-        print(f'Total available records: {total_available_records}')
+        logger.info('Total available records: {}', total_available_records)
 
         offset = 0
         total_records = 0
@@ -92,7 +93,7 @@ class AddressCollector:
             writer.writeheader()
 
             while more_records:
-                print(f'Fetching records with offset: {offset}')
+                logger.info('Fetching records with offset: {}', offset)
                 data = self.fetch_addresses(offset)
                 total = data.get('data', {}).get('home_search', {}).get('total', 0)
                 results = data.get('data', {}).get('home_search', {}).get('results', [])
@@ -114,7 +115,7 @@ class AddressCollector:
                 ):
                     more_records = False
 
-        print(f'Saved {total_records} addresses to {self.file_name}')
+        logger.info('Saved {} addresses to {}', total_records, self.file_name)
         return total_records
 
     def _process_result(self, result):
@@ -150,7 +151,7 @@ if __name__ == '__main__':
 
     collector = AddressCollector(
         url=api_url,
-        state_code='WY',
+        state_code='NY',
         headers=api_headers,
         file_name='addresses',
         max_records=20000,
@@ -158,4 +159,4 @@ if __name__ == '__main__':
         sort='desc',
     )
     total_records = collector.collect_all_addresses()
-    print(f'Total records collected: {total_records}')
+    logger.info('Total records collected: {}', total_records)

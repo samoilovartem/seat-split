@@ -1,6 +1,13 @@
 import os
 
 import pandas as pd
+from dotenv import load_dotenv
+
+load_dotenv()
+
+INPUT_DIRECTORY_PATH = os.environ.get('SPLIT_FILES_INPUT_DIRECTORY_PATH')
+OUTPUT_DIRECTORY_PATH = os.environ.get('SPLIT_FILES_OUTPUT_DIRECTORY_PATH')
+records_per_file = 3500
 
 
 def split_csv_files(input_directory, output_directory, records_per_file):
@@ -37,9 +44,5 @@ def split_csv_files(input_directory, output_directory, records_per_file):
                 df.to_csv(output_file_path, index=False)
 
 
-input_directory_path = '/Users/samoylovartem/Documents/Data/Addresses'
-output_directory_path = '/Users/samoylovartem/Documents/Data/Splitted addresses'
-records_per_file = 3500
-
 if __name__ == '__main__':
-    split_csv_files(input_directory_path, output_directory_path, records_per_file)
+    split_csv_files(INPUT_DIRECTORY_PATH, OUTPUT_DIRECTORY_PATH, records_per_file)
