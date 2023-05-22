@@ -7,29 +7,25 @@ WORKDIR /app
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    NEW_RELIC_CONFIG_FILE=newrelic.ini \
-    NEW_RELIC_ENVIRONMENT=production \
-    NEW_RELIC_LOG=stdout \
-    NEW_RELIC_LOG_LEVEL=info \
     POETRY_VERSION=1.4.2 \
-    GUNICORN_TIMEOUT=30
+    GUNICORN_TIMEOUT=0
 
 RUN apt-get update && \
-    apt-get install -y binutils libproj-dev gdal-bin
+    apt-get install -y binutils libproj-dev gdal-bin && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip install --upgrade pip
 
 RUN pip install "poetry==$POETRY_VERSION"
 
 COPY poetry.lock pyproject.toml ./
 
 RUN poetry config virtualenvs.create false && \
-    poetry install --no-dev
+    poetry install --no-install
 
 COPY . .
 
 RUN python manage.py collectstatic --noinput
 
-RUN adduser --disabled-password samoylovartem
-USER samoylovartem
-
 CMD python manage.py migrate --noinput && \
-    newrelic-admin run-program gunicorn --timeout $GUNICORN_TIMEOUT --bind 0.0.0.0:$PORT config.wsgi:application
+    gunicorn --timeout $GUNICORN_TIMEOUT --bind 0.0.0.0:$PORT config.wsgi:application
