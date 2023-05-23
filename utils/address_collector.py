@@ -151,7 +151,7 @@ if __name__ == '__main__':
 
     collector = AddressCollector(
         url=api_url,
-        state_code='NY',
+        state_code='TX',
         headers=api_headers,
         file_name='addresses',
         max_records=20000,
