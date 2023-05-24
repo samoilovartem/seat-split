@@ -52,6 +52,7 @@ jobs:
           status: Failure
           fields: repo,commit,author,action,eventName,ref,workflow,job,took
         env:
+          github_token: ${{ secrets.GH_PAT }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   notify_success:
@@ -65,4 +66,5 @@ jobs:
           status: Success
           fields: repo,commit,author,action,eventName,ref,workflow,job,took
         env:
+          github_token: ${{ secrets.GH_PAT }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
