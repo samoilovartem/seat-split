@@ -10,7 +10,7 @@ jobs:
       - uses: TrueBrain/actions-flake8@v2
         with:
           max_line_length: 110
-          ignore: E203, E266, E501, W503, W605
+          ignore: E203,E266,E501,W503,W605
 
   black_isort:
     needs: flake8
