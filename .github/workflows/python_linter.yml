@@ -1,0 +1,68 @@
+name: Python Linter
+
+on: [pull_request]
+
+jobs:
+  flake8:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: TrueBrain/actions-flake8@v2
+        with:
+          max_line_length: 110
+          ignore: E203, E266, E501, W503, W605
+
+  black_isort:
+    needs: flake8
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black isort
+      - name: Run black and isort
+        run: |
+          python -m isort .
+          python -m black .
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GH_PAT }}
+          title: "Format Python code with psf/black push"
+          commit-message: ":art: Format Python code with psf/black"
+          body: |
+            There appear to be some python formatting errors in ${{ github.sha }}. This pull request
+            uses the [psf/black](https://github.com/psf/black) formatter to fix these issues.
+          base: ${{ github.head_ref }}
+          branch: actions/black
+
+  notify_flake8_failure:
+    runs-on: ubuntu-latest
+    needs: flake8
+    if: ${{ always() && needs.flake8.result == 'failure' }}
+    steps:
+      - name: Notify flake8 failure on Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: Failure
+          fields: repo,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  notify_success:
+    runs-on: ubuntu-latest
+    needs: [flake8, black_isort]
+    if: ${{ always() && needs.flake8.result == 'success' && needs.black_isort.result == 'success' }}
+    steps:
+      - name: Notify success on Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: Success
+          fields: repo,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
