@@ -53,7 +53,8 @@ jobs:
           fields: repo,commit,author,action,eventName,ref,workflow,job,took
           author_name: 8398a7@action-slack
           github_token: ${{ secrets.GH_PAT }}
-          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   notify_success:
     runs-on: ubuntu-latest
@@ -67,4 +68,5 @@ jobs:
           fields: repo,commit,author,action,eventName,ref,workflow,job,took
           author_name: 8398a7@action-slack
           github_token: ${{ secrets.GH_PAT }}
-          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
