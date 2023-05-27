@@ -24,12 +24,6 @@ services:
       - ./django-backend/.env.dev
     volumes:
       - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
-      interval: 10s
-      timeout: 3s
-      retries: 3
-      start_period: 10s
     ports:
       - "${POSTGRES_PORT_HOST}:${POSTGRES_PORT_CONTAINER}"
     restart: unless-stopped
