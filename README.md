@@ -2,14 +2,14 @@
 
 ### Description:
 
-This project is a CRM Django backend that provides API endpoints and functionalities for managing users, groups, accounts, cards and mobile transactions. It uses Django as the framework, Django Rest Framework for API creation, and Simple JWT for authentication.
+This project is a CRM Django backend that provides API endpoints and functionalities for managing users, groups, accounts, cards, mobile transactions, email domains, US addresses and venues addresses. It uses Django as the framework, Django Rest Framework for API creation, and poetry as a dependencies manager.
 
 ### Installation:
 
 1. Clone the repository from GitHub.
 2. Create `.env.prod` and `.env.dev` in django-backend directory using `.env.prod.example` and `.env.dev.example`.
 3. Install Docker and launch the daemon.
-4. Cd to project's root and run `docker compose up`.
+4. Cd to project's root and run `docker compose up --build`.
 
 ### Project structure:
 #### Directories:
@@ -68,26 +68,15 @@ This project is a CRM Django backend that provides API endpoints and functionali
 Also, you can simply run `docker_deploy.sh`and script will complete these 3 commands for you.
 
 ### Tests:
-We have multiple tests (CRUD) for these categories:
-1. Users
-2. Groups
-3. Accounts
-4. Cards
+We have multiple tests (CRUD) for these apps:
+1. users
+2. groups
+3. accounts
+4. cards
 
-All tests are tagged by its own category to be able to run them separately. For example this command will run all tests tagged as "users":\
-`python manage.py test --tag=users`
+Additionally, there are some tests for address_within_distance viewset (us_addresses)
 
-In order to speed up all tests we can use threads:\
-`python manage.py test --parallel`
-
-Though the better way to run tests is to use `coverage` package, which is already installed (check requirements.txt).
-
-To get full detailed report with html output use this command:\
-`coverage run manage.py test -v 2 && coverage report && coverage html`
-
-HTML report can be viewed in **_htmlcov/index.html_**
-
-Also, you can simply run `run_tests.sh`and choose from provided options.
+To launch tests simply run `run_tests.sh`and choose from provided options.
 
 
 #### Useful notes:

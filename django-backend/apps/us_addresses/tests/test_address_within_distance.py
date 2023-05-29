@@ -9,7 +9,7 @@ from apps.us_addresses.models import USAddresses
 from apps.us_addresses.tests.settings import US_ADDRESSES_BASE_URL
 
 
-@tag('accounts', 'authenticated', 'authorized')
+@tag('us_addresses', 'authenticated', 'authorized')
 class USAddressTest(APITestCase):
     """
     Account parent test class that inherits from APITestCase and has 'setUp' method
