@@ -7,6 +7,17 @@ from apps.common_services.utils import get_model_fields
 
 
 class CSVImporter:
+    """
+    CSVImporter is a utility class that imports data from a CSV file into a Django model.
+
+    Attributes:
+        request: Django HttpRequest object.
+        app_name: String representing Django app name where the model is located.
+        model_name: String representing Django model name where the data will be imported.
+        resource: Tablib Dataset instance containing the imported data.
+        duplicate_check_column: String representing the model field to check for duplicates.
+    """
+
     def __init__(
         self,
         request,
@@ -26,6 +37,12 @@ class CSVImporter:
         self.exclude_fields = exclude_fields
 
     def import_file(self):
+        """
+        Import data from the CSV file to the specified Django model.
+
+        Returns:
+            Django Rest Framework Response object indicating the success or failure of the operation.
+        """
         if not self.file:
             return Response({'success': False, 'error': 'No file was uploaded.'})
 
@@ -79,6 +96,12 @@ class CSVImporter:
             return Response({'success': True, 'message': 'Data uploaded successfully.'})
 
     def _get_existing_records(self, duplicate_check_column_index, dataset):
+        """
+        Retrieve existing records in the model that match values in the duplicate_check_column of the CSV file.
+
+        Returns:
+            List of error messages for duplicate records.
+        """
         if not self.duplicate_check_column:
             return []
 
@@ -94,6 +117,12 @@ class CSVImporter:
         return error_messages
 
     def _get_validation_errors(self, duplicate_check_column_index, invalid_rows):
+        """
+        Retrieve validation errors for rows that failed to import.
+
+        Returns:
+            List of error messages for invalid rows.
+        """
         error_messages = []
         for invalid_row in invalid_rows:
             duplicate_check_value = invalid_row.values[duplicate_check_column_index + 1]
@@ -103,6 +132,15 @@ class CSVImporter:
         return error_messages
 
     def _load_dataset_from_file(self):
+        """
+        Load the CSV file into a tablib Dataset instance.
+
+        Returns:
+            Dataset instance containing the data from the CSV file.
+
+        Raises:
+            UnsupportedFormat: If the file is not in the correct CSV or XLSX format.
+        """
         if self.file.name.endswith('.xlsx'):
             dataset = Dataset().load(self.file.read(), format='xlsx')
         elif self.file.name.endswith('.csv'):
