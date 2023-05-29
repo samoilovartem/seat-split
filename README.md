@@ -117,7 +117,5 @@ To launch tests simply run `run_tests.sh`and choose from provided options.
 9. Safely delete an app:\
 `python manage.py migrate <app_name> zero`\
 After running this command we can delete an app from INSTALLED_APPS and delete a corresponding directory
-10. Automatically upgrade all requirements:\
-`pur -r requirements.txt`
-11. Check project's files with flake8 and black before making commit:\
+10. Check project's files with flake8 and black before making commit:\
 `pre-commit run --all-files`
