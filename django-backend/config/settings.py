@@ -111,30 +111,39 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-RUNNING_ON_GCLOUD = os.environ.get('RUNNING_ON_GCLOUD', 'False').lower() in [
-    'true',
-    '1',
-]
+# RUNNING_ON_GCLOUD = os.environ.get('RUNNING_ON_GCLOUD', 'False').lower() in [
+#     'true',
+#     '1',
+# ]
+#
+# if RUNNING_ON_GCLOUD:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.contrib.gis.db.backends.postgis',
+#             'HOST': f'/cloudsql/{os.environ.get("GCLOUD_DB_CONNECTION_NAME")}',
+#             'NAME': os.environ.get('GCLOUD_DB_NAME'),
+#             'USER': os.environ.get('GCLOUD_DB_USER'),
+#             'PASSWORD': os.environ.get('GCLOUD_DB_PASSWORD'),
+#         }
+#     }
+# else:
+#     DATABASES = {
+#         'default': dj_database_url.config(
+#             default=os.environ.get('DOCKER_PGDB_URL'),
+#             ssl_require=False if DEBUG else True,
+#             conn_max_age=600,
+#             engine='django.contrib.gis.db.backends.postgis',
+#         )
+#     }
 
-if RUNNING_ON_GCLOUD:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.contrib.gis.db.backends.postgis',
-            'HOST': f'/cloudsql/{os.environ.get("GCLOUD_DB_CONNECTION_NAME")}',
-            'NAME': os.environ.get('GCLOUD_DB_NAME'),
-            'USER': os.environ.get('GCLOUD_DB_USER'),
-            'PASSWORD': os.environ.get('GCLOUD_DB_PASSWORD'),
-        }
-    }
-else:
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=os.environ.get('DOCKER_PGDB_URL'),
-            ssl_require=False if DEBUG else True,
-            conn_max_age=600,
-            engine='django.contrib.gis.db.backends.postgis',
-        )
-    }
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get('DOCKER_PGDB_URL'),
+        ssl_require=False if DEBUG else True,
+        conn_max_age=600,
+        engine='django.contrib.gis.db.backends.postgis',
+    )
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
