@@ -1,6 +1,3 @@
-# pull official base image (platform must be linux/amd64 due to different CPU architecture between
-# local Mac M1 and server linux.
-# Alpine is not working for some reason
 FROM --platform=linux/amd64 python:3.11
 
 WORKDIR /app
