@@ -12,15 +12,15 @@ echo "Type only number:
 # shellcheck disable=SC2162
 read number
 
-cd .. && cd django-backend
+cd .. && cd django-backend || exit
 
-if [ "$number" -eq 1 ]
+if test "$number" -eq 1
   then
     poetry export -f requirements.txt --output dev-requirements.txt --without-hashes --with dev
-elif [ "$number" -eq 2 ]
+elif test "$number" -eq 2
   then
     poetry export -f requirements.txt --output prod-requirements.txt
-elif [ "$number" -eq 3 ]
+elif test "$number" -eq 3
   then
     poetry update
 else

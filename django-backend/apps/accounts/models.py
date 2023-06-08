@@ -43,6 +43,11 @@ class Accounts(models.Model):
     email_forwarding = models.BooleanField(default=False)
     auto_po_seats_scouts = models.BooleanField(default=False)
     errors_failed = models.CharField(max_length=255, validators=[any_or_na])
+
+    am_created = models.BooleanField(default=False)
+    am_password = models.CharField(max_length=255, validators=[any_or_na])
+    paciolan_created = models.BooleanField(default=False)
+    paciolan_password = models.CharField(max_length=255, validators=[any_or_na])
     tm_created = models.BooleanField(default=False)
     tm_password = models.CharField(max_length=32, validators=[any_or_na])
     tm_address = models.CharField(max_length=255, validators=[any_or_na], default='NA')

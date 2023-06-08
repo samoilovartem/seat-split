@@ -22,56 +22,56 @@ read number
 
 cd ..
 
-if [ "$number" -eq 1 ]
+if test "$number" -eq 1
   then
     heroku pg:backups --app django-docker
-elif [ "$number" -eq 2 ]
+elif test "$number" -eq 2
   then
     echo "${GREEN}Please send a correct backup ID${NC}"
     read -r backup_id
     heroku pg:backups:info "$backup_id" --app django-docker
-elif [ "$number" -eq 3 ]
+elif test "$number" -eq 3
   then
     heroku pg:backups:download --app django-docker
-elif [ "$number" -eq 4 ]
+elif test "$number" -eq 4
   then
     echo "${GREEN}Please send a correct backup ID${NC}"
     read -r backup_id
     heroku pg:backups:url "$backup_id" --app django-docker
-elif [ "$number" -eq 5 ]
+elif test "$number" -eq 5
   then
     heroku pg:backups:capture --app django-docker
-elif [ "$number" -eq 6 ]
+elif test "$number" -eq 6
   then
     heroku pg:backups:cancel
-elif [ "$number" -eq 7 ]
+elif test "$number" -eq 7
   then
     heroku pg:backups:schedule DATABASE_URL --at '07:00 Asia/Manila' --app django-docker
-elif [ "$number" -eq 8 ]
+elif test "$number" -eq 8
   then
     heroku pg:backups:unschedule DATABASE_URL --app django-docker
-elif [ "$number" -eq 9 ]
+elif test "$number" -eq 9
   then
     heroku pg:backups:schedules --app django-docker
-elif [ "$number" -eq 10 ]
+elif test "$number" -eq 10
   then
     echo "${GREEN}Please send a correct backup ID${NC}"
     read -r backup_id
     echo "${GREEN}Are you sure you want to proceed? (yes/no)${NC}"
     read -r answer
-    if [ "$answer" = "yes" ]
+    if test "$answer" = "yes"
       then
         heroku pg:backups:restore "$backup_id" DATABASE_URL --app django-docker
     else
         echo "${GREEN}The transaction is cancelled${NC}"
     fi
-elif [ "$number" -eq 11 ]
+elif test "$number" -eq 11
   then
     echo "${GREEN}Please send a correct backup ID${NC}"
     read -r backup_id
     echo "${GREEN}Are you sure you want to delete backup ${backup_id}? (yes/no)${NC}"
     read -r answer
-    if [ "$answer" = "yes" ]
+    if test "$answer" = "yes"
       then
         heroku pg:backups:delete "$backup_id" --app django-docker
     else

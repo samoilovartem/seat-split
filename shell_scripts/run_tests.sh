@@ -3,7 +3,7 @@
 NC='\033[0m'
 GREEN='\033[0;32m'
 
-if [ "$1" = "precommit" ]; then
+if test "$1" = "precommit"; then
   number=4
   docker_flags=""
 else
@@ -18,16 +18,16 @@ else
   docker_flags="-it"
 fi
 
-if [ "$number" -eq 1 ]
+if test "$number" -eq 1
   then
     docker exec $docker_flags django bash -c "coverage run manage.py test -v 2 && coverage report"
-elif [ "$number" -eq 2 ]
+elif test "$number" -eq 2
   then
     docker exec $docker_flags django bash -c "coverage run manage.py test -v 2 && coverage report && coverage html"
-elif [ "$number" -eq 3 ]
+elif test "$number" -eq 3
   then
     docker exec $docker_flags django bash -c "python manage.py test"
-elif [ "$number" -eq 4 ]
+elif test "$number" -eq 4
   then
     docker exec $docker_flags django bash -c "python manage.py test --parallel"
 else
