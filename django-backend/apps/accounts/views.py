@@ -1,3 +1,12 @@
+from io import StringIO
+from re import S
+from venv import logger
+
+from django.apps import apps
+from apps.common_services.csv_normalizer import (
+    apply_request_fields,
+    normalize_csv_request,
+)
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -9,7 +18,10 @@ from apps.accounts.serializers import AccountsSerializer
 from apps.common_services.duplicate_checker import DuplicateChecker
 from apps.common_services.file_exporter import CSVExporter
 from apps.common_services.file_importer import CSVImporter
-from apps.common_services.utils import records_per_value
+from apps.common_services.utils import (
+    get_skippable_fields,
+    records_per_value,
+)
 
 
 class AllAccountsViewSet(ModelViewSet):
@@ -17,49 +29,85 @@ class AllAccountsViewSet(ModelViewSet):
     serializer_class = AccountsSerializer
     filterset_class = AccountsFilterSet
     search_fields = [
-        'email',
-        'comments',
+        "email",
+        "comments",
     ]
     ordering_fields = [
-        'id',
-        'type',
-        'created_by',
-        'created_at',
-        'ld_computer_used',
-        'last_opened',
-        'disabled',
+        "id",
+        "type",
+        "created_by",
+        "created_at",
+        "ld_computer_used",
+        "last_opened",
+        "disabled",
     ]
-    my_tags = ['All accounts']
+    my_tags = ["All accounts"]
 
-    @action(methods=['GET'], detail=False)
+    @action(methods=["GET"], detail=False)
     def show_duplicates(self, request):
-        duplicate_checker = DuplicateChecker(model=Accounts, field='email')
+        duplicate_checker = DuplicateChecker(model=Accounts, field="email")
         return duplicate_checker.get_duplicate_summary()
 
-    @action(methods=['GET'], detail=False)
+    @action(methods=["GET"], detail=False)
     def get_accounts_per_type(self, request):
-        result = records_per_value(Accounts, 'type')
-        return Response({'results': result})
+        result = records_per_value(Accounts, "type")
+        return Response({"results": result})
 
-    @action(methods=['GET'], detail=False)
+    @action(methods=["GET"], detail=False)
     def get_accounts_per_team(self, request):
-        result = records_per_value(Accounts, 'team')
-        return Response({'results': result})
+        result = records_per_value(Accounts, "team")
+        return Response({"results": result})
 
-    @action(methods=['POST'], detail=False)
+    @action(methods=["POST"], detail=False)
     def import_file(self, request):
         csv_importer = CSVImporter(
             request,
-            app_name='accounts',
-            model_name='Accounts',
+            app_name="accounts",
+            model_name="Accounts",
             resource=AccountsResource,
-            duplicate_check_column='email',
-            exclude_fields=['updated_at', 'id'],
+            duplicate_check_column="email",
+            exclude_fields=["updated_at", "id"],
         )
         response = csv_importer.import_file()
         return response
 
-    @action(methods=['POST'], detail=False)
+    @action(methods=["POST"], detail=False)
     def export_file(self, request):
-        csv_exporter = CSVExporter(request, app_name='accounts', model_name='Accounts')
+        csv_exporter = CSVExporter(request, app_name="accounts", model_name="Accounts")
         return csv_exporter.export_file()
+
+    @action(methods=["POST"], detail=False)
+    def flexible_import_csv(self, request):
+        # TODO: CLEANUP THIS SNIPPET
+        request_fields = [
+            {key: value} for key, value in request.data.items() if key != "file"
+        ]
+
+        if not request_fields:
+            return Response({"success": False, "error": "No fields were provided."})
+
+        request = normalize_csv_request(
+            request,
+            "accounts",
+            "Accounts",
+            exclude_fields=["updated_at", "id"],
+        )
+        new_request = apply_request_fields(
+            request,
+            request_fields,
+            "accounts",
+            "Accounts",
+            exclude_fields=["updated_at", "id"],
+        )
+
+        csv_importer = CSVImporter(
+            new_request,
+            app_name="accounts",
+            model_name="Accounts",
+            resource=AccountsResource,
+            duplicate_check_column="email",
+            exclude_fields=["updated_at", "id"],
+        )
+
+        response = csv_importer.import_file()
+        return response
