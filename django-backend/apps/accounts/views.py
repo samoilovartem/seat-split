@@ -77,6 +77,8 @@ class AllAccountsViewSet(ModelViewSet):
     @action(methods=["POST"], detail=False)
     def flexible_import_csv(self, request):
         # TODO: CLEANUP THIS SNIPPET
+
+        # TODO: Abstract these methods
         request_fields = [
             {key: value} for key, value in request.data.items() if key != "file"
         ]
@@ -84,6 +86,7 @@ class AllAccountsViewSet(ModelViewSet):
         if not request_fields:
             return Response({"success": False, "error": "No fields were provided."})
 
+        # TODO: Maybe add a class that contains all the logic for this?
         request = normalize_csv_request(
             request,
             "accounts",

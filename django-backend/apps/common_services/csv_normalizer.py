@@ -26,7 +26,6 @@ def apply_request_fields(
     """
 
     # get the csv file
-
     csv_file = request.FILES.get("file").read().decode("utf-8")
 
     # convert the csv file to a dictionary
