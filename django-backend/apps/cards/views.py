@@ -15,36 +15,36 @@ from apps.users.models import User
 class AllCardsViewSet(FlexFieldsModelViewSet):
     def get_queryset(self):
         queryset = Cards.objects.all()
-        if is_expanded(self.request, 'created_by'):
+        if is_expanded(self.request, "created_by"):
             queryset = queryset.prefetch_related(
-                Prefetch('created_by', queryset=User.objects.only('id', 'username'))
+                Prefetch("created_by", queryset=User.objects.only("id", "username"))
             )
         return queryset
 
-    permit_list_expands = ['created_by']
+    permit_list_expands = ["created_by"]
     serializer_class = CardsSerializer
     filterset_class = CardsFilterSet
     search_fields = [
-        'account_assigned',
-        'type',
-        'platform',
-        'parent_card',
+        "account_assigned",
+        "type",
+        "platform",
+        "parent_card",
     ]
     ordering_fields = [
-        'id',
-        'account_assigned',
-        'team',
-        'created_by',
-        'created_at',
+        "id",
+        "account_assigned",
+        "team",
+        "created_by",
+        "created_at",
     ]
-    my_tags = ['All cards']
+    my_tags = ["All cards"]
 
-    @action(methods=['GET'], detail=False)
+    @action(methods=["GET"], detail=False)
     def show_duplicates(self, request):
-        duplicate_checker = DuplicateChecker(model=Cards, field='account_assigned')
+        duplicate_checker = DuplicateChecker(model=Cards, field="account_assigned")
         return duplicate_checker.get_duplicate_summary()
 
-    @action(methods=['GET'], detail=False)
+    @action(methods=["GET"], detail=False)
     def get_cards_per_team(self, request):
-        result = records_per_value(Cards, 'team')
-        return Response({'results': result})
+        result = records_per_value(Cards, "team")
+        return Response({"results": result})
