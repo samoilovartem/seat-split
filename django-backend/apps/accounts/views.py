@@ -2,7 +2,6 @@ from io import StringIO
 from re import S
 from venv import logger
 
-from django.apps import apps
 from apps.common_services.csv_normalizer import (
     apply_request_fields,
     normalize_csv_request,
@@ -19,7 +18,6 @@ from apps.common_services.duplicate_checker import DuplicateChecker
 from apps.common_services.file_exporter import CSVExporter
 from apps.common_services.file_importer import CSVImporter
 from apps.common_services.utils import (
-    get_skippable_fields,
     records_per_value,
 )
 
