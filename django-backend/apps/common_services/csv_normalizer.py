@@ -1,7 +1,7 @@
 from io import BytesIO
 from django.db.models.fields import NOT_PROVIDED
 from loguru import logger
-from apps.common_services.utils import get_model_fields, get_skippable_fields
+from apps.common_services.utils import get_model_fields
 from apps.common_services.csv_converter import (
     csv_to_dict,
     dict_to_csv,
