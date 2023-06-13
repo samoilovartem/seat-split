@@ -37,6 +37,7 @@ def apply_request_fields(
         {key: value} for key, value in request.data.items() if key in model_fields
     ]
 
+    # TODO: Simplify the logic for this? Maybe use filter and list comprehension?
     for row in csv_dictionary:
         for dictionaries in request_fields:
             for key, value in dictionaries.items():
@@ -93,7 +94,6 @@ def normalize_csv_request(request, app_name, model_name, exclude_fields=[]):
 
     # convert the csv file data back to a csv file
     csv_file = dict_to_csv(csv_dict)
-    logger.warning(f"csv_file: {csv_file}")
 
     new_request = request
     new_request.FILES["file"].file = BytesIO(csv_file)
