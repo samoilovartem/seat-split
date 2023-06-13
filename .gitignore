@@ -161,3 +161,4 @@ static/
 django-backend/newrelic.ini
 django-backend/.env.dev
 django-backend/.env.prod
+.vscode/settings.json
