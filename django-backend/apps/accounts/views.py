@@ -5,6 +5,7 @@ from venv import logger
 from apps.common_services.csv_normalizer import (
     apply_request_fields,
     normalize_csv_request,
+    get_request_fields,
 )
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -76,13 +77,8 @@ class AllAccountsViewSet(ModelViewSet):
 
     @action(methods=["POST"], detail=False)
     def flexible_import_csv(self, request):
-        # TODO: CLEANUP THIS SNIPPET
-
-        # TODO: Abstract these methods
-        request_fields = [
-            {key: value} for key, value in request.data.items() if key != "file"
-        ]
-
+        request_fields = get_request_fields(request)
+        
         if not request_fields:
             return Response({"success": False, "error": "No fields were provided."})
 
@@ -95,7 +91,6 @@ class AllAccountsViewSet(ModelViewSet):
         )
         new_request = apply_request_fields(
             request,
-            request_fields,
             "accounts",
             "Accounts",
             exclude_fields=["updated_at", "id"],
