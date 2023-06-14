@@ -1,14 +1,14 @@
 from io import BytesIO
 from django.db.models.fields import NOT_PROVIDED
-from requests import Request
 from loguru import logger
+from requests import Request
 from apps.common_services.utils import get_model_fields
 from apps.common_services.csv_converter import (
     csv_to_dict,
     dict_to_csv,
 )
 from django.apps import apps
-from rest_framework.response import Response
+from pandas import DataFrame as df
 
 
 def get_request_fields(request: Request) -> list:
@@ -29,11 +29,28 @@ def get_request_fields(request: Request) -> list:
     return request_fields
 
 
+def get_request_file(request):
+    return request.FILES.get("file").read().decode("utf-8")
+
+
+def set_dict_to_default(
+    dictionary: dict, default_values: dict, fallback: str = "NA"
+) -> dict:
+    for key in default_values:
+        dictionary.setdefault(key, default_values[key])
+
+    for key, value in dictionary.items():
+        dictionary[key] = (
+            fallback if isinstance(value, NOT_PROVIDED.__class__) else value
+        )
+
+    logger.warning(f"Dictionary: {dictionary}")
+
+    return dictionary
+
+
 def normalize_csv_request(
-    request: Request,
-    app_name: str,
-    model_name: str,
-    exclude_fields: list = []
+    request: Request, app_name: str, model_name: str, exclude_fields: list = []
 ) -> Request:
     """
     This function is used to normalize the request data from the frontend.
@@ -54,40 +71,32 @@ def normalize_csv_request(
     if "file" not in request.FILES:
         raise ValueError("No file was uploaded.")
 
-    # get the csv file
-    csv_file = str(request.FILES.get("file").read().decode("utf-8"))
+    csv_dict = csv_to_dict(str(get_request_file(request)))
+    csv_headers = set(csv_dict[0].keys())
 
-    # convert the csv file to a dictionary
-    csv_dict = csv_to_dict(csv_file)
-
-    # get the csv file headers
-    csv_file_headers = set(csv_dict[0].keys())
+    # get the fields in the model that are not in the csv file
     model_fields = get_model_fields(app_name, model_name, exclude_fields=exclude_fields)
+    missing_fields = [field for field in model_fields if field not in csv_headers]
 
-    # get the missing fields
-    missing_fields = [field for field in model_fields if field not in csv_file_headers]
-
-    # get default values
+    # get the default values for the missing fields and apply them to the csv file
     default_values = {
         field.name: field.default
         for field in apps.get_model(app_name, model_name)._meta.fields
         if field.name in missing_fields
     }
-
-    # add the missing fields to the csv file
     for row in csv_dict:
         [row.update({field: default_values[field]}) for field in missing_fields]
 
-    for row in csv_dict:
-        for key, value in row.items():
-            if key in default_values:
-                row[key] = default_values[key]
-            elif not value:
-                row[key] = "NA"
+    # fill in the missing values with the default values
 
-    # convert the csv file data back to a csv file
+    df(csv_dict).fillna("NA", inplace=True)
+    for row in csv_dict:
+        row = set_dict_to_default(row, default_values)
+
+    # convert the csv file back to a bytes object
     csv_file = dict_to_csv(csv_dict)
 
+    # create a new request object with the updated csv file
     new_request = request
     new_request.FILES["file"].file = BytesIO(csv_file)
 
@@ -123,28 +132,24 @@ def apply_request_fields(
         exclude_fields,
     )
 
-    # get the csv file
-    csv_file = normalized_request.FILES.get("file").read().decode("utf-8")
+    csv_file = (
+        normalized_request.FILES.get("file").read().decode("utf-8")
+    )  # get the csv file
 
-    # convert the csv file to a dictionary
-    csv_dictionary = csv_to_dict(csv_file)
+    csv_dictionary = csv_to_dict(csv_file)  # convert the csv file to a dictionary
+
+    request_fields = get_request_fields(normalized_request)
 
     model_fields = get_model_fields(app_name, model_name, exclude_fields=exclude_fields)
 
-    request_fields = get_request_fields(normalized_request)
     request_fields = [
-        {key: value} for key, value in normalized_request.data.items() if key in model_fields
+        field for field in request_fields if list(field.keys())[0] in model_fields
     ]
 
-    # TODO: Simplify the logic for this? Maybe use filter and list comprehension?
     for row in csv_dictionary:
-        for dictionaries in request_fields:
-            for key, value in dictionaries.items():
-                row[key] = value
+        [row.update(dictionaries) for dictionaries in request_fields]
 
     csv_file = dict_to_csv(csv_dictionary)
+    normalized_request.FILES.get("file").file = BytesIO(csv_file)
 
-    new_request = normalized_request
-    new_request.FILES.get("file").file = BytesIO(csv_file)
-
-    return new_request
+    return normalized_request
