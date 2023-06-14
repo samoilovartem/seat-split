@@ -71,7 +71,7 @@ class AllAccountsViewSet(ModelViewSet):
 
     @action(methods=["POST"], detail=False)
     def flexible_import_csv(self, request):
-        new_request = apply_request_fields(
+        normalized_request = apply_request_fields(
             request,
             "accounts",
             "Accounts",
@@ -79,7 +79,7 @@ class AllAccountsViewSet(ModelViewSet):
         )
 
         csv_importer = CSVImporter(
-            new_request,
+            normalized_request,
             app_name="accounts",
             model_name="Accounts",
             resource=AccountsResource,
