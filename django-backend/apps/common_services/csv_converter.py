@@ -16,10 +16,10 @@ def csv_to_dict(data: str) -> list[dict[str, str]]:
 
     # convert csv string to dataframe
     df = pd.read_csv(StringIO(data))
-    df.fillna("NA", inplace=True)
+    df.fillna('NA', inplace=True)
 
     # convert dataframe to list of dictionaries
-    return df.to_dict("records")
+    return df.to_dict('records')
 
 
 def dict_to_csv(data: list[dict[str, str]]) -> list[str]:
@@ -35,4 +35,4 @@ def dict_to_csv(data: list[dict[str, str]]) -> list[str]:
     csv = pd.DataFrame(data).to_csv(index=False)
 
     # convert to bytes
-    return csv.encode("utf-8")
+    return csv.encode('utf-8')

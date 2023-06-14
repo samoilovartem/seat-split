@@ -105,4 +105,4 @@ class AccountsAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
 
 
 admin.site.register(Accounts, AccountsAdminConfig)
-admin.site.site_header = "Lew & Dowski"
+admin.site.site_header = 'Lew & Dowski'

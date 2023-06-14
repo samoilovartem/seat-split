@@ -4,12 +4,12 @@ from config.components.global_settings import DEBUG
 
 
 class ColorizedFormatter(logging.Formatter):
-    GREEN = "\033[32m"
-    RESET = "\033[0m"
+    GREEN = '\033[32m'
+    RESET = '\033[0m'
 
     def format(self, record):
         message = super().format(record)
-        if "django.db.backends" in record.name:
+        if 'django.db.backends' in record.name:
             return self.GREEN + message + self.RESET
         return message
 

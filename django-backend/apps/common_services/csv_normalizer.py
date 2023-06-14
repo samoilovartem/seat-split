@@ -23,7 +23,7 @@ def get_request_fields(request: Request) -> list:
     """
 
     request_fields = [
-        {key: value} for key, value in request.data.items() if key != "file"
+        {key: value} for key, value in request.data.items() if key != 'file'
     ]
 
     return request_fields
@@ -39,11 +39,11 @@ def get_request_file(request: Request) -> dict:
     Returns:
         dict: A dictionary containing the data from the request file.
     """
-    return request.FILES.get("file").read().decode("utf-8")
+    return request.FILES.get('file').read().decode('utf-8')
 
 
 def set_dict_to_default(
-    dictionary: dict, default_values: dict, fallback: str = "NA"
+    dictionary: dict, default_values: dict, fallback: str = 'NA'
 ) -> dict:
     """
     Sets the values of a dictionary to the default values.
@@ -64,7 +64,7 @@ def set_dict_to_default(
             fallback if isinstance(value, NOT_PROVIDED.__class__) else value
         )
 
-    logger.warning(f"Dictionary: {dictionary}")
+    logger.warning(f'Dictionary: {dictionary}')
 
     return dictionary
 
@@ -88,8 +88,8 @@ def normalize_csv_request(
         Request: A new request object with the updated data.
     """
 
-    if "file" not in request.FILES:
-        raise ValueError("No file was uploaded.")
+    if 'file' not in request.FILES:
+        raise ValueError('No file was uploaded.')
 
     csv_dict = csv_to_dict(str(get_request_file(request)))
     csv_headers = set(csv_dict[0].keys())
@@ -108,7 +108,7 @@ def normalize_csv_request(
         [row.update({field: default_values[field]}) for field in missing_fields]
 
     # fill in the missing values with the default values
-    df(csv_dict).fillna("NA", inplace=True)
+    df(csv_dict).fillna('NA', inplace=True)
     for row in csv_dict:
         row = set_dict_to_default(row, default_values)
 
@@ -117,7 +117,7 @@ def normalize_csv_request(
 
     # create a new request object with the updated csv file
     new_request = request
-    new_request.FILES["file"].file = BytesIO(csv_file)
+    new_request.FILES['file'].file = BytesIO(csv_file)
 
     return new_request
 
@@ -141,8 +141,8 @@ def apply_request_fields(
         Request: A new request object with the updated data.
     """
 
-    if "file" not in request.FILES:
-        raise ValueError("No file was uploaded.")
+    if 'file' not in request.FILES:
+        raise ValueError('No file was uploaded.')
 
     normalized_request = normalize_csv_request(
         request,
@@ -152,7 +152,7 @@ def apply_request_fields(
     )
 
     csv_file = (
-        normalized_request.FILES.get("file").read().decode("utf-8")
+        normalized_request.FILES.get('file').read().decode('utf-8')
     )  # get the csv file
 
     csv_dictionary = csv_to_dict(csv_file)  # convert the csv file to a dictionary
@@ -169,6 +169,6 @@ def apply_request_fields(
         [row.update(dictionaries) for dictionaries in request_fields]
 
     csv_file = dict_to_csv(csv_dictionary)
-    normalized_request.FILES.get("file").file = BytesIO(csv_file)
+    normalized_request.FILES.get('file').file = BytesIO(csv_file)
 
     return normalized_request
