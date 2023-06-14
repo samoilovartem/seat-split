@@ -1,14 +1,14 @@
 from io import BytesIO
-from django.db.models.fields import NOT_PROVIDED
+
 from loguru import logger
-from requests import Request
-from apps.common_services.utils import get_model_fields
-from apps.common_services.csv_converter import (
-    csv_to_dict,
-    dict_to_csv,
-)
-from django.apps import apps
 from pandas import DataFrame as df
+from rest_framework.request import Request
+
+from django.apps import apps
+from django.db.models.fields import NOT_PROVIDED
+
+from apps.common_services.csv_converter import csv_to_dict, dict_to_csv
+from apps.common_services.utils import get_model_fields
 
 
 def get_request_fields(request: Request) -> list:
