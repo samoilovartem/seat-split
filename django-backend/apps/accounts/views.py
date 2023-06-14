@@ -77,11 +77,6 @@ class AllAccountsViewSet(ModelViewSet):
 
     @action(methods=["POST"], detail=False)
     def flexible_import_csv(self, request):
-        request_fields = get_request_fields(request)
-
-        if not request_fields:
-            return Response({"success": False, "error": "No fields were provided."})
-
         new_request = apply_request_fields(
             request,
             "accounts",
