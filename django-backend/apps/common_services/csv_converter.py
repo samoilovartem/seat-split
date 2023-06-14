@@ -1,7 +1,6 @@
 from io import BytesIO, StringIO
 import django
 import pandas as pd
-from ast import literal_eval
 
 
 def csv_to_dict(data: str) -> list[dict[str, str]]:
