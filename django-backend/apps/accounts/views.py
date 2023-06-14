@@ -78,17 +78,10 @@ class AllAccountsViewSet(ModelViewSet):
     @action(methods=["POST"], detail=False)
     def flexible_import_csv(self, request):
         request_fields = get_request_fields(request)
-        
+
         if not request_fields:
             return Response({"success": False, "error": "No fields were provided."})
 
-        # TODO: Maybe add a class that contains all the logic for this?
-        request = normalize_csv_request(
-            request,
-            "accounts",
-            "Accounts",
-            exclude_fields=["updated_at", "id"],
-        )
         new_request = apply_request_fields(
             request,
             "accounts",
