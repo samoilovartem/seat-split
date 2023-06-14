@@ -29,13 +29,33 @@ def get_request_fields(request: Request) -> list:
     return request_fields
 
 
-def get_request_file(request):
+def get_request_file(request: Request) -> dict:
+    """
+    Gets the file from a request.
+
+    Args:
+        request (Request): Request object from the endpoint.
+
+    Returns:
+        dict: A dictionary containing the data from the request file.
+    """
     return request.FILES.get("file").read().decode("utf-8")
 
 
 def set_dict_to_default(
     dictionary: dict, default_values: dict, fallback: str = "NA"
 ) -> dict:
+    """
+    Sets the values of a dictionary to the default values.
+
+    Args:
+        dictionary (dict): Dictionary to set the values of.
+        default_values (dict): Default values to set the dictionary to.
+        fallback (str, optional): Default value of a dict item, if it is not provided. Defaults to "NA".
+
+    Returns:
+        dict: Dictionary with the default values set.
+    """
     for key in default_values:
         dictionary.setdefault(key, default_values[key])
 
@@ -88,7 +108,6 @@ def normalize_csv_request(
         [row.update({field: default_values[field]}) for field in missing_fields]
 
     # fill in the missing values with the default values
-
     df(csv_dict).fillna("NA", inplace=True)
     for row in csv_dict:
         row = set_dict_to_default(row, default_values)
