@@ -1,5 +1,4 @@
-from io import BytesIO, StringIO
-import django
+from io import StringIO
 import pandas as pd
 
 
