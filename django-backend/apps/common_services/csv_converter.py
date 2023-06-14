@@ -37,21 +37,3 @@ def dict_to_csv(data: list[dict[str, str]]) -> list[str]:
 
     # convert to bytes
     return csv.encode("utf-8")
-
-
-def csv_to_file(data: list[str], file_name: str) -> StringIO:
-    """
-    Convert a list of csv strings to a StringIO object
-
-    Args:
-        data: list of csv strings
-        file_path: path to csv file
-    """
-
-    # convert to django file
-    data = StringIO("\n".join(data))
-    # cast to django file
-    data = django.core.files.base.ContentFile(data)
-    data.name = file_name
-
-    return data
