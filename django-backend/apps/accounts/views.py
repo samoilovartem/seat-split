@@ -67,21 +67,12 @@ class AllAccountsViewSet(ModelViewSet):
 
     @action(methods=['POST'], detail=False)
     def flexible_import_csv(self, request):
-        normalized_request = apply_request_fields(
+        response = apply_request_fields(
             request,
             'accounts',
             'Accounts',
             exclude_fields=['updated_at', 'id'],
+            strict_fields=['recovery_email'],
         )
 
-        csv_importer = CSVImporter(
-            normalized_request,
-            app_name='accounts',
-            model_name='Accounts',
-            resource=AccountsResource,
-            duplicate_check_column='email',
-            exclude_fields=['updated_at', 'id'],
-        )
-
-        response = csv_importer.import_file()
         return response
