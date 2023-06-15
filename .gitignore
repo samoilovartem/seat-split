@@ -149,6 +149,7 @@ cython_debug/
 compose.txt
 docker_commands
 gsheets_engine.py
+logs
 
 *.xlsx
 *.csv
