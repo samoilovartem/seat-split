@@ -231,9 +231,7 @@ def apply_request_fields(
 
     if missing_dates:
         if not ignore_dates:
-            error_message = (
-                f'missing dates {missing_dates}. Please provide dates or set "ignore_dates" to "true"',
-            )
+            error_message = f'missing dates {missing_dates}. Please provide dates or set ignore_dates:true'
             return Response({'success': False, 'error': error_message})
 
         normalize_request_dates(missing_dates, request_fields, date_fields)
@@ -247,7 +245,7 @@ def apply_request_fields(
     missing_strict_fields = get_missing_strict_fields(strict_fields, csv_dictionary)
 
     if missing_strict_fields:
-        error_message = f'missing required fields {missing_strict_fields}. Please provide required fields.'
+        error_message = f'missing strict fields {missing_strict_fields}. Please provide in the request.'
         return Response({'success': False, 'error': error_message})
 
     csv_file = dict_to_csv(csv_dictionary)
