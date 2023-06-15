@@ -9,7 +9,7 @@ class ColorizedFormatter(logging.Formatter):
 
     def format(self, record):
         message = super().format(record)
-        if 'django.db.backends' in record.name:
+        if "django.db.backends" in record.name:
             return self.GREEN + message + self.RESET
         return message
 

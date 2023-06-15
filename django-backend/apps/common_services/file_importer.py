@@ -107,7 +107,7 @@ class CSVImporter:
 
         duplicate_check_values = [row[duplicate_check_column_index] for row in dataset]
         existing_records = self.model.objects.filter(
-            **{f'{self.duplicate_check_column}__in': duplicate_check_values}
+            **{f"{self.duplicate_check_column}__in": duplicate_check_values}
         ).values_list(self.duplicate_check_column, flat=True)
         unique_existing_records = set(existing_records)
         error_messages = [
