@@ -18,17 +18,17 @@ class AllAccountsViewSet(ModelViewSet):
     serializer_class = AccountsSerializer
     filterset_class = AccountsFilterSet
     search_fields = [
-        "email",
-        "comments",
+        'email',
+        'comments',
     ]
     ordering_fields = [
-        "id",
-        "type",
-        "created_by",
-        "created_at",
-        "ld_computer_used",
-        "last_opened",
-        "disabled",
+        'id',
+        'type',
+        'created_by',
+        'created_at',
+        'ld_computer_used',
+        'last_opened',
+        'disabled',
     ]
     my_tags = ['All accounts']
 
@@ -69,18 +69,18 @@ class AllAccountsViewSet(ModelViewSet):
     def flexible_import_csv(self, request):
         normalized_request = apply_request_fields(
             request,
-            "accounts",
-            "Accounts",
-            exclude_fields=["updated_at", "id"],
+            'accounts',
+            'Accounts',
+            exclude_fields=['updated_at', 'id'],
         )
 
         csv_importer = CSVImporter(
             normalized_request,
-            app_name="accounts",
-            model_name="Accounts",
+            app_name='accounts',
+            model_name='Accounts',
             resource=AccountsResource,
-            duplicate_check_column="email",
-            exclude_fields=["updated_at", "id"],
+            duplicate_check_column='email',
+            exclude_fields=['updated_at', 'id'],
         )
 
         response = csv_importer.import_file()

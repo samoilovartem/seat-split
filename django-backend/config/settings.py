@@ -6,169 +6,169 @@ from split_settings.tools import include
 
 from config.components.global_settings import BASE_DIR, DEBUG
 
-dotenv_file = BASE_DIR / (".env.dev" if DEBUG else ".env.prod")
+dotenv_file = BASE_DIR / ('.env.dev' if DEBUG else '.env.prod')
 if os.path.isfile(dotenv_file):
     load_dotenv(dotenv_file)
 
 ALLOWED_HOSTS = (
-    os.environ.get("ALLOWED_HOSTS", "").split(", ")
-    if os.environ.get("ALLOWED_HOSTS")
+    os.environ.get('ALLOWED_HOSTS', '').split(', ')
+    if os.environ.get('ALLOWED_HOSTS')
     else []
 )
 CSRF_TRUSTED_ORIGINS = (
-    os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(", ")
-    if os.environ.get("CSRF_TRUSTED_ORIGINS")
+    os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(', ')
+    if os.environ.get('CSRF_TRUSTED_ORIGINS')
     else []
 )
 CORS_ALLOWED_ORIGINS = (
-    os.environ.get("CORS_ALLOWED_ORIGINS", "").split(", ")
-    if os.environ.get("CORS_ALLOWED_ORIGINS")
+    os.environ.get('CORS_ALLOWED_ORIGINS', '').split(', ')
+    if os.environ.get('CORS_ALLOWED_ORIGINS')
     else []
 )
 
 include(
-    "components/rest_framework.py",
-    "components/internationalization.py",
-    "components/djoser.py",
-    "components/rollbar.py",
-    "components/simple_jwt.py",
-    "components/import_export.py",
-    "components/query_count.py",
-    "components/django_filters.py",
-    "components/swagger.py",
-    "components/logger.py",
+    'components/rest_framework.py',
+    'components/internationalization.py',
+    'components/djoser.py',
+    'components/rollbar.py',
+    'components/simple_jwt.py',
+    'components/import_export.py',
+    'components/query_count.py',
+    'components/django_filters.py',
+    'components/swagger.py',
+    'components/logger.py',
 )
 
 INSTALLED_APPS = [
     # ---- Django standard apps ---- #
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    "django.contrib.gis",
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.gis',
     # ---- Third party apps ---- #
-    "drf_yasg",
-    "rest_framework",
-    "rest_framework.authtoken",
-    "rest_framework_api_key",
-    "rest_framework_simplejwt",
-    "rest_framework_simplejwt.token_blacklist",
-    "djoser",
-    "django_filters",
-    "import_export",
-    "django_truncate",
-    "corsheaders",
-    "simple_history",
+    'drf_yasg',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_api_key',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
+    'djoser',
+    'django_filters',
+    'import_export',
+    'django_truncate',
+    'corsheaders',
+    'simple_history',
     # ---- Project's apps ---- #
-    "apps.cards.apps.CardsConfig",
-    "apps.accounts.apps.AccountsConfig",
-    "apps.users.apps.UsersConfig",
-    "apps.mobile_numbers.apps.MobileNumbersConfig",
-    "apps.email_domains.apps.EmailDomainsConfig",
-    "apps.us_addresses.apps.UsAddressesConfig",
-    "apps.venues.apps.VenuesConfig",
+    'apps.cards.apps.CardsConfig',
+    'apps.accounts.apps.AccountsConfig',
+    'apps.users.apps.UsersConfig',
+    'apps.mobile_numbers.apps.MobileNumbersConfig',
+    'apps.email_domains.apps.EmailDomainsConfig',
+    'apps.us_addresses.apps.UsAddressesConfig',
+    'apps.venues.apps.VenuesConfig',
 ]
 
 if DEBUG:
-    INSTALLED_APPS.append("debug_toolbar")
+    INSTALLED_APPS.append('debug_toolbar')
 
-ROOT_URLCONF = "config.urls"
+ROOT_URLCONF = 'config.urls'
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "rollbar.contrib.django.middleware.RollbarNotifierMiddleware",
-    "simple_history.middleware.HistoryRequestMiddleware",
+    'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 if DEBUG:
-    MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = "config.wsgi.application"
+WSGI_APPLICATION = 'config.wsgi.application'
 
-RUNNING_ON_GCLOUD = os.environ.get("RUNNING_ON_GCLOUD", "False").lower() in [
-    "true",
-    "1",
+RUNNING_ON_GCLOUD = os.environ.get('RUNNING_ON_GCLOUD', 'False').lower() in [
+    'true',
+    '1',
 ]
 
 if RUNNING_ON_GCLOUD:
     DATABASES = {
-        "default": {
-            "ENGINE": "django.contrib.gis.db.backends.postgis",
-            "HOST": f'/cloudsql/{os.environ.get("GCLOUD_DB_CONNECTION_NAME")}',
-            "NAME": os.environ.get("GCLOUD_DB_NAME"),
-            "USER": os.environ.get("GCLOUD_DB_USER"),
-            "PASSWORD": os.environ.get("GCLOUD_DB_PASSWORD"),
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'HOST': f'/cloudsql/{os.environ.get("GCLOUD_DB_CONNECTION_NAME")}',
+            'NAME': os.environ.get('GCLOUD_DB_NAME'),
+            'USER': os.environ.get('GCLOUD_DB_USER'),
+            'PASSWORD': os.environ.get('GCLOUD_DB_PASSWORD'),
         }
     }
 else:
     DATABASES = {
-        "default": dj_database_url.config(
-            default=os.environ.get("DOCKER_PGDB_URL"),
+        'default': dj_database_url.config(
+            default=os.environ.get('DOCKER_PGDB_URL'),
             ssl_require=False if DEBUG else True,
             conn_max_age=600,
-            engine="django.contrib.gis.db.backends.postgis",
+            engine='django.contrib.gis.db.backends.postgis',
         )
     }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
 if DEBUG:
-    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-STATIC_ROOT = BASE_DIR / "static"
-STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / 'static'
+STATIC_URL = '/static/'
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_ROOT = BASE_DIR / "media"
-MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-INTERNAL_IPS = os.environ.get("INTERNAL_IPS", "").split(", ")
+INTERNAL_IPS = os.environ.get('INTERNAL_IPS', '').split(', ')
 if DEBUG:
     # showing django-debug-toolbar in docker development container
-    INTERNAL_IPS = type(str("c"), (), {"__contains__": lambda *a: True})()
+    INTERNAL_IPS = type(str('c'), (), {'__contains__': lambda *a: True})()
 
 APPEND_SLASH = False
 
-AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = 'users.User'

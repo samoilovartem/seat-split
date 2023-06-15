@@ -1,9 +1,9 @@
 from django.urls import reverse
 
-USERS_LIST_URL = reverse('all-users-list')
-USER_DETAIL_URL = reverse('all-users-detail', kwargs={'pk': 1})
-GROUPS_LIST_URL = reverse('all-groups-list')
-GROUP_DETAIL_URL = reverse('all-groups-detail', kwargs={'pk': 1})
+USERS_LIST_URL = reverse("all-users-list")
+USER_DETAIL_URL = reverse("all-users-detail", kwargs={"pk": 1})
+GROUPS_LIST_URL = reverse("all-groups-list")
+GROUP_DETAIL_URL = reverse("all-groups-detail", kwargs={"pk": 1})
 
 API_ROOT_URL = reverse("api-root")
 SWAGGER_URL = reverse("schema-swagger-ui")
