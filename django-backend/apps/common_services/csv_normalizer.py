@@ -82,7 +82,8 @@ def get_missing_strict_fields(strict_fields: list, csv_dict: list[dict]) -> list
     for row in csv_dict:
         for field in strict_fields:
             if row[field] == "NA":
-                missing_strict_fields.append(field)
+                strict_error = f'email:{row.get("email")},field: {field}'
+                missing_strict_fields.append(strict_error)
 
     return missing_strict_fields
 
