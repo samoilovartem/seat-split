@@ -1,5 +1,6 @@
 from typing import Optional
 
+from numpy import record
 from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import PostgresLexer
@@ -16,6 +17,49 @@ def records_per_value(model: type[Model], filter_name: str) -> list[dict[str, in
         .annotate(count=Count(filter_name))
     )
     return result
+
+
+def get_missing_strict_fields(csv_dict: record, strict_fields: list = []) -> list[dict]:
+    """Get fields with properly assigned values in the CSV file
+
+
+    Args:
+        csv_dict (numpy record): the csv file represented as a numpy record
+        strict_fields (list): the list of fields that must be strictly enforced
+
+    Returns:
+        list: a list of dictionaries, each in the format
+        email: account_email, field: missing_field
+    """
+    missing_strict_fields = list()
+
+    for row in csv_dict:
+        for field in strict_fields:
+            if row.get(field) == "NA":
+                entry = {'email': row.get("email"), 'field': field}
+                missing_strict_fields.append(entry)
+
+    return missing_strict_fields
+
+
+def get_missing_date_fields(csv_dict: record, date_fields: list = []) -> list:
+    """Get date fields with invalid values in the CSV file
+
+    Args:
+        csv_dict (numpy record): the csv file represented as a numpy record
+        date_fields (list): the list of date fields to be checked
+
+    Returns:
+        list: The list of date fields or columns that have no proper values
+    """
+
+    missing_dates = [
+        date_field
+        for date_field, date in csv_dict[0].items()
+        if date_field in date_fields and date == 'NA'
+    ]
+
+    return missing_dates
 
 
 def get_model_fields(
