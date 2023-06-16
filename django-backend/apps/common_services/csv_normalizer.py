@@ -2,7 +2,6 @@ from datetime import datetime
 from io import BytesIO
 
 from loguru import logger
-from numpy import record
 from pandas import DataFrame as df
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -44,6 +43,24 @@ def get_request_fields(request: Request) -> list:
     ]
 
     return request_fields
+
+
+def get_request_dates(request: Request, date_fields: list = []) -> list:
+    """
+    Gets the date fields from a request.
+
+    Args:
+        request (Request): Request object from the endpoint.
+
+    Returns:
+        list: A list containing all the date fields in the request.
+    """
+
+    request_dates = [
+        {key: value} for key, value in request.data.items() if key in date_fields
+    ]
+
+    return request_dates
 
 
 def use_fallback_dates(
@@ -101,34 +118,6 @@ def set_dict_to_default(
     return dictionary
 
 
-def normalize_request_dates(
-    csv_dictionary: record,
-    request_fields: list[dict],
-    date_fields: list = ["created_at", "last_opened"],
-) -> list[dict]:
-    missing_dates = get_missing_date_fields(csv_dictionary, date_fields)
-
-    ignore_dates = {'ignore_dates': 'true'} in request_fields
-
-    if missing_dates:
-        if not ignore_dates:
-            error_message = f'missing dates {missing_dates}. Please provide dates or set ignore_dates:true'
-            return Response({'success': False, 'error': error_message})
-
-        fallback_date = datetime.today().strftime('%Y-%m-%d')
-
-        supplied_dates = [
-            date for date in request_fields if list(date.keys())[0] in date_fields
-        ]
-
-        # check if the request covers all the missing dates
-        unassigned_dates = set(missing_dates) - set(supplied_dates)
-        for date_field in unassigned_dates:
-            request_fields.append({date_field: fallback_date})
-
-    return request_fields
-
-
 def normalize_csv_request(
     request: Request,
     app_name: str,
@@ -150,9 +139,6 @@ def normalize_csv_request(
     Returns:
         Request: A new request object with the updated data.
     """
-
-    if 'file' not in request.FILES:
-        raise ValueError('No file was uploaded.')
 
     csv_dict = csv_to_dict(str(get_request_file(request)))
     csv_headers = set(csv_dict[0].keys())
@@ -210,7 +196,7 @@ def apply_request_fields(
     """
 
     if 'file' not in request.FILES:
-        raise ValueError('No file was uploaded.')
+        return Response({'success': False, 'error': 'No file was uploaded.'})
 
     normalized_request = normalize_csv_request(
         request,
@@ -227,16 +213,30 @@ def apply_request_fields(
     request_fields = get_request_fields(normalized_request)
     model_fields = get_model_fields(app_name, model_name, exclude_fields=exclude_fields)
 
-    request_fields = normalize_request_dates(csv_dictionary, request_fields)
+    date_fields = ['created_at', 'last_opened']
+    missing_dates = get_missing_date_fields(
+        csv_dictionary,
+        date_fields,
+    )
+
+    ignore_dates = {'ignore_dates': 'true'} in request_fields
+    request_dates = get_request_dates(normalized_request, date_fields)
+
+    if not ignore_dates and missing_dates and not request_dates:
+        error_message = f'missing dates {missing_dates}. Please provide dates or set ignore_dates:true'
+        return Response({'success': False, 'error': error_message})
+    elif ignore_dates and missing_dates and not request_dates:
+        fallback_date = datetime.today().strftime('%Y-%m-%d')
+        unassigned_dates = set(missing_dates)
+        for date_field in unassigned_dates:
+            request_fields.append({date_field: fallback_date})
+
     request_fields = filter_request_fields(model_fields, request_fields)
 
     for row in csv_dictionary:
         [row.update(dictionaries) for dictionaries in request_fields]
 
-    missing_strict_fields = get_missing_strict_fields(
-        csv_dictionary,
-        strict_fields=["recovery_email"],
-    )
+    missing_strict_fields = get_missing_strict_fields(csv_dictionary, strict_fields)
 
     if missing_strict_fields:
         error_message = f'missing strict fields {missing_strict_fields}. Please provide in the request.'
