@@ -19,7 +19,7 @@ def records_per_value(model: type[Model], filter_name: str) -> list[dict[str, in
     return result
 
 
-def get_missing_strict_fields(csv_dict: record, strict_fields: list = []) -> list[dict]:
+def get_missing_strict_fields(csv_dict: record, strict_fields: list[str] | None = None) -> list[dict[str, str]]:
     """Get fields with properly assigned values in the CSV file
 
 
@@ -31,27 +31,33 @@ def get_missing_strict_fields(csv_dict: record, strict_fields: list = []) -> lis
         list: a list of dictionaries, each in the format
         email: account_email, field: missing_field
     """
+
+    if strict_fields is None:
+        return []
+
     missing_strict_fields = list()
 
     for row in csv_dict:
         for field in strict_fields:
-            if row.get(field) == "NA":
-                entry = {'email': row.get("email"), 'field': field}
+            if row.get(field) == 'NA':
+                entry = {'email': row.get('email'), 'field': field}
                 missing_strict_fields.append(entry)
 
     return missing_strict_fields
 
 
-def get_missing_date_fields(csv_dict: record, date_fields: list = []) -> list:
+def get_missing_date_fields(csv_dict: record, date_fields: list[str] | None = None) -> list[str]:
     """Get date fields with invalid values in the CSV file
 
     Args:
         csv_dict (numpy record): the csv file represented as a numpy record
-        date_fields (list): the list of date fields to be checked
-
+        date_fields (list): the list of date fields to bvc un
     Returns:
         list: The list of date fields or columns that have no proper values
     """
+
+    if date_fields is None:
+        return []
 
     missing_dates = [
         date_field
