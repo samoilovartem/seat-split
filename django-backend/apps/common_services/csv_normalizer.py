@@ -1,7 +1,6 @@
 from datetime import datetime
 from io import BytesIO
 
-from loguru import logger
 import pandas as pd
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -22,7 +21,9 @@ FILE_KEY = 'file'
 DATE_FIELDS = ['created_at', 'last_opened']
 
 
-def filter_request_fields(model_fields: list[str], request_fields: list[dict[str, any]]) -> list[dict[str, any]]:
+def filter_request_fields(
+    model_fields: list[str], request_fields: list[dict[str, any]]
+) -> list[dict[str, any]]:
     """
     Filters the request fields to only include the model fields.
 
@@ -205,23 +206,21 @@ def normalize_csv_request(
     return new_request
 
 
-def normalize_request_dates(csv_dictionary: dict[str, any], request_fields: list[dict[str, any]], normalized_request: Request) -> list[str]:
+def normalize_request_dates(
+    csv_dictionary: dict[str, any],
+    request_fields: list[dict[str, any]],
+    normalized_request: Request,
+) -> list[str]:
+    missing_dates = get_missing_date_fields(csv_dictionary, DATE_FIELDS)
 
-    missing_dates = get_missing_date_fields(
-        csv_dictionary,
-        DATE_FIELDS
-    )
-
-    request_dates = get_request_dates(
-        normalized_request,
-        DATE_FIELDS
-    )
+    request_dates = get_request_dates(normalized_request, DATE_FIELDS)
 
     ignore_dates = {'ignore_dates': 'true'} in request_fields
 
     if not ignore_dates and missing_dates and not request_dates:
         raise ValueError(
-            f"Missing date fields in request: {missing_dates}. Provide the missing dates or add the 'ignore_dates' field to the request.")
+            f"Missing date fields in request: {missing_dates}. Provide the missing dates or add the 'ignore_dates' field to the request."
+        )
 
     if ignore_dates and missing_dates and not request_dates:
         fallback_date = datetime.today().strftime('%Y-%m-%d')
@@ -232,7 +231,9 @@ def normalize_request_dates(csv_dictionary: dict[str, any], request_fields: list
     return request_fields
 
 
-def apply_fields_to_rows(csv_dictionary: dict[str, any], request_fields: list[dict[str, any]]):
+def apply_fields_to_rows(
+    csv_dictionary: dict[str, any], request_fields: list[dict[str, any]]
+):
     for row in csv_dictionary:
         [row.update(dictionaries) for dictionaries in request_fields]
 
@@ -264,7 +265,9 @@ def apply_request_fields(
     """
 
     if FILE_KEY not in request.FILES:
-        return Response({'success': False, 'error': f'No file was uploaded. {request.FILES}'})
+        return Response(
+            {'success': False, 'error': f'No file was uploaded. {request.FILES}'}
+        )
 
     if not exclude_fields:
         exclude_fields = []
@@ -281,9 +284,13 @@ def apply_request_fields(
     try:
         csv_dictionary = csv_to_dict(str(get_request_file(normalized_request)))
         request_fields = get_request_fields(normalized_request)
-        model_fields = get_model_fields(app_name, model_name, exclude_fields=exclude_fields)
+        model_fields = get_model_fields(
+            app_name, model_name, exclude_fields=exclude_fields
+        )
 
-        request_fields = normalize_request_dates(csv_dictionary, request_fields, normalized_request)
+        request_fields = normalize_request_dates(
+            csv_dictionary, request_fields, normalized_request
+        )
         request_fields = filter_request_fields(model_fields, request_fields)
     except ValueError as e:
         return Response({'success': False, 'error': str(e)})
