@@ -219,7 +219,7 @@ def normalize_request_dates(
 
     if not ignore_dates and missing_dates and not request_dates:
         raise ValueError(
-            f"Missing date fields in request: {missing_dates}. Provide the missing dates or add the 'ignore_dates' field to the request."
+            f'Missing date fields in request: {missing_dates}. Provide the missing dates or add the "ignore_dates" field to the request.'
         )
 
     if ignore_dates and missing_dates and not request_dates:
