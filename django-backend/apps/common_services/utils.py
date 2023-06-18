@@ -1,6 +1,5 @@
 from typing import Optional
 
-from numpy import record
 from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import PostgresLexer
@@ -19,12 +18,14 @@ def records_per_value(model: type[Model], filter_name: str) -> list[dict[str, in
     return result
 
 
-def get_missing_strict_fields(csv_dict: record, strict_fields: list[str] | None = None) -> list[dict[str, str]]:
+def get_missing_strict_fields(
+    csv_dict: list[dict[str, any]], strict_fields: list[str] | None = None
+) -> list[dict[str, str]]:
     """Get fields with properly assigned values in the CSV file
 
 
     Args:
-        csv_dict (numpy record): the csv file represented as a numpy record
+        csv_dict (list[dict[str, any]]): the csv file represented as a list of dicionaries
         strict_fields (list): the list of fields that must be strictly enforced
 
     Returns:
@@ -37,8 +38,8 @@ def get_missing_strict_fields(csv_dict: record, strict_fields: list[str] | None 
 
     missing_strict_fields = list()
 
-    for row in csv_dict:
-        for field in strict_fields:
+    for field in strict_fields:
+        for row in csv_dict:
             if row.get(field) == 'NA':
                 entry = {'email': row.get('email'), 'field': field}
                 missing_strict_fields.append(entry)
@@ -46,11 +47,13 @@ def get_missing_strict_fields(csv_dict: record, strict_fields: list[str] | None 
     return missing_strict_fields
 
 
-def get_missing_date_fields(csv_dict: record, date_fields: list[str] | None = None) -> list[str]:
+def get_missing_date_fields(
+    csv_dict: list[dict[str, any]], date_fields: list[str] | None = None
+) -> list[str]:
     """Get date fields with invalid values in the CSV file
 
     Args:
-        csv_dict (numpy record): the csv file represented as a numpy record
+        csv_dict (list[dict[str, any]]): the csv file represented as a list of dicionaries
         date_fields (list): the list of date fields to bvc un
     Returns:
         list: The list of date fields or columns that have no proper values
