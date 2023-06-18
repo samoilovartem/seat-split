@@ -60,7 +60,9 @@ def get_request_fields(request: Request) -> list[dict[str, any]]:
     return request_fields
 
 
-def get_request_dates(request: Request, date_fields: list[str] | None = None) -> list:
+def get_request_dates(
+    request: Request, date_fields: list[str] | None = None
+) -> list[dict[str, any]]:
     """
     Gets the date fields from a request.
 
@@ -68,7 +70,7 @@ def get_request_dates(request: Request, date_fields: list[str] | None = None) ->
         request (Request): Request object from the endpoint.
 
     Returns:
-        list: A list containing all the date fields in the request.
+        list (list[dict[str, any]]): A list containing all the date fields in the request.
     """
 
     if date_fields is None:
@@ -196,35 +198,51 @@ def normalize_csv_request(
         .reindex(columns=model_fields, fill_value='NA')
         .to_dict('records')
     )
+    new_request = request
 
     csv_file = dict_to_csv(csv_dict)
-
-    # create a new request object with the updated csv file
-    new_request = request
-    new_request.FILES[FILE_KEY].file = BytesIO(csv_file)
+    update_request_file(new_request, csv_file)
 
     return new_request
 
 
 def normalize_request_dates(
-    csv_dictionary: dict[str, any],
+    csv_dictionary: list[dict[str, any]],
     request_fields: list[dict[str, any]],
     normalized_request: Request,
 ) -> list[str]:
-    missing_dates = get_missing_date_fields(csv_dictionary, DATE_FIELDS)
+    """Normalizes request dates by setting them to fallback values when necessary
 
+    Args:
+        csv_dictionary (list(dict[str, any])): the csv file represented as a list of dictionaries
+        request_fields (list[dict[str, any]]): the fields within the request body
+        normalized_request (Request): the normalized request object
+
+    Raises:
+        ValueError: if the request does not contain the date fields and the ignore_dates field is not present
+
+    Returns:
+        list[dict[str, any]]: the normalized request fields
+    """
+
+    missing_dates = get_missing_date_fields(csv_dictionary, DATE_FIELDS)
     request_dates = get_request_dates(normalized_request, DATE_FIELDS)
+    unassigned_dates = (
+        set(missing_dates) - set(request_dates[0].keys()) if request_dates else set()
+    )
 
     ignore_dates = {'ignore_dates': 'true'} in request_fields
-
     if not ignore_dates and missing_dates and not request_dates:
         raise ValueError(
-            f'Missing date fields in request: {missing_dates}. Provide the missing dates or add the "ignore_dates" field to the request.'
+            f'Missing date fields in request: {missing_dates}. Provide the missing dates or add the ignore_dates : true flag in the request.'
+        )
+    if not ignore_dates and unassigned_dates:
+        raise ValueError(
+            f'Missing date fields in request: {unassigned_dates}. Provide the missing dates or add the ignore_dates : true flag in the request.'
         )
 
-    if ignore_dates and missing_dates and not request_dates:
+    if ignore_dates and missing_dates and unassigned_dates:
         fallback_date = datetime.today().strftime('%Y-%m-%d')
-        unassigned_dates = set(missing_dates)
         for date_field in unassigned_dates:
             request_fields.append({date_field: fallback_date})
 
@@ -232,15 +250,34 @@ def normalize_request_dates(
 
 
 def apply_fields_to_rows(
-    csv_dictionary: dict[str, any], request_fields: list[dict[str, any]]
+    csv_dictionary: list[dict[str, any]],
+    request_fields: list[dict[str, any]],
 ):
+    """Applies the request fields to the csv file
+
+    Args:
+        csv_dictionary (list[dict[str, any]]): the csv file represented as a list of dictionaries
+        request_fields (list[dict[str, any]]): the fields within the request body
+    """
     for row in csv_dictionary:
         [row.update(dictionaries) for dictionaries in request_fields]
 
 
-def update_request_file(request: Request, csv_dictionary: dict[str, any]) -> Request:
-    csv_file = dict_to_csv(csv_dictionary)
-    request.FILES.get(FILE_KEY).file = BytesIO(csv_file)
+def update_request_file(request: Request, csv_file: bytes):
+    """Updates the embedded csv file in the request object to the new csv file
+
+    Args:
+        request (Request): the request object to be updated
+        csv_file (bytes): the new csv file to be embedded in the request object
+
+    Raises:
+        ValueError: if the csv file is invalid
+    """
+    try:
+        csv_file = BytesIO(csv_file)
+        request.FILES.get(FILE_KEY).file = csv_file
+    except AttributeError:
+        raise ValueError('Invalid csv file.')
 
 
 def apply_request_fields(
@@ -282,12 +319,11 @@ def apply_request_fields(
     )
 
     try:
-        csv_dictionary = csv_to_dict(str(get_request_file(normalized_request)))
+        csv_dictionary = csv_to_dict(get_request_file(normalized_request))
         request_fields = get_request_fields(normalized_request)
         model_fields = get_model_fields(
             app_name, model_name, exclude_fields=exclude_fields
         )
-
         request_fields = normalize_request_dates(
             csv_dictionary, request_fields, normalized_request
         )
@@ -298,12 +334,11 @@ def apply_request_fields(
     apply_fields_to_rows(csv_dictionary, request_fields)
 
     missing_strict_fields = get_missing_strict_fields(csv_dictionary, strict_fields)
-
     if missing_strict_fields:
         error_message = f'missing strict fields {missing_strict_fields}. Please provide in the request.'
         return Response({'success': False, 'error': error_message})
 
-    update_request_file(normalized_request, csv_dictionary)
+    update_request_file(normalized_request, dict_to_csv(csv_dictionary))
 
     csv_importer = CSVImporter(
         normalized_request,
