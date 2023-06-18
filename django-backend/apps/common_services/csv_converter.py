@@ -8,7 +8,7 @@ def csv_to_dict(data: str) -> list[dict[str, str]]:
     Convert a list of csv strings to a list of dictionaries.
 
     Args:
-        data: list of csv strings
+        data: the csv file as a string, this is often fetched from a request.FILES object
 
     Returns:
         list of dictionaries
