@@ -68,6 +68,8 @@ def get_request_date_keys(
 
     Args:
         request (Request): Request object from the endpoint.
+        date_fields (list[str] | None, optional): List of date field keys to extract from the request.
+            If not provided, the function will return an empty list.
 
     Returns:
         list (list[str]): A list containing all the date fields in the request.
@@ -188,8 +190,7 @@ def normalize_csv_request(
     for row in csv_dict:
         [row.update({field: default_values[field]}) for field in missing_fields]
 
-    for row in csv_dict:
-        row = set_dict_to_default(row, default_values)
+    csv_dict = [set_dict_to_default(row, default_values) for row in csv_dict]
 
     csv_dict = (
         pd.DataFrame.from_records(csv_dict)
@@ -208,7 +209,7 @@ def normalize_request_dates(
     csv_dictionary: list[dict[str, any]],
     request_fields: list[dict[str, any]],
     normalized_request: Request,
-) -> list[str]:
+) -> list[dict[str, any]]:
     """Normalizes request dates by setting them to fallback values when necessary
 
     Args:
@@ -230,7 +231,8 @@ def normalize_request_dates(
     ignore_dates = {'ignore_dates': 'true'} in request_fields
     if not ignore_dates and unassigned_dates:
         raise ValueError(
-            f'Missing date fields in request: {unassigned_dates}. Provide the missing dates or add the ignore_dates : true flag in the request.'
+            f'Missing date fields in request: {unassigned_dates}. Provide the missing dates or add the ignore_dates : '
+            f'true flag in the request.'
         )
 
     if ignore_dates and unassigned_dates:
@@ -287,7 +289,7 @@ def apply_request_fields(
         app_name (str): app name
         model_name (str): model name
         exclude_fields (list): list of fields to exclude from the model
-        strict-fields (list): list of fields that must be in the model
+        strict_fields (list): list of fields that must be in the model
 
     Returns:
         Response: the response indicating whether the request was successful or not
