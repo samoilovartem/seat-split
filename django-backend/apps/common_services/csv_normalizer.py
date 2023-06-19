@@ -60,9 +60,9 @@ def get_request_fields(request: Request) -> list[dict[str, any]]:
     return request_fields
 
 
-def get_request_dates(
+def get_request_date_keys(
     request: Request, date_fields: list[str] | None = None
-) -> list[dict[str, any]]:
+) -> list[str]:
     """
     Gets the date fields from a request.
 
@@ -70,15 +70,13 @@ def get_request_dates(
         request (Request): Request object from the endpoint.
 
     Returns:
-        list (list[dict[str, any]]): A list containing all the date fields in the request.
+        list (list[str]): A list containing all the date fields in the request.
     """
 
     if date_fields is None:
         return []
 
-    request_dates = [
-        {key: value} for key, value in request.data.items() if key in date_fields
-    ]
+    request_dates = [key for key, _ in request.data.items() if key in date_fields]
 
     return request_dates
 
@@ -226,22 +224,16 @@ def normalize_request_dates(
     """
 
     missing_dates = get_missing_date_fields(csv_dictionary, DATE_FIELDS)
-    request_dates = get_request_dates(normalized_request, DATE_FIELDS)
-    unassigned_dates = (
-        set(missing_dates) - set(request_dates[0].keys()) if request_dates else set()
-    )
+    request_dates = get_request_date_keys(normalized_request, DATE_FIELDS)
+    unassigned_dates = set(missing_dates) - set(request_dates)
 
     ignore_dates = {'ignore_dates': 'true'} in request_fields
-    if not ignore_dates and missing_dates and not request_dates:
-        raise ValueError(
-            f'Missing date fields in request: {missing_dates}. Provide the missing dates or add the ignore_dates : true flag in the request.'
-        )
     if not ignore_dates and unassigned_dates:
         raise ValueError(
             f'Missing date fields in request: {unassigned_dates}. Provide the missing dates or add the ignore_dates : true flag in the request.'
         )
 
-    if ignore_dates and missing_dates and unassigned_dates:
+    if ignore_dates and unassigned_dates:
         fallback_date = datetime.today().strftime('%Y-%m-%d')
         for date_field in unassigned_dates:
             request_fields.append({date_field: fallback_date})
