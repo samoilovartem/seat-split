@@ -149,6 +149,7 @@ cython_debug/
 compose.txt
 docker_commands
 gsheets_engine.py
+logs
 
 *.xlsx
 *.csv
@@ -161,3 +162,4 @@ static/
 django-backend/newrelic.ini
 django-backend/.env.dev
 django-backend/.env.prod
+.vscode/settings.json

@@ -18,6 +18,59 @@ def records_per_value(model: type[Model], filter_name: str) -> list[dict[str, in
     return result
 
 
+def get_missing_strict_fields(
+    csv_dict: list[dict[str, any]], strict_fields: list[str] | None = None
+) -> list[dict[str, str]]:
+    """Get fields with properly assigned values in the CSV file
+
+
+    Args:
+        csv_dict (list[dict[str, any]]): the csv file represented as a list of dicionaries
+        strict_fields (list): the list of fields that must be strictly enforced
+
+    Returns:
+        list: a list of dictionaries, each in the format
+        email: account_email, field: missing_field
+    """
+
+    if strict_fields is None:
+        return []
+
+    missing_strict_fields = list()
+
+    for field in strict_fields:
+        for row in csv_dict:
+            if row.get(field) == 'NA':
+                entry = {'email': row.get('email'), 'field': field}
+                missing_strict_fields.append(entry)
+
+    return missing_strict_fields
+
+
+def get_missing_date_fields(
+    csv_dict: list[dict[str, any]], date_fields: list[str] | None = None
+) -> list[str]:
+    """Get date fields with invalid values in the CSV file
+
+    Args:
+        csv_dict (list[dict[str, any]]): the csv file represented as a list of dicionaries
+        date_fields (list): the list of date fields to bvc un
+    Returns:
+        list: The list of date fields or columns that have no proper values
+    """
+
+    if date_fields is None:
+        return []
+
+    missing_dates = [
+        date_field
+        for date_field, date in csv_dict[0].items()
+        if date_field in date_fields and date == 'NA'
+    ]
+
+    return missing_dates
+
+
 def get_model_fields(
     app_name: str, model_name: str, exclude_fields: Optional[list[str]] = None
 ) -> list[str]:

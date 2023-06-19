@@ -6,6 +6,7 @@ from apps.accounts.filters import AccountsFilterSet
 from apps.accounts.models import Accounts
 from apps.accounts.resource import AccountsResource
 from apps.accounts.serializers import AccountsSerializer
+from apps.common_services.csv_normalizer import apply_request_fields
 from apps.common_services.duplicate_checker import DuplicateChecker
 from apps.common_services.file_exporter import CSVExporter
 from apps.common_services.file_importer import CSVImporter
@@ -63,3 +64,15 @@ class AllAccountsViewSet(ModelViewSet):
     def export_file(self, request):
         csv_exporter = CSVExporter(request, app_name='accounts', model_name='Accounts')
         return csv_exporter.export_file()
+
+    @action(methods=['POST'], detail=False)
+    def flexible_import_csv(self, request):
+        response = apply_request_fields(
+            request,
+            'accounts',
+            'Accounts',
+            exclude_fields=['updated_at', 'id'],
+            strict_fields=['recovery_email'],
+        )
+
+        return response
