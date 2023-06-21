@@ -32,6 +32,7 @@ pygount = "^1.5.1"
 rollbar = "^0.16.3"
 whitenoise = "^6.3.0"
 pandas = "^2.0"
+pydantic = "^1.10.9"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "^7.2"

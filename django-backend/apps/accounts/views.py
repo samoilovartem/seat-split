@@ -11,6 +11,10 @@ from apps.common_services.duplicate_checker import DuplicateChecker
 from apps.common_services.file_exporter import CSVExporter
 from apps.common_services.file_importer import CSVImporter
 from apps.common_services.utils import records_per_value
+from apps.config import AccountsCSVConfig
+
+APP_NAME = Accounts._meta.app_label
+MODEL_NAME = Accounts._meta.model_name
 
 
 class AllAccountsViewSet(ModelViewSet):
@@ -30,6 +34,7 @@ class AllAccountsViewSet(ModelViewSet):
         'last_opened',
         'disabled',
     ]
+    csv_config = AccountsCSVConfig()
     my_tags = ['All accounts']
 
     @action(methods=['GET'], detail=False)
@@ -51,28 +56,27 @@ class AllAccountsViewSet(ModelViewSet):
     def import_file(self, request):
         csv_importer = CSVImporter(
             request,
-            app_name='accounts',
-            model_name='Accounts',
+            app_name=APP_NAME,
+            model_name=MODEL_NAME,
             resource=AccountsResource,
-            duplicate_check_column='email',
-            exclude_fields=['updated_at', 'id'],
+            duplicate_check_column=self.csv_config.duplicate_check_column,
+            exclude_fields=self.csv_config.exclude_fields,
         )
         response = csv_importer.import_file()
         return response
 
     @action(methods=['POST'], detail=False)
     def export_file(self, request):
-        csv_exporter = CSVExporter(request, app_name='accounts', model_name='Accounts')
+        csv_exporter = CSVExporter(request, app_name=APP_NAME, model_name=MODEL_NAME)
         return csv_exporter.export_file()
 
     @action(methods=['POST'], detail=False)
     def flexible_import_csv(self, request):
         response = apply_request_fields(
             request,
-            'accounts',
-            'Accounts',
-            exclude_fields=['updated_at', 'id'],
-            strict_fields=['recovery_email'],
+            app_name=APP_NAME,
+            model_name=MODEL_NAME,
+            exclude_fields=self.csv_config.exclude_fields,
+            strict_fields=self.csv_config.strict_fields,
         )
-
         return response
