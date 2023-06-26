@@ -6,9 +6,9 @@ from django.db.models import Prefetch
 
 from apps.accounts.models import Accounts
 from apps.common_services.utils import records_per_value
-from apps.mobile_numbers.filters import MobileNumbersFilterSet
+from apps.mobile_numbers.api.v1.filters import MobileNumbersFilterSet
+from apps.mobile_numbers.api.v1.serializers import MobileNumbersSerializer
 from apps.mobile_numbers.models import MobileNumberTransaction
-from apps.mobile_numbers.serializers import MobileNumbersSerializer
 from apps.users.models import User
 
 

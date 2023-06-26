@@ -10,8 +10,8 @@ from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.test import tag
 
+from apps.users.api.v1.serializers import UserCreateSerializer
 from apps.users.models import User
-from apps.users.serializers import UserCreateSerializer
 from apps.users.tests.settings import (
     FULL_USER_DATA,
     REQUIRED_USER_DATA,

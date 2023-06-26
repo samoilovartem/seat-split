@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from django.db.models import Prefetch
 
 from apps.common_services.utils import records_per_value
+from apps.email_domains.api.v1.serializers import EmailDomainsSerializer
 from apps.email_domains.models import EmailDomains
-from apps.email_domains.serializers import EmailDomainsSerializer
 from apps.email_domains.services.data_generator import DataGenerator
 from apps.email_domains.services.utils import (
     generate_random_email_data,

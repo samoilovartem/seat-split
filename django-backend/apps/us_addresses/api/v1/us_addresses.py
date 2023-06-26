@@ -7,8 +7,8 @@ from rest_framework.viewsets import GenericViewSet
 
 from apps.common_services.file_importer import CSVImporter
 from apps.config import USAddressesCSVConfig
+from apps.us_addresses.api.v1.serializers import USAddressSerializer
 from apps.us_addresses.models import USAddresses
-from apps.us_addresses.serializers import USAddressSerializer
 from apps.us_addresses.services.get_address_within_distance import (
     AddressesWithinDistanceHandler,
 )

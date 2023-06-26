@@ -8,14 +8,13 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import Group, Permission
 from django.db.models import Prefetch
 
-from apps.users.models import User
-from apps.users.serializers import (
+from apps.users.api.v1.serializers import (
     GeneralUserSerializer,
-    GroupSerializer,
     UserCreateSerializer,
     UserDetailSerializer,
     UserListSerializer,
 )
+from apps.users.models import User
 
 
 class UsersViewSet(FlexFieldsModelViewSet):
@@ -70,12 +69,3 @@ class UsersViewSet(FlexFieldsModelViewSet):
             return Response(data={'message': 'The token has been blacklisted'})
         except Exception as error:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': error})
-
-
-class GroupViewSet(FlexFieldsModelViewSet):
-    queryset = Group.objects.all().prefetch_related(
-        Prefetch('permissions', queryset=Permission.objects.only('id', 'name'))
-    )
-    serializer_class = GroupSerializer
-    my_tags = ['All groups']
-    permit_list_expands = ['permissions']

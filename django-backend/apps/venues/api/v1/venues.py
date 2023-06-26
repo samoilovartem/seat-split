@@ -5,8 +5,8 @@ from rest_framework.viewsets import ModelViewSet
 from apps.common_services.duplicate_checker import DuplicateChecker
 from apps.common_services.file_importer import CSVImporter
 from apps.config import VenuesCSVConfig
+from apps.venues.api.v1.serializers import VenuesSerializer
 from apps.venues.models import Venues
-from apps.venues.serializers import VenuesSerializer
 
 APP_NAME = Venues._meta.app_label
 MODEL_NAME = Venues._meta.model_name

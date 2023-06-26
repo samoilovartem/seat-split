@@ -2,10 +2,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from apps.accounts.filters import AccountsFilterSet
+from apps.accounts.api.v1.filters import AccountsFilterSet
+from apps.accounts.api.v1.serializers import AccountsSerializer
 from apps.accounts.models import Accounts
 from apps.accounts.resource import AccountsResource
-from apps.accounts.serializers import AccountsSerializer
 from apps.common_services.csv_normalizer import apply_request_fields
 from apps.common_services.duplicate_checker import DuplicateChecker
 from apps.common_services.file_exporter import CSVExporter

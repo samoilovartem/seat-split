@@ -4,9 +4,9 @@ from rest_framework.response import Response
 
 from django.db.models import Prefetch
 
-from apps.cards.filters import CardsFilterSet
+from apps.cards.api.v1.filters import CardsFilterSet
+from apps.cards.api.v1.serializers import CardsSerializer
 from apps.cards.models import Cards
-from apps.cards.serializers import CardsSerializer
 from apps.common_services.duplicate_checker import DuplicateChecker
 from apps.common_services.utils import records_per_value
 from apps.users.models import User
