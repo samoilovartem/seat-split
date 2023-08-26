@@ -13,7 +13,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'apps.common_services.permissions.CustomDjangoModelPermissions',
+        # 'apps.common_services.permissions.CustomDjangoModelPermissions',
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_FILTER_BACKENDS': [

@@ -7,9 +7,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
 
-        token['user_role'] = user.role
-        token['user_team'] = user.team
-
         return token
 
 
