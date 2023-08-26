@@ -11,21 +11,21 @@ services:
     volumes:
       - ./django-backend:/app
     ports:
-      - "${DJANGO_PORT_HOST}:${DJANGO_PORT_CONTAINER}"
+      - "8000:8000"
     depends_on:
       - pgdb
     networks:
       - backend
 
   pgdb:
-    image: postgis/postgis
+    image: postgres
     container_name: pgdb
     env_file:
       - ./django-backend/.env.dev
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - "${POSTGRES_PORT_HOST}:${POSTGRES_PORT_CONTAINER}"
+      - "5432:5432"
     restart: unless-stopped
     networks:
       - backend

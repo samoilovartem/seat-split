@@ -4,11 +4,10 @@ WORKDIR /app
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    POETRY_VERSION=1.4.2 \
+    POETRY_VERSION=1.6.1 \
     GUNICORN_TIMEOUT=0
 
 RUN apt-get update && \
-    apt-get install -y binutils libproj-dev gdal-bin && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip
