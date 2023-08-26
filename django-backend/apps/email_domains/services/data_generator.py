@@ -2,8 +2,6 @@ from random import choice, randint
 
 from faker import Faker
 
-from apps.accounts.models import Accounts
-
 
 class DataGenerator:
     def __init__(self, domain_name: str, state_abbr: str = None):
@@ -39,12 +37,9 @@ class DataGenerator:
             return f'{transformed_first}{transformed_last}{random_number}@{self.domain_name}'
 
     def generate_unique_email(self):
-        while True:
-            first_name = self.fake.first_name()
-            last_name = self.fake.last_name()
-            email = self.generate_email(first_name, last_name)
-            if not Accounts.objects.filter(email=email).exists():
-                break
+        first_name = self.fake.first_name()
+        last_name = self.fake.last_name()
+        email = self.generate_email(first_name, last_name)
         return first_name, last_name, email
 
     def generate_data(self):
