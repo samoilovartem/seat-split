@@ -25,11 +25,3 @@ repos:
     rev: 6.0.0
     hooks:
       - id: flake8
-
-  - repo: local
-    hooks:
-      - id: run-tests
-        name: Run Tests
-        entry: ./shell_scripts/run_tests.sh precommit
-        language: script
-        pass_filenames: false
