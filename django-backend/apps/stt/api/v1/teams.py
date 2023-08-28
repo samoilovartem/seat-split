@@ -1,3 +1,4 @@
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -9,6 +10,9 @@ from apps.stt.models import Team
 class TeamViewSet(ModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
+    filterset_fields = ['league', 'city', 'name']
+    permission_classes = [AllowAny]
+
     my_tags = ['all teams']
 
 
