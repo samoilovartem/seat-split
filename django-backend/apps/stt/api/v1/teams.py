@@ -1,6 +1,6 @@
+from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from apps.stt.api.v1.serializers import TeamSerializer
@@ -15,9 +15,8 @@ class TeamViewSet(ModelViewSet):
 
     my_tags = ['all teams']
 
-
-class TeamsAndLeaguesInfoView(APIView):
-    def get(self, request):
+    @action(detail=False, methods=['get'])
+    def get_teams_and_leagues_info(self, request):
         leagues = ['NFL', 'NBA', 'NHL', 'MLB', 'MLS']
 
         teams = Team.objects.all()
