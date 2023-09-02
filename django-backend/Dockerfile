@@ -21,7 +21,6 @@ RUN poetry config virtualenvs.create false && \
 
 COPY . .
 
-RUN python manage.py collectstatic --noinput
+RUN chmod +x ./entrypoint-prod.sh
 
-CMD python manage.py migrate --noinput && \
-    gunicorn --timeout $GUNICORN_TIMEOUT --bind 0.0.0.0:$PORT config.wsgi:application
+CMD ["./entrypoint-prod.sh"]
