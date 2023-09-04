@@ -17,7 +17,7 @@ class ConvertNoneToStringSerializerMixin:
 
         for field in fields:
             if field in data and data[field] is None:
-                data[field] = 'NA'
+                data[field] = ''
         return data
 
 
