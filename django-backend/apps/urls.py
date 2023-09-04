@@ -4,7 +4,7 @@ from django.urls import include, path
 
 from apps.common_services.jwt_token_claims import CustomTokenObtainPairView
 from apps.routers import main_router
-from apps.stt.api.v1.auth import RegisterView
+from apps.stt.api.v1.registration import RegisterView
 
 urlpatterns = [
     path('api/v1/base-auth/', include('rest_framework.urls')),
