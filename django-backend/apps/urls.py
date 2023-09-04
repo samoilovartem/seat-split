@@ -9,6 +9,7 @@ from apps.stt.api.v1.registration import RegisterView
 urlpatterns = [
     path('api/v1/base-auth/', include('rest_framework.urls')),
     path('api/v1/auth/', include('djoser.urls')),
+    path('api/v1/token-auth/', include('djoser.urls.authtoken')),
     path('api/v1/', include('apps.stt.api.v1.urls')),
     path('api/v1/', include(main_router.urls)),
     path(
