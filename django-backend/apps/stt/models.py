@@ -29,7 +29,7 @@ class TicketHolder(UUIDMixin):
     address = models.CharField(max_length=255, blank=True)
     is_card_interest = models.BooleanField(default=False)
     is_season_ticket_interest = models.BooleanField(default=False)
-    tickets_data = models.JSONField(null=True, blank=True)
+    tickets_data = models.JSONField(null=True, blank=True, default={})
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
