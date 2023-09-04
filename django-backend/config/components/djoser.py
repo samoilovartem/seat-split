@@ -20,7 +20,7 @@ DJOSER = {
         'token_destroy': ['rest_framework.permissions.IsAuthenticated'],
     },
     'SERIALIZERS': {
-        'current_user': 'djoser.serializers.UserSerializer',
+        'current_user': 'apps.users.api.v1.serializers.UserDetailSerializer',
         'user': 'djoser.serializers.UserSerializer',
         'user_create': 'djoser.serializers.UserCreateSerializer',
     },

@@ -1,9 +1,11 @@
 from rest_flex_fields import FlexFieldsModelSerializer
+from rest_framework.fields import SerializerMethodField
 
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group, Permission
 
 from apps.serializers import ConvertNoneToStringSerializerMixin
+from apps.stt.models import TicketHolder
 from apps.users.models import User
 
 
@@ -48,15 +50,31 @@ class GeneralUserSerializer(FlexFieldsModelSerializer):
 class UserDetailSerializer(
     ConvertNoneToStringSerializerMixin, FlexFieldsModelSerializer
 ):
+    ticket_holder_data = SerializerMethodField()
+
     class Meta:
         model = User
-        exclude = ('password',)
-        none_to_str_fields = ('last_login', 'role', 'team', 'last_opened', 'email')
+        exclude = ('password', 'username')
+        none_to_str_fields = ('last_login',)
         ref_name = 'UserDetailSerializer'
         expandable_fields = {
             'user_permissions': (PermissionsSerializer, {'many': True}),
             'groups': (UserGroupSerializer, {'many': True}),
         }
+
+    @staticmethod
+    def get_ticket_holder_data(obj):
+        try:
+            ticket_holder = TicketHolder.objects.get(user=obj)
+            return {
+                'phone': ticket_holder.phone,
+                'address': ticket_holder.address,
+                'tickets_data': ticket_holder.tickets_data,
+                'date_created': ticket_holder.date_created,
+                'is_verified': ticket_holder.is_verified,
+            }
+        except TicketHolder.DoesNotExist:
+            return {}
 
 
 class UserListSerializer(ConvertNoneToStringSerializerMixin, FlexFieldsModelSerializer):
