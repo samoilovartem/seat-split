@@ -1,7 +1,7 @@
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework_api_key.permissions import HasAPIKey
 
 from apps.stt.api.v1.serializers import TeamSerializer
 from apps.stt.models import Team
@@ -11,7 +11,7 @@ class TeamViewSet(ModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
     filterset_fields = ['league', 'city', 'name']
-    permission_classes = [AllowAny]
+    permission_classes = [HasAPIKey]
 
     my_tags = ['all teams']
 
