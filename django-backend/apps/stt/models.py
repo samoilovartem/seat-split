@@ -14,7 +14,7 @@ class UUIDMixin(models.Model):
         abstract = True
 
 
-class TicketHolder(models.Model):
+class TicketHolder(UUIDMixin):
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
     user = models.OneToOneField(
