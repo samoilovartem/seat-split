@@ -18,6 +18,5 @@ DJOSER = {
     'SERIALIZERS': {
         'current_user': 'apps.users.api.v1.serializers.UserSerializer',
         'user': 'apps.users.api.v1.serializers.UserSerializer',
-        # 'user_create': 'apps.users.api.v1.serializers.UserCreateSerializer',
     },
 }
