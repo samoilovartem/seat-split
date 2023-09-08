@@ -37,6 +37,7 @@ include(
     'components/django_filters.py',
     'components/swagger.py',
     'components/logger.py',
+    'components/smtp_and_email.py',
 )
 
 INSTALLED_APPS = [
@@ -122,9 +123,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-if DEBUG:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = '/static/'
