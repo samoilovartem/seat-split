@@ -30,6 +30,8 @@ rollbar = "^0.16.3"
 pandas = "^2.0"
 drf-yasg = "^1.21.7"
 whitenoise = "^6.5.0"
+celery = "^5.3.4"
+requests = "^2.31.0"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "^7.2"
