@@ -1,7 +1,6 @@
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework.exceptions import ValidationError
 
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group, Permission
 
 from apps.stt.models import TicketHolder
@@ -58,11 +57,11 @@ class UserSerializer(FlexFieldsModelSerializer):
 
     def update(self, instance, validated_data):
         ticket_holder_data = validated_data.pop('ticket_holder_user', None)
-        self.update_or_create_ticket_holder(instance, ticket_holder_data)
+        self.update_ticket_holder(instance, ticket_holder_data)
 
         return super().update(instance, validated_data)
 
-    def update_or_create_ticket_holder(self, user, ticket_holder_data):  # noqa
+    def update_ticket_holder(self, user, ticket_holder_data):  # noqa
         if ticket_holder_data is not None:
             ticket_holder = TicketHolder.objects.filter(user=user).first()
             if not ticket_holder:
@@ -78,20 +77,3 @@ class UserSerializer(FlexFieldsModelSerializer):
         if ret['ticket_holder_data'] is None:
             ret['ticket_holder_data'] = {}
         return ret
-
-
-class UserCreateSerializer(FlexFieldsModelSerializer):
-    def create(self, validated_data):
-        validated_data['password'] = make_password(validated_data['password'])
-        return super(UserCreateSerializer, self).create(validated_data)
-
-    class Meta:
-        model = User
-        exclude = (
-            'date_joined',
-            'last_login',
-        )
-        extra_kwargs = {
-            'password': {'write_only': True},
-        }
-        ref_name = 'UserCreateSerializer'
