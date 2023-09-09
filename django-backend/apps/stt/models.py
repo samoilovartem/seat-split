@@ -25,7 +25,6 @@ class TicketHolder(UUIDMixin):
         blank=True,
         max_length=255,
     )
-    is_verified = models.BooleanField(default=False)
     address = models.CharField(max_length=255, blank=True)
     is_card_interest = models.BooleanField(default=False)
     is_season_ticket_interest = models.BooleanField(default=False)

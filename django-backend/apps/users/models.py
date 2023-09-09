@@ -34,6 +34,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=150)
     email = models.EmailField(max_length=255, blank=True, unique=True)
     password = models.CharField(max_length=255)
+    is_verified = models.BooleanField(default=False)
 
     objects = CustomUserManager()
 
