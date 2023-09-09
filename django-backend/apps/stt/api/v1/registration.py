@@ -63,11 +63,10 @@ class VerifyView(APIView):
         try:
             uid = force_str(urlsafe_base64_decode(self.kwargs['uidb64']))
             user = User.objects.get(id=uid)
-            ticket_holder = TicketHolder.objects.get(user=user)
 
             if default_token_generator.check_token(user, self.kwargs['token']):
-                ticket_holder.is_verified = True
-                ticket_holder.save()
+                user.is_verified = True
+                user.save()
 
                 send_email_confirmed(request, user)  # ToDO move this function to Celery
 
@@ -81,7 +80,6 @@ class VerifyView(APIView):
             ValueError,
             OverflowError,
             User.DoesNotExist,
-            TicketHolder.DoesNotExist,
         ):
             return Response(
                 {'error': 'Something went wrong!'}, status=status.HTTP_400_BAD_REQUEST

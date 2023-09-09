@@ -10,7 +10,7 @@ class CustomTokenCreateView(TokenCreateView):
 
     def _action(self, serializer):
         user = serializer.user
-        if not user.ticket_holder_user.is_verified:
+        if not user.is_verified:
             raise AuthenticationFailed('User is not verified.')
         return super()._action(serializer)
 
