@@ -10,7 +10,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        if not self.user.ticket_holder_user.is_verified:
+        if not self.user.is_verified:
             raise AuthenticationFailed('User is not verified.')
 
         return data
