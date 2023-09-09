@@ -8,6 +8,9 @@ EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
 EMAIL_PORT = os.environ.get('EMAIL_PORT')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_PROJECT_NAME = os.environ.get('EMAIL_PROJECT_NAME')
+EMAIL_FRONTEND_BASE_URL = os.environ.get('EMAIL_FRONTEND_BASE_URL')
+EMAIL_CONTENT_TYPE = os.environ.get('EMAIL_CONTENT_TYPE')
 
 SMTP2GO_API_BASE_URL = os.environ.get('SMTP2GO_API_BASE_URL')
 SMTP2GO_API_KEY = os.environ.get('SMTP2GO_API_KEY')
