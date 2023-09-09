@@ -5,13 +5,18 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from django.contrib.auth import password_validation
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 
 from apps.stt.api.v1.serializers import RegisterSerializer
 from apps.stt.models import TicketHolder, User
+from apps.stt.utils import send_email_confirmation
 
 
 class RegisterView(APIView):
     permission_classes = (AllowAny,)
+    my_tags = ['registration and verification']
 
     @swagger_auto_schema(request_body=RegisterSerializer)
     def post(self, request):
@@ -44,5 +49,37 @@ class RegisterView(APIView):
                 is_card_interest=serializer.validated_data['is_card_interest'],
             )
 
+            send_email_confirmation(request, user)  # ToDO move this function to Celery
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class VerifyView(APIView):
+    my_tags = ['registration and verification']
+
+    def post(self, request, *args, **kwargs):
+        try:
+            uid = force_str(urlsafe_base64_decode(self.kwargs['uidb64']))
+            user = User.objects.get(id=uid)
+            ticket_holder = TicketHolder.objects.get(user=user)
+
+            if default_token_generator.check_token(user, self.kwargs['token']):
+                ticket_holder.is_verified = True
+                ticket_holder.save()
+
+                return Response(status=status.HTTP_200_OK)
+            else:
+                return Response(
+                    {'error': 'Token is not valid!'}, status=status.HTTP_400_BAD_REQUEST
+                )
+        except (
+            TypeError,
+            ValueError,
+            OverflowError,
+            User.DoesNotExist,
+            TicketHolder.DoesNotExist,
+        ):
+            return Response(
+                {'error': 'Something went wrong!'}, status=status.HTTP_400_BAD_REQUEST
+            )
