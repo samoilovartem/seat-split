@@ -11,7 +11,7 @@ from django.utils.http import urlsafe_base64_decode
 
 from apps.stt.api.v1.serializers import RegisterSerializer
 from apps.stt.models import TicketHolder, User
-from apps.stt.utils import send_email_confirmation
+from apps.stt.utils import send_email_confirmation, send_email_confirmed
 
 
 class RegisterView(APIView):
@@ -26,6 +26,7 @@ class RegisterView(APIView):
             try:
                 password_validation.validate_password(password)
             except Exception as e:
+                # ToDo: add logger
                 return Response(
                     {'password': list(e.messages)}, status=status.HTTP_400_BAD_REQUEST
                 )
@@ -67,6 +68,8 @@ class VerifyView(APIView):
             if default_token_generator.check_token(user, self.kwargs['token']):
                 ticket_holder.is_verified = True
                 ticket_holder.save()
+
+                send_email_confirmed(request, user)  # ToDO move this function to Celery
 
                 return Response(status=status.HTTP_200_OK)
             else:
