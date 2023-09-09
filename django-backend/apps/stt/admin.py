@@ -29,15 +29,21 @@ class TicketHolderAdminConfig(admin.ModelAdmin):
     save_as = True
     save_on_top = True
     list_display = (
-        'id',
         'first_name',
         'last_name',
-        'phone',
+        'get_email',
+        'id',
     )
     list_display_links = (
         'first_name',
         'last_name',
+        'get_email',
     )
+
+    def get_email(self, obj):
+        return obj.user.email
+
+    get_email.short_description = 'User email'
 
 
 class TicketAdminConfig(admin.ModelAdmin):
