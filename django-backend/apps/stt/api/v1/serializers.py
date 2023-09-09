@@ -1,8 +1,19 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.serializers import ModelSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from apps.stt.models import Team, TicketHolder, User
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        if not self.user.ticket_holder_user.is_verified:
+            raise AuthenticationFailed('User is not verified.')
+
+        return data
 
 
 class UserSerializer(ModelSerializer[User]):
