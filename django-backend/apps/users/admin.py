@@ -9,12 +9,14 @@ class UserAdminConfig(UserAdmin):
     save_as = True
     save_on_top = True
     list_display = (
-        'id',
         'first_name',
         'last_name',
         'email',
+        'id',
         'is_staff',
         'is_active',
+        'is_superuser',
+        'is_verified',
     )
     list_display_links = (
         'first_name',
@@ -34,6 +36,7 @@ class UserAdminConfig(UserAdmin):
                     'is_active',
                     'is_staff',
                     'is_superuser',
+                    'is_verified',
                     'groups',
                     'user_permissions',
                 )
