@@ -1,10 +1,9 @@
 build:
   docker:
     web: django-backend/Dockerfile
-release:
-  image: web
-  command:
-    - python manage.py collectstatic --noinput && python manage.py migrate --noinput
 run:
-  web: gunicorn --timeout "$GUNICORN_TIMEOUT" --bind 0.0.0.0:"$PORT" config.wsgi:application
-  worker: celery -A config worker --loglevel=info
+  web: ./entrypoint-prod.sh
+  celery_worker:
+    command:
+      - celery -A config worker --loglevel=info
+    image: web
