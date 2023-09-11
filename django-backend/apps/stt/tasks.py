@@ -1,4 +1,3 @@
-import time
 from uuid import UUID
 
 from celery import shared_task
@@ -7,7 +6,6 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
 from apps.stt.utils import get_confirmation_link
-from config.components.celery import CELERY_GENERAL_SLEEP_TIME
 from config.components.smtp_and_email import (
     EMAIL_CONTENT_TYPE,
     EMAIL_FRONTEND_BASE_URL,
@@ -19,7 +17,7 @@ from config.components.smtp_and_email import (
 @shared_task
 def send_email_confirmation(user_email: str, user_id: UUID):
     """Sends email confirmation to user using standard Django email backend."""
-    time.sleep(CELERY_GENERAL_SLEEP_TIME)
+    # time.sleep(CELERY_GENERAL_SLEEP_TIME)
 
     mail_subject = f'Activate your account in {EMAIL_PROJECT_NAME}'
     message = render_to_string(
@@ -47,7 +45,7 @@ def send_email_confirmation(user_email: str, user_id: UUID):
 @shared_task
 def send_email_confirmed(user_email: str):
     """Sends email notifying that email is confirmed to user using standard Django email backend."""
-    time.sleep(CELERY_GENERAL_SLEEP_TIME)
+    # time.sleep(CELERY_GENERAL_SLEEP_TIME)
 
     mail_subject = f'Your account in {EMAIL_PROJECT_NAME} is confirmed'
     message = render_to_string(
