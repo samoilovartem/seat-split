@@ -1,6 +1,6 @@
 build:
   docker:
-    web: Dockerfile
+    web: django-backend/Dockerfile
 release:
   image: web
   command:
