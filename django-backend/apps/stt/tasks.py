@@ -1,0 +1,73 @@
+import time
+from uuid import UUID
+
+from celery import shared_task
+
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+
+from apps.stt.utils import get_confirmation_link
+from config.components.celery import CELERY_GENERAL_SLEEP_TIME
+from config.components.smtp_and_email import (
+    EMAIL_CONTENT_TYPE,
+    EMAIL_FRONTEND_BASE_URL,
+    EMAIL_PROJECT_NAME,
+    SMTP2GO_FROM_EMAIL,
+)
+
+
+@shared_task
+def send_email_confirmation(user_email: str, user_id: UUID):
+    """Sends email confirmation to user using standard Django email backend."""
+    time.sleep(CELERY_GENERAL_SLEEP_TIME)
+
+    mail_subject = f'Activate your account in {EMAIL_PROJECT_NAME}'
+    message = render_to_string(
+        'emails/account_verification.html',
+        {
+            'email': user_email,
+            'link': get_confirmation_link(user_id=user_id),
+            'project_name': EMAIL_PROJECT_NAME,
+        },
+    )
+    email = EmailMessage(
+        subject=mail_subject,
+        body=message,
+        to=[user_email],
+        from_email=SMTP2GO_FROM_EMAIL,
+    )
+    email.content_subtype = EMAIL_CONTENT_TYPE
+    try:
+        email.send()
+    except Exception as e:
+        print(e)  # TODO: replace with logger
+        return
+
+
+@shared_task
+def send_email_confirmed(user_email: str):
+    """Sends email notifying that email is confirmed to user using standard Django email backend."""
+    time.sleep(CELERY_GENERAL_SLEEP_TIME)
+
+    mail_subject = f'Your account in {EMAIL_PROJECT_NAME} is confirmed'
+    message = render_to_string(
+        'emails/account_verified.html',
+        {
+            'email': user_email,
+            'link': f'https://{EMAIL_FRONTEND_BASE_URL}/',
+            'project_name': EMAIL_PROJECT_NAME,
+        },
+    )
+
+    email = EmailMessage(
+        subject=mail_subject,
+        body=message,
+        to=[user_email],
+        from_email=SMTP2GO_FROM_EMAIL,
+    )
+    email.content_subtype = EMAIL_CONTENT_TYPE
+    try:
+        email.send()
+    except Exception as e:
+        print(e)  # TODO: replace with logger
+        return

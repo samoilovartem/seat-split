@@ -1,70 +1,28 @@
-from rest_flex_fields import FlexFieldsModelViewSet
-from rest_framework.decorators import action
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from django.db.models import Prefetch
-
-from apps.common_services.utils import records_per_value
-from apps.email_domains.api.v1.serializers import EmailDomainsSerializer
-from apps.email_domains.models import EmailDomains
 from apps.email_domains.services.data_generator import DataGenerator
-from apps.email_domains.services.utils import (
-    generate_random_email_data,
-    get_random_domain_name,
-)
-from apps.users.models import User
 
 
-class AllEmailDomainsViewSet(FlexFieldsModelViewSet):
-    def get_queryset(self):
-        queryset = EmailDomains.objects.all().prefetch_related(
-            Prefetch('created_by', queryset=User.objects.only('id', 'username'))
-        )
-        return queryset
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def generate_random_data_with_provided_domain_or_state(request):
+    domain_name = request.data.get('domain_name')
+    state = request.data.get('state')
 
-    permit_list_expands = ['created_by']
-    serializer_class = EmailDomainsSerializer
+    if not domain_name:
+        return Response({'error': 'Domain name is required'})
 
-    search_fields = ('domain_name',)
-    ordering_fields = (
-        'id',
-        'created_at',
-    )
-    my_tags = ['All email domains']
+    generator = DataGenerator(domain_name, state)
 
-    @action(methods=['GET'], detail=False)
-    def get_email_domains_per_type(self, request):
-        result = records_per_value(EmailDomains, 'type')
-        return Response({'results': result})
-
-    @action(methods=['POST'], detail=False)
-    def generate_random_data_with_provided_domain_or_state(self, request):
-        domain_name = request.data.get('domain_name')
-        state = request.data.get('state')
-
-        if not domain_name:
-            return Response({'error': 'Domain name is required'})
-
-        generator = DataGenerator(domain_name, state)
-
-        if not state:
-            data = generator.generate_data()
-            return Response(data)
-
-        try:
-            data = generator.generate_data()
-        except Exception as e:
-            return Response({'error': str(e)})
-
+    if not state:
+        data = generator.generate_data()
         return Response(data)
 
-    @action(methods=['GET'], detail=False)
-    def generate_random_data(self, request):
-        domain_name = get_random_domain_name()
+    try:
+        data = generator.generate_data()
+    except Exception as e:
+        return Response({'error': str(e)})
 
-        if not domain_name:
-            return Response({'error': 'No email domains are available'})
-
-        data = generate_random_email_data(domain_name)
-
-        return Response(data)
+    return Response(data)

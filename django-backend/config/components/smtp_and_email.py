@@ -1,0 +1,23 @@
+import os
+
+from config.components.global_settings import DEBUG
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_PROJECT_NAME = os.environ.get('EMAIL_PROJECT_NAME')
+EMAIL_FRONTEND_BASE_URL = os.environ.get('EMAIL_FRONTEND_BASE_URL')
+EMAIL_CONTENT_TYPE = os.environ.get('EMAIL_CONTENT_TYPE')
+
+SMTP2GO_API_BASE_URL = os.environ.get('SMTP2GO_API_BASE_URL')
+SMTP2GO_API_KEY = os.environ.get('SMTP2GO_API_KEY')
+SMTP2GO_EMAIL_CONFIRMATION_TEMPLATE_ID = os.environ.get(
+    'SMTP2GO_EMAIL_CONFIRMATION_TEMPLATE_ID'
+)
+SMTP2GO_FROM_EMAIL = os.environ.get('SMTP2GO_FROM_EMAIL')
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

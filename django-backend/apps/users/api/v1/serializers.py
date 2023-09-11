@@ -1,9 +1,9 @@
 from rest_flex_fields import FlexFieldsModelSerializer
+from rest_framework.exceptions import ValidationError
 
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group, Permission
 
-from apps.serializers import ConvertNoneToStringSerializerMixin
+from apps.stt.models import TicketHolder
 from apps.users.models import User
 
 
@@ -34,73 +34,46 @@ class GroupSerializer(FlexFieldsModelSerializer):
         }
 
 
-class GeneralUserSerializer(FlexFieldsModelSerializer):
+class TicketHolderUserSerializer(FlexFieldsModelSerializer):
     class Meta:
-        model = User
-        exclude = ('password',)
-        extra_kwargs = {
-            'date_joined': {'read_only': True},
-            'last_login': {'read_only': True},
-        }
-        ref_name = 'GeneralUserSerializer'
+        model = TicketHolder
+        exclude = ('date_created', 'user')
 
 
-class UserDetailSerializer(
-    ConvertNoneToStringSerializerMixin, FlexFieldsModelSerializer
-):
-    class Meta:
-        model = User
-        exclude = ('password',)
-        none_to_str_fields = ('last_login', 'role', 'team', 'last_opened', 'email')
-        ref_name = 'UserDetailSerializer'
-        expandable_fields = {
-            'user_permissions': (PermissionsSerializer, {'many': True}),
-            'groups': (UserGroupSerializer, {'many': True}),
-        }
-
-
-class UserListSerializer(ConvertNoneToStringSerializerMixin, FlexFieldsModelSerializer):
-    class Meta:
-        model = User
-        exclude = ('password',)
-        none_to_str_fields = ('last_login', 'role', 'team', 'last_opened', 'email')
-        ref_name = 'UserListSerializer'
-        expandable_fields = {
-            'user_permissions': (PermissionsSerializer, {'many': True}),
-            'groups': (UserGroupSerializer, {'many': True}),
-        }
-
-
-class UserCreateSerializer(FlexFieldsModelSerializer):
-    def create(self, validated_data):
-        validated_data['password'] = make_password(validated_data['password'])
-        return super(UserCreateSerializer, self).create(validated_data)
+class UserSerializer(FlexFieldsModelSerializer):
+    ticket_holder_data = TicketHolderUserSerializer(source='ticket_holder_user')
 
     class Meta:
         model = User
         exclude = (
+            'password',
+            'username',
+            'user_permissions',
+            'groups',
             'date_joined',
             'last_login',
         )
-        extra_kwargs = {
-            'password': {'write_only': True},
-        }
-        ref_name = 'UserCreateSerializer'
+        ref_name = 'UserSerializer'
 
+    def update(self, instance, validated_data):
+        ticket_holder_data = validated_data.pop('ticket_holder_user', None)
+        self.update_ticket_holder(instance, ticket_holder_data)
 
-class DjoserUserSerializer(FlexFieldsModelSerializer):
-    class Meta:
-        model = User
-        exclude = ('password', 'groups', 'user_permissions')
-        extra_kwargs = {
-            'password': {'write_only': True},
-            'username': {'read_only': True},
-            'last_login': {'read_only': True},
-            'date_joined': {'read_only': True},
-            'is_superuser': {'read_only': True},
-            'is_staff': {'read_only': True},
-            'is_active': {'read_only': True},
-            'role': {'read_only': True},
-            'team': {'read_only': True},
-        }
-        ref_name = 'DjoserUserSerializer'
+        return super().update(instance, validated_data)
+
+    def update_ticket_holder(self, user, ticket_holder_data):  # noqa
+        if ticket_holder_data is not None:
+            ticket_holder = TicketHolder.objects.filter(user=user).first()
+            if not ticket_holder:
+                raise ValidationError(
+                    {'ticket_holder_data': 'No associated Ticket Holder to update.'}
+                )
+            for key, value in ticket_holder_data.items():
+                setattr(ticket_holder, key, value)
+            ticket_holder.save()
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        if ret['ticket_holder_data'] is None:
+            ret['ticket_holder_data'] = {}
+        return ret

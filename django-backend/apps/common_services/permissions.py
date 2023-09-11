@@ -34,10 +34,14 @@ class IsOwnerOrReadOnly(BasePermission):
         return obj.username == request.user
 
 
-class SpecificTeamObjectOnly(BasePermission):
-    """Gives access to an object if current user suits the condition"""
-
+class CurrentUserOrAdmin(BasePermission):
     def has_object_permission(self, request, view, obj):
-        # if request.user.email == 'lawns@lawns.com':
-        #     return obj.team == 'lawns'
-        return obj.team == 'lawns' if request.user.email == 'lawns@lawns.com' else None
+        if obj == request.user:
+            return True
+        if request.user.is_staff or request.user.is_superuser:
+            return True
+
+
+class IsAdmin(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_staff or request.user.is_superuser

@@ -4,11 +4,10 @@ WORKDIR /app
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    POETRY_VERSION=1.4.2 \
+    POETRY_VERSION=1.6.1 \
     GUNICORN_TIMEOUT=0
 
 RUN apt-get update && \
-    apt-get install -y binutils libproj-dev gdal-bin && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip
@@ -22,7 +21,6 @@ RUN poetry config virtualenvs.create false && \
 
 COPY . .
 
-RUN python manage.py collectstatic --noinput
+RUN chmod +x ./entrypoint-prod.sh
 
-CMD python manage.py migrate --noinput && \
-    gunicorn --timeout $GUNICORN_TIMEOUT --bind 0.0.0.0:$PORT config.wsgi:application
+CMD ["./entrypoint-prod.sh"]
