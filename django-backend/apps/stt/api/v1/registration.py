@@ -11,7 +11,7 @@ from django.utils.http import urlsafe_base64_decode
 
 from apps.stt.api.v1.serializers import RegisterSerializer
 from apps.stt.models import TicketHolder, User
-from apps.stt.utils import send_email_confirmation, send_email_confirmed
+from apps.stt.tasks import send_email_confirmation, send_email_confirmed
 
 
 class RegisterView(APIView):
@@ -50,25 +50,29 @@ class RegisterView(APIView):
                 is_card_interest=serializer.validated_data['is_card_interest'],
             )
 
-            send_email_confirmation(request, user)  # ToDO move this function to Celery
+            send_email_confirmation.delay(user.email, user.id)
+            # send_email_confirmation(user.email, user.id)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class VerifyView(APIView):
+    permission_classes = (AllowAny,)
     my_tags = ['registration and verification']
 
     def post(self, request, *args, **kwargs):
         try:
-            uid = force_str(urlsafe_base64_decode(self.kwargs['uidb64']))
+            uid = force_str(urlsafe_base64_decode(self.kwargs.get('uidb64')))
             user = User.objects.get(id=uid)
 
-            if default_token_generator.check_token(user, self.kwargs['token']):
-                user.is_verified = True
-                user.save()
+            if default_token_generator.check_token(user, self.kwargs.get('token')):
+                if not user.is_verified:
+                    user.is_verified = True
+                    user.save()
 
-                send_email_confirmed(request, user)  # ToDO move this function to Celery
+                send_email_confirmed.delay(user.email)
+                # send_email_confirmed(user.email)
 
                 return Response(status=status.HTTP_200_OK)
             else:
