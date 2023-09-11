@@ -1,11 +1,11 @@
 version: "3.8"
 
 services:
-  django:
+  stt_django:
     build:
       context: ./django-backend/
       dockerfile: "Dockerfile-dev"
-    container_name: django
+    container_name: stt_django
     env_file:
       - ./django-backend/.env.dev
     volumes:
@@ -13,13 +13,13 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - pgdb
+      - stt_pgdb
     networks:
       - backend
 
-  pgdb:
+  stt_pgdb:
     image: postgres
-    container_name: pgdb
+    container_name: stt_pgdb
     env_file:
       - ./django-backend/.env.dev
     volumes:
@@ -27,6 +27,30 @@ services:
     ports:
       - "5432:5432"
     restart: unless-stopped
+    networks:
+      - backend
+
+  stt_celery:
+    build:
+      context: ./django-backend/
+      dockerfile: "Dockerfile-dev"
+    command: celery -A config worker --loglevel=info
+    container_name: stt_celery
+    env_file:
+      - ./django-backend/.env.dev
+    volumes:
+      - ./django-backend:/app
+    depends_on:
+      - stt_django
+      - stt_redis
+    networks:
+      - backend
+
+  stt_redis:
+    image: redis
+    container_name: stt_redis
+    ports:
+      - "6379:6379"
     networks:
       - backend
 

@@ -38,6 +38,7 @@ include(
     'components/swagger.py',
     'components/logger.py',
     'components/smtp_and_email.py',
+    'components/celery.py',
 )
 
 INSTALLED_APPS = [
