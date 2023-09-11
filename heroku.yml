@@ -5,5 +5,5 @@ run:
   web: ./entrypoint-prod.sh
   celery_worker:
     command:
-      - celery -A config worker --loglevel=info
+      - celery -A config worker --loglevel=info --concurrency=2
     image: web
