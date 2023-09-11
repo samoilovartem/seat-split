@@ -7,7 +7,4 @@ release:
     - python manage.py collectstatic --noinput && python manage.py migrate --noinput
 run:
   web: gunicorn --timeout "$GUNICORN_TIMEOUT" --bind 0.0.0.0:"$PORT" config.wsgi:application
-  worker:
-    command:
-      - celery -A config worker -l info
-    image: web
+  worker: celery -A config worker --loglevel=info
