@@ -50,8 +50,8 @@ class RegisterView(APIView):
                 is_card_interest=serializer.validated_data['is_card_interest'],
             )
 
-            send_email_confirmation.delay(user.email, user.id)
-            # send_email_confirmation(user.email, user.id)
+            # send_email_confirmation.delay(user.email, user.id)
+            send_email_confirmation(user.email, user.id)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -71,8 +71,8 @@ class VerifyView(APIView):
                     user.is_verified = True
                     user.save()
 
-                send_email_confirmed.delay(user.email)
-                # send_email_confirmed(user.email)
+                # send_email_confirmed.delay(user.email)
+                send_email_confirmed(user.email)
 
                 return Response(status=status.HTTP_200_OK)
             else:

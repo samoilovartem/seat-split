@@ -3,7 +3,7 @@ build:
     web: django-backend/Dockerfile
 run:
   web: ./entrypoint-prod.sh
-  celery_worker:
-    command:
-      - celery -A config worker --loglevel=info --concurrency=2
-    image: web
+#  celery_worker:
+#    command:
+#      - celery -A config worker --loglevel=info --concurrency=2
+#    image: web
