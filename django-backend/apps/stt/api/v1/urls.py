@@ -11,7 +11,7 @@ from apps.stt.api.v1.registration import RegisterView, VerifyView
 
 urlpatterns = [
     path(
-        'api/v1/email-domains/generate_random_data_with_provided_domain_or_state/',
+        'email-domains/generate_random_data_with_provided_domain_or_state/',
         generate_random_data_with_provided_domain_or_state,
     ),
     path('token-auth/token/login', CustomTokenCreateView.as_view(), name='login'),
