@@ -21,6 +21,6 @@ jobs:
         with:
           status: ${{ job.status }}
           fields: repo,message,commit,author,action,workflow,job,eventName,ref,sha,startTime,finishTime
-          mention: channel
+          github_token: ${{ secrets.GH_PAT }}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
