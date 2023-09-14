@@ -2,7 +2,15 @@ from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet
 
-from apps.stt.models import Event, Purchase, Team, TeamEvent, Ticket, TicketHolder
+from apps.stt.models import (
+    Event,
+    Purchase,
+    Team,
+    TeamEvent,
+    Ticket,
+    TicketHolder,
+    TicketHolderTeam,
+)
 
 
 class TeamEventFormset(BaseInlineFormSet):
@@ -24,6 +32,15 @@ class TeamEventInline(admin.TabularInline):
     formset = TeamEventFormset
 
 
+class TicketHolderTeamInline(admin.TabularInline):
+    model = TicketHolderTeam
+    extra = 0
+    readonly_fields = (
+        'credentials_website_username',
+        'credentials_website_password',
+    )
+
+
 class TicketHolderAdminConfig(admin.ModelAdmin):
     model = TicketHolder
     save_as = True
@@ -40,6 +57,8 @@ class TicketHolderAdminConfig(admin.ModelAdmin):
         'get_email',
     )
 
+    inlines = (TicketHolderTeamInline,)
+
     def get_email(self, obj):
         return obj.user.email
 
@@ -52,7 +71,7 @@ class TicketAdminConfig(admin.ModelAdmin):
     save_on_top = True
     list_display = (
         'id',
-        'user',
+        'ticket_holder',
         'event',
         'skybox_event_id',
     )
