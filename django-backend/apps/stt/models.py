@@ -41,7 +41,7 @@ class TicketHolder(UUIDMixin):
 
 
 class Ticket(UUIDMixin):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ticket_holder = models.ForeignKey(TicketHolder, on_delete=models.CASCADE)
     event = models.ForeignKey('Event', on_delete=models.CASCADE, related_name='tickets')
     skybox_event_id = models.IntegerField(null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -127,3 +127,24 @@ class TeamEvent(UUIDMixin):
                 name='event_team_idx',
             ),
         )
+
+
+class TicketHolderTeam(UUIDMixin):
+    ticket_holder = models.ForeignKey(TicketHolder, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    credentials_website_username = models.CharField(max_length=255)
+    credentials_website_password = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "content\".\"ticket_holder_team"
+        unique_together = ['ticket_holder', 'team']
+        constraints = (
+            UniqueConstraint(
+                fields=('ticket_holder', 'team'),
+                name='ticket_holder_team_idx',
+            ),
+        )
+
+    def __str__(self):
+        return f'{self.ticket_holder} - {self.team} - {self.id}'
