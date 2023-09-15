@@ -1,5 +1,7 @@
 from uuid import uuid4
 
+from simple_history.models import HistoricalRecords
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import UniqueConstraint
@@ -79,6 +81,7 @@ class Event(UUIDMixin):
     name = models.CharField(max_length=255)
     date_time = models.DateTimeField()
     season = models.CharField(max_length=255)
+    history = HistoricalRecords()
 
     def __str__(self):
         return f'{self.name}'
@@ -87,6 +90,10 @@ class Event(UUIDMixin):
         db_table = "content\".\"event"
         verbose_name = 'Event'
         verbose_name_plural = 'Events'
+        permissions = (
+            ('import_events', 'Can import'),
+            ('export_events', 'Can export'),
+        )
 
 
 class Team(UUIDMixin):
@@ -128,6 +135,9 @@ class TeamEvent(UUIDMixin):
             ),
         )
 
+    def __str__(self):
+        return f'{self.event} - {self.team} - {self.id}'
+
 
 class TicketHolderTeam(UUIDMixin):
     ticket_holder = models.ForeignKey(TicketHolder, on_delete=models.CASCADE)
@@ -148,3 +158,6 @@ class TicketHolderTeam(UUIDMixin):
 
     def __str__(self):
         return f'{self.ticket_holder} - {self.team} - {self.id}'
+
+
+ticket_holders_teams = models.ManyToManyField(Team, through='TicketHolderTeam')
