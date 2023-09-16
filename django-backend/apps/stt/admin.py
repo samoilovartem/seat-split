@@ -16,6 +16,7 @@ from apps.stt.models import (
     TicketHolder,
     TicketHolderTeam,
 )
+from apps.stt.resources import EventResource
 
 
 class TeamEventFormset(BaseInlineFormSet):
@@ -99,6 +100,7 @@ class PurchaseAdminConfig(admin.ModelAdmin):
 
 class EventAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
     model = Event
+    resource_class = EventResource
     save_as = True
     save_on_top = True
     list_display = (
