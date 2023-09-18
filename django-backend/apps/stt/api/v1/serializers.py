@@ -3,7 +3,7 @@ from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.serializers import ModelSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from apps.stt.models import Team, TicketHolder, TicketHolderTeam, User
+from apps.stt.models import Team, Ticket, TicketHolder, TicketHolderTeam, User
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -69,4 +69,10 @@ class TicketHolderSerializer(serializers.ModelSerializer):
 class TicketHolderTeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = TicketHolderTeam
+        fields = '__all__'
+
+
+class TicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
         fields = '__all__'
