@@ -5,8 +5,6 @@ from django.db import models
 
 
 class CustomUserManager(BaseUserManager):
-    # use_in_migrations = True
-
     def create_user(self, email, password, **extra_fields):
         if not email:
             raise ValueError('The Email must be set')
@@ -34,7 +32,9 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=150)
     email = models.EmailField(max_length=255, blank=True, unique=True)
     password = models.CharField(max_length=255)
-    is_verified = models.BooleanField(default=False)
+    is_verified = models.BooleanField(
+        default=False, help_text='Designates whether the user has verified his email.'
+    )
 
     objects = CustomUserManager()
 

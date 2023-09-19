@@ -147,7 +147,9 @@ class TeamEvent(models.Model):
 
 class TicketHolderTeam(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    ticket_holder = models.ForeignKey(TicketHolder, on_delete=models.CASCADE)
+    ticket_holder = models.ForeignKey(
+        TicketHolder, related_name='ticket_holder_teams', on_delete=models.CASCADE
+    )
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     credentials_website_username = models.CharField(max_length=255)
     credentials_website_password = models.CharField(max_length=255)
