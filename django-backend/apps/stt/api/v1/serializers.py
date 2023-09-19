@@ -1,3 +1,4 @@
+from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.serializers import ModelSerializer
@@ -54,22 +55,26 @@ class RegisterSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
 
-class TeamSerializer(serializers.ModelSerializer):
+class TeamSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Team
         fields = '__all__'
 
 
-class TicketHolderSerializer(serializers.ModelSerializer):
+class TicketHolderTeamSerializer(FlexFieldsModelSerializer):
+    class Meta:
+        model = TicketHolderTeam
+        exclude = ('ticket_holder',)
+        expandable_fields = {'team': (TeamSerializer, {'many': True})}
+
+
+class TicketHolderSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = TicketHolder
         fields = '__all__'
-
-
-class TicketHolderTeamSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TicketHolderTeam
-        fields = '__all__'
+        expandable_fields = {
+            'ticket_holder_teams': (TicketHolderTeamSerializer, {'many': True}),
+        }
 
 
 class TicketSerializer(serializers.ModelSerializer):
