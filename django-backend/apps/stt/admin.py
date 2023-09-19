@@ -137,7 +137,7 @@ class EventAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
     associated_teams.short_description = 'Teams'
 
 
-class TeamAdminConfig(admin.ModelAdmin):
+class TeamAdminConfig(ImportExportMixin, admin.ModelAdmin):
     model = Team
     save_as = True
     save_on_top = True

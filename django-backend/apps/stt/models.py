@@ -9,14 +9,8 @@ from django.db.models import UniqueConstraint
 User = get_user_model()
 
 
-class UUIDMixin(models.Model):
+class TicketHolder(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-
-    class Meta:
-        abstract = True
-
-
-class TicketHolder(UUIDMixin):
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
     user = models.OneToOneField(
@@ -33,16 +27,17 @@ class TicketHolder(UUIDMixin):
     tickets_data = models.JSONField(null=True, blank=True, default=dict)
     date_created = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f'{self.first_name} {self.last_name}'
-
     class Meta:
         db_table = "content\".\"ticket_holder"
         verbose_name = 'Ticket Holder'
         verbose_name_plural = 'Ticket Holders'
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
 
-class Ticket(UUIDMixin):
+
+class Ticket(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     ticket_holder = models.ForeignKey(TicketHolder, on_delete=models.CASCADE)
     event = models.ForeignKey('Event', on_delete=models.CASCADE, related_name='tickets')
     skybox_event_id = models.IntegerField(null=True, blank=True)
@@ -59,8 +54,12 @@ class Ticket(UUIDMixin):
         verbose_name = 'Ticket'
         verbose_name_plural = 'Tickets'
 
+    def __str__(self):
+        return f'{self.ticket_holder} - {self.event} - {self.id}'
 
-class Purchase(UUIDMixin):
+
+class Purchase(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     invoice_number = models.IntegerField()
     customer = models.CharField(max_length=255)
@@ -68,23 +67,21 @@ class Purchase(UUIDMixin):
     purchase_price = models.DecimalField(max_digits=10, decimal_places=2)
     delivery_status = models.CharField(max_length=255)
 
-    def __str__(self):
-        return f'{self.ticket} - {self.invoice_number}'
-
     class Meta:
         db_table = "content\".\"purchase"
         verbose_name = 'Purchase'
         verbose_name_plural = 'Purchases'
 
+    def __str__(self):
+        return f'{self.ticket} - {self.invoice_number}'
 
-class Event(UUIDMixin):
+
+class Event(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     name = models.CharField(max_length=255)
     date_time = models.DateTimeField()
     season = models.CharField(max_length=255)
     history = HistoricalRecords()
-
-    def __str__(self):
-        return f'{self.name}'
 
     class Meta:
         db_table = "content\".\"event"
@@ -95,8 +92,12 @@ class Event(UUIDMixin):
             ('export_events', 'Can export'),
         )
 
+    def __str__(self):
+        return f'{self.name}'
 
-class Team(UUIDMixin):
+
+class Team(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     name = models.CharField(max_length=255)
     name_short = models.CharField(max_length=255)
     abbreviation = models.CharField(max_length=255)
@@ -108,19 +109,24 @@ class Team(UUIDMixin):
     credentials_website = models.CharField(max_length=255)
     ticketmaster_name = models.CharField(max_length=255)
 
-    def __str__(self):
-        return f'{self.name}'
-
     class Meta:
         db_table = "content\".\"team"
         verbose_name = 'Team'
         verbose_name_plural = 'Teams'
+        permissions = (
+            ('import_events', 'Can import'),
+            ('export_events', 'Can export'),
+        )
+
+    def __str__(self):
+        return f'{self.name}'
 
 
 teams_events = models.ManyToManyField(Team, through='TeamEvent')
 
 
-class TeamEvent(UUIDMixin):
+class TeamEvent(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -139,8 +145,11 @@ class TeamEvent(UUIDMixin):
         return f'{self.event} - {self.team} - {self.id}'
 
 
-class TicketHolderTeam(UUIDMixin):
-    ticket_holder = models.ForeignKey(TicketHolder, on_delete=models.CASCADE)
+class TicketHolderTeam(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    ticket_holder = models.ForeignKey(
+        TicketHolder, related_name='ticket_holder_teams', on_delete=models.CASCADE
+    )
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     credentials_website_username = models.CharField(max_length=255)
     credentials_website_password = models.CharField(max_length=255)

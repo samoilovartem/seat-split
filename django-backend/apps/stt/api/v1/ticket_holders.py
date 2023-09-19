@@ -1,4 +1,5 @@
 from drf_yasg.utils import swagger_auto_schema
+from rest_flex_fields import is_expanded
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import (
@@ -25,9 +26,21 @@ class TicketHolderViewSet(
     ListModelMixin,
     GenericViewSet,
 ):
-    queryset = TicketHolder.objects.all()
     serializer_class = TicketHolderSerializer
     permission_classes = [IsAuthenticated]
+    permit_list_expands = ['ticket_holder_teams']
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff or user.is_superuser:
+            queryset = TicketHolder.objects.all()
+        else:
+            queryset = TicketHolder.objects.filter(user=user)
+
+        if is_expanded(self.request, 'ticket_holder_teams'):
+            queryset = queryset.prefetch_related('ticket_holder_teams')
+
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
