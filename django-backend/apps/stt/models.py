@@ -48,6 +48,7 @@ class Ticket(models.Model):
     barcode = models.IntegerField(null=True, blank=True)
     listing_status = models.CharField(max_length=255)
     sold_at = models.DateTimeField(null=True, blank=True)
+    history = HistoricalRecords()
 
     class Meta:
         db_table = "content\".\"ticket"
@@ -66,6 +67,7 @@ class Purchase(models.Model):
     purchased_at = models.DateTimeField(null=True, blank=True)
     purchase_price = models.DecimalField(max_digits=10, decimal_places=2)
     delivery_status = models.CharField(max_length=255)
+    history = HistoricalRecords()
 
     class Meta:
         db_table = "content\".\"purchase"
@@ -130,6 +132,7 @@ class TeamEvent(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "content\".\"team_event"
@@ -150,10 +153,13 @@ class TicketHolderTeam(models.Model):
     ticket_holder = models.ForeignKey(
         TicketHolder, related_name='ticket_holder_teams', on_delete=models.CASCADE
     )
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    team = models.ForeignKey(
+        Team, related_name='ticket_holder_teams', on_delete=models.CASCADE
+    )
     credentials_website_username = models.CharField(max_length=255)
     credentials_website_password = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "content\".\"ticket_holder_team"
