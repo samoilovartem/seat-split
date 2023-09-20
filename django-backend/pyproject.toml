@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "django-backend"
 version = "0.1.0"
-description = "Django backend for lewanddowski-crm based on django rest framework."
+description = "Django backend for season-ticket-tech project based on django rest framework."
 authors = ["Artem Samoilov <asamoilov@lewanddowski.com>"]
 readme = "README.md"
 
@@ -47,5 +47,5 @@ known_django = "django"
 sections = ["FUTURE", "STDLIB", "THIRDPARTY", "DJANGO", "FIRSTPARTY", "LOCALFOLDER"]
 
 [build-system]
-requires = ["poetry-core>=1.4.2"]
+requires = ["poetry-core>=1.6.1"]
 build-backend = "poetry.core.masonry.api"

@@ -47,6 +47,7 @@ class TicketHolderTeamInline(admin.TabularInline):
     )
 
 
+@admin.register(TicketHolder)
 class TicketHolderAdminConfig(admin.ModelAdmin):
     model = TicketHolder
     save_as = True
@@ -71,19 +72,21 @@ class TicketHolderAdminConfig(admin.ModelAdmin):
     get_email.short_description = 'User email'
 
 
+@admin.register(Ticket)
 class TicketAdminConfig(admin.ModelAdmin):
     model = Ticket
     save_as = True
     save_on_top = True
     list_display = (
-        'id',
-        'ticket_holder',
         'event',
+        'ticket_holder',
         'skybox_event_id',
+        'id',
     )
-    list_display_links = ('id',)
+    list_display_links = ('event',)
 
 
+@admin.register(Purchase)
 class PurchaseAdminConfig(admin.ModelAdmin):
     model = Purchase
     save_as = True
@@ -98,6 +101,7 @@ class PurchaseAdminConfig(admin.ModelAdmin):
     list_display_links = ('id',)
 
 
+@admin.register(Event)
 class EventAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
     model = Event
     resource_class = EventResource
@@ -137,28 +141,22 @@ class EventAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
     associated_teams.short_description = 'Teams'
 
 
+@admin.register(Team)
 class TeamAdminConfig(ImportExportMixin, admin.ModelAdmin):
     model = Team
     save_as = True
     save_on_top = True
     list_display = (
-        'id',
         'name',
         'league',
         'city',
         'state',
+        'id',
     )
-    list_display_links = ('id',)
+    list_display_links = ('name',)
     search_fields = (
         'name',
         'league',
         'city',
         'state',
     )
-
-
-admin.site.register(TicketHolder, TicketHolderAdminConfig)
-admin.site.register(Ticket, TicketAdminConfig)
-admin.site.register(Purchase, PurchaseAdminConfig)
-admin.site.register(Event, EventAdminConfig)
-admin.site.register(Team, TeamAdminConfig)

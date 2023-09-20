@@ -64,8 +64,11 @@ class TeamSerializer(FlexFieldsModelSerializer):
 class TicketHolderTeamSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = TicketHolderTeam
-        exclude = ('ticket_holder',)
-        expandable_fields = {'team': (TeamSerializer, {'many': True})}
+        fields = '__all__'
+        expandable_fields = {
+            'team': 'apps.stt.api.v1.serializers.TeamSerializer',
+            'ticket_holder': 'apps.stt.api.v1.serializers.TicketHolderSerializer',
+        }
 
 
 class TicketHolderSerializer(FlexFieldsModelSerializer):
@@ -77,7 +80,7 @@ class TicketHolderSerializer(FlexFieldsModelSerializer):
         }
 
 
-class TicketSerializer(serializers.ModelSerializer):
+class TicketSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Ticket
         fields = '__all__'
