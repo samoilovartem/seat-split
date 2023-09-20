@@ -10,7 +10,7 @@ class TicketViewSet(ModelViewSet):
     filterset_fields = ['ticket_holder', 'event', 'listing_status', 'sold_at']
     permission_classes = (IsTicketHolder,)
 
-    my_tags = ['all tickets']
+    my_tags = ['tickets']
 
     def get_queryset(self):
         user = self.request.user

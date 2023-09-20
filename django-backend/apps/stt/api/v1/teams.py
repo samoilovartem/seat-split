@@ -13,7 +13,7 @@ class TeamViewSet(ModelViewSet):
     filterset_fields = ['league', 'city', 'name']
     permission_classes = [HasAPIKey]
 
-    my_tags = ['all teams']
+    my_tags = ['teams']
 
     @action(detail=False, methods=['get'])
     def get_teams_and_leagues_info(self, request):
