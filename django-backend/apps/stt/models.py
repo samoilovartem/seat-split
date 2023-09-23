@@ -25,7 +25,8 @@ class TicketHolder(models.Model):
     is_card_interest = models.BooleanField(default=False)
     is_season_ticket_interest = models.BooleanField(default=False)
     tickets_data = models.JSONField(null=True, blank=True, default=dict)
-    date_created = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    history = HistoricalRecords()
 
     class Meta:
         db_table = "content\".\"ticket_holder"

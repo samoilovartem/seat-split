@@ -48,7 +48,7 @@ class TicketHolderTeamInline(admin.TabularInline):
 
 
 @admin.register(TicketHolder)
-class TicketHolderAdminConfig(admin.ModelAdmin):
+class TicketHolderAdminConfig(SimpleHistoryAdmin):
     model = TicketHolder
     save_as = True
     save_on_top = True
@@ -65,11 +65,27 @@ class TicketHolderAdminConfig(admin.ModelAdmin):
     )
 
     inlines = (TicketHolderTeamInline,)
+    history_list_display = ('changed_fields', 'list_changes', 'status')
 
     def get_email(self, obj):
         return obj.user.email
 
     get_email.short_description = 'User email'
+
+    @staticmethod
+    def changed_fields(obj):
+        if obj.prev_record:
+            delta = obj.diff_against(obj.prev_record)
+            return delta.changed_fields
+        return None
+
+    @staticmethod
+    def list_changes(obj):
+        fields = ''
+        if obj.prev_record:
+            fields = show_changed_fields(obj, fields)
+            return format_html(fields)
+        return None
 
 
 @admin.register(Ticket)
