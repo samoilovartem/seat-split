@@ -37,7 +37,7 @@ class GroupSerializer(FlexFieldsModelSerializer):
 class TicketHolderUserSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = TicketHolder
-        exclude = ('date_created', 'user')
+        exclude = ('created_at', 'user')
 
 
 class UserSerializer(FlexFieldsModelSerializer):
