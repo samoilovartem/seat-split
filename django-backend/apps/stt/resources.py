@@ -10,7 +10,7 @@ class EventResource(ModelResource):
             date_time=row.get('date_time'),
             season=row.get('season'),
         )
-        team_names = row.get('name').split(' vs ')
+        team_names = row.get('name').split(' at ')
 
         for team_name in team_names:
             team = Team.objects.get(name=team_name)
