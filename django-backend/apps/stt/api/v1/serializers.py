@@ -4,7 +4,15 @@ from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.serializers import ModelSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from apps.stt.models import Team, Ticket, TicketHolder, TicketHolderTeam, User
+from apps.stt.models import (
+    Event,
+    Team,
+    TeamEvent,
+    Ticket,
+    TicketHolder,
+    TicketHolderTeam,
+    User,
+)
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -84,3 +92,26 @@ class TicketSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Ticket
         fields = '__all__'
+
+
+class TeamEventSerializer(FlexFieldsModelSerializer):
+    team = TeamSerializer(read_only=True)
+
+    class Meta:
+        model = TeamEvent
+        fields = ['team']
+
+
+class EventSerializer(FlexFieldsModelSerializer):
+    teams = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Event
+        fields = '__all__'
+
+    @staticmethod
+    def get_teams(obj):
+        team_events = obj.teamevent_set.all()
+        teams = [team_event.team for team_event in team_events]
+
+        return TeamSerializer(teams, many=True).data
