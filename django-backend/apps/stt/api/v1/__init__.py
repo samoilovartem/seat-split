@@ -1,5 +1,6 @@
 from rest_framework import routers
 
+from apps.stt.api.v1.events import EventViewSet
 from apps.stt.api.v1.teams import TeamViewSet
 from apps.stt.api.v1.ticket_holder_team import TicketHolderTeamViewSet
 from apps.stt.api.v1.ticket_holders import TicketHolderViewSet
@@ -14,3 +15,4 @@ stt_router_v1.register(
     'ticket-holders-teams', TicketHolderTeamViewSet, basename='ticket-holders-teams'
 )
 stt_router_v1.register(r'tickets', TicketViewSet, basename='tickets')
+stt_router_v1.register(r'events', EventViewSet, basename='events')

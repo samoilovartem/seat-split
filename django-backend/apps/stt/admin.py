@@ -124,14 +124,18 @@ class EventAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
     save_as = True
     save_on_top = True
     list_display = (
-        'id',
+        'name',
         'associated_teams',
+        'event_league',
         'date_time',
         'season',
+        'id',
     )
-    list_display_links = ('id',)
+    list_display_links = ('name',)
     inlines = (TeamEventInline,)
+    search_fields = ('name', 'season')
     history_list_display = ('changed_fields', 'list_changes', 'status')
+    ordering = ('date_time',)
 
     @staticmethod
     def changed_fields(obj):
@@ -151,10 +155,17 @@ class EventAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
     def associated_teams(self, obj):
         teams = [te.team.name for te in obj.teamevent_set.all()]
         if len(teams) == 2:
-            return f'{teams[0]} vs {teams[1]}'
+            return f'{teams[0]}, {teams[1]}'
         return ', '.join(teams)
 
+    def event_league(self, obj):
+        teams_leagues = [te.team.league for te in obj.teamevent_set.all()]
+        if teams_leagues[0] == teams_leagues[1]:
+            return teams_leagues[0]
+        return ', '.join(teams_leagues)
+
     associated_teams.short_description = 'Teams'
+    event_league.short_description = 'League'
 
 
 @admin.register(Team)
@@ -176,3 +187,6 @@ class TeamAdminConfig(ImportExportMixin, admin.ModelAdmin):
         'city',
         'state',
     )
+
+
+admin.site.site_header = 'Season Tickets Tech Admin Dashboard'
