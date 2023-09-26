@@ -63,7 +63,11 @@ class TicketHolderAdminConfig(SimpleHistoryAdmin):
         'last_name',
         'get_email',
     )
-
+    search_fields = (
+        'first_name',
+        'last_name',
+        'user__email',
+    )
     inlines = (TicketHolderTeamInline,)
     history_list_display = ('changed_fields', 'list_changes', 'status')
 
@@ -99,7 +103,13 @@ class TicketAdminConfig(admin.ModelAdmin):
         'skybox_event_id',
         'id',
     )
+    search_fields = (
+        'ticket_holder__first_name',
+        'ticket_holder__last_name',
+        'event__name',
+    )
     list_display_links = ('event',)
+    autocomplete_fields = ('event', 'ticket_holder')
 
 
 @admin.register(Purchase)
@@ -115,6 +125,7 @@ class PurchaseAdminConfig(admin.ModelAdmin):
         'delivery_status',
     )
     list_display_links = ('id',)
+    autocomplete_fields = ('ticket',)
 
 
 @admin.register(Event)
