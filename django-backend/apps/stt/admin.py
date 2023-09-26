@@ -3,7 +3,7 @@ from simple_history.admin import SimpleHistoryAdmin
 
 from django.contrib import admin
 from django.core.exceptions import ValidationError
-from django.forms import BaseInlineFormSet
+from django.forms import BaseInlineFormSet, Select
 from django.utils.html import format_html
 
 from apps.common_services.utils import show_changed_fields
@@ -17,6 +17,7 @@ from apps.stt.models import (
     TicketHolderTeam,
 )
 from apps.stt.resources import EventResource
+from config.settings import DELIVERY_STATUSES, LISTING_STATUSES
 
 
 class TeamEventFormset(BaseInlineFormSet):
@@ -63,7 +64,11 @@ class TicketHolderAdminConfig(SimpleHistoryAdmin):
         'last_name',
         'get_email',
     )
-
+    search_fields = (
+        'first_name',
+        'last_name',
+        'user__email',
+    )
     inlines = (TicketHolderTeamInline,)
     history_list_display = ('changed_fields', 'list_changes', 'status')
 
@@ -99,7 +104,18 @@ class TicketAdminConfig(admin.ModelAdmin):
         'skybox_event_id',
         'id',
     )
+    search_fields = (
+        'ticket_holder__first_name',
+        'ticket_holder__last_name',
+        'event__name',
+    )
     list_display_links = ('event',)
+    autocomplete_fields = ('event', 'ticket_holder')
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name == 'listing_status':
+            kwargs['widget'] = Select(choices=LISTING_STATUSES)
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
 
 @admin.register(Purchase)
@@ -108,13 +124,19 @@ class PurchaseAdminConfig(admin.ModelAdmin):
     save_as = True
     save_on_top = True
     list_display = (
-        'id',
         'ticket',
         'invoice_number',
         'customer',
         'delivery_status',
+        'id',
     )
-    list_display_links = ('id',)
+    list_display_links = ('ticket',)
+    autocomplete_fields = ('ticket',)
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name == 'delivery_status':
+            kwargs['widget'] = Select(choices=DELIVERY_STATUSES)
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
 
 @admin.register(Event)
@@ -190,3 +212,4 @@ class TeamAdminConfig(ImportExportMixin, admin.ModelAdmin):
 
 
 admin.site.site_header = 'Season Tickets Tech Admin Dashboard'
+admin.site.site_url = None
