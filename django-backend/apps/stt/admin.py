@@ -216,6 +216,7 @@ class TeamAdminConfig(ImportExportMixin, admin.ModelAdmin):
         'city',
         'state',
     )
+    list_filter = ('league',)
 
 
 admin.site.site_header = 'Season Tickets Tech Admin Dashboard'
