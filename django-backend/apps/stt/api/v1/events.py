@@ -1,8 +1,8 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from apps.stt.api.v1.filters import EventFilterSet
 from apps.stt.api.v1.serializers import EventSerializer
+from apps.stt.filters import EventFilterSet
 from apps.stt.models import Event
 
 
