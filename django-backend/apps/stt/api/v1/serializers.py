@@ -93,6 +93,9 @@ class TicketSerializer(FlexFieldsModelSerializer):
         model = Ticket
         fields = '__all__'
 
+    def create(self, validated_data):
+        return Ticket.objects.create(**validated_data)
+
 
 class TeamEventSerializer(FlexFieldsModelSerializer):
     team = TeamSerializer(read_only=True)
