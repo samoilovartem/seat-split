@@ -18,7 +18,7 @@ from apps.stt.models import (
     TicketHolderTeam,
 )
 from apps.stt.resources import EventResource
-from config.settings import DELIVERY_STATUSES, LISTING_STATUSES
+from config.components.business_related import DELIVERY_STATUSES, LISTING_STATUSES
 
 
 class BaseModelAdmin(SimpleHistoryAdmin):

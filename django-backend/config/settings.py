@@ -39,6 +39,7 @@ include(
     'components/logger.py',
     'components/smtp_and_email.py',
     'components/celery.py',
+    'components/business_related.py',
 )
 
 INSTALLED_APPS = [
@@ -145,18 +146,3 @@ if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-
-LISTING_STATUSES = [
-    ('Listed', 'Listed'),
-    ('Delisted', 'Delisted'),
-    ('Sold', 'Sold'),
-    ('Cancelled', 'Cancelled'),
-]
-
-DELIVERY_STATUSES = [
-    ('Pending', 'Pending'),
-    ('Dispatched', 'Dispatched'),
-    ('Delivered', 'Delivered'),
-    ('Received', 'Received'),
-    ('Returned', 'Returned'),
-]
