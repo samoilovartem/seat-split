@@ -5,6 +5,7 @@ from rest_framework_api_key.permissions import HasAPIKey
 
 from apps.stt.api.v1.serializers import TeamSerializer
 from apps.stt.models import Team
+from config.components.business_related import SUPPORTED_LEAGUES
 
 
 class TeamViewSet(ModelViewSet):
@@ -17,11 +18,9 @@ class TeamViewSet(ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def get_teams_and_leagues_info(self, request):
-        leagues = ['NFL', 'NBA', 'NHL', 'MLB', 'MLS']
-
         teams = Team.objects.all()
         team_serializer = TeamSerializer(teams, many=True)
 
-        data = {'leagues': leagues, 'teams': team_serializer.data}
+        data = {'leagues': SUPPORTED_LEAGUES, 'teams': team_serializer.data}
 
         return Response(data)

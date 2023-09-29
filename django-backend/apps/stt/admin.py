@@ -18,7 +18,26 @@ from apps.stt.models import (
     TicketHolderTeam,
 )
 from apps.stt.resources import EventResource
-from config.settings import DELIVERY_STATUSES, LISTING_STATUSES
+from config.components.business_related import DELIVERY_STATUSES, LISTING_STATUSES
+
+
+class BaseModelAdmin(SimpleHistoryAdmin):
+    history_list_display = ('changed_fields', 'list_changes', 'status')
+
+    @staticmethod
+    def changed_fields(obj):
+        if obj.prev_record:
+            delta = obj.diff_against(obj.prev_record)
+            return delta.changed_fields
+        return None
+
+    @staticmethod
+    def list_changes(obj):
+        fields = ''
+        if obj.prev_record:
+            fields = show_changed_fields(obj, fields)
+            return format_html(fields)
+        return None
 
 
 class TeamEventFormset(BaseInlineFormSet):
@@ -50,7 +69,7 @@ class TicketHolderTeamInline(admin.TabularInline):
 
 
 @admin.register(TicketHolder)
-class TicketHolderAdminConfig(SimpleHistoryAdmin):
+class TicketHolderAdminConfig(BaseModelAdmin):
     model = TicketHolder
     save_as = True
     save_on_top = True
@@ -71,31 +90,16 @@ class TicketHolderAdminConfig(SimpleHistoryAdmin):
         'user__email',
     )
     inlines = (TicketHolderTeamInline,)
-    history_list_display = ('changed_fields', 'list_changes', 'status')
+    autocomplete_fields = ('user',)
 
     def get_email(self, obj):
         return obj.user.email
 
     get_email.short_description = 'User email'
 
-    @staticmethod
-    def changed_fields(obj):
-        if obj.prev_record:
-            delta = obj.diff_against(obj.prev_record)
-            return delta.changed_fields
-        return None
-
-    @staticmethod
-    def list_changes(obj):
-        fields = ''
-        if obj.prev_record:
-            fields = show_changed_fields(obj, fields)
-            return format_html(fields)
-        return None
-
 
 @admin.register(Ticket)
-class TicketAdminConfig(admin.ModelAdmin):
+class TicketAdminConfig(BaseModelAdmin):
     model = Ticket
     save_as = True
     save_on_top = True
@@ -141,7 +145,7 @@ class PurchaseAdminConfig(admin.ModelAdmin):
 
 
 @admin.register(Event)
-class EventAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
+class EventAdminConfig(ImportExportMixin, BaseModelAdmin):
     model = Event
     resource_class = EventResource
     save_as = True
@@ -157,7 +161,6 @@ class EventAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
     list_display_links = ('name',)
     inlines = (TeamEventInline,)
     search_fields = ('name', 'season')
-    history_list_display = ('changed_fields', 'list_changes', 'status')
     ordering = ('date_time',)
     list_filter = ('season', LeagueListFilter)
 
@@ -165,21 +168,6 @@ class EventAdminConfig(ImportExportMixin, SimpleHistoryAdmin):
         queryset = super().get_queryset(request)
         queryset = queryset.prefetch_related('teamevent_set__team')
         return queryset
-
-    @staticmethod
-    def changed_fields(obj):
-        if obj.prev_record:
-            delta = obj.diff_against(obj.prev_record)
-            return delta.changed_fields
-        return None
-
-    @staticmethod
-    def list_changes(obj):
-        fields = ''
-        if obj.prev_record:
-            fields = show_changed_fields(obj, fields)
-            return format_html(fields)
-        return None
 
     def associated_teams(self, obj):
         teams = [te.team.name for te in obj.teamevent_set.all()]
