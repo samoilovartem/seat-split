@@ -55,6 +55,12 @@ class Ticket(models.Model):
         db_table = "content\".\"ticket"
         verbose_name = 'Ticket'
         verbose_name_plural = 'Tickets'
+        constraints = (
+            UniqueConstraint(
+                fields=('ticket_holder', 'event', 'seat'),
+                name='unique_ticket',
+            ),
+        )
 
     def __str__(self):
         return f'{self.ticket_holder} - {self.event} - {self.id}'
