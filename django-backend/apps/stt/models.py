@@ -163,6 +163,9 @@ class TicketHolderTeam(models.Model):
     team = models.ForeignKey(
         Team, related_name='ticket_holder_teams', on_delete=models.CASCADE
     )
+    section = models.CharField(max_length=255)
+    row = models.CharField(max_length=255)
+    seat = models.CharField(max_length=255)
     credentials_website_username = models.CharField(max_length=255)
     credentials_website_password = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
