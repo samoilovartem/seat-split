@@ -89,6 +89,7 @@ class TicketHolderAdminConfig(BaseModelAdmin):
         'last_name',
         'user__email',
     )
+    exclude = ('tickets_data',)
     inlines = (TicketHolderTeamInline,)
     autocomplete_fields = ('user',)
 
