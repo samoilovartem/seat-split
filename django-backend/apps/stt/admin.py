@@ -59,7 +59,7 @@ class TeamEventInline(admin.TabularInline):
     formset = TeamEventFormset
 
 
-class TicketHolderTeamInline(admin.TabularInline):
+class TicketHolderTeamInline(admin.StackedInline):
     model = TicketHolderTeam
     extra = 0
     readonly_fields = (
