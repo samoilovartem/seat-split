@@ -59,7 +59,7 @@ class TeamEventInline(admin.TabularInline):
     formset = TeamEventFormset
 
 
-class TicketHolderTeamInline(admin.TabularInline):
+class TicketHolderTeamInline(admin.StackedInline):
     model = TicketHolderTeam
     extra = 0
     readonly_fields = (
@@ -89,6 +89,7 @@ class TicketHolderAdminConfig(BaseModelAdmin):
         'last_name',
         'user__email',
     )
+    exclude = ('tickets_data',)
     inlines = (TicketHolderTeamInline,)
     autocomplete_fields = ('user',)
 
