@@ -1,4 +1,5 @@
 LISTING_STATUSES = [
+    ('Pending', 'Pending'),
     ('Listed', 'Listed'),
     ('Delisted', 'Delisted'),
     ('Sold', 'Sold'),
