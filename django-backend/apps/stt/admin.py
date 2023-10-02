@@ -7,7 +7,7 @@ from django.forms import BaseInlineFormSet, Select
 from django.utils.html import format_html
 
 from apps.common_services.utils import show_changed_fields
-from apps.stt.filters import LeagueListFilter
+from apps.stt.filters import HomeAwayFilter, LeagueListFilter
 from apps.stt.models import (
     Event,
     Purchase,
@@ -163,7 +163,7 @@ class EventAdminConfig(ImportExportMixin, BaseModelAdmin):
     inlines = (TeamEventInline,)
     search_fields = ('name', 'season')
     ordering = ('date_time',)
-    list_filter = ('season', LeagueListFilter)
+    list_filter = ('season', LeagueListFilter, HomeAwayFilter)
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
