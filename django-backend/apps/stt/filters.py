@@ -63,3 +63,47 @@ class LeagueListFilter(SimpleListFilter):
             ).distinct()
         else:
             return queryset
+
+
+class HomeAwayFilter(SimpleListFilter):
+    """
+    Custom filter for Django admin that filters events based on whether they're 'home' or 'away' games
+    for the team searched for in the search bar.
+    """
+
+    title = 'home / away'
+    parameter_name = 'home_away'
+
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples. The first element in each tuple is the coded value
+        for the option that will appear in the URL query. The second element is the
+        human-readable name for the option that will appear in the right sidebar.
+        """
+        return [
+            ('home', 'Home'),
+            ('away', 'Away'),
+        ]
+
+    def queryset(self, request, queryset):
+        """
+        Returns a queryset of events filtered based on whether they're 'home' or 'away'
+        games for the team searched for in the search bar. If no valid 'home' or 'away'
+        value is provided or no team name is searched, the unaltered queryset is returned.
+        """
+        if not self.value():
+            return queryset
+
+        team_name = request.GET.get('q', '')
+
+        if not team_name:
+            return queryset
+
+        search_string = team_name.strip()
+
+        if self.value() == 'home':
+            return queryset.filter(name__icontains=f' at {search_string}')
+        elif self.value() == 'away':
+            return queryset.filter(name__icontains=f'{search_string} at')
+
+        return queryset
