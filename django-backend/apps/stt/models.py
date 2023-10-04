@@ -168,6 +168,9 @@ class TicketHolderTeam(models.Model):
     seat = models.CharField(max_length=255)
     credentials_website_username = models.CharField(max_length=255)
     credentials_website_password = models.CharField(max_length=255)
+    is_confirmed = models.BooleanField(
+        default=False, help_text="Is the ticket holder's team data confirmed?"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
