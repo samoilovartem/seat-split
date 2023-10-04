@@ -69,3 +69,33 @@ def send_email_confirmed(user_email: str):
     except Exception as e:
         print(e)  # TODO: replace with logger
         return
+
+
+@shared_task
+def send_ticket_holder_team_confirmed(user_email: str, team_name: str):
+    """Sends email notifying that ticket holder team is confirmed to user using standard Django email backend."""
+    # time.sleep(CELERY_GENERAL_SLEEP_TIME)
+
+    mail_subject = f'Your team "{team_name}" data has been verified'
+    message = render_to_string(
+        'emails/ticket_holder_team_confirmed.html',
+        {
+            'email': user_email,
+            'team_name': team_name,
+            'link': f'https://{EMAIL_FRONTEND_BASE_URL}/',
+            'project_name': EMAIL_PROJECT_NAME,
+        },
+    )
+
+    email = EmailMessage(
+        subject=mail_subject,
+        body=message,
+        to=[user_email],
+        from_email=SMTP2GO_FROM_EMAIL,
+    )
+    email.content_subtype = EMAIL_CONTENT_TYPE
+    try:
+        email.send()
+    except Exception as e:
+        print(e)
+        return
