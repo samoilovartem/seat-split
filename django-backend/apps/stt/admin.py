@@ -107,7 +107,10 @@ class TicketAdminConfig(BaseModelAdmin):
     list_display = (
         'event',
         'ticket_holder',
-        'skybox_event_id',
+        'listing_status',
+        'section',
+        'row',
+        'seat',
         'id',
     )
     search_fields = (
@@ -115,6 +118,7 @@ class TicketAdminConfig(BaseModelAdmin):
         'ticket_holder__last_name',
         'event__name',
     )
+    list_filter = ('listing_status',)
     list_display_links = ('event',)
     autocomplete_fields = ('event', 'ticket_holder')
 
