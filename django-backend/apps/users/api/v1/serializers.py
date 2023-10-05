@@ -45,7 +45,9 @@ class TicketHolderUserSerializer(FlexFieldsModelSerializer):
 
     @staticmethod
     def get_ticket_holder_teams(obj):
-        return TicketHolderTeamSerializer(obj.ticket_holder_teams.all(), many=True).data
+        return TicketHolderTeamSerializer(
+            obj.ticket_holder_teams.all().prefetch_related('team'), many=True
+        ).data
 
 
 class UserSerializer(FlexFieldsModelSerializer):
