@@ -1,8 +1,10 @@
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework.exceptions import ValidationError
+from rest_framework.fields import SerializerMethodField
 
 from django.contrib.auth.models import Group, Permission
 
+from apps.stt.api.v1.serializers import TicketHolderTeamSerializer
 from apps.stt.models import TicketHolder
 from apps.users.models import User
 
@@ -35,9 +37,15 @@ class GroupSerializer(FlexFieldsModelSerializer):
 
 
 class TicketHolderUserSerializer(FlexFieldsModelSerializer):
+    ticket_holder_teams = SerializerMethodField()
+
     class Meta:
         model = TicketHolder
         exclude = ('created_at', 'user')
+
+    @staticmethod
+    def get_ticket_holder_teams(obj):
+        return TicketHolderTeamSerializer(obj.ticket_holder_teams.all(), many=True).data
 
 
 class UserSerializer(FlexFieldsModelSerializer):
