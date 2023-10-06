@@ -70,8 +70,6 @@ class TeamSerializer(FlexFieldsModelSerializer):
 
 
 class TicketHolderTeamSerializer(FlexFieldsModelSerializer):
-    team = TeamSerializer(read_only=True)
-
     class Meta:
         model = TicketHolderTeam
         fields = '__all__'
