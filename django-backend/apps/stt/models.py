@@ -113,6 +113,7 @@ class Team(models.Model):
     league = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=255)
+    home_venue = models.CharField(max_length=255)
     ticketmaster_id = models.IntegerField()
     timezone = models.CharField(max_length=255)
     credentials_website = models.CharField(max_length=255)
