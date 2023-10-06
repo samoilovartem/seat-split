@@ -1,39 +1,21 @@
 from rest_flex_fields import FlexFieldsModelSerializer
+from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import SerializerMethodField
 
-from django.contrib.auth.models import Group, Permission
-
-from apps.stt.api.v1.serializers import TicketHolderTeamSerializer
-from apps.stt.models import TicketHolder
+from apps.stt.api.v1.serializers import TeamSerializer
+from apps.stt.models import TicketHolder, TicketHolderTeam
 from apps.users.models import User
 
 
-class PermissionsSerializer(FlexFieldsModelSerializer):
+class LocalTicketHolderTeamSerializer(serializers.ModelSerializer):
+    """Serializer for TicketHolderTeam that is used ONLY in TicketHolderUserSerializer"""
+
+    team = TeamSerializer(read_only=True)
+
     class Meta:
-        model = Permission
-        fields = (
-            'id',
-            'name',
-        )
-
-
-class UserGroupSerializer(FlexFieldsModelSerializer):
-    class Meta:
-        model = Group
-        fields = (
-            'id',
-            'name',
-        )
-
-
-class GroupSerializer(FlexFieldsModelSerializer):
-    class Meta:
-        model = Group
+        model = TicketHolderTeam
         fields = '__all__'
-        expandable_fields = {
-            'permissions': (PermissionsSerializer, {'many': True}),
-        }
 
 
 class TicketHolderUserSerializer(FlexFieldsModelSerializer):
@@ -45,7 +27,7 @@ class TicketHolderUserSerializer(FlexFieldsModelSerializer):
 
     @staticmethod
     def get_ticket_holder_teams(obj):
-        return TicketHolderTeamSerializer(
+        return LocalTicketHolderTeamSerializer(
             obj.ticket_holder_teams.all().prefetch_related('team'), many=True
         ).data
 
