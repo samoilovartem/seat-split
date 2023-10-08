@@ -1,3 +1,4 @@
+# change this config according to your needs
 ENDPOINT = ""
 SENTINEL_ENDPOINT = ""
 TEAMS_ENDPOINT = ""
