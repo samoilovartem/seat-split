@@ -1,76 +1,87 @@
-from collections import namedtuple
 from time import sleep
 from timeit import default_timer as timer
 
-import config as cfg
-import leagues as leagues
 import pandas as pd
 import requests
-import teams
+from config import config
 from events import normalize_event
+from leagues import League, get_leagues
+from loguru import logger
+from teams import Team, get_teams
 
 
 def can_fetch():
-    response = requests.get(cfg.SENTINEL_ENDPOINT)
-    return response.json()['total'] != "1"
+    response = requests.get(config.sentinel_endpoint)
+    return response.json()['total'] != '1'
 
 
-def build_query(team: teams.Team, Leagues: dict[str, leagues.League]):
+def build_query(team: Team, Leagues: dict[str, League]):
     params = {
-        "keywords": [f"{team.name} {team.home_venue}"],
-        "excludeParking": "true",
-        "eventType": "SPORT",
-        "eventDateFrom": Leagues[team.league].start_date,
-        "eventDateTo": Leagues[team.league].end_date,
+        'keywords': [f'{team.name} {team.home_venue}'],
+        'excludeParking': 'true',
+        'eventType': 'SPORT',
+        'eventDateFrom': Leagues[team.league].start_date,
+        'eventDateTo': Leagues[team.league].end_date,
     }
     return params
 
 
 def normalize_df(df, Teams: list):
-    schema = ["skybox_event_id",
-              "name", "league", "date_time", "season"]
+    schema = ['skybox_event_id', 'name', 'league', 'date_time', 'season']
 
     output_df = pd.DataFrame(columns=schema)
     team_names = [team.name for team in Teams]
 
-    def get_league(name: str):
+    def get_league(team_name: str):
         for team in Teams:
-            if team.name == name:
+            if team.name == team_name:
                 return team.league
 
-        return ""
+        return ''
 
     def django_date(date: str):
         date, time = date.split('T')
-        return f"{date} {time}"
+        return f'{date} {time}'
 
     for entry in df.to_dict(orient='records'):
         if 'at' not in entry['name'] or 'includes' in entry['name']:
-            print("skipping", entry['name'])
+            logger.info('skipping', entry['name'])
             continue
 
         name = normalize_event(entry['name'], team_names)
         league = get_league(name)
         date_time = django_date(entry['date'])
 
-        output_df = output_df._append({
-            "skybox_event_id": entry['id'],
-            "name": name,
-            "league": league,
-            "date_time": date_time,
-            "season": "2023"
-        }, ignore_index=True)
+        output_df = output_df._append(
+            {
+                'skybox_event_id': entry['id'],
+                'name': name,
+                'league': league,
+                'date_time': date_time,
+                'season': '2023',
+            },
+            ignore_index=True,
+        )
 
     return output_df
 
 
 def build_df(data, team, Leagues):
-    response = requests.get(cfg.ENDPOINT, headers=cfg.TEAM_HEADERS,
-                            params=build_query(team, Leagues,),)
+    response = requests.get(
+        config.skybox_endpoint,
+        headers=config.team_headers,
+        params=build_query(
+            team,
+            Leagues,
+        ),
+    )
     if response.status_code != 200:
-        print(
-            f"""skybox call failed for team {team.name}:
-                    {response.status_code} | {response.text}""")
+        logger.error(
+            'skybox call failed for team {}: {} | {}',
+            team.name,
+            response.status_code,
+            response.text,
+        )
         # return an empty dataframe
         return pd.DataFrame()
 
@@ -82,43 +93,43 @@ def build_df(data, team, Leagues):
 def main():
     df = pd.DataFrame()
 
-    Teams = teams.get_teams()
-    Leagues = leagues.get_leagues()
+    teams = get_teams()
+    leagues = get_leagues()
 
     time = timer()
-    sleep_time = cfg.sleep_time
-    interval_time = cfg.interval_time
+    sleep_time = config.sleep_time
+    interval_time = config.interval_time
 
-    for team in Teams:
+    for team in teams:
         while not can_fetch():
-            print(f"waiting for API to be free for {sleep_time} seconds")
+            logger.info('waiting for API to be free for {} seconds', sleep_time)
             sleep(sleep_time)
 
             end = timer()
-            elapsed_time = (end - time)/60
+            elapsed_time = (end - time) / 60
 
-            print(f"elapsed time: {elapsed_time} minutes")
+            logger.info('elapsed time: {} minutes', elapsed_time)
 
-        entry_df = build_df(df, team, Leagues)
+        entry_df = build_df(df, team, leagues)
 
         if entry_df.empty:
-            print(f"no events found for {team.name}")
+            logger.warning('no events found for {}', team.name)
             continue
 
         try:
             df = df._append(entry_df, ignore_index=True)
         except Exception as e:
-            print(f"dataframe append failed | error: {e}")
+            logger.exception('dataframe append failed | error: {}', e)
         finally:
-            print(f"successfully fetched events for {team.name}")
+            logger.success('successfully fetched events for {}', team.name)
 
         time = timer()
-        print(f"sleeping for {interval_time} seconds before next call")
+        logger.info('sleeping for {} seconds before next call', interval_time)
         sleep(interval_time)
 
-    final_df = normalize_df(df, Teams)
-    final_df.to_csv(cfg.output_file, index=False)
+    final_df = normalize_df(df, teams)
+    final_df.to_csv(config.output_file, index=False)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

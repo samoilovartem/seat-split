@@ -1,44 +1,44 @@
 from collections import namedtuple
 
-import config as cfg
 import pandas as pd
 import requests
+from config import config
+from loguru import logger
 
-TEAMVENUE_FILE = "team_and_homecourts.csv"
 Team = namedtuple('Team', ['name', 'league', 'home_venue'], defaults=[''])
 
 
-def add_homevenue(team: Team, filename=TEAMVENUE_FILE):
+def add_home_venue(team: Team, filename=config.team_venue_file):
     df = pd.read_csv(filename)
     df = df.set_index('team')
 
     home_venue = df.loc[team.name, 'home_venue']
     if not home_venue:
-        print("home_venue COULD NOT BE FOUND", team.name)
+        logger.error('home_venue COULD NOT BE FOUND', team.name)
         return team
 
     return Team(team.name, team.league, home_venue)
 
 
 def get_teams():
-
     team_list: list[Team] = []
 
     headers = {
-        "Content-Type": "application/json",
-        "Authorization": "token " + cfg.AUTH_TOKEN
+        'Content-Type': 'application/json',
+        'Authorization': 'token ' + config.stt_auth_token,
     }
 
     try:
-        req = requests.get(cfg.TEAMS_ENDPOINT, headers=headers)
-        data = req.json()["results"]
+        req = requests.get(config.stt_teams_endpoint, headers=headers)
+        data = req.json()['results']
         for team in data:
-            target = add_homevenue(
-                Team(team["name"], team["league"], team["home_venue"]))
+            target = add_home_venue(
+                Team(team['name'], team['league'], team['home_venue'])
+            )
             team_list.append(target)
 
     except Exception as e:
-        print("teams call failed", e)
+        logger.exception('teams call failed', e)
         exit()
     finally:
         # order teams by league

@@ -1,11 +1,14 @@
+from loguru import logger
+
+
 def split_event(event) -> list[str]:
-    print("splitting: ", event)
+    logger.info('splitting: ', event)
     return event.split(' at ')
 
 
 def normalize_performer(p: str, performers: list[str]):
     for performer in performers:
-        bench = ""
+        bench = ''
         for word in p.split(' '):
             if word in performer.split(' '):
                 bench += word + ' '

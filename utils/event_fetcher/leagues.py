@@ -9,10 +9,4 @@ NFL = League('NFL', '2023-09-07', '2024-01-07')
 
 
 def get_leagues():
-    return {
-        "NBA": NBA,
-        "MLS": MLS,
-        "NHL": NHL,
-        "MLB": MLB,
-        "NFL": NFL
-    }
+    return {'NBA': NBA, 'MLS': MLS, 'NHL': NHL, 'MLB': MLB, 'NFL': NFL}
