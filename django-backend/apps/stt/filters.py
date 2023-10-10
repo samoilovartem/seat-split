@@ -1,6 +1,7 @@
 from django_filters.rest_framework import FilterSet
 
 from django.contrib.admin import SimpleListFilter
+from django.utils import timezone
 
 from apps.stt.models import Event, Team, TeamEvent
 from config.settings import BOOL_LOOKUPS, CHAR_LOOKUPS, DATE_AND_ID_LOOKUPS  # noqa
@@ -107,3 +108,33 @@ class HomeAwayFilter(SimpleListFilter):
             return queryset.filter(name__icontains=f'{search_string} at')
 
         return queryset
+
+
+class FutureEventsFilter(SimpleListFilter):
+    """
+    This class provides a filter for the Events based on their date. By default, only future events
+    (i.e., events with a 'date_time' field value greater than or equal to the current time) are displayed.
+    An option is provided to display all events, including those in the past.
+    """
+
+    title = 'Future events'
+    parameter_name = 'future_events'
+
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples to be displayed in the filter sidebar. Each tuple represents
+        a filter option and contains a URL query parameter and its human-readable counterpart.
+        """
+        return (('all events (including past)', 'All events (including past)'),)
+
+    def queryset(self, request, queryset):
+        """
+        Filters the queryset based on the chosen filter option.
+
+        If 'all events (including past)' is chosen, all instances of the model will be returned.
+        By default, or if no choice is selected, only instances representing future events
+        will be returned.
+        """
+        if self.value() == 'all events (including past)':
+            return queryset
+        return queryset.filter(date_time__gte=timezone.now())
