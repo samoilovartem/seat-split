@@ -4,6 +4,7 @@ from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.serializers import ModelSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from apps.stt.api.v1.validators import validate_seat_range
 from apps.stt.models import (
     Event,
     Team,
@@ -77,6 +78,21 @@ class TicketHolderTeamSerializer(FlexFieldsModelSerializer):
             'team': 'apps.stt.api.v1.serializers.TeamSerializer',
             'ticket_holder': 'apps.stt.api.v1.serializers.TicketHolderSerializer',
         }
+
+    @staticmethod
+    def validate_seat(value):
+        return validate_seat_range(value)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if '-' in representation['seat']:
+            first_seat, last_seat = representation['seat'].split('-')
+            representation['seat'] = [
+                str(i) for i in range(int(first_seat), int(last_seat) + 1)
+            ]
+        else:
+            representation['seat'] = [representation['seat']]
+        return representation
 
 
 class TicketHolderSerializer(FlexFieldsModelSerializer):
