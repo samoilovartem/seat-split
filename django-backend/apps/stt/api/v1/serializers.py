@@ -7,6 +7,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from apps.stt.api.v1.validators import validate_seat_range
 from apps.stt.models import (
     Event,
+    Purchase,
     Team,
     TeamEvent,
     Ticket,
@@ -134,3 +135,9 @@ class EventSerializer(FlexFieldsModelSerializer):
         teams = [team_event.team for team_event in team_events]
 
         return TeamSerializer(teams, many=True).data
+
+
+class PurchaseSerializer(FlexFieldsModelSerializer):
+    class Meta:
+        model = Purchase
+        fields = '__all__'

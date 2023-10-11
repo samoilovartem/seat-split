@@ -3,8 +3,12 @@ from django_filters.rest_framework import FilterSet
 from django.contrib.admin import SimpleListFilter
 from django.utils import timezone
 
-from apps.stt.models import Event, Team, TeamEvent
-from config.settings import BOOL_LOOKUPS, CHAR_LOOKUPS, DATE_AND_ID_LOOKUPS  # noqa
+from apps.stt.models import Event, Purchase, Team, TeamEvent
+from config.settings import (  # noqa
+    BOOL_OR_EXACT_LOOKUPS,
+    CHAR_LOOKUPS,
+    DATE_AND_ID_LOOKUPS,
+)
 
 
 class TeamFilterSet(FilterSet):
@@ -24,6 +28,18 @@ class EventFilterSet(FilterSet):
         fields = {
             'name': CHAR_LOOKUPS,
             'date_time': DATE_AND_ID_LOOKUPS,
+        }
+
+
+class PurchaseFilterSet(FilterSet):
+    class Meta:
+        model = Purchase
+        fields = {
+            'ticket': BOOL_OR_EXACT_LOOKUPS,
+            'invoice_number': BOOL_OR_EXACT_LOOKUPS,
+            'customer': CHAR_LOOKUPS,
+            'purchased_at': DATE_AND_ID_LOOKUPS,
+            'delivery_status': CHAR_LOOKUPS,
         }
 
 
