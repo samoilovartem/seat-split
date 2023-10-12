@@ -9,7 +9,7 @@ from config.components.business_related import SUPPORTED_LEAGUES
 
 
 class TeamViewSet(ModelViewSet):
-    queryset = Team.objects.all()
+    queryset = Team.objects.all().order_by('id')
     serializer_class = TeamSerializer
     filterset_fields = ['league', 'city', 'name']
     permission_classes = (IsAuthenticated,)
