@@ -3,6 +3,19 @@ from rest_flex_fields import FlexFieldsModelSerializer
 from apps.users.models import User
 
 
+class ShowAllSeatsMixin:
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if '-' in representation['seat']:
+            first_seat, last_seat = representation['seat'].split('-')
+            representation['seat'] = [
+                str(i) for i in range(int(first_seat), int(last_seat) + 1)
+            ]
+        else:
+            representation['seat'] = [representation['seat']]
+        return representation
+
+
 class ConvertNoneToStringSerializerMixin:
     def get_none_to_str_fields(self):
         meta = getattr(self, 'Meta', None)
