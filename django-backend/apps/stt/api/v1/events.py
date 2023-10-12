@@ -7,7 +7,9 @@ from apps.stt.models import Event
 
 
 class EventViewSet(ModelViewSet):
-    queryset = Event.objects.all().prefetch_related('teamevent_set__team')
+    queryset = (
+        Event.objects.all().prefetch_related('teamevent_set__team').order_by('id')
+    )
     filterset_class = EventFilterSet
     serializer_class = EventSerializer
     permission_classes = (IsAuthenticated,)

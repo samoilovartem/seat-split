@@ -27,9 +27,9 @@ class TicketHolderViewSet(
     def get_queryset(self):
         user = self.request.user
         if user.is_staff or user.is_superuser:
-            queryset = TicketHolder.objects.all()
+            queryset = TicketHolder.objects.all().order_by('id')
         else:
-            queryset = TicketHolder.objects.filter(user=user)
+            queryset = TicketHolder.objects.filter(user=user).order_by('id')
 
         if is_expanded(self.request, 'ticket_holder_teams'):
             queryset = queryset.prefetch_related('ticket_holder_teams')

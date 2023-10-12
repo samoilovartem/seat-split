@@ -21,9 +21,11 @@ class TicketViewSet(ModelViewSet):
         user = self.request.user
 
         if user.is_staff or user.is_superuser:
-            return Ticket.objects.all()
+            return Ticket.objects.all().order_by('id')
 
-        return Ticket.objects.filter(ticket_holder=user.ticket_holder_user)
+        return Ticket.objects.filter(ticket_holder=user.ticket_holder_user).order_by(
+            'id'
+        )
 
     def create_ticket(self, data, many=False):
         serializer = self.get_serializer(data=data, many=many)

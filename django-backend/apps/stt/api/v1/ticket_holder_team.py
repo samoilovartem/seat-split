@@ -16,11 +16,11 @@ class TicketHolderTeamViewSet(
     def get_queryset(self):
         user = self.request.user
         if user.is_staff or user.is_superuser:
-            queryset = TicketHolderTeam.objects.all()
+            queryset = TicketHolderTeam.objects.all().order_by('id')
         else:
             queryset = TicketHolderTeam.objects.filter(
                 ticket_holder=user.ticket_holder_user
-            )
+            ).order_by('id')
 
         if is_expanded(self.request, 'team'):
             queryset = queryset.select_related('team')
