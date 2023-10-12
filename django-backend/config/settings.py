@@ -36,10 +36,11 @@ include(
     'components/query_count.py',
     'components/django_filters.py',
     'components/swagger.py',
-    'components/logger.py',
+    # 'components/logger.py',
     'components/smtp_and_email.py',
     'components/celery.py',
     'components/business_related.py',
+    'components/query_count.py',
 )
 
 INSTALLED_APPS = [
@@ -57,7 +58,6 @@ INSTALLED_APPS = [
     'rest_framework_api_key',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-    'djoser',
     'django_filters',
     'import_export',
     'django_truncate',
@@ -83,6 +83,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'config.middlewares.CustomRollbarNotifierMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
+    'querycount.middleware.QueryCountMiddleware',
 ]
 
 TEMPLATES = [
