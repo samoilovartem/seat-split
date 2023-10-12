@@ -7,7 +7,6 @@ from apps.stt.models import Purchase
 
 
 class PurchaseViewSet(ModelViewSet):
-    queryset = Purchase.objects.all()
     serializer_class = PurchaseSerializer
     filterset_class = PurchaseFilterSet
     permission_classes = (IsTicketHolder,)

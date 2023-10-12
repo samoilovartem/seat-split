@@ -1,35 +1,17 @@
 from rest_flex_fields import FlexFieldsModelSerializer
-from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import SerializerMethodField
 
-from apps.stt.api.v1.serializers import TeamSerializer
-from apps.stt.models import TicketHolder, TicketHolderTeam
+from apps.stt.api.v1.serializers import TicketHolderTeamSerializer
+from apps.stt.models import TicketHolder
 from apps.users.models import User
 
 
-class LocalTicketHolderTeamSerializer(serializers.ModelSerializer):
-    """Serializer for TicketHolderTeam that is used ONLY in TicketHolderUserSerializer"""
-
-    team = TeamSerializer(read_only=True)
-
-    class Meta:
-        model = TicketHolderTeam
-        fields = '__all__'
-
-
 class TicketHolderUserSerializer(FlexFieldsModelSerializer):
-    ticket_holder_teams = SerializerMethodField()
+    ticket_holder_teams = TicketHolderTeamSerializer(many=True, read_only=True)
 
     class Meta:
         model = TicketHolder
         exclude = ('created_at', 'user')
-
-    @staticmethod
-    def get_ticket_holder_teams(obj):
-        return LocalTicketHolderTeamSerializer(
-            obj.ticket_holder_teams.all().prefetch_related('team'), many=True
-        ).data
 
 
 class UserSerializer(FlexFieldsModelSerializer):
@@ -51,7 +33,9 @@ class UserSerializer(FlexFieldsModelSerializer):
         ticket_holder_data = validated_data.pop('ticket_holder_user', None)
         self.update_ticket_holder(instance, ticket_holder_data)
 
-        return super().update(instance, validated_data)
+        instance = super().update(instance, validated_data)
+        instance.refresh_from_db()
+        return instance
 
     def update_ticket_holder(self, user, ticket_holder_data):  # noqa
         if ticket_holder_data is not None:
