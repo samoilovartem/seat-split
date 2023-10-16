@@ -1,13 +1,27 @@
 from rest_flex_fields import FlexFieldsModelSerializer
+from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from apps.stt.api.v1.serializers import TicketHolderTeamSerializer
-from apps.stt.models import TicketHolder
+from apps.stt.models import Team, TicketHolder, TicketHolderTeam
 from apps.users.models import User
 
 
+class SimpleTeamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = ('id', 'name')
+
+
+class SimpleTicketHolderTeamSerializer(serializers.ModelSerializer):
+    team = SimpleTeamSerializer()
+
+    class Meta:
+        model = TicketHolderTeam
+        fields = '__all__'
+
+
 class TicketHolderUserSerializer(FlexFieldsModelSerializer):
-    ticket_holder_teams = TicketHolderTeamSerializer(many=True, read_only=True)
+    ticket_holder_teams = SimpleTicketHolderTeamSerializer(many=True, read_only=True)
 
     class Meta:
         model = TicketHolder

@@ -1,7 +1,6 @@
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
-from rest_framework.exceptions import AuthenticationFailed, ValidationError
-from rest_framework.serializers import ModelSerializer
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from apps.serializers import ShowAllSeatsMixin
@@ -26,21 +25,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             raise AuthenticationFailed('User is not verified.')
 
         return data
-
-
-class UserSerializer(ModelSerializer[User]):
-    @staticmethod
-    def validate_email(value):
-        if User.objects.filter(email=value).exists():
-            raise ValidationError()
-        return value
-
-    class Meta:
-        ref_name = 'UserSerializer'
-        model = User
-        fields = [
-            'id',
-        ]
 
 
 class RegisterSerializer(serializers.ModelSerializer):
