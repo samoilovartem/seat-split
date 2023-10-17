@@ -9,7 +9,7 @@ from apps.users.models import User
 class SimpleTeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'league')
 
 
 class SimpleTicketHolderTeamSerializer(serializers.ModelSerializer):
