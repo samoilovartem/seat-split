@@ -1,3 +1,4 @@
+from rest_flex_fields import is_expanded
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -21,11 +22,19 @@ class TicketViewSet(ModelViewSet):
         user = self.request.user
 
         if user.is_staff or user.is_superuser:
-            return Ticket.objects.all().order_by('id')
+            queryset = Ticket.objects.all().order_by('id')
 
-        return Ticket.objects.filter(ticket_holder=user.ticket_holder_user).order_by(
-            'id'
-        )
+        else:
+            queryset = Ticket.objects.filter(
+                ticket_holder=user.ticket_holder_user
+            ).order_by('id')
+
+        if is_expanded(self.request, 'event'):
+            queryset = queryset.select_related('event')
+        if is_expanded(self.request, 'ticket_holder'):
+            queryset = queryset.select_related('ticket_holder')
+
+        return queryset
 
     def create_ticket(self, data, many=False):
         serializer = self.get_serializer(data=data, many=many)

@@ -79,10 +79,26 @@ class TicketHolderSerializer(FlexFieldsModelSerializer):
         }
 
 
+class SimpleTicketHolderSerializer(FlexFieldsModelSerializer):
+    class Meta:
+        model = TicketHolder
+        fields = '__all__'
+
+
+class SimpleEventSerializer(FlexFieldsModelSerializer):
+    class Meta:
+        model = Event
+        fields = '__all__'
+
+
 class TicketSerializer(ShowAllSeatsMixin, FlexFieldsModelSerializer):
     class Meta:
         model = Ticket
         fields = '__all__'
+        expandable_fields = {
+            'ticket_holder': SimpleTicketHolderSerializer,
+            'event': SimpleEventSerializer,
+        }
 
     def create(self, validated_data):
         return Ticket.objects.create(**validated_data)
