@@ -69,6 +69,9 @@ INSTALLED_APPS = [
     'apps.email_domains.apps.EmailDomainsConfig',
 ]
 
+if DEBUG:
+    INSTALLED_APPS += ['django_extensions']
+
 ROOT_URLCONF = 'config.urls'
 
 MIDDLEWARE = [
