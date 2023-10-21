@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from celery import shared_task
+from loguru import logger
 
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -37,8 +38,13 @@ def send_email_confirmation(user_email: str, user_id: UUID):
     email.content_subtype = EMAIL_CONTENT_TYPE
     try:
         email.send()
+        logger.info('Email confirmation has been successfully sent to {}', user_email)
     except Exception as e:
-        print(e)  # TODO: replace with logger
+        logger.exception(
+            'There is an error sending `email confirmation` to {}. Error: {}',
+            user_email,
+            e,
+        )
         return
 
 
@@ -66,8 +72,13 @@ def send_email_confirmed(user_email: str):
     email.content_subtype = EMAIL_CONTENT_TYPE
     try:
         email.send()
+        logger.info('`Email confirmed` has been successfully sent to {}', user_email)
     except Exception as e:
-        print(e)  # TODO: replace with logger
+        logger.exception(
+            'There is an error sending `email confirmed` to {}. Error: {}',
+            user_email,
+            e,
+        )
         return
 
 
@@ -96,6 +107,14 @@ def send_ticket_holder_team_confirmed(user_email: str, team_name: str):
     email.content_subtype = EMAIL_CONTENT_TYPE
     try:
         email.send()
+        logger.info(
+            '`Ticket holder team confirmed` has been successfully sent to {}',
+            user_email,
+        )
     except Exception as e:
-        print(e)
+        logger.exception(
+            'There is an error sending `ticket holder team confirmed` to {}. Error: {}',
+            user_email,
+            e,
+        )
         return
