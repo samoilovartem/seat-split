@@ -26,7 +26,6 @@ class RegisterView(APIView):
             try:
                 password_validation.validate_password(password)
             except Exception as e:
-                # ToDo: add logger
                 return Response(
                     {'password': list(e.messages)}, status=status.HTTP_400_BAD_REQUEST
                 )
@@ -67,9 +66,14 @@ class VerifyView(APIView):
             user = User.objects.get(id=uid)
 
             if default_token_generator.check_token(user, self.kwargs.get('token')):
-                if not user.is_verified:
-                    user.is_verified = True
-                    user.save()
+                if user.is_verified:
+                    return Response(
+                        {'error': 'User already verified!'},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
+                user.is_verified = True
+                user.save()
 
                 # send_email_confirmed.delay(user.email)
                 send_email_confirmed(user.email)
