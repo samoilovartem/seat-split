@@ -15,7 +15,9 @@ class AvailableSeatsCalculator:
         """
         self.ticket_holder = ticket_holder
         self.team = team
-        self.th_team = TicketHolderTeam.objects.get(ticket_holder=ticket_holder)
+        self.th_team = TicketHolderTeam.objects.get(
+            ticket_holder=ticket_holder, team=self.team
+        )
         self.general_seats = self._get_seats_from_range(self.th_team.seat)
         self.applicable_events = self._get_future_events_for_team()
         self.tickets = self._get_tickets_for_events()
