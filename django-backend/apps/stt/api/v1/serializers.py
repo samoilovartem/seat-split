@@ -131,3 +131,10 @@ class PurchaseSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Purchase
         fields = '__all__'
+
+
+class AvailableSeatsSerializer(serializers.Serializer):
+    ticket_holder = serializers.PrimaryKeyRelatedField(
+        queryset=TicketHolder.objects.all()
+    )
+    team = serializers.PrimaryKeyRelatedField(queryset=Team.objects.all())
