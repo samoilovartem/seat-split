@@ -41,6 +41,7 @@ class Ticket(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     ticket_holder = models.ForeignKey(TicketHolder, on_delete=models.CASCADE)
     event = models.ForeignKey('Event', on_delete=models.CASCADE, related_name='tickets')
+    season = models.CharField(max_length=255)
     skybox_event_id = models.CharField(max_length=255, blank=True, default='')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     seat = models.CharField(max_length=255)
@@ -102,7 +103,7 @@ class Event(models.Model):
         )
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.name} | {self.date_time.strftime("%m/%d/%Y, %H:%M:%S")}'
 
 
 class Team(models.Model):
