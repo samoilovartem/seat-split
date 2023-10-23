@@ -19,7 +19,7 @@ class AvailableSeatsCalculator:
             ticket_holder=ticket_holder, team=self.team
         )
         self.general_seats = self._get_seats_from_range(self.th_team.seat)
-        self.applicable_events = self._get_future_events_for_team()
+        self.applicable_events = self._get_future_home_events_for_team()
         self.tickets = self._get_tickets_for_events()
 
     def _get_seats_from_range(self, seat_range: str) -> set[str]:  # noqa
@@ -35,9 +35,9 @@ class AvailableSeatsCalculator:
         else:
             return {seat_range}
 
-    def _get_future_events_for_team(self) -> list[Event]:
+    def _get_future_home_events_for_team(self) -> list[Event]:
         """
-        Get all future events for the specified team.
+        Get all future home events for the specified team.
 
         :return: List of upcoming events.
         """

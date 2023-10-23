@@ -187,7 +187,7 @@ class TicketHolderTeam(models.Model):
         )
 
     def __str__(self):
-        return f'{self.ticket_holder} - {self.team} - {self.id}'
+        return f'{self.ticket_holder} - {self.team} - {self.team.id}'
 
 
 ticket_holders_teams = models.ManyToManyField(Team, through='TicketHolderTeam')
