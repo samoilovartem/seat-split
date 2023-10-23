@@ -75,11 +75,12 @@ class AvailableSeatsCalculator:
         for event in self.applicable_events:
             used_seats = tickets_by_event.get(event.id, set())
             available_seats = self.general_seats - used_seats
-            results.append(
-                {
-                    'event': SimpleEventSerializer(event).data,
-                    'available_seats': list(available_seats),
-                }
-            )
+            if available_seats:
+                results.append(
+                    {
+                        'event': SimpleEventSerializer(event).data,
+                        'available_seats': sorted(list(available_seats), key=int),
+                    }
+                )
 
         return results
