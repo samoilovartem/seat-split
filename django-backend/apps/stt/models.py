@@ -49,6 +49,7 @@ class Ticket(models.Model):
     section = models.CharField(max_length=255)
     barcode = models.CharField(max_length=255, blank=True, default='')
     listing_status = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
     sold_at = models.DateTimeField(null=True, blank=True)
     history = HistoricalRecords()
 
@@ -75,6 +76,7 @@ class Purchase(models.Model):
     purchased_at = models.DateTimeField(null=True, blank=True)
     purchase_price = models.DecimalField(max_digits=10, decimal_places=2)
     delivery_status = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
     history = HistoricalRecords()
 
     class Meta:
@@ -97,6 +99,12 @@ class Event(models.Model):
         db_table = "content\".\"event"
         verbose_name = 'Event'
         verbose_name_plural = 'Events'
+        constraints = (
+            UniqueConstraint(
+                fields=('name', 'date_time', 'season'),
+                name='name_date_time_season_idx',
+            ),
+        )
         permissions = (
             ('import_events', 'Can import'),
             ('export_events', 'Can export'),
@@ -145,7 +153,8 @@ class TeamEvent(models.Model):
 
     class Meta:
         db_table = "content\".\"team_event"
-        unique_together = ['event', 'team']
+        verbose_name = "Event's Team"
+        verbose_name_plural = "Event's Teams"
         constraints = (
             UniqueConstraint(
                 fields=('event', 'team'),
@@ -178,7 +187,8 @@ class TicketHolderTeam(models.Model):
 
     class Meta:
         db_table = "content\".\"ticket_holder_team"
-        unique_together = ['ticket_holder', 'team']
+        verbose_name = "Ticket Holder's Team"
+        verbose_name_plural = "Ticket Holder's Teams"
         constraints = (
             UniqueConstraint(
                 fields=('ticket_holder', 'team'),

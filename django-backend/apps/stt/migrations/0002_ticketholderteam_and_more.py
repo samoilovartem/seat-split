@@ -51,8 +51,4 @@ class Migration(migrations.Migration):
                 fields=('ticket_holder', 'team'), name='ticket_holder_team_idx'
             ),
         ),
-        migrations.AlterUniqueTogether(
-            name='ticketholderteam',
-            unique_together={('ticket_holder', 'team')},
-        ),
     ]
