@@ -160,7 +160,6 @@ class PurchaseAdminConfig(admin.ModelAdmin):
     list_filter = (
         'customer',
         'delivery_status',
-        'ticket__listing_status',
     )
     list_display_links = ('ticket',)
     autocomplete_fields = ('ticket',)
