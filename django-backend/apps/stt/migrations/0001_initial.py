@@ -217,8 +217,4 @@ class Migration(migrations.Migration):
                 fields=('event', 'team'), name='event_team_idx'
             ),
         ),
-        migrations.AlterUniqueTogether(
-            name='teamevent',
-            unique_together={('event', 'team')},
-        ),
     ]
