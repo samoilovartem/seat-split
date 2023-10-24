@@ -7,7 +7,7 @@ echo "Running migrations..."
 python manage.py migrate --noinput
 
 echo "Creating STT staff group..."
-python manage.py create_stt_staff_group --noinput
+python manage.py create_stt_staff_group
 
 echo "Starting server..."
 gunicorn --timeout "$GUNICORN_TIMEOUT" --bind 0.0.0.0:"$PORT" config.wsgi:application
