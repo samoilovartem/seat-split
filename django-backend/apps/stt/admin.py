@@ -18,7 +18,11 @@ from apps.stt.models import (
     TicketHolderTeam,
 )
 from apps.stt.resources import EventResource
-from config.components.business_related import DELIVERY_STATUSES, LISTING_STATUSES
+from config.components.business_related import (
+    DELIVERY_STATUSES,
+    LISTING_STATUSES,
+    MARKETPLACES,
+)
 
 
 class BaseModelAdmin(SimpleHistoryAdmin):
@@ -79,12 +83,14 @@ class TicketHolderAdminConfig(BaseModelAdmin):
         'get_email',
         'id',
     )
+    readonly_fields = ('id', 'created_at')
     list_display_links = (
         'first_name',
         'last_name',
         'get_email',
     )
     search_fields = (
+        'id',
         'first_name',
         'last_name',
         'user__email',
@@ -104,6 +110,7 @@ class TicketAdminConfig(BaseModelAdmin):
     model = Ticket
     save_as = True
     save_on_top = True
+    ordering = ('-created_at',)
     list_display = (
         'event',
         'ticket_holder',
@@ -113,7 +120,9 @@ class TicketAdminConfig(BaseModelAdmin):
         'seat',
         'id',
     )
+    readonly_fields = ('id', 'created_at')
     search_fields = (
+        'id',
         'ticket_holder__first_name',
         'ticket_holder__last_name',
         'event__name',
@@ -140,12 +149,27 @@ class PurchaseAdminConfig(admin.ModelAdmin):
         'delivery_status',
         'id',
     )
+    search_fields = (
+        'id',
+        'ticket__id',
+        'ticket__ticket_holder__first_name',
+        'ticket__ticket_holder__last_name',
+        'ticket__event__name',
+    )
+    readonly_fields = ('id',)
+    list_filter = (
+        'customer',
+        'delivery_status',
+        'ticket__listing_status',
+    )
     list_display_links = ('ticket',)
     autocomplete_fields = ('ticket',)
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if db_field.name == 'delivery_status':
             kwargs['widget'] = Select(choices=DELIVERY_STATUSES)
+        if db_field.name == 'customer':
+            kwargs['widget'] = Select(choices=MARKETPLACES)
         return super().formfield_for_dbfield(db_field, request, **kwargs)
 
 
@@ -163,9 +187,10 @@ class EventAdminConfig(ImportExportMixin, BaseModelAdmin):
         'season',
         'id',
     )
+    readonly_fields = ('id',)
     list_display_links = ('name',)
     inlines = (TeamEventInline,)
-    search_fields = ('name', 'season')
+    search_fields = ('id', 'name', 'season')
     ordering = ('date_time',)
     list_filter = ('season', LeagueListFilter, HomeAwayFilter, FutureEventsFilter)
 
@@ -202,8 +227,10 @@ class TeamAdminConfig(ImportExportMixin, admin.ModelAdmin):
         'state',
         'id',
     )
+    readonly_fields = ('id',)
     list_display_links = ('name',)
     search_fields = (
+        'id',
         'name',
         'league',
         'city',
