@@ -1,20 +1,17 @@
 LISTING_STATUSES = [
     ('Pending', 'Pending'),
     ('Listed', 'Listed'),
-    ('Delisted', 'Delisted'),
     ('Sold', 'Sold'),
     ('Cancelled', 'Cancelled'),
 ]
 
 DELIVERY_STATUSES = [
     ('Pending', 'Pending'),
-    ('Dispatched', 'Dispatched'),
-    ('Delivered', 'Delivered'),
-    ('Received', 'Received'),
-    ('Returned', 'Returned'),
+    ('Complete', 'Complete'),
 ]
 
 MARKETPLACES = [
+    ('Event Inventory', 'Event Inventory'),
     ('StubHub', 'StubHub'),
     ('Mercury', 'Mercury'),
     ('SeatGeek', 'SeatGeek'),
