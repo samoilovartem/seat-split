@@ -1,4 +1,8 @@
 from rest_flex_fields import FlexFieldsModelViewSet, is_expanded
+from rest_framework import status
+from rest_framework.response import Response
+
+from django.db import IntegrityError
 
 from apps.common_services.permissions import IsTicketHolder
 from apps.stt.api.v1.serializers import TicketHolderTeamSerializer
@@ -28,3 +32,12 @@ class TicketHolderTeamViewSet(
             queryset = queryset.select_related('ticket_holder')
 
         return queryset
+
+    def create(self, request, *args, **kwargs):
+        try:
+            return super(TicketHolderTeamViewSet, self).create(request, *args, **kwargs)
+        except IntegrityError:
+            content = {
+                'detail': 'A TicketHolderTeam with this ticket_holder and team combination already exists.'
+            }
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
