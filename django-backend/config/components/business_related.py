@@ -2,7 +2,6 @@ LISTING_STATUSES = [
     ('Pending', 'Pending'),
     ('Listed', 'Listed'),
     ('Sold', 'Sold'),
-    ('Cancelled', 'Cancelled'),
 ]
 
 DELIVERY_STATUSES = [
