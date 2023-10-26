@@ -6,9 +6,12 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
-from apps.stt.models import Ticket
+from apps.stt.models import Ticket, TicketHolderTeam
 from apps.users.models import User
-from config.components.slack_integration import STT_NOTIFICATIONS_CHANNEL_TICKET_URL
+from config.components.slack_integration import (
+    STT_NOTIFICATIONS_CHANNEL_TICKET_HOLDER_URL,
+    STT_NOTIFICATIONS_CHANNEL_TICKET_URL,
+)
 from config.components.smtp_and_email import (
     EMAIL_FRONTEND_BASE_URL,
     SMTP2GO_API_BASE_URL,
@@ -54,7 +57,7 @@ def get_confirmation_link(user_id: UUID):
     return confirmation_link
 
 
-def create_slack_message(instance: Ticket) -> dict[str, str]:
+def create_ticket_status_cancelled_slack_message(instance: Ticket) -> dict[str, str]:
     """Function to create the Slack message payload."""
     return {
         'text': f'Ticket {instance.id} for {instance.ticket_holder} - {instance.event} has been cancelled!',
@@ -84,5 +87,55 @@ def create_slack_message(instance: Ticket) -> dict[str, str]:
                     f'actions. \n\n<{STT_NOTIFICATIONS_CHANNEL_TICKET_URL}/{instance.id}/change/|View Ticket>',
                 },
             },
+        ],
+    }
+
+
+def create_ticket_holder_team_slack_message(
+    instance: TicketHolderTeam,
+) -> dict[str, str]:
+    """Function to create the Slack message payload for TicketHolderTeam."""
+    return {
+        'text': f"New Ticket Holder's Team {instance.id} for {instance.ticket_holder} - {instance.team} has been added!",
+        'blocks': [
+            {
+                'type': 'header',
+                'text': {
+                    'type': 'plain_text',
+                    'text': "New Ticket Holder's Team Alert",
+                },
+            },
+            {
+                'type': 'section',
+                'fields': [
+                    {
+                        'type': 'mrkdwn',
+                        'text': f"*TICKET HOLDER:*\n{instance.ticket_holder}",
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': f"*TICKET HOLDER ID:*\n`{instance.ticket_holder.id}`",
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': f"*TEAM:*\n{instance.team}",
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': f"*TICKET HOLDER'S TEAM ID:*\n`{instance.id}`",
+                    },
+                ],
+            },
+            {'type': 'divider'},
+            {
+                'type': 'section',
+                'text': {
+                    'type': 'mrkdwn',
+                    'text': f"The above record for the ticket holder's team has been added. "
+                    f"Please review the details and *confirm* the team if data is correct. \n\n"
+                    f"<{STT_NOTIFICATIONS_CHANNEL_TICKET_HOLDER_URL}/{instance.ticket_holder.id}/change/|View Record>",
+                },
+            },
+            {'type': 'divider'},
         ],
     }
