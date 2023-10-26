@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from apps.stt.models import Ticket, TicketHolderTeam
 from apps.stt.tasks import send_ticket_holder_team_confirmed, send_to_slack
 from apps.stt.utils import (
+    create_ticket_created_slack_message,
     create_ticket_holder_team_slack_message,
     create_ticket_status_cancelled_slack_message,
 )
@@ -36,7 +37,19 @@ def send_confirmation_email(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Ticket)
 def ticket_post_save(sender, instance, **kwargs):
-    if kwargs.get('created', False) or len(instance.history.all()) < 2:
+    """Send a Slack notification when a ticket is created or cancelled."""
+    if kwargs.get('created', False):
+        message = create_ticket_created_slack_message(instance)
+        if DEBUG:
+            logger.info(
+                'DEBUG MODE: Slack notification has not been sent due to DEBUG mode.'
+            )
+            return
+        send_to_slack(message)
+        # send_to_slack.delay(message)
+        return
+
+    if len(instance.history.all()) < 2:
         return
 
     previous_status = instance.history.all()[1].listing_status
@@ -46,7 +59,9 @@ def ticket_post_save(sender, instance, **kwargs):
     message = create_ticket_status_cancelled_slack_message(instance)
 
     if DEBUG:
-        logger.info('DEBUG MODE: Slack notification has not been sent.')
+        logger.info(
+            'DEBUG MODE: Slack notification has not been sent due to DEBUG mode.'
+        )
         return
 
     send_to_slack(message)
@@ -61,7 +76,9 @@ def ticket_holder_team_post_save(sender, instance, **kwargs):
     message = create_ticket_holder_team_slack_message(instance)
 
     if DEBUG:
-        logger.info('DEBUG MODE: Slack notification has not been sent.')
+        logger.info(
+            'DEBUG MODE: Slack notification has not been sent due to DEBUG mode.'
+        )
         return
 
     send_to_slack(message)
