@@ -8,6 +8,7 @@ from django.utils.html import format_html
 
 from apps.common_services.utils import show_changed_fields
 from apps.stt.filters import FutureEventsFilter, HomeAwayFilter, LeagueListFilter
+from apps.stt.forms import TicketAdminForm
 from apps.stt.models import (
     Event,
     Purchase,
@@ -108,6 +109,7 @@ class TicketHolderAdminConfig(BaseModelAdmin):
 @admin.register(Ticket)
 class TicketAdminConfig(BaseModelAdmin):
     model = Ticket
+    form = TicketAdminForm
     save_as = True
     save_on_top = True
     ordering = ('-created_at',)
