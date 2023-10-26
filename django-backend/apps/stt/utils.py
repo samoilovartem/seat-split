@@ -136,6 +136,60 @@ def create_ticket_holder_team_slack_message(
                     f"<{STT_NOTIFICATIONS_CHANNEL_TICKET_HOLDER_URL}/{instance.ticket_holder.id}/change/|View Record>",
                 },
             },
+        ],
+    }
+
+
+def create_ticket_created_slack_message(instance: Ticket) -> dict[str, str]:
+    """Function to create the Slack message payload for a newly created Ticket."""
+    return {
+        'text': f"New Ticket {instance.id} for {instance.ticket_holder} has been created!",
+        'blocks': [
+            {
+                'type': 'header',
+                'text': {
+                    'type': 'plain_text',
+                    'text': "New Ticket Alert",
+                },
+            },
+            {
+                'type': 'section',
+                'fields': [
+                    {
+                        'type': 'mrkdwn',
+                        'text': f"*TICKET HOLDER:*\n{instance.ticket_holder}",
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': f"*TICKET ID:*\n`{instance.id}`",
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': f"*EVENT:*\n{instance.event}",
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': f"*SECTION:*\n{instance.section}",
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': f"*ROW:*\n{instance.row}",
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': f"*SEAT:*\n{instance.seat}",
+                    },
+                ],
+            },
             {'type': 'divider'},
+            {
+                'type': 'section',
+                'text': {
+                    'type': 'mrkdwn',
+                    'text': f"A new ticket has been created. "
+                    f"Please review the details and take necessary actions. \n\n"
+                    f"<{STT_NOTIFICATIONS_CHANNEL_TICKET_URL}/{instance.id}/change/|View Record>",
+                },
+            },
         ],
     }
