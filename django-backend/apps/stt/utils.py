@@ -158,7 +158,7 @@ def create_ticket_created_slack_message(instance: Ticket) -> dict[str, str]:
                 'type': 'header',
                 'text': {
                     'type': 'plain_text',
-                    'text': f"New Ticket Alert {STT_NOTIFICATIONS_EMOJI['NEW_TICKET_CREATED']}",
+                    'text': f"New Ticket Alert {STT_NOTIFICATIONS_EMOJI['TICKET_CREATED']}",
                 },
             },
             {
