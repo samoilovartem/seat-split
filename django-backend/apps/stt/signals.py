@@ -1,18 +1,18 @@
-from loguru import logger
-
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
 
 from apps.stt.models import Purchase, Ticket, TicketHolderTeam
-from apps.stt.tasks import send_ticket_holder_team_confirmed, send_to_slack
+from apps.stt.tasks import send_slack_notification, send_ticket_holder_team_confirmed
 from apps.stt.utils import (
     create_ticket_created_slack_message,
     create_ticket_holder_team_slack_message,
     create_ticket_status_cancelled_slack_message,
+    send_debug_logger_slack_message,
 )
 from config.components.business_related import DELIVERY_STATUSES, MARKETPLACES
 from config.components.global_settings import DEBUG
+from config.components.slack_integration import STT_NOTIFICATIONS_CHANNEL_TICKET_URL
 
 
 @receiver(pre_save, sender=TicketHolderTeam)
@@ -31,10 +31,6 @@ def send_confirmation_email(sender, instance, **kwargs):
         send_ticket_holder_team_confirmed(
             user_email=instance.ticket_holder.user.email, team_name=instance.team.name
         )
-        # send_ticket_holder_team_confirmed.delay(
-        #     user_email=instance.ticket_holder.user.email,
-        #     team_name=instance.team.name
-        # )
 
 
 @receiver(post_save, sender=Ticket)
@@ -45,14 +41,13 @@ def ticket_post_save(sender, instance, **kwargs):
     """
     if kwargs.get('created', False):
         if DEBUG:
-            logger.info(
-                'DEBUG MODE: Slack notification has not been sent due to DEBUG mode.'
-            )
+            send_debug_logger_slack_message()
             return
 
         message = create_ticket_created_slack_message(instance)
-        send_to_slack(message)
-        # send_to_slack.delay(message)
+        send_slack_notification(
+            message, STT_NOTIFICATIONS_CHANNEL_TICKET_URL, ':season_ticket:'
+        )
         return
 
     if len(instance.history.all()) < 2:
@@ -72,14 +67,11 @@ def ticket_post_save(sender, instance, **kwargs):
 
     elif previous_status != 'Cancelled' and instance.listing_status == 'Cancelled':
         if DEBUG:
-            logger.info(
-                'DEBUG MODE: Slack notification has not been sent due to DEBUG mode.'
-            )
+            send_debug_logger_slack_message()
             return
 
         message = create_ticket_status_cancelled_slack_message(instance)
-        send_to_slack(message)
-        # send_to_slack.delay(message)
+        send_slack_notification(message, STT_NOTIFICATIONS_CHANNEL_TICKET_URL, ':x:')
 
 
 @receiver(post_save, sender=TicketHolderTeam)
@@ -88,11 +80,8 @@ def ticket_holder_team_post_save(sender, instance, **kwargs):
         return
 
     if DEBUG:
-        logger.info(
-            'DEBUG MODE: Slack notification has not been sent due to DEBUG mode.'
-        )
+        send_debug_logger_slack_message()
         return
 
     message = create_ticket_holder_team_slack_message(instance)
-    send_to_slack(message)
-    # send_to_slack.delay(message)
+    send_slack_notification(message, STT_NOTIFICATIONS_CHANNEL_TICKET_URL, ':sparkle:')

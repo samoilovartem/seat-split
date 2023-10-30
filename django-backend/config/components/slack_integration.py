@@ -1,5 +1,7 @@
 import os
 
+from slack_sdk import WebClient
+
 from config.components.global_settings import DJANGO_HOST_URL
 
 STT_NOTIFICATIONS_CHANNEL_WEBHOOK_URL = os.environ.get(
@@ -10,3 +12,6 @@ STT_NOTIFICATIONS_CHANNEL_TICKET_HOLDER_URL = (
     f'{DJANGO_HOST_URL}/admin/stt/ticketholder'
 )
 STT_NOTIFICATIONS_BOT_API_TOKEN = os.environ.get('STT_NOTIFICATIONS_BOT_API_TOKEN')
+STT_NOTIFICATIONS_CHANNEL_ID = os.environ.get('STT_NOTIFICATIONS_CHANNEL_ID')
+
+slack_client = WebClient(token=STT_NOTIFICATIONS_BOT_API_TOKEN)

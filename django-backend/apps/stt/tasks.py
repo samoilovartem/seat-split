@@ -1,15 +1,14 @@
 from uuid import UUID
 
-import requests
 from celery import shared_task
 from loguru import logger
-from rest_framework import status
+from slack_sdk.errors import SlackApiError
 
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
 from apps.stt.utils import get_confirmation_link
-from config.components.slack_integration import STT_NOTIFICATIONS_CHANNEL_WEBHOOK_URL
+from config.components.slack_integration import slack_client
 from config.components.smtp_and_email import (
     EMAIL_CONTENT_TYPE,
     EMAIL_FRONTEND_BASE_URL,
@@ -124,18 +123,13 @@ def send_ticket_holder_team_confirmed(user_email: str, team_name: str):
 
 
 @shared_task
-def send_to_slack(message):
+def send_slack_notification(message: dict[str, str], channel: str, icon_emoji: str):
     try:
-        payload = {'text': message['text'], 'blocks': message['blocks']}
-        response = requests.post(
-            STT_NOTIFICATIONS_CHANNEL_WEBHOOK_URL,
-            json=payload,
-            headers={'Content-Type': 'application/json'},
+        slack_client.chat_postMessage(
+            channel=channel,
+            text=message['text'],
+            blocks=message['blocks'],
+            icon_emoji=icon_emoji,
         )
-        if response.status_code != status.HTTP_200_OK:
-            raise ValueError(
-                'Request to Slack returned an error %s, the response is:\n%s'
-                % (response.status_code, response.text)
-            )
-    except Exception as e:
+    except SlackApiError as e:
         logger.error('There is an error sending a notification to slack. Error: {}', e)
