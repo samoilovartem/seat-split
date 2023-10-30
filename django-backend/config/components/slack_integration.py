@@ -4,6 +4,14 @@ from slack_sdk import WebClient
 
 from config.components.global_settings import DJANGO_HOST_URL
 
+STT_NOTIFICATIONS_EMOJI = {
+    'NEW_TICKET_CREATED': os.environ.get('NEW_TICKET_CREATED', ':sparkle:'),
+    'TICKET_HOLDER_TEAM_CREATED': os.environ.get(
+        'TICKET_HOLDER_TEAM_CREATED', ':season_ticket:'
+    ),
+    'TICKET_DELISTING_REQUEST': os.environ.get('TICKET_DELISTING_REQUEST', ':x:'),
+}
+
 STT_NOTIFICATIONS_CHANNEL_WEBHOOK_URL = os.environ.get(
     'STT_NOTIFICATIONS_CHANNEL_WEBHOOK_URL'
 )

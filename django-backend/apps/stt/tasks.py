@@ -123,13 +123,12 @@ def send_ticket_holder_team_confirmed(user_email: str, team_name: str):
 
 
 @shared_task
-def send_slack_notification(message: dict[str, str], channel: str, icon_emoji: str):
+def send_slack_notification(message: dict[str, str], channel: str):
     try:
         slack_client.chat_postMessage(
             channel=channel,
             text=message['text'],
             blocks=message['blocks'],
-            icon_emoji=icon_emoji,
         )
     except SlackApiError as e:
         logger.error('There is an error sending a notification to slack. Error: {}', e)
