@@ -12,7 +12,7 @@ from apps.stt.utils import (
 )
 from config.components.business_related import DELIVERY_STATUSES, MARKETPLACES
 from config.components.global_settings import DEBUG
-from config.components.slack_integration import STT_NOTIFICATIONS_CHANNEL_TICKET_URL
+from config.components.slack_integration import STT_NOTIFICATIONS_CHANNEL_ID
 
 
 @receiver(pre_save, sender=TicketHolderTeam)
@@ -46,7 +46,9 @@ def ticket_post_save(sender, instance, **kwargs):
 
         message = create_ticket_created_slack_message(instance)
         send_slack_notification(
-            message, STT_NOTIFICATIONS_CHANNEL_TICKET_URL, ':season_ticket:'
+            message=message,
+            channel=STT_NOTIFICATIONS_CHANNEL_ID,
+            icon_emoji=':season_ticket:',
         )
         return
 
@@ -71,7 +73,9 @@ def ticket_post_save(sender, instance, **kwargs):
             return
 
         message = create_ticket_status_cancelled_slack_message(instance)
-        send_slack_notification(message, STT_NOTIFICATIONS_CHANNEL_TICKET_URL, ':x:')
+        send_slack_notification(
+            message=message, channel=STT_NOTIFICATIONS_CHANNEL_ID, icon_emoji=':x:'
+        )
 
 
 @receiver(post_save, sender=TicketHolderTeam)
@@ -84,4 +88,6 @@ def ticket_holder_team_post_save(sender, instance, **kwargs):
         return
 
     message = create_ticket_holder_team_slack_message(instance)
-    send_slack_notification(message, STT_NOTIFICATIONS_CHANNEL_TICKET_URL, ':sparkle:')
+    send_slack_notification(
+        message=message, channel=STT_NOTIFICATIONS_CHANNEL_ID, icon_emoji=':sparkle:'
+    )
