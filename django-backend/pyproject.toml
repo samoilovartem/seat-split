@@ -32,6 +32,7 @@ whitenoise = "^6.5.0"
 celery = "^5.3.4"
 requests = "^2.31.0"
 redis = "^5.0.0"
+slack-sdk = "^3.23.0"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "^7.2"
