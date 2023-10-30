@@ -48,7 +48,6 @@ def ticket_post_save(sender, instance, **kwargs):
         send_slack_notification(
             message=message,
             channel=STT_NOTIFICATIONS_CHANNEL_ID,
-            icon_emoji=':season_ticket:',
         )
         return
 
@@ -73,9 +72,7 @@ def ticket_post_save(sender, instance, **kwargs):
             return
 
         message = create_ticket_status_cancelled_slack_message(instance)
-        send_slack_notification(
-            message=message, channel=STT_NOTIFICATIONS_CHANNEL_ID, icon_emoji=':x:'
-        )
+        send_slack_notification(message=message, channel=STT_NOTIFICATIONS_CHANNEL_ID)
 
 
 @receiver(post_save, sender=TicketHolderTeam)
@@ -88,6 +85,4 @@ def ticket_holder_team_post_save(sender, instance, **kwargs):
         return
 
     message = create_ticket_holder_team_slack_message(instance)
-    send_slack_notification(
-        message=message, channel=STT_NOTIFICATIONS_CHANNEL_ID, icon_emoji=':sparkle:'
-    )
+    send_slack_notification(message=message, channel=STT_NOTIFICATIONS_CHANNEL_ID)

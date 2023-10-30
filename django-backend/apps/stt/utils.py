@@ -12,6 +12,7 @@ from apps.users.models import User
 from config.components.slack_integration import (
     STT_NOTIFICATIONS_CHANNEL_TICKET_HOLDER_URL,
     STT_NOTIFICATIONS_CHANNEL_TICKET_URL,
+    STT_NOTIFICATIONS_EMOJI,
 )
 from config.components.smtp_and_email import (
     EMAIL_FRONTEND_BASE_URL,
@@ -69,7 +70,10 @@ def create_ticket_status_cancelled_slack_message(instance: Ticket) -> dict[str, 
         'blocks': [
             {
                 'type': 'header',
-                'text': {'type': 'plain_text', 'text': 'Ticket Delisting Alert'},
+                'text': {
+                    'type': 'plain_text',
+                    'text': f'Ticket Delisting Alert {STT_NOTIFICATIONS_EMOJI["TICKET_DELISTING_REQUEST"]}',
+                },
             },
             {
                 'type': 'section',
@@ -107,7 +111,7 @@ def create_ticket_holder_team_slack_message(
                 'type': 'header',
                 'text': {
                     'type': 'plain_text',
-                    'text': "New Ticket Holder's Team Alert",
+                    'text': f"New Ticket Holder's Team Alert {STT_NOTIFICATIONS_EMOJI['TICKET_HOLDER_TEAM_CREATED']}",
                 },
             },
             {
@@ -154,7 +158,7 @@ def create_ticket_created_slack_message(instance: Ticket) -> dict[str, str]:
                 'type': 'header',
                 'text': {
                     'type': 'plain_text',
-                    'text': "New Ticket Alert",
+                    'text': f"New Ticket Alert {STT_NOTIFICATIONS_EMOJI['TICKET_CREATED']}",
                 },
             },
             {
