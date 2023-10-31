@@ -150,11 +150,20 @@ def create_ticket_holder_team_slack_message(
 
 
 def create_ticket_created_slack_message(
-    ticket_holder, event, section, row, seats, representative_ticket_id=None
+    ticket_holder: str,
+    event: str,
+    section: str,
+    row: str,
+    tickets_data: list[dict[str, str]],
 ) -> dict[str, str]:
     """Function to create the Slack message payload for newly created Tickets."""
 
-    seats_text = ", ".join(seats)
+    seats_links = [
+        f"<{STT_NOTIFICATIONS_CHANNEL_TICKET_URL}/{ticket['id']}/change/|{ticket['seat']}>"
+        for ticket in tickets_data
+    ]
+    seats_text = ", ".join(seats_links)
+    tickets_data_length = len(tickets_data)
 
     return {
         'text': f"New Tickets for {ticket_holder} have been created!",
@@ -163,7 +172,9 @@ def create_ticket_created_slack_message(
                 'type': 'header',
                 'text': {
                     'type': 'plain_text',
-                    'text': f"New Ticket/s Alert {STT_NOTIFICATIONS_EMOJI['TICKET_CREATED']}",
+                    'text': f"New Ticket Alert {STT_NOTIFICATIONS_EMOJI['TICKET_CREATED']}"
+                    if tickets_data_length == 1
+                    else f"New Tickets Alert {STT_NOTIFICATIONS_EMOJI['TICKET_CREATED']}",
                 },
             },
             {
@@ -187,7 +198,9 @@ def create_ticket_created_slack_message(
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*SEAT/S:*\n{seats_text}",
+                        'text': f"*SEAT :*\n{seats_text}"
+                        if tickets_data_length == 1
+                        else f"*SEATS :*\n{seats_text}",
                     },
                 ],
             },
@@ -196,9 +209,10 @@ def create_ticket_created_slack_message(
                 'type': 'section',
                 'text': {
                     'type': 'mrkdwn',
-                    'text': f"New tickets have been created. "
-                    f"Please review the details and take necessary actions. \n\n"
-                    f"<{STT_NOTIFICATIONS_CHANNEL_TICKET_URL}/{representative_ticket_id}/change/|View Record>",
+                    'text': "New ticket has been created. Please review the details and take necessary actions."
+                    if tickets_data_length == 1
+                    else "New tickets have been created. "
+                    "Please review the details and take necessary actions.",
                 },
             },
         ],

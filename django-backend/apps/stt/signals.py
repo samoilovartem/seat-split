@@ -46,14 +46,15 @@ def ticket_post_save(sender, instance, **kwargs):
     when ticket is sold.
     """
     if kwargs.get('created', False):
-        # if DEBUG:
-        #     send_debug_logger_slack_message()
-        #     return
+        if DEBUG:
+            send_debug_logger_slack_message()
+            return
 
         redis_key = f'new_tickets_{instance.event.id}_{instance.ticket_holder.id}'
 
         ticket_data = json.dumps(
             {
+                'id': str(instance.id),
                 'ticket_holder': instance.ticket_holder.__str__(),
                 'event': instance.event.__str__(),
                 'seat': instance.seat,
@@ -90,8 +91,9 @@ def ticket_post_save(sender, instance, **kwargs):
             return
 
         message = create_ticket_status_cancelled_slack_message(instance)
-        send_slack_notification(message=message, channel=STT_NOTIFICATIONS_CHANNEL_ID)
-        # send_slack_notification.apply_async(args=(message, STT_NOTIFICATIONS_CHANNEL_ID), countdown=5)
+        send_slack_notification.apply_async(
+            args=(message, STT_NOTIFICATIONS_CHANNEL_ID), countdown=5
+        )
 
 
 @receiver(post_save, sender=TicketHolderTeam)
@@ -99,10 +101,11 @@ def ticket_holder_team_post_save(sender, instance, **kwargs):
     if not kwargs.get('created', False):
         return
 
-    # if DEBUG:
-    #     send_debug_logger_slack_message()
-    #     return
+    if DEBUG:
+        send_debug_logger_slack_message()
+        return
 
     message = create_ticket_holder_team_slack_message(instance)
-    send_slack_notification(message, STT_NOTIFICATIONS_CHANNEL_ID)
-    # send_slack_notification.apply_async(args=(message, STT_NOTIFICATIONS_CHANNEL_ID), countdown=5)
+    send_slack_notification.apply_async(
+        args=(message, STT_NOTIFICATIONS_CHANNEL_ID), countdown=5
+    )

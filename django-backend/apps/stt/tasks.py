@@ -128,7 +128,7 @@ def send_ticket_holder_team_confirmed(user_email: str, team_name: str):
 
 
 @shared_task
-def send_slack_notification(message: dict[str, str], channel: str):
+def send_slack_notification(message: dict[str, str], channel: str) -> None:
     try:
         slack_client.chat_postMessage(
             channel=channel,
@@ -140,7 +140,7 @@ def send_slack_notification(message: dict[str, str], channel: str):
 
 
 @shared_task
-def send_aggregated_slack_notification(event_id, ticket_holder_id):
+def send_aggregated_slack_notification(event_id: UUID, ticket_holder_id: UUID) -> None:
     redis_key = f'new_tickets_{event_id}_{ticket_holder_id}'
 
     raw_tickets_data = redis_connection.lrange(redis_key, 0, -1)
@@ -148,8 +148,6 @@ def send_aggregated_slack_notification(event_id, ticket_holder_id):
     redis_connection.delete(redis_key)
 
     if tickets_data:
-        seats = [ticket['seat'] for ticket in tickets_data]
-        # Using the details from the first ticket as a representative for all of them.
         representative_ticket_data = tickets_data[0]
 
         message_payload = create_ticket_created_slack_message(
@@ -157,7 +155,7 @@ def send_aggregated_slack_notification(event_id, ticket_holder_id):
             event=representative_ticket_data['event'],
             section=representative_ticket_data['section'],
             row=representative_ticket_data['row'],
-            seats=seats,
+            tickets_data=tickets_data,
         )
 
         try:
