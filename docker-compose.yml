@@ -30,29 +30,29 @@ services:
     networks:
       - backend
 
-#  stt_celery:
-#    build:
-#      context: ./django-backend/
-#      dockerfile: "Dockerfile-dev"
-#    command: celery -A config worker --loglevel=info
-#    container_name: stt_celery
-#    env_file:
-#      - ./django-backend/.env.dev
-#    volumes:
-#      - ./django-backend:/app
-#    depends_on:
-#      - stt_django
-#      - stt_redis
-#    networks:
-#      - backend
-#
-#  stt_redis:
-#    image: redis
-#    container_name: stt_redis
-#    ports:
-#      - "6379:6379"
-#    networks:
-#      - backend
+  stt_celery:
+    build:
+      context: ./django-backend/
+      dockerfile: "Dockerfile-dev"
+    command: celery -A config worker --loglevel=info
+    container_name: stt_celery
+    env_file:
+      - ./django-backend/.env.dev
+    volumes:
+      - ./django-backend:/app
+    depends_on:
+      - stt_django
+      - stt_redis
+    networks:
+      - backend
+
+  stt_redis:
+    image: redis
+    container_name: stt_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
 
 volumes:
   pgdata:
