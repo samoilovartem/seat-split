@@ -1,3 +1,4 @@
+import json
 from uuid import UUID
 
 from celery import shared_task
@@ -7,7 +8,7 @@ from slack_sdk.errors import SlackApiError
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
-from apps.stt.utils import get_confirmation_link
+from apps.stt.utils import create_ticket_created_slack_message, get_confirmation_link
 from config.components.redis import redis_connection
 from config.components.slack_integration import (
     STT_NOTIFICATIONS_CHANNEL_ID,
@@ -142,15 +143,26 @@ def send_slack_notification(message: dict[str, str], channel: str):
 def send_aggregated_slack_notification(event_id, ticket_holder_id):
     redis_key = f'new_tickets_{event_id}_{ticket_holder_id}'
 
-    seats = [seat.decode('utf-8') for seat in redis_connection.lrange(redis_key, 0, -1)]
+    raw_tickets_data = redis_connection.lrange(redis_key, 0, -1)
+    tickets_data = [json.loads(data.decode('utf-8')) for data in raw_tickets_data]
     redis_connection.delete(redis_key)
 
-    if seats:
-        message = f"New tickets created for event {event_id} for ticket holder {ticket_holder_id}. Seats: {', '.join(seats)}"
+    if tickets_data:
+        seats = [ticket['seat'] for ticket in tickets_data]
+        # Using the details from the first ticket as a representative for all of them.
+        representative_ticket_data = tickets_data[0]
+
+        message_payload = create_ticket_created_slack_message(
+            ticket_holder=representative_ticket_data['ticket_holder'],
+            event=representative_ticket_data['event'],
+            section=representative_ticket_data['section'],
+            row=representative_ticket_data['row'],
+            seats=seats,
+        )
+
         try:
             slack_client.chat_postMessage(
-                channel=STT_NOTIFICATIONS_CHANNEL_ID,
-                text=message,
+                channel=STT_NOTIFICATIONS_CHANNEL_ID, **message_payload
             )
         except SlackApiError as e:
             logger.error(

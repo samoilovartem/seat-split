@@ -149,16 +149,21 @@ def create_ticket_holder_team_slack_message(
     }
 
 
-def create_ticket_created_slack_message(instance: Ticket) -> dict[str, str]:
-    """Function to create the Slack message payload for a newly created Ticket."""
+def create_ticket_created_slack_message(
+    ticket_holder, event, section, row, seats, representative_ticket_id=None
+) -> dict[str, str]:
+    """Function to create the Slack message payload for newly created Tickets."""
+
+    seats_text = ", ".join(seats)
+
     return {
-        'text': f"New Ticket {instance.id} for {instance.ticket_holder} has been created!",
+        'text': f"New Tickets for {ticket_holder} have been created!",
         'blocks': [
             {
                 'type': 'header',
                 'text': {
                     'type': 'plain_text',
-                    'text': f"New Ticket Alert {STT_NOTIFICATIONS_EMOJI['TICKET_CREATED']}",
+                    'text': f"New Ticket/s Alert {STT_NOTIFICATIONS_EMOJI['TICKET_CREATED']}",
                 },
             },
             {
@@ -166,27 +171,23 @@ def create_ticket_created_slack_message(instance: Ticket) -> dict[str, str]:
                 'fields': [
                     {
                         'type': 'mrkdwn',
-                        'text': f"*TICKET HOLDER:*\n{instance.ticket_holder}",
+                        'text': f"*TICKET HOLDER:*\n{ticket_holder}",
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*TICKET ID:*\n`{instance.id}`",
+                        'text': f"*EVENT:*\n{event}",
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*EVENT:*\n{instance.event}",
+                        'text': f"*SECTION:*\n{section}",
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*SECTION:*\n{instance.section}",
+                        'text': f"*ROW:*\n{row}",
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*ROW:*\n{instance.row}",
-                    },
-                    {
-                        'type': 'mrkdwn',
-                        'text': f"*SEAT:*\n{instance.seat}",
+                        'text': f"*SEAT/S:*\n{seats_text}",
                     },
                 ],
             },
@@ -195,9 +196,9 @@ def create_ticket_created_slack_message(instance: Ticket) -> dict[str, str]:
                 'type': 'section',
                 'text': {
                     'type': 'mrkdwn',
-                    'text': f"A new ticket has been created. "
+                    'text': f"New tickets have been created. "
                     f"Please review the details and take necessary actions. \n\n"
-                    f"<{STT_NOTIFICATIONS_CHANNEL_TICKET_URL}/{instance.id}/change/|View Record>",
+                    f"<{STT_NOTIFICATIONS_CHANNEL_TICKET_URL}/{representative_ticket_id}/change/|View Record>",
                 },
             },
         ],

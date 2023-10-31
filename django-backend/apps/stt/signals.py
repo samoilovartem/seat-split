@@ -1,3 +1,5 @@
+import json
+
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -50,8 +52,17 @@ def ticket_post_save(sender, instance, **kwargs):
 
         redis_key = f'new_tickets_{instance.event.id}_{instance.ticket_holder.id}'
 
-        redis_connection.rpush(redis_key, instance.seat)
+        ticket_data = json.dumps(
+            {
+                'ticket_holder': instance.ticket_holder.__str__(),
+                'event': instance.event.__str__(),
+                'seat': instance.seat,
+                'row': instance.row,
+                'section': instance.section,
+            }
+        )
 
+        redis_connection.rpush(redis_key, ticket_data)
         redis_connection.expire(redis_key, 300)
 
         send_aggregated_slack_notification.apply_async(
