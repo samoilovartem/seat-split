@@ -8,7 +8,11 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
 from apps.stt.utils import get_confirmation_link
-from config.components.slack_integration import slack_client
+from config.components.redis import redis_connection
+from config.components.slack_integration import (
+    STT_NOTIFICATIONS_CHANNEL_ID,
+    slack_client,
+)
 from config.components.smtp_and_email import (
     EMAIL_CONTENT_TYPE,
     EMAIL_FRONTEND_BASE_URL,
@@ -132,3 +136,23 @@ def send_slack_notification(message: dict[str, str], channel: str):
         )
     except SlackApiError as e:
         logger.error('There is an error sending a notification to slack. Error: {}', e)
+
+
+@shared_task
+def send_aggregated_slack_notification(event_id, ticket_holder_id):
+    redis_key = f'new_tickets_{event_id}_{ticket_holder_id}'
+
+    seats = [seat.decode('utf-8') for seat in redis_connection.lrange(redis_key, 0, -1)]
+    redis_connection.delete(redis_key)
+
+    if seats:
+        message = f"New tickets created for event {event_id} for ticket holder {ticket_holder_id}. Seats: {', '.join(seats)}"
+        try:
+            slack_client.chat_postMessage(
+                channel=STT_NOTIFICATIONS_CHANNEL_ID,
+                text=message,
+            )
+        except SlackApiError as e:
+            logger.error(
+                'There is an error sending a notification to slack. Error: {}', e
+            )

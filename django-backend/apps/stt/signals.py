@@ -3,15 +3,19 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 from apps.stt.models import Purchase, Ticket, TicketHolderTeam
-from apps.stt.tasks import send_slack_notification, send_ticket_holder_team_confirmed
+from apps.stt.tasks import (
+    send_aggregated_slack_notification,
+    send_slack_notification,
+    send_ticket_holder_team_confirmed,
+)
 from apps.stt.utils import (
-    create_ticket_created_slack_message,
     create_ticket_holder_team_slack_message,
     create_ticket_status_cancelled_slack_message,
     send_debug_logger_slack_message,
 )
 from config.components.business_related import DELIVERY_STATUSES, MARKETPLACES
 from config.components.global_settings import DEBUG
+from config.components.redis import redis_connection
 from config.components.slack_integration import STT_NOTIFICATIONS_CHANNEL_ID
 
 
@@ -40,16 +44,19 @@ def ticket_post_save(sender, instance, **kwargs):
     when ticket is sold.
     """
     if kwargs.get('created', False):
-        if DEBUG:
-            send_debug_logger_slack_message()
-            return
+        # if DEBUG:
+        #     send_debug_logger_slack_message()
+        #     return
 
-        message = create_ticket_created_slack_message(instance)
-        send_slack_notification(
-            message=message,
-            channel=STT_NOTIFICATIONS_CHANNEL_ID,
+        redis_key = f'new_tickets_{instance.event.id}_{instance.ticket_holder.id}'
+
+        redis_connection.rpush(redis_key, instance.seat)
+
+        redis_connection.expire(redis_key, 300)
+
+        send_aggregated_slack_notification.apply_async(
+            args=(instance.event.id, instance.ticket_holder.id), countdown=30
         )
-        return
 
     if len(instance.history.all()) < 2:
         return
@@ -73,6 +80,7 @@ def ticket_post_save(sender, instance, **kwargs):
 
         message = create_ticket_status_cancelled_slack_message(instance)
         send_slack_notification(message=message, channel=STT_NOTIFICATIONS_CHANNEL_ID)
+        # send_slack_notification.apply_async(args=(message, STT_NOTIFICATIONS_CHANNEL_ID), countdown=5)
 
 
 @receiver(post_save, sender=TicketHolderTeam)
@@ -80,9 +88,10 @@ def ticket_holder_team_post_save(sender, instance, **kwargs):
     if not kwargs.get('created', False):
         return
 
-    if DEBUG:
-        send_debug_logger_slack_message()
-        return
+    # if DEBUG:
+    #     send_debug_logger_slack_message()
+    #     return
 
     message = create_ticket_holder_team_slack_message(instance)
-    send_slack_notification(message=message, channel=STT_NOTIFICATIONS_CHANNEL_ID)
+    send_slack_notification(message, STT_NOTIFICATIONS_CHANNEL_ID)
+    # send_slack_notification.apply_async(args=(message, STT_NOTIFICATIONS_CHANNEL_ID), countdown=5)
