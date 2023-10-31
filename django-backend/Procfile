@@ -1,0 +1,2 @@
+web: ./entrypoint-prod.sh
+worker: celery -A config worker --loglevel=info --concurrency=2
