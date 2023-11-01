@@ -2,11 +2,7 @@ from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError
 
 from apps.users.models import User
-from config.settings import (
-    GENERAL_SUPERUSER_EMAIL,
-    GENERAL_SUPERUSER_PASSWORD,
-    GENERAL_SUPERUSER_USERNAME,
-)
+from config.settings import GENERAL_SUPERUSER_EMAIL, GENERAL_SUPERUSER_PASSWORD
 
 
 class Command(BaseCommand):
@@ -16,7 +12,6 @@ class Command(BaseCommand):
         if not User.objects.filter(is_superuser=True).exists():
             try:
                 User.objects.create_superuser(
-                    GENERAL_SUPERUSER_USERNAME,
                     GENERAL_SUPERUSER_EMAIL,
                     GENERAL_SUPERUSER_PASSWORD,
                 )
