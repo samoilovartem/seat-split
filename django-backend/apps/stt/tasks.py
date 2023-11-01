@@ -25,8 +25,6 @@ from config.components.smtp_and_email import (
 @shared_task
 def send_email_confirmation(user_email: str, user_id: UUID):
     """Sends email confirmation to user using standard Django email backend."""
-    # time.sleep(CELERY_GENERAL_SLEEP_TIME)
-
     mail_subject = f'Activate your account in {EMAIL_PROJECT_NAME}'
     message = render_to_string(
         'emails/account_verification.html',
@@ -58,8 +56,6 @@ def send_email_confirmation(user_email: str, user_id: UUID):
 @shared_task
 def send_email_confirmed(user_email: str):
     """Sends email notifying that email is confirmed to user using standard Django email backend."""
-    # time.sleep(CELERY_GENERAL_SLEEP_TIME)
-
     mail_subject = f'Your account in {EMAIL_PROJECT_NAME} is confirmed'
     message = render_to_string(
         'emails/account_verified.html',
@@ -92,8 +88,6 @@ def send_email_confirmed(user_email: str):
 @shared_task
 def send_ticket_holder_team_confirmed(user_email: str, team_name: str):
     """Sends email notifying that ticket holder team is confirmed to user using standard Django email backend."""
-    # time.sleep(CELERY_GENERAL_SLEEP_TIME)
-
     mail_subject = f'Your team "{team_name}" data has been verified'
     message = render_to_string(
         'emails/ticket_holder_team_confirmed.html',

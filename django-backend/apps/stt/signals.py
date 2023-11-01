@@ -34,8 +34,8 @@ def store_previous_is_confirmed(sender, instance, **kwargs):
 def send_confirmation_email(sender, instance, **kwargs):
     previous_is_confirmed = getattr(instance, '_previous_is_confirmed', None)
     if previous_is_confirmed is False and instance.is_confirmed:
-        send_ticket_holder_team_confirmed(
-            user_email=instance.ticket_holder.user.email, team_name=instance.team.name
+        send_ticket_holder_team_confirmed.apply_async(
+            args=(instance.ticket_holder.user.email, instance.team.name), countdown=5
         )
 
 
