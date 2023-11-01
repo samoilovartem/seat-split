@@ -1,7 +1,6 @@
 from uuid import UUID
 
 import requests
-from loguru import logger
 
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
@@ -57,10 +56,6 @@ def get_confirmation_link(user_id: UUID):
     )
 
     return confirmation_link
-
-
-def send_debug_logger_slack_message() -> None:
-    logger.info('DEBUG MODE: Slack notification has not been sent due to DEBUG mode.')
 
 
 def create_ticket_status_cancelled_slack_message(instance: Ticket) -> dict[str, str]:
