@@ -1,12 +1,16 @@
-FROM python:3.11
-
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    POETRY_VERSION=1.6.1
+FROM --platform=linux/amd64 python:3.11
 
 WORKDIR /app
 
-RUN apt-get update
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    POETRY_VERSION=1.6.1 \
+    GUNICORN_TIMEOUT=0
+
+RUN apt-get update && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip install --upgrade pip
 
 RUN pip install "poetry==$POETRY_VERSION"
 
@@ -17,4 +21,6 @@ RUN poetry config virtualenvs.create false && \
 
 COPY . .
 
-CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+RUN chmod +x ./entrypoint-prod.sh
+
+CMD ["./entrypoint-prod.sh"]
