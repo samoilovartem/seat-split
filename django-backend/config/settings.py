@@ -36,7 +36,7 @@ include(
     'components/query_count.py',
     'components/django_filters.py',
     'components/swagger.py',
-    # 'components/logger.py',
+    'components/logger.py',
     'components/smtp_and_email.py',
     'components/celery.py',
     'components/business_related.py',
@@ -87,6 +87,7 @@ MIDDLEWARE = [
     'config.middlewares.CustomRollbarNotifierMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
     'querycount.middleware.QueryCountMiddleware',
+    'request_logging.middleware.LoggingMiddleware',
 ]
 
 TEMPLATES = [
@@ -150,3 +151,6 @@ if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+
+GENERAL_SUPERUSER_EMAIL = os.environ.get('GENERAL_SUPERUSER_EMAIL', 'admin@example.com')
+GENERAL_SUPERUSER_PASSWORD = os.environ.get('GENERAL_SUPERUSER_PASSWORD', 'qwerty123@')

@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
+from apps.users.forms import CustomUserCreationForm
 from apps.users.models import User
 
 
 class UserAdminConfig(UserAdmin):
+    add_form = CustomUserCreationForm
     model = User
     save_as = True
     save_on_top = True
@@ -24,6 +26,21 @@ class UserAdminConfig(UserAdmin):
         'email',
     )
     readonly_fields = ('id', 'last_login', 'date_joined')
+    add_fieldsets = (
+        (
+            None,
+            {
+                'classes': ('wide',),
+                'fields': (
+                    'email',
+                    'first_name',
+                    'last_name',
+                    'password1',
+                    'password2',
+                ),
+            },
+        ),
+    )
     fieldsets = (
         (
             'Personal info',

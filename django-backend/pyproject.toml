@@ -33,6 +33,7 @@ celery = "^5.3.4"
 requests = "^2.31.0"
 redis = "^5.0.0"
 slack-sdk = "^3.23.0"
+django-request-logging = "^0.7.5"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "^7.2"
