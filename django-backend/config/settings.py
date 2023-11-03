@@ -36,7 +36,7 @@ include(
     'components/query_count.py',
     'components/django_filters.py',
     'components/swagger.py',
-    # 'components/logger.py',
+    'components/logger.py',
     'components/smtp_and_email.py',
     'components/celery.py',
     'components/business_related.py',
@@ -154,43 +154,3 @@ if not DEBUG:
 
 GENERAL_SUPERUSER_EMAIL = os.environ.get('GENERAL_SUPERUSER_EMAIL', 'admin@example.com')
 GENERAL_SUPERUSER_PASSWORD = os.environ.get('GENERAL_SUPERUSER_PASSWORD', 'qwerty123@')
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'standard': {
-            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt': "%d/%b/%Y %H:%M:%S",
-        },
-    },
-    'handlers': {
-        'console': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'standard',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'WARN',
-            'propagate': True,
-        },
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': 'WARN',
-            'propagate': False,
-        },
-        'website': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'django.request': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-    },
-}
