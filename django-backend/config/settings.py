@@ -36,7 +36,7 @@ include(
     'components/query_count.py',
     'components/django_filters.py',
     'components/swagger.py',
-    # 'components/logger.py',
+    'components/logger.py',
     'components/smtp_and_email.py',
     'components/celery.py',
     'components/business_related.py',
