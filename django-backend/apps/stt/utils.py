@@ -1,7 +1,6 @@
 from uuid import UUID
 
 import requests
-from loguru import logger
 
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
@@ -57,10 +56,6 @@ def get_confirmation_link(user_id: UUID):
     )
 
     return confirmation_link
-
-
-def send_debug_logger_slack_message() -> None:
-    logger.info('DEBUG MODE: Slack notification has not been sent due to DEBUG mode.')
 
 
 def create_ticket_status_cancelled_slack_message(instance: Ticket) -> dict[str, str]:
@@ -149,16 +144,32 @@ def create_ticket_holder_team_slack_message(
     }
 
 
-def create_ticket_created_slack_message(instance: Ticket) -> dict[str, str]:
-    """Function to create the Slack message payload for a newly created Ticket."""
+def create_ticket_created_slack_message(
+    ticket_holder: str,
+    event: str,
+    section: str,
+    row: str,
+    tickets_data: list[dict[str, str]],
+) -> dict[str, str]:
+    """Function to create the Slack message payload for newly created Tickets."""
+
+    seats_links = [
+        f"<{STT_NOTIFICATIONS_CHANNEL_TICKET_URL}/{ticket['id']}/change/|{ticket['seat']}>"
+        for ticket in tickets_data
+    ]
+    seats_text = ", ".join(seats_links)
+    tickets_data_length = len(tickets_data)
+
     return {
-        'text': f"New Ticket {instance.id} for {instance.ticket_holder} has been created!",
+        'text': f"New Tickets for {ticket_holder} have been created!",
         'blocks': [
             {
                 'type': 'header',
                 'text': {
                     'type': 'plain_text',
-                    'text': f"New Ticket Alert {STT_NOTIFICATIONS_EMOJI['TICKET_CREATED']}",
+                    'text': f"New Ticket Alert {STT_NOTIFICATIONS_EMOJI['TICKET_CREATED']}"
+                    if tickets_data_length == 1
+                    else f"New Tickets Alert {STT_NOTIFICATIONS_EMOJI['TICKET_CREATED']}",
                 },
             },
             {
@@ -166,27 +177,25 @@ def create_ticket_created_slack_message(instance: Ticket) -> dict[str, str]:
                 'fields': [
                     {
                         'type': 'mrkdwn',
-                        'text': f"*TICKET HOLDER:*\n{instance.ticket_holder}",
+                        'text': f"*TICKET HOLDER:*\n{ticket_holder}",
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*TICKET ID:*\n`{instance.id}`",
+                        'text': f"*EVENT:*\n{event}",
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*EVENT:*\n{instance.event}",
+                        'text': f"*SECTION:*\n{section}",
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*SECTION:*\n{instance.section}",
+                        'text': f"*ROW:*\n{row}",
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*ROW:*\n{instance.row}",
-                    },
-                    {
-                        'type': 'mrkdwn',
-                        'text': f"*SEAT:*\n{instance.seat}",
+                        'text': f"*SEAT :*\n{seats_text}"
+                        if tickets_data_length == 1
+                        else f"*SEATS :*\n{seats_text}",
                     },
                 ],
             },
@@ -195,9 +204,10 @@ def create_ticket_created_slack_message(instance: Ticket) -> dict[str, str]:
                 'type': 'section',
                 'text': {
                     'type': 'mrkdwn',
-                    'text': f"A new ticket has been created. "
-                    f"Please review the details and take necessary actions. \n\n"
-                    f"<{STT_NOTIFICATIONS_CHANNEL_TICKET_URL}/{instance.id}/change/|View Record>",
+                    'text': "New ticket has been created. Please review the details and take necessary actions."
+                    if tickets_data_length == 1
+                    else "New tickets have been created. "
+                    "Please review the details and take necessary actions.",
                 },
             },
         ],
