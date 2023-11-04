@@ -1,12 +1,7 @@
 from typing import Optional
 
-from pygments import highlight
-from pygments.formatters import TerminalFormatter
-from pygments.lexers import PostgresLexer
-from sqlparse import format
-
 from django.apps import apps
-from django.db.models import Count, Model, QuerySet
+from django.db.models import Count, Model
 
 
 def records_per_value(model: type[Model], filter_name: str) -> list[dict[str, int]]:
@@ -92,8 +87,3 @@ def show_changed_fields(obj, fields):
             f'</span> to <span style="background-color:#92BF0F">{change.new}</span> . <br/>'
         )
     return fields
-
-
-def print_sql(queryset: QuerySet) -> None:
-    formatted = format(str(queryset.query), reindent=True)
-    print(highlight(formatted, PostgresLexer(), TerminalFormatter()))

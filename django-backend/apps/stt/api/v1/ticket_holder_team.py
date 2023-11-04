@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from django.db import IntegrityError
 
-from apps.common_services.permissions import IsTicketHolder
+from apps.permissions import IsTicketHolder
 from apps.stt.api.v1.serializers import TicketHolderTeamSerializer
 from apps.stt.models import TicketHolderTeam
 
