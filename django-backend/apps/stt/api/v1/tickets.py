@@ -6,7 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from django.db import IntegrityError
 
-from apps.common_services.permissions import IsTicketHolder
+from apps.permissions import IsTicketHolder
 from apps.stt.api.v1.serializers import TicketSerializer
 from apps.stt.models import Ticket
 

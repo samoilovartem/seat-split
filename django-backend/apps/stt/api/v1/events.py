@@ -5,10 +5,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from apps.common_services.available_seats_calculator import AvailableSeatsCalculator
 from apps.stt.api.v1.serializers import AvailableSeatsSerializer, EventSerializer
 from apps.stt.filters import EventFilterSet
 from apps.stt.models import Event, TicketHolderTeam
+from apps.stt.services.available_seats_calculator import AvailableSeatsCalculator
 
 
 class EventViewSet(ModelViewSet):

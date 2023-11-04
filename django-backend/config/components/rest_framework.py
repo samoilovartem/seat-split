@@ -1,7 +1,7 @@
 from config.components.global_settings import DEBUG
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'apps.common_services.pagination.CustomPagination',
+    'DEFAULT_PAGINATION_CLASS': 'apps.pagination.CustomPagination',
     'PAGE_SIZE': 20,
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
