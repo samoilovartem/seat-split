@@ -1,3 +1,5 @@
+from config.components.global_settings import DEBUG
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -27,12 +29,12 @@ LOGGING = {
         },
         'website': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'DEBUG' if DEBUG else 'INFO',
             'propagate': False,
         },
         'django.request': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'DEBUG' if DEBUG else 'INFO',
             'propagate': False,
         },
     },
