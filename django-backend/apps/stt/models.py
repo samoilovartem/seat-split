@@ -177,6 +177,7 @@ class TicketHolderTeam(models.Model):
     section = models.CharField(max_length=255)
     row = models.CharField(max_length=255)
     seat = models.CharField(max_length=255)
+    seats_quantity = models.PositiveIntegerField(default=1, editable=False)
     credentials_website_username = models.CharField(max_length=255)
     credentials_website_password = models.CharField(max_length=255)
     is_confirmed = models.BooleanField(
@@ -195,6 +196,17 @@ class TicketHolderTeam(models.Model):
                 name='ticket_holder_team_idx',
             ),
         )
+
+    def save(self, *args, **kwargs):
+        self.seats_quantity = self.calculate_quantity()
+        super(TicketHolderTeam, self).save(*args, **kwargs)
+
+    def calculate_quantity(self):
+        # Use the same logic as in validate_seat_range for calculating quantity.
+        if '-' in self.seat:
+            first_seat, last_seat = map(int, self.seat.split('-'))
+            return last_seat - first_seat + 1
+        return 1
 
     def __str__(self):
         return f'{self.ticket_holder} - {self.team} - {self.team.id}'
