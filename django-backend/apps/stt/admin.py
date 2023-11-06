@@ -68,6 +68,7 @@ class TicketHolderTeamInline(admin.StackedInline):
     model = TicketHolderTeam
     extra = 0
     readonly_fields = (
+        'seats_quantity',
         'credentials_website_username',
         'credentials_website_password',
     )
