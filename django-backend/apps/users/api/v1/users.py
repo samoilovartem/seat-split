@@ -1,3 +1,4 @@
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -5,11 +6,11 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.db.models import Prefetch
 
 from apps.stt.models import TicketHolderTeam
-from apps.users.api.v1.serializers import UserSerializer
+from apps.users.api.v1.serializers import ChangePasswordSerializer, UserSerializer
 
 User = get_user_model()
 
@@ -34,10 +35,33 @@ class UserViewSet(ModelViewSet):
             return queryset
         return queryset.filter(pk=self.request.user.pk)
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['GET'])
     def me(self, request):
         serializer = self.get_serializer(request.user)
         return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=ChangePasswordSerializer)
+    @action(detail=False, methods=['POST'])
+    def change_password(self, request, pk=None):
+        user = request.user
+        serializer = ChangePasswordSerializer(
+            data=request.data, context={'request': request}
+        )
+
+        if serializer.is_valid():
+            if not user.check_password(serializer.validated_data['old_password']):
+                return Response(
+                    {'old_password': ['Old password is incorrect.']},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            user.set_password(serializer.validated_data['new_password'])
+            user.save()
+            update_session_auth_hash(request, user)
+
+            return Response({'status': 'password changed'}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
