@@ -2,9 +2,26 @@ from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from django.contrib.auth import password_validation
+
 from apps.serializers import ShowAllSeatsMixin
 from apps.stt.models import Team, TicketHolder, TicketHolderTeam
 from apps.users.models import User
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_new_password(self, value):
+        password_validation.validate_password(value, self.context['request'].user)
+        return value
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError('Old password is not correct')
+        return value
 
 
 class SimpleTeamSerializer(serializers.ModelSerializer):
