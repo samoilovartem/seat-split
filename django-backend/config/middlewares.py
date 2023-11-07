@@ -1,3 +1,4 @@
+import logging
 import time
 import uuid
 
@@ -51,3 +52,23 @@ def logging_middleware(get_response):
             return response
 
     return middleware
+
+
+class LogRequestTimeMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+        self.logger = logging.getLogger('django.request')
+
+    def __call__(self, request):
+        start_time = time.time()
+        response = self.get_response(request)
+        end_time = time.time()
+
+        execution_time_ms = (end_time - start_time) * 1000
+        self.logger.info(
+            'Request %s completed. Execution time: %.2fms',
+            request.path,
+            execution_time_ms,
+        )
+
+        return response
