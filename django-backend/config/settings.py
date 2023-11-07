@@ -75,6 +75,7 @@ if DEBUG:
 ROOT_URLCONF = 'config.urls'
 
 MIDDLEWARE = [
+    'config.middlewares.LogRequestTimeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
