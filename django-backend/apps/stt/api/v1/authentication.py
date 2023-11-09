@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from django.core.exceptions import ObjectDoesNotExist
 
-from apps.stt.api.v1.serializers import CustomTokenObtainPairSerializer
+from apps.stt.api.serializers import CustomTokenObtainPairSerializer
 
 
 class CustomTokenCreateView(ObtainAuthToken):

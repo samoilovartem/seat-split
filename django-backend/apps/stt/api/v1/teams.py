@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from apps.stt.api.v1.serializers import TeamSerializer
+from apps.stt.api.serializers import TeamSerializer
 from apps.stt.models import Team
 from config.components.business_related import SUPPORTED_LEAGUES
 

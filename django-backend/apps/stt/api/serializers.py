@@ -4,7 +4,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from apps.serializers import ShowAllSeatsMixin
-from apps.stt.api.v1.validators import validate_seat_range
+from apps.stt.api.validators import validate_seat_range
 from apps.stt.models import (
     Event,
     Purchase,

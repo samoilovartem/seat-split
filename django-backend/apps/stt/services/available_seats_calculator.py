@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Any
 
-from apps.stt.api.v1.serializers import SimpleEventSerializer
+from apps.stt.api.serializers import SimpleEventSerializer
 from apps.stt.models import Event, Ticket, TicketHolderTeam
 
 
