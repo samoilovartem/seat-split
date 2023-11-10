@@ -2,7 +2,7 @@ from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from django.contrib.auth import password_validation
+from django.contrib.auth import authenticate, password_validation
 
 from apps.serializers import ShowAllSeatsMixin
 from apps.stt.models import Team, TicketHolder, TicketHolderTeam
@@ -21,6 +21,22 @@ class ChangePasswordSerializer(serializers.Serializer):
         user = self.context['request'].user
         if not user.check_password(value):
             raise serializers.ValidationError('Old password is not correct')
+        return value
+
+
+class EmailChangeSerializer(serializers.Serializer):
+    new_email = serializers.EmailField(required=True)
+    current_password = serializers.CharField(required=True, write_only=True)
+
+    def validate_current_password(self, value):
+        user = self.context['request'].user
+        if not authenticate(username=user.username, password=value):
+            raise serializers.ValidationError('Current password is incorrect.')
+        return value
+
+    def validate_new_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError('Email is already in use.')
         return value
 
 
