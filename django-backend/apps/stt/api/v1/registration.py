@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.permissions import AllowAny
@@ -12,6 +14,9 @@ from django.utils.http import urlsafe_base64_decode
 from apps.stt.api.serializers import RegisterSerializer
 from apps.stt.models import TicketHolder, User
 from apps.stt.tasks import send_email_confirmation, send_email_confirmed
+from apps.users.tasks import send_email_change_confirmed
+from config.components.celery import CELERY_GENERAL_COOLDOWN
+from config.components.redis import redis_connection
 
 
 class RegisterView(APIView):
@@ -60,33 +65,64 @@ class VerifyView(APIView):
     my_tags = ['registration and verification']
 
     def post(self, request, *args, **kwargs):
-        try:
-            uid = force_str(urlsafe_base64_decode(self.kwargs.get('uidb64')))
-            user = User.objects.get(id=uid)
+        uidb64 = kwargs.get('uidb64')
+        token = kwargs.get('token')
 
-            if default_token_generator.check_token(user, self.kwargs.get('token')):
-                if user.is_verified:
-                    return Response(
-                        {'error': 'User already verified!'},
-                        status=status.HTTP_400_BAD_REQUEST,
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+
+            try:
+                user_id = UUID(uid)
+            except ValueError:
+                return Response(
+                    {'error': 'Invalid user ID format.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            user = User.objects.get(pk=user_id)
+
+            is_email_change_verification = False
+            new_email = redis_connection.get(f'email_change_{uid}')
+
+            if new_email:
+                is_email_change_verification = True
+
+            if default_token_generator.check_token(user, token):
+                if not is_email_change_verification:
+                    if user.is_verified:
+                        return Response(
+                            {'error': 'User already verified.'},
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
+
+                    user.is_verified = True
+                    user.save()
+
+                    send_email_confirmed.apply_async(
+                        args=(user.email,), countdown=CELERY_GENERAL_COOLDOWN
                     )
 
-                user.is_verified = True
-                user.save()
+                else:
+                    user.email = new_email
+                    user.username = new_email
+                    user.save()
 
-                send_email_confirmed.apply_async(args=(user.email,), countdown=5)
+                    redis_connection.delete(f'email_change_{uid}')
 
-                return Response(status=status.HTTP_200_OK)
+                    send_email_change_confirmed.apply_async(
+                        args=(new_email,), countdown=CELERY_GENERAL_COOLDOWN
+                    )
+
+                return Response(
+                    {'message': 'Verification successful'}, status=status.HTTP_200_OK
+                )
+
             else:
                 return Response(
-                    {'error': 'Token is not valid!'}, status=status.HTTP_400_BAD_REQUEST
+                    {'error': 'Token is not valid.'}, status=status.HTTP_400_BAD_REQUEST
                 )
-        except (
-            TypeError,
-            ValueError,
-            OverflowError,
-            User.DoesNotExist,
-        ):
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             return Response(
-                {'error': 'Something went wrong!'}, status=status.HTTP_400_BAD_REQUEST
+                {'error': 'Invalid link or user not found.'},
+                status=status.HTTP_400_BAD_REQUEST,
             )

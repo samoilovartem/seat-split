@@ -10,7 +10,13 @@ from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.db.models import Prefetch
 
 from apps.stt.models import TicketHolderTeam
-from apps.users.api.v1.serializers import ChangePasswordSerializer, UserSerializer
+from apps.users.api.serializers import (
+    ChangePasswordSerializer,
+    EmailChangeSerializer,
+    UserSerializer,
+)
+from apps.users.tasks import send_email_change_confirmation
+from config.components.redis import redis_connection
 
 User = get_user_model()
 
@@ -60,6 +66,32 @@ class UserViewSet(ModelViewSet):
             update_session_auth_hash(request, user)
 
             return Response({'status': 'password changed'}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @swagger_auto_schema(request_body=EmailChangeSerializer)
+    @action(detail=False, methods=['POST'])
+    def change_email(self, request, pk=None):
+        serializer = EmailChangeSerializer(
+            data=request.data, context={'request': request}
+        )
+        if serializer.is_valid():
+            user = request.user
+            new_email = serializer.validated_data['new_email']
+
+            # Send email confirmation now uses the user's ID to identify the email change in Redis
+            send_email_change_confirmation.apply_async(
+                args=(new_email, user.id), countdown=5
+            )
+
+            # Store new email in Redis with a key as user_id and set expiration time (e.g., 24 hours)
+            key = f'email_change_{user.id}'
+            redis_connection.setex(key, 86_400, new_email)  # 86,400 seconds = 24 hours
+
+            return Response(
+                {'message': 'Verification email sent to the new address.'},
+                status=status.HTTP_200_OK,
+            )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

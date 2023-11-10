@@ -1,10 +1,11 @@
 from uuid import UUID
 
 import requests
+from rest_framework.exceptions import ValidationError
 
 from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 from apps.stt.models import Ticket, TicketHolderTeam
 from apps.users.models import User
@@ -20,6 +21,18 @@ from config.components.smtp_and_email import (
     SMTP2GO_EMAIL_CONFIRMATION_TEMPLATE_ID,
     SMTP2GO_FROM_EMAIL,
 )
+
+
+def decode_uid(uidb64):
+    """
+    Decodes a URL-safe base64-encoded UUID and returns a UUID object.
+    Raises a `ValidationError` if the input is not a valid UUID.
+    """
+    try:
+        uid_str = force_str(urlsafe_base64_decode(uidb64))
+        return UUID(uid_str)
+    except (ValueError, TypeError, OverflowError) as e:
+        raise ValidationError(f"Invalid UID: {e}")
 
 
 def send_email_confirmation_with_api(
