@@ -1,5 +1,3 @@
-from uuid import UUID
-
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.permissions import AllowAny
@@ -7,16 +5,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from django.contrib.auth import password_validation
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_str
-from django.utils.http import urlsafe_base64_decode
 
 from apps.stt.api.serializers import RegisterSerializer
 from apps.stt.models import TicketHolder, User
-from apps.stt.tasks import send_email_confirmation, send_email_confirmed
-from apps.users.tasks import send_email_change_confirmed
-from config.components.celery import CELERY_GENERAL_COOLDOWN
-from config.components.redis import redis_connection
+from apps.stt.services.verification_service import VerificationService
+from apps.stt.tasks import send_email_confirmation
 
 
 class RegisterView(APIView):
@@ -69,60 +62,7 @@ class VerifyView(APIView):
         token = kwargs.get('token')
 
         try:
-            uid = force_str(urlsafe_base64_decode(uidb64))
-
-            try:
-                user_id = UUID(uid)
-            except ValueError:
-                return Response(
-                    {'error': 'Invalid user ID format.'},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-            user = User.objects.get(pk=user_id)
-
-            is_email_change_verification = False
-            new_email = redis_connection.get(f'email_change_{uid}')
-
-            if new_email:
-                is_email_change_verification = True
-
-            if default_token_generator.check_token(user, token):
-                if not is_email_change_verification:
-                    if user.is_verified:
-                        return Response(
-                            {'error': 'User already verified.'},
-                            status=status.HTTP_400_BAD_REQUEST,
-                        )
-
-                    user.is_verified = True
-                    user.save()
-
-                    send_email_confirmed.apply_async(
-                        args=(user.email,), countdown=CELERY_GENERAL_COOLDOWN
-                    )
-
-                else:
-                    user.email = new_email
-                    user.username = new_email
-                    user.save()
-
-                    redis_connection.delete(f'email_change_{uid}')
-
-                    send_email_change_confirmed.apply_async(
-                        args=(new_email,), countdown=CELERY_GENERAL_COOLDOWN
-                    )
-
-                return Response(
-                    {'message': 'Verification successful'}, status=status.HTTP_200_OK
-                )
-
-            else:
-                return Response(
-                    {'error': 'Token is not valid.'}, status=status.HTTP_400_BAD_REQUEST
-                )
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            return Response(
-                {'error': 'Invalid link or user not found.'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            message = VerificationService.verify_user(uidb64, token)
+            return Response({'message': message}, status=status.HTTP_200_OK)
+        except ValueError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
