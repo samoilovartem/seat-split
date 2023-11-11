@@ -5,13 +5,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from django.contrib.auth import password_validation
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_str
-from django.utils.http import urlsafe_base64_decode
 
-from apps.stt.api.v1.serializers import RegisterSerializer
+from apps.stt.api.serializers import RegisterSerializer
 from apps.stt.models import TicketHolder, User
-from apps.stt.tasks import send_email_confirmation, send_email_confirmed
+from apps.stt.services.verification_service import VerificationService
+from apps.stt.tasks import send_email_confirmation
 
 
 class RegisterView(APIView):
@@ -60,33 +58,11 @@ class VerifyView(APIView):
     my_tags = ['registration and verification']
 
     def post(self, request, *args, **kwargs):
+        uidb64 = kwargs.get('uidb64')
+        token = kwargs.get('token')
+
         try:
-            uid = force_str(urlsafe_base64_decode(self.kwargs.get('uidb64')))
-            user = User.objects.get(id=uid)
-
-            if default_token_generator.check_token(user, self.kwargs.get('token')):
-                if user.is_verified:
-                    return Response(
-                        {'error': 'User already verified!'},
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
-
-                user.is_verified = True
-                user.save()
-
-                send_email_confirmed.apply_async(args=(user.email,), countdown=5)
-
-                return Response(status=status.HTTP_200_OK)
-            else:
-                return Response(
-                    {'error': 'Token is not valid!'}, status=status.HTTP_400_BAD_REQUEST
-                )
-        except (
-            TypeError,
-            ValueError,
-            OverflowError,
-            User.DoesNotExist,
-        ):
-            return Response(
-                {'error': 'Something went wrong!'}, status=status.HTTP_400_BAD_REQUEST
-            )
+            message = VerificationService.verify_user(uidb64, token)
+            return Response({'message': message}, status=status.HTTP_200_OK)
+        except ValueError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

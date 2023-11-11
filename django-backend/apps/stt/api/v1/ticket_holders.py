@@ -8,7 +8,7 @@ from rest_framework.mixins import (
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
-from apps.stt.api.v1.serializers import TicketHolderSerializer
+from apps.stt.api.serializers import TicketHolderSerializer
 from apps.stt.models import TicketHolder
 
 
