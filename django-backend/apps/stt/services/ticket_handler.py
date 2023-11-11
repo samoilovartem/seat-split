@@ -13,7 +13,10 @@ from config.components.celery import (
     CELERY_GENERAL_COOLDOWN,
 )
 from config.components.global_settings import DEBUG
-from config.components.redis import REDIS_NEW_TICKETS_KEY_EXPIRE, redis_connection
+from config.components.redis import (
+    REDIS_NEW_TICKETS_KEY_EXPIRE,
+    redis_celery_connection,
+)
 from config.components.slack_integration import STT_NOTIFICATIONS_CHANNEL_ID
 
 
@@ -66,8 +69,8 @@ class TicketHandler:
                 'section': self.instance.section,
             }
         )
-        redis_connection.rpush(redis_key, ticket_data)
-        redis_connection.expire(redis_key, REDIS_NEW_TICKETS_KEY_EXPIRE)
+        redis_celery_connection.rpush(redis_key, ticket_data)
+        redis_celery_connection.expire(redis_key, REDIS_NEW_TICKETS_KEY_EXPIRE)
 
     def _handle_ticket_status_change(self) -> None:
         """Handles the logic for ticket status changes."""

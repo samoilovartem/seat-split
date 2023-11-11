@@ -16,7 +16,7 @@ from apps.users.api.serializers import (
     UserSerializer,
 )
 from apps.users.tasks import send_email_change_confirmation
-from config.components.redis import redis_connection
+from config.components.redis import redis_celery_connection
 
 User = get_user_model()
 
@@ -86,7 +86,9 @@ class UserViewSet(ModelViewSet):
 
             # Store new email in Redis with a key as user_id and set expiration time (e.g., 24 hours)
             key = f'email_change_{user.id}'
-            redis_connection.setex(key, 86_400, new_email)  # 86,400 seconds = 24 hours
+            redis_celery_connection.setex(
+                key, 86_400, new_email
+            )  # 86,400 seconds = 24 hours
 
             return Response(
                 {'message': 'Verification email sent to the new address.'},

@@ -8,7 +8,7 @@ from apps.stt.models import User
 from apps.stt.tasks import send_email_confirmed
 from apps.users.tasks import send_email_change_confirmed
 from config.components.celery import CELERY_GENERAL_COOLDOWN
-from config.components.redis import redis_connection
+from config.components.redis import redis_general_connection
 
 
 class VerificationService:
@@ -25,7 +25,7 @@ class VerificationService:
         except User.DoesNotExist:
             raise ValueError('User not found')
 
-        new_email = redis_connection.get(f'email_change_{uid}')
+        new_email = redis_general_connection.get(f'email_change_{uid}')
         is_email_change_verification = bool(new_email)
 
         if not default_token_generator.check_token(user, token):
@@ -54,7 +54,7 @@ class VerificationService:
         user.email = new_email
         user.username = new_email
         user.save()
-        redis_connection.delete(f'email_change_{uid}')
+        redis_general_connection.delete(f'email_change_{uid}')
         send_email_change_confirmed.apply_async(
             args=(new_email,), countdown=CELERY_GENERAL_COOLDOWN
         )

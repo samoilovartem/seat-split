@@ -9,7 +9,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
 from apps.stt.utils import create_ticket_created_slack_message, get_confirmation_link
-from config.components.redis import redis_connection
+from config.components.redis import redis_celery_connection
 from config.components.slack_integration import (
     STT_NOTIFICATIONS_CHANNEL_ID,
     slack_client,
@@ -142,9 +142,9 @@ def send_slack_notification(message: dict[str, str], channel: str) -> None:
 def send_aggregated_slack_notification(event_id: UUID, ticket_holder_id: UUID) -> None:
     redis_key = f'new_tickets_{event_id}_{ticket_holder_id}'
 
-    raw_tickets_data = redis_connection.lrange(redis_key, 0, -1)
+    raw_tickets_data = redis_celery_connection.lrange(redis_key, 0, -1)
     tickets_data = [json.loads(data.decode('utf-8')) for data in raw_tickets_data]
-    redis_connection.delete(redis_key)
+    redis_celery_connection.delete(redis_key)
 
     if tickets_data:
         representative_ticket_data = tickets_data[0]
