@@ -6,7 +6,7 @@ from django.db.utils import OperationalError
 from django.http import JsonResponse
 
 from apps.stt.tasks import celery_ping
-from config.components.redis import redis_connection
+from config.components.redis import redis_celery_connection
 
 
 def health_check(request):
@@ -18,7 +18,7 @@ def health_check(request):
         db_status = 'PostgreSQL connection failed'
 
     try:
-        redis_connection.ping()
+        redis_celery_connection.ping()
         redis_status = 'Redis connected'
     except (redis.exceptions.ConnectionError, redis.exceptions.BusyLoadingError):
         redis_status = 'Redis connection failed'
