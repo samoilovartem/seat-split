@@ -89,6 +89,7 @@ MIDDLEWARE = [
     'simple_history.middleware.HistoryRequestMiddleware',
     'querycount.middleware.QueryCountMiddleware',
     'request_logging.middleware.LoggingMiddleware',
+    'config.middlewares.SimpleTokenAuthenticationMiddleware',
 ]
 
 TEMPLATES = [
@@ -155,3 +156,5 @@ if not DEBUG:
 
 GENERAL_SUPERUSER_EMAIL = os.environ.get('GENERAL_SUPERUSER_EMAIL', 'admin@example.com')
 GENERAL_SUPERUSER_PASSWORD = os.environ.get('GENERAL_SUPERUSER_PASSWORD', 'qwerty123@')
+
+HEALTH_CHECK_TOKEN = os.environ.get('HEALTH_CHECK_TOKEN', 'health_check_token')
