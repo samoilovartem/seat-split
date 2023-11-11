@@ -3,7 +3,12 @@ import time
 import uuid
 
 from loguru import logger
+from rest_framework import status
 from rollbar.contrib.django.middleware import RollbarNotifierMiddleware
+
+from django.http import JsonResponse
+
+from config.settings import HEALTH_CHECK_TOKEN
 
 
 class CustomRollbarNotifierMiddleware(RollbarNotifierMiddleware):
@@ -72,3 +77,20 @@ class LogRequestTimeMiddleware:
         )
 
         return response
+
+
+class SimpleTokenAuthenticationMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        return response
+
+    def process_view(self, request, view_func, view_args, view_kwargs):
+        if view_func.__name__ == 'health_check':
+            token = request.headers.get('Authorization')
+            if token != HEALTH_CHECK_TOKEN:
+                return JsonResponse(
+                    {'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED
+                )

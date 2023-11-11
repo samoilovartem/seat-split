@@ -23,6 +23,11 @@ from config.components.smtp_and_email import (
 
 
 @shared_task
+def celery_ping():
+    return 'pong'
+
+
+@shared_task
 def send_email_confirmation(user_email: str, user_id: UUID):
     """Sends email confirmation to user using standard Django email backend."""
     mail_subject = f'Activate your account in {EMAIL_PROJECT_NAME}'
