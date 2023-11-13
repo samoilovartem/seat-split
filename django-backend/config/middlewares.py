@@ -3,10 +3,9 @@ import time
 import uuid
 
 from loguru import logger
-from rest_framework import status
 from rollbar.contrib.django.middleware import RollbarNotifierMiddleware
 
-from django.http import JsonResponse
+from django.http import HttpResponseForbidden
 
 from config.settings import HEALTH_CHECK_TOKEN
 
@@ -84,13 +83,9 @@ class SimpleTokenAuthenticationMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        response = self.get_response(request)
-        return response
-
-    def process_view(self, request, view_func, view_args, view_kwargs):
-        if view_func.__name__ == 'health_check':
+        if '/health-check/' in request.path:
             token = request.headers.get('Authorization')
-            if token != HEALTH_CHECK_TOKEN:
-                return JsonResponse(
-                    {'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED
-                )
+            if not token == HEALTH_CHECK_TOKEN:
+                return HttpResponseForbidden('Unauthorized')
+
+        return self.get_response(request)

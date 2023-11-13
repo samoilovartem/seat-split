@@ -63,6 +63,10 @@ INSTALLED_APPS = [
     'django_truncate',
     'corsheaders',
     'simple_history',
+    'health_check',
+    'health_check.db',
+    'health_check.cache',
+    'health_check.contrib.celery',
     # ---- Project's apps ---- #
     'apps.users.apps.UsersConfig',
     'apps.stt.apps.SttConfig',

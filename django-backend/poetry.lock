@@ -640,6 +640,24 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-health-check"
+version = "3.17.0"
+description = "Run checks on services like databases, queue servers, celery processes, etc."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "django-health-check-3.17.0.tar.gz", hash = "sha256:d1b8671e79d1de6e3dd1a9c69566222b0bfcfacca8b90511a4407b2d0d3d2778"},
+    {file = "django_health_check-3.17.0-py2.py3-none-any.whl", hash = "sha256:20dc5ccb516a4e7163593fd4026f0a7531e3027b47d23ebe3bd9dbc99ac4354c"},
+]
+
+[package.dependencies]
+django = ">=2.2"
+
+[package.extras]
+docs = ["sphinx"]
+test = ["celery", "pytest", "pytest-cov", "pytest-django", "redis"]
+
+[[package]]
 name = "django-import-export"
 version = "3.3.1"
 description = "Django application and library for importing and exporting data with included admin integration."
@@ -2250,4 +2268,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "7f959fb1f0517abf5d9ef72809856f6738ffc23618fe3d71da10b38a52232b5d"
+content-hash = "8d4a5da2ae8e85363062dd426803bc12dc1bd3f6a41e412d2814c4c8d3e968c5"
