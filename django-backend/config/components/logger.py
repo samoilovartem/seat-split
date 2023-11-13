@@ -5,6 +5,8 @@ from config.components.global_settings import DEBUG
 
 
 class SensitiveInfoFilter(Filter):
+    """Filter to mask sensitive information in logs."""
+
     def filter(self, record):
         if hasattr(record, 'msg'):
             pattern = r'(".*password"\s*:\s*")([^"]+)'

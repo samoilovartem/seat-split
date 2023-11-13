@@ -13,8 +13,13 @@ from apps.stt.models import Ticket
 
 class TicketViewSet(ModelViewSet):
     serializer_class = TicketSerializer
-    filterset_fields = ['ticket_holder', 'event', 'listing_status', 'sold_at']
+    filterset_fields = ('ticket_holder', 'event', 'listing_status', 'sold_at', 'season')
     permission_classes = (IsTicketHolder,)
+    search_fields = (
+        'ticket_holder__first_name',
+        'ticket_holder__last_name',
+        'event__name',
+    )
 
     my_tags = ['tickets']
 
