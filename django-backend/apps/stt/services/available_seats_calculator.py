@@ -15,10 +15,10 @@ class AvailableSeatsCalculator:
         """
         self.ticket_holder = ticket_holder
         self.team = team
-        self.th_team = TicketHolderTeam.objects.get(
+        self.ticket_holder_team = TicketHolderTeam.objects.get(
             ticket_holder=ticket_holder, team=self.team
         )
-        self.general_seats = self._get_seats_from_range(self.th_team.seat)
+        self.general_seats = self._get_seats_from_range(self.ticket_holder_team.seat)
         self.applicable_events = self._get_future_home_events_for_team()
         self.tickets = self._get_tickets_for_events()
 
@@ -59,6 +59,17 @@ class AvailableSeatsCalculator:
             season__in=[event.season for event in self.applicable_events],
         ).values('event_id', 'seat')
 
+    def _get_general_ticket_data(self) -> dict[str, Any]:
+        """
+        Retrieve general tickets data for the TicketHolderTeam model.
+        """
+        return {
+            'section': self.ticket_holder_team.section,
+            'row': self.ticket_holder_team.row,
+            'seat': self.ticket_holder_team.seat,
+            'venue': self.team.home_venue,
+        }
+
     def calculate(self) -> list[dict[str, Any]]:
         """
         Calculate the available seats for the ticket holder for each upcoming event.
@@ -80,6 +91,7 @@ class AvailableSeatsCalculator:
                     {
                         'event': SimpleEventSerializer(event).data,
                         'available_seats': sorted(list(available_seats), key=int),
+                        'general_ticket_data': self._get_general_ticket_data(),
                     }
                 )
 
