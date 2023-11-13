@@ -7,10 +7,12 @@ from config.components.global_settings import DEBUG
 class SensitiveInfoFilter(Filter):
     def filter(self, record):
         if hasattr(record, 'msg'):
-            pattern = r'("password"\s*:\s*")([^"]+)'
+            # This pattern looks for any key that contains 'password'
+            pattern = r'(".*password"\s*:\s*")([^"]+)'
             replacement = r'\1********'
             record.msg = re.sub(pattern, replacement, record.msg)
 
+            # Handle the case where the log message is a bytes object
             if isinstance(record.msg, bytes):
                 decoded_msg = record.msg.decode('utf-8')
                 masked_msg = re.sub(pattern, replacement, decoded_msg)
