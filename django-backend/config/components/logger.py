@@ -1,3 +1,4 @@
+import re
 from logging import Filter
 
 from config.components.global_settings import DEBUG
@@ -6,8 +7,14 @@ from config.components.global_settings import DEBUG
 class SensitiveInfoFilter(Filter):
     def filter(self, record):
         if hasattr(record, 'msg'):
-            if 'password' in record.msg:
-                record.msg = record.msg.replace('password', '********')
+            pattern = r'("password"\s*:\s*")([^"]+)'
+            replacement = r'\1********'
+            record.msg = re.sub(pattern, replacement, record.msg)
+
+            if isinstance(record.msg, bytes):
+                decoded_msg = record.msg.decode('utf-8')
+                masked_msg = re.sub(pattern, replacement, decoded_msg)
+                record.msg = masked_msg.encode('utf-8')
         return True
 
 
