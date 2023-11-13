@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from apps.stt.models import Purchase, Ticket
 from apps.stt.tasks import send_aggregated_slack_notification, send_slack_notification
-from apps.stt.utils import create_ticket_status_cancelled_slack_message
+from apps.stt.utils import create_ticket_status_requested_for_delisting_slack_message
 from config.components.business_related import DELIVERY_STATUSES, MARKETPLACES
 from config.components.celery import (
     CELERY_AGGREGATED_SLACK_NOTIFICATION_COUNTDOWN,
@@ -79,8 +79,8 @@ class TicketHandler:
         previous_status = self.instance.history.all()[1].listing_status
         if self._was_sold(previous_status):
             self._handle_ticket_sold()
-        elif self._was_cancelled(previous_status):
-            self._handle_ticket_cancelled()
+        elif self._was_requested_for_delisting(previous_status):
+            self._handle_ticket_requested_for_delisting()
 
     def _was_sold(self, previous_status: str) -> bool:
         """Check if the ticket was sold."""
@@ -97,19 +97,21 @@ class TicketHandler:
                 purchased_at=timezone.now(),
             )
 
-    def _was_cancelled(self, previous_status: str) -> bool:
-        """Check if the ticket was cancelled."""
+    def _was_requested_for_delisting(self, previous_status: str) -> bool:
+        """Check if the ticket was requested for delisting."""
         return (
-            self.instance.listing_status == 'Cancelled'
-            and previous_status != 'Cancelled'
+            self.instance.listing_status == 'Requested for delisting'
+            and previous_status != 'Requested for delisting'
         )
 
-    def _handle_ticket_cancelled(self) -> None:
-        """Logic for when a ticket is cancelled."""
+    def _handle_ticket_requested_for_delisting(self) -> None:
+        """Logic for when a ticket is requested for delisting."""
         if DEBUG:
             self._send_debug_logger_slack_message()
             return
-        message = create_ticket_status_cancelled_slack_message(self.instance)
+        message = create_ticket_status_requested_for_delisting_slack_message(
+            self.instance
+        )
         send_slack_notification.apply_async(
             args=(message, STT_NOTIFICATIONS_CHANNEL_ID),
             countdown=CELERY_GENERAL_COOLDOWN,

@@ -30,7 +30,9 @@ def get_confirmation_link(user_id: UUID):
     return confirmation_link
 
 
-def create_ticket_status_cancelled_slack_message(instance: Ticket) -> dict[str, str]:
+def create_ticket_status_requested_for_delisting_slack_message(
+    instance: Ticket,
+) -> dict[str, str]:
     """Function to create the Slack message payload."""
     return {
         'text': f'Ticket {instance.id} for {instance.ticket_holder} - {instance.event} has been cancelled!',

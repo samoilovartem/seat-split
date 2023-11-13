@@ -1,6 +1,7 @@
 LISTING_STATUSES = [
     ('Pending', 'Pending'),
     ('Listed', 'Listed'),
+    ('Requested for delisting', 'Requested for delisting'),
     ('Sold', 'Sold'),
     ('Cancelled', 'Cancelled'),
 ]

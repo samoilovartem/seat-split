@@ -12,8 +12,9 @@ class TicketAdminForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         listing_status = cleaned_data.get('listing_status')
-        if listing_status == 'Cancelled':
+        if listing_status == 'Requested for delisting':
             raise ValidationError(
-                'A ticket with listing status "Cancelled" cannot be saved. You must change the status first.'
+                'A ticket with listing status "Requested for delisting" cannot be saved. '
+                'You must change the status first.'
             )
         return cleaned_data
