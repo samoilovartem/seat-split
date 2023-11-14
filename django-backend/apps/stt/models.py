@@ -1,3 +1,4 @@
+from hashlib import md5
 from uuid import uuid4
 
 from simple_history.models import HistoricalRecords
@@ -7,6 +8,17 @@ from django.db import models
 from django.db.models import UniqueConstraint
 
 User = get_user_model()
+
+
+def ticket_holder_avatar_path(instance, filename):
+    ext = filename.split('.')[-1]
+
+    unique_filename = f'{uuid4().hex}.{ext}'
+
+    user = instance.user
+    hash_string = md5(f'{user.email}{user.id}'.encode()).hexdigest()
+
+    return f'avatars/{hash_string}/{unique_filename}'
 
 
 class TicketHolder(models.Model):
@@ -26,6 +38,9 @@ class TicketHolder(models.Model):
     is_season_ticket_interest = models.BooleanField(default=False)
     tickets_data = models.JSONField(null=True, blank=True, default=dict)
     created_at = models.DateTimeField(auto_now_add=True)
+    avatar = models.ImageField(
+        upload_to=ticket_holder_avatar_path, null=True, blank=True
+    )
     history = HistoricalRecords()
 
     class Meta:
@@ -202,7 +217,6 @@ class TicketHolderTeam(models.Model):
         super(TicketHolderTeam, self).save(*args, **kwargs)
 
     def calculate_quantity(self):
-        # Use the same logic as in validate_seat_range for calculating quantity.
         if '-' in self.seat:
             first_seat, last_seat = map(int, self.seat.split('-'))
             return last_seat - first_seat + 1
