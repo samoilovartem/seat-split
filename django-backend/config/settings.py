@@ -140,16 +140,16 @@ AUTH_PASSWORD_VALIDATORS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = (
+    os.path.join(BASE_DIR, 'media')
+    if DEBUG
+    else os.environ.get('RAILWAY_VOLUME_MOUNT_PATH')
+)
 MEDIA_URL = '/media/'
 
 STORAGES = {
     'default': {
         'BACKEND': 'django.core.files.storage.FileSystemStorage',
-        'OPTIONS': {
-            'location': MEDIA_ROOT,
-            'base_url': MEDIA_URL,
-        },
     },
     'staticfiles': {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
