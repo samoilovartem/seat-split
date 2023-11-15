@@ -140,11 +140,7 @@ AUTH_PASSWORD_VALIDATORS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = (
-    os.path.join(BASE_DIR, 'media')
-    if DEBUG
-    else os.environ.get('RAILWAY_VOLUME_MOUNT_PATH')
-)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 STORAGES = {
