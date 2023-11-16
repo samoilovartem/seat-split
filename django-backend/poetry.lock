@@ -598,6 +598,17 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-admin-rangefilter"
+version = "0.11.2"
+description = "django-admin-rangefilter app, add the filter by a custom date range on the admin UI."
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+files = [
+    {file = "django-admin-rangefilter-0.11.2.tar.gz", hash = "sha256:0cccf83f2992eba54795e0c748184f4b9bce895c0dd5bb1556eab1950242b48f"},
+    {file = "django_admin_rangefilter-0.11.2-py2.py3-none-any.whl", hash = "sha256:d574a914c209671b6c8e3d218efc0fc32a917e6a65ad2bd36b4116be5c47f6cb"},
+]
+
+[[package]]
 name = "django-cors-headers"
 version = "3.14.0"
 description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
@@ -2244,4 +2255,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "5545c698c20f7373f47e7f15645608d2beb092044161c08451295d3cb323bbf3"
+content-hash = "bbeb0605af9283f45808f3c337ca8d6e6f431ef04e28544bd9e91b3f495a7d34"
