@@ -1,13 +1,23 @@
-# CRM django backend documentation
+# Season Tickets Tech Backend
 
 ### Description:
 
-This project is a CRM Django backend that provides API endpoints and functionalities for managing users, groups, accounts, cards, mobile transactions, email domains, US addresses and venues addresses. It uses Django as the framework, Django Rest Framework for API creation, and poetry as a dependencies manager.
+Current repository is a backend part of comprehensive STT project, which is a working name for [Seat Split](https://www.seatsplit.com/) consignment portal. Seat Split allows ticket season holders to sell their tickets to other fans. Currently, we support only sports events, but in the future we are planning to expand our business to other events like concerts, theaters, etc.
+
+### Main stack:
+- Python
+- Django
+- Django Rest Framework
+- PostgreSQL
+- Redis
+- Celery
+- Docker
+- Poetry
 
 ### Installation:
 
 1. Clone the repository from GitHub.
-2. Create `.env.prod` and `.env.dev` in django-backend directory using `.env.prod.example` and `.env.dev.example`.
+2. Create `.env.dev` in django-backend directory using `.env.dev.example`.
 3. Install Docker and launch the daemon.
 4. Cd to project's root and run `docker compose up --build`.
 
@@ -17,16 +27,13 @@ This project is a CRM Django backend that provides API endpoints and functionali
 - **django-backend** - contains all necessary files for Django backend.
   - **apps** - contains all existing django applications and common (among them) files.
   - **config** - contains standard Django settings files.
-  - **static** - contains static files of all django custom apps, standard apps and installed libraries (not available in git repository).
-  - **templates** - contains Django admin template settings.
-- **instruction_files** - contains a simple. instruction for using admin panel and all necessary screenshots.
-- **migration_manager** - contains all necessary `.py` files for cleaning data and preparing it for migration from CSV to Postgresql using Django admin panel.
-- **nginx** - contains all necessary files for nginx configuration.
+  - **templates** - contains Django admin template settings as well as email templates.
+- **nginx** - contains all necessary files for nginx configuration (in case we are the one who manage nginx).
 - **shell_scripts** - contains all shell commands that can make our life much easier.
    - **create_requirements.sh** - creates `dev-requirements.txt` and `prod-requirements.txt` files.
    - **docker_deploy.sh** - builds docker container and pushes it to Heroku.
    - **run_tests.sh** - runs all tests and creates html report.
-   - **make_project_structure.sh** - creates project structure.
+   - **make_project_structure_tree.sh** - creates project structure.
    - **heroku_backup.sh** - contains all necessary commands to backup Heroku database.
    - **count_lines_of_code.sh** - counts all lines of code in the project.
 
@@ -37,25 +44,15 @@ This project is a CRM Django backend that provides API endpoints and functionali
 - **.flake8** - custom settings for flake8 linter.
 - **.gitignore** - list of files or directories that are excluded from getting into git repository.
 - **.pre-commit-config.yaml** - custom settings for flake8, black and isort linters hooks.
-- **docker-compose.yml** - file-constructor, that allows to build docker container. Used for local development only.
-- **Dockerfile** - file-instruction of how to build docker image for Heroku deployment. Used for production on Heroku only.
+- **docker-compose.yml** - file-constructor, that allows to build docker containers. Used for local development only.
+- **Dockerfile** - file-instruction of how to build docker image for services like Heroku and Railway.
 - **Dockerfile-dev** - file-instruction of how to build docker image for local development. This is the file, that `docker-compose.yml` is using for building docker container to run it locally.
-- **Dockerfile-prod** - file-instruction of how to build docker image for production deployment. Used for production only.
+- **Dockerfile-prod** - file-instruction of how to build docker image for production deployment in case we use VPS.
 - **pyproject.toml** - custom project's settings. This file contains all necessary information about the project itself, dev and prod dependencies. Used to create `dev-requirements.txt` and `prod-requirements.txt` files.
 
 ### Deployment to Heroku
-#### Using git (not recommended):
 
-1. Add Config vars in Heroku app:
-   * `DJANGO_SETTINGS_MODULE=mysite.settings`
-   * `SECRET_KEY=our_secret_key`
-   * `DEBUG=False`
-2. Make sure to add everything we don't want to be uploaded in `.gitignore` and run: `git add .`
-3. Add your commit: `git commit -m 'your commit'`
-4. Push files to Heroku: `git push heroku main`
-5. If you encounter problems with Django collectstatic, please run `heroku config:set DISABLE_COLLECTSTATIC=1`and push everything again. Full guide is [here](https://stackoverflow.com/questions/55330749/error-while-running-python-manage-py-collectstatic-noinput-after-changin) for your reference.
-
-#### Using Container Registry (preferred):
+#### Using Container Registry:
 
 1. Prepare correct Dockerfile
 2. Use this command to build the container:\
@@ -67,17 +64,24 @@ This project is a CRM Django backend that provides API endpoints and functionali
 
 Also, you can simply run `docker_deploy.sh`and script will complete these 3 commands for you.
 
-### Tests:
-We have multiple tests (CRUD) for these apps:
-1. users
-2. groups
-3. accounts
-4. cards
+### Deployment to Railway
+#### Using Github Actions:
 
-Additionally, there are some tests for address_within_distance viewset (us_addresses)
+Railway will automatically deploy the app in case **main** branch has been updated.
 
-To launch tests simply run `run_tests.sh`and choose from provided options.
+### Git workflow:
 
+We are using simple Git workflow with **main** and **develop** branches. All new features should be developed in separate branches (`feature/<relevant_feature_name>`) and then merged into **develop** branch after **Pull Request** is reviewed and approved.
+The next step would be creating a **Pull Request** from **develop** to **main** branch and merge it.
+
+### PR template:
+1. What does this PR do?
+2. Why are we doing this?
+3. How should this be manually tested?
+4. Any background context you want to provide?
+5. What are the relevant tickets?
+6. Screenshots (if appropriate).
+7. Questions.
 
 #### Useful notes:
 1. Heroku `python manage.py collectstatic` issue solution can be found [here](https://stackoverflow.com/questions/55330749/error-while-running-python-manage-py-collectstatic-noinput-after-changin).

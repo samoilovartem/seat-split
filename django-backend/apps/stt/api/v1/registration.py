@@ -10,6 +10,7 @@ from apps.stt.api.serializers import RegisterSerializer
 from apps.stt.models import TicketHolder, User
 from apps.stt.services.verification_service import VerificationService
 from apps.stt.tasks import send_email_confirmation
+from config.components.celery import CELERY_GENERAL_COUNTDOWN
 
 
 class RegisterView(APIView):
@@ -47,7 +48,9 @@ class RegisterView(APIView):
                 is_card_interest=serializer.validated_data['is_card_interest'],
             )
 
-            send_email_confirmation.apply_async(args=(user.email, user.id), countdown=5)
+            send_email_confirmation.apply_async(
+                args=(user.email, user.id), countdown=CELERY_GENERAL_COUNTDOWN
+            )
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

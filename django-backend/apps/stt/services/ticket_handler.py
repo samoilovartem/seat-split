@@ -10,7 +10,7 @@ from apps.stt.utils import create_ticket_status_requested_for_delisting_slack_me
 from config.components.business_related import DELIVERY_STATUSES, MARKETPLACES
 from config.components.celery import (
     CELERY_AGGREGATED_SLACK_NOTIFICATION_COUNTDOWN,
-    CELERY_GENERAL_COOLDOWN,
+    CELERY_GENERAL_COUNTDOWN,
 )
 from config.components.global_settings import DEBUG
 from config.components.redis import (
@@ -114,5 +114,5 @@ class TicketHandler:
         )
         send_slack_notification.apply_async(
             args=(message, STT_NOTIFICATIONS_CHANNEL_ID),
-            countdown=CELERY_GENERAL_COOLDOWN,
+            countdown=CELERY_GENERAL_COUNTDOWN,
         )
