@@ -7,7 +7,7 @@ from django.utils.http import urlsafe_base64_decode
 from apps.stt.models import User
 from apps.stt.tasks import send_email_confirmed
 from apps.users.tasks import send_email_change_confirmed
-from config.components.celery import CELERY_GENERAL_COOLDOWN
+from config.components.celery import CELERY_GENERAL_COUNTDOWN
 from config.components.redis import redis_general_connection
 
 
@@ -45,7 +45,7 @@ class VerificationService:
         user.save()
 
         send_email_confirmed.apply_async(
-            args=(user.email,), countdown=CELERY_GENERAL_COOLDOWN
+            args=(user.email,), countdown=CELERY_GENERAL_COUNTDOWN
         )
         return 'Standard verification successful'
 
@@ -56,6 +56,6 @@ class VerificationService:
         user.save()
         redis_general_connection.delete(f'email_change_{uid}')
         send_email_change_confirmed.apply_async(
-            args=(new_email,), countdown=CELERY_GENERAL_COOLDOWN
+            args=(new_email,), countdown=CELERY_GENERAL_COUNTDOWN
         )
         return 'Email change verification successful'

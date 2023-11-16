@@ -7,7 +7,7 @@ from apps.stt.models import Ticket, TicketHolderTeam
 from apps.stt.services.ticket_handler import TicketHandler
 from apps.stt.tasks import send_slack_notification, send_ticket_holder_team_confirmed
 from apps.stt.utils import create_ticket_holder_team_slack_message
-from config.components.celery import CELERY_GENERAL_COOLDOWN
+from config.components.celery import CELERY_GENERAL_COUNTDOWN
 from config.components.global_settings import DEBUG
 from config.components.slack_integration import STT_NOTIFICATIONS_CHANNEL_ID
 
@@ -27,7 +27,7 @@ def send_confirmation_email(sender, instance, **kwargs):
     if previous_is_confirmed is False and instance.is_confirmed:
         send_ticket_holder_team_confirmed.apply_async(
             args=(instance.ticket_holder.user.email, instance.team.name),
-            countdown=CELERY_GENERAL_COOLDOWN,
+            countdown=CELERY_GENERAL_COUNTDOWN,
         )
 
 
@@ -54,5 +54,5 @@ def ticket_holder_team_post_save(sender, instance, **kwargs):
 
     message = create_ticket_holder_team_slack_message(instance)
     send_slack_notification.apply_async(
-        args=(message, STT_NOTIFICATIONS_CHANNEL_ID), countdown=CELERY_GENERAL_COOLDOWN
+        args=(message, STT_NOTIFICATIONS_CHANNEL_ID), countdown=CELERY_GENERAL_COUNTDOWN
     )
