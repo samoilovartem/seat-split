@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from import_export.admin import ImportExportMixin
+from rangefilter.filters import DateRangeFilterBuilder
 from simple_history.admin import SimpleHistoryAdmin
 
 from django.contrib import admin
@@ -130,7 +133,16 @@ class TicketAdminConfig(BaseModelAdmin):
         'ticket_holder__last_name',
         'event__name',
     )
-    list_filter = ('listing_status',)
+    list_filter = (
+        'listing_status',
+        (
+            'created_at',
+            DateRangeFilterBuilder(
+                title='Created At',
+                default_start=datetime.now(),
+            ),
+        ),
+    )
     list_display_links = ('event',)
     autocomplete_fields = ('event', 'ticket_holder')
 
@@ -163,6 +175,13 @@ class PurchaseAdminConfig(admin.ModelAdmin):
     list_filter = (
         'customer',
         'delivery_status',
+        (
+            'created_at',
+            DateRangeFilterBuilder(
+                title='Created At',
+                default_start=datetime.now(),
+            ),
+        ),
     )
     list_display_links = ('ticket',)
     autocomplete_fields = ('ticket',)
@@ -194,7 +213,20 @@ class EventAdminConfig(ImportExportMixin, BaseModelAdmin):
     inlines = (TeamEventInline,)
     search_fields = ('id', 'name', 'season')
     ordering = ('date_time',)
-    list_filter = ('season', LeagueListFilter, HomeAwayFilter, FutureEventsFilter)
+    list_filter = (
+        (
+            'date_time',
+            DateRangeFilterBuilder(
+                title='Event date',
+                default_start=datetime.now(),
+                default_end=datetime.now(),
+            ),
+        ),
+        'season',
+        LeagueListFilter,
+        HomeAwayFilter,
+        FutureEventsFilter,
+    )
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)

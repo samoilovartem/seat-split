@@ -19,4 +19,4 @@ class Inquiry(models.Model):
         verbose_name_plural = 'Inquiries'
 
     def __str__(self):
-        return f'{self.first_name} - {self.email} - {self.id}'
+        return f'{self.first_name} {self.last_name} - {self.email} - {self.id}'
