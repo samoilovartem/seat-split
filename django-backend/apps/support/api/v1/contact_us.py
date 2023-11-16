@@ -15,7 +15,13 @@ class ContactView(APIView):
         if serializer.is_valid():
             inquiry = serializer.save()
             send_contact_us_notification.apply_async(
-                args=(inquiry.email, inquiry.subject, inquiry.message),
+                args=(
+                    inquiry.email,
+                    inquiry.subject,
+                    inquiry.message,
+                    inquiry.first_name,
+                    inquiry.last_name,
+                ),
                 countdown=CELERY_GENERAL_COUNTDOWN,
             )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
