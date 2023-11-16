@@ -18,6 +18,7 @@ SMTP2GO_EMAIL_CONFIRMATION_TEMPLATE_ID = os.environ.get(
     'SMTP2GO_EMAIL_CONFIRMATION_TEMPLATE_ID'
 )
 SMTP2GO_FROM_EMAIL = os.environ.get('SMTP2GO_FROM_EMAIL')
+SMTP2GO_SUPPORT_EMAIL = os.environ.get('SMTP2GO_SUPPORT_EMAIL')
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

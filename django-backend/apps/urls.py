@@ -8,6 +8,7 @@ from apps.stt.api.v1.authentication import CustomTokenObtainPairView
 urlpatterns = [
     path('api/v1/base-auth/', include('rest_framework.urls')),
     path('api/', include('apps.stt.api.urls')),
+    path('api/', include('apps.support.api.urls')),
     path(
         'api/v1/auth/jwt/create/',
         CustomTokenObtainPairView.as_view(),

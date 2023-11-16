@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     'apps.users.apps.UsersConfig',
     'apps.stt.apps.SttConfig',
     'apps.email_domains.apps.EmailDomainsConfig',
+    'apps.support.apps.SupportConfig',
 ]
 
 if DEBUG:
