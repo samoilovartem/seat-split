@@ -16,6 +16,7 @@ from apps.users.api.serializers import (
     UserSerializer,
 )
 from apps.users.tasks import send_email_change_confirmation
+from config.components.celery import CELERY_GENERAL_COUNTDOWN
 from config.components.redis import redis_celery_connection
 
 User = get_user_model()
@@ -79,12 +80,10 @@ class UserViewSet(ModelViewSet):
             user = request.user
             new_email = serializer.validated_data['new_email']
 
-            # Send email confirmation now uses the user's ID to identify the email change in Redis
             send_email_change_confirmation.apply_async(
-                args=(new_email, user.id), countdown=5
+                args=(new_email, user.id), countdown=CELERY_GENERAL_COUNTDOWN
             )
 
-            # Store new email in Redis with a key as user_id and set expiration time (e.g., 24 hours)
             key = f'email_change_{user.id}'
             redis_celery_connection.setex(
                 key, 86_400, new_email
