@@ -1,7 +1,7 @@
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import action, api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -13,9 +13,10 @@ from apps.stt.models import TicketHolderTeam
 from apps.users.api.serializers import (
     ChangePasswordSerializer,
     EmailChangeSerializer,
+    PasswordResetRequestSerializer,
     UserSerializer,
 )
-from apps.users.tasks import send_email_change_confirmation
+from apps.users.tasks import send_email_change_confirmation, send_password_reset_email
 from config.components.celery import CELERY_GENERAL_COUNTDOWN
 from config.components.redis import redis_celery_connection
 
@@ -91,6 +92,30 @@ class UserViewSet(ModelViewSet):
 
             return Response(
                 {'message': 'Verification email sent to the new address.'},
+                status=status.HTTP_200_OK,
+            )
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @swagger_auto_schema(request_body=PasswordResetRequestSerializer)
+    @action(detail=False, methods=['POST'], permission_classes=(AllowAny,))
+    def reset_password(self, request):
+        serializer = PasswordResetRequestSerializer(data=request.data)
+
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            try:
+                user = User.objects.get(email=email)
+                send_password_reset_email.apply_async(
+                    args=(email, user.id), countdown=CELERY_GENERAL_COUNTDOWN
+                )
+            except User.DoesNotExist:
+                pass
+
+            return Response(
+                {
+                    'message': 'If your email is in our database, you will receive a link to reset your password.'
+                },
                 status=status.HTTP_200_OK,
             )
 
