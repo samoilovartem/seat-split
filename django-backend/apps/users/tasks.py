@@ -23,7 +23,9 @@ def send_email_change_confirmation(user_email: str, user_id: UUID):
         'emails/email_change_confirmation.html',
         {
             'email': user_email,
-            'link': get_confirmation_link(user_id=user_id),
+            'link': get_confirmation_link(
+                user_id=user_id, specific_path='email-change'
+            ),
             'project_name': EMAIL_PROJECT_NAME,
         },
     )
@@ -73,6 +75,39 @@ def send_email_change_confirmed(user_email: str):
     except Exception as e:
         logger.exception(
             'There is an error sending `email confirmed` to {}. Error: {}',
+            user_email,
+            e,
+        )
+        return
+
+
+@shared_task
+def send_password_reset_email(user_email: str, user_id: UUID):
+    """Sends a password reset email to the user."""
+    mail_subject = f'{EMAIL_PROJECT_NAME} | Password Reset Request'
+    message = render_to_string(
+        'emails/password_reset_email.html',
+        {
+            'email': user_email,
+            'link': get_confirmation_link(
+                user_id=user_id, specific_path='reset-password'
+            ),
+            'project_name': EMAIL_PROJECT_NAME,
+        },
+    )
+    email = EmailMessage(
+        subject=mail_subject,
+        body=message,
+        to=[user_email],
+        from_email=SMTP2GO_FROM_EMAIL,
+    )
+    email.content_subtype = EMAIL_CONTENT_TYPE
+    try:
+        email.send()
+        logger.info('Password reset email has been successfully sent to {}', user_email)
+    except Exception as e:
+        logger.exception(
+            'There is an error sending password reset email to {}. Error: {}',
             user_email,
             e,
         )
