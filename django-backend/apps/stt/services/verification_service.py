@@ -13,7 +13,7 @@ from config.components.redis import redis_general_connection
 
 class VerificationService:
     @staticmethod
-    def verify_user(uidb64, token):
+    def verify_user(uidb64, token, new_password=None):
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
             user_id = UUID(uid)
@@ -25,11 +25,16 @@ class VerificationService:
         except User.DoesNotExist:
             raise ValueError('User not found')
 
-        new_email = redis_general_connection.get(f'email_change_{uid}')
-        is_email_change_verification = bool(new_email)
-
         if not default_token_generator.check_token(user, token):
             raise ValueError('Token is not valid')
+
+        if new_password:
+            user.set_password(new_password)
+            user.save()
+            return 'Password has been reset successfully'
+
+        new_email = redis_general_connection.get(f'email_change_{uid}')
+        is_email_change_verification = bool(new_email)
 
         if is_email_change_verification:
             return VerificationService._process_email_change(user, new_email, uid)

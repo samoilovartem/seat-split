@@ -30,7 +30,9 @@ def send_email_confirmation(user_email: str, user_id: UUID):
         'emails/account_verification.html',
         {
             'email': user_email,
-            'link': get_confirmation_link(user_id=user_id),
+            'link': get_confirmation_link(
+                user_id=user_id, specific_path='confirm-email'
+            ),
             'project_name': EMAIL_PROJECT_NAME,
         },
     )

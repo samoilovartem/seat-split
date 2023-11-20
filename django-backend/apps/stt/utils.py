@@ -14,7 +14,7 @@ from config.components.slack_integration import (
 from config.components.smtp_and_email import EMAIL_FRONTEND_BASE_URL
 
 
-def get_confirmation_link(user_id: UUID):
+def get_confirmation_link(user_id: UUID, specific_path: str):
     """Returns link for email confirmation."""
     try:
         user = User.objects.get(pk=user_id)
@@ -23,8 +23,9 @@ def get_confirmation_link(user_id: UUID):
 
     token = default_token_generator.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
+
     confirmation_link = (
-        f'https://{EMAIL_FRONTEND_BASE_URL}/api/confirm-email?uid={uid}&token={token}'
+        f'https://{EMAIL_FRONTEND_BASE_URL}/api/{specific_path}?uid={uid}&token={token}'
     )
 
     return confirmation_link

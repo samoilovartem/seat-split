@@ -40,6 +40,10 @@ class EmailChangeSerializer(serializers.Serializer):
         return value
 
 
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+
+
 class SimpleTeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
