@@ -18,7 +18,7 @@ from config.components.smtp_and_email import (
 @shared_task
 def send_email_change_confirmation(user_email: str, user_id: UUID):
     """Sends email change confirmation to user using standard Django email backend."""
-    mail_subject = f'Activate your account in {EMAIL_PROJECT_NAME}'
+    mail_subject = f'{EMAIL_PROJECT_NAME} | Email change confirmation'
     message = render_to_string(
         'emails/email_change_confirmation.html',
         {
@@ -50,7 +50,7 @@ def send_email_change_confirmation(user_email: str, user_id: UUID):
 def send_email_change_confirmed(user_email: str):
     """Sends email notifying that email change is confirmed (email has been changed)
     to user using standard Django email backend."""
-    mail_subject = f'Your account in {EMAIL_PROJECT_NAME} is confirmed'
+    mail_subject = f'{EMAIL_PROJECT_NAME} | Your email has been changed'
     message = render_to_string(
         'emails/email_change_confirmed.html',
         {
