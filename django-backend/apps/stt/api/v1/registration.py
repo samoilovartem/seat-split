@@ -63,9 +63,10 @@ class VerifyView(APIView):
     def post(self, request, *args, **kwargs):
         uidb64 = kwargs.get('uidb64')
         token = kwargs.get('token')
+        new_password = request.data.get('new_password', None)
 
         try:
-            message = VerificationService.verify_user(uidb64, token)
+            message = VerificationService.verify_user(uidb64, token, new_password)
             return Response({'message': message}, status=status.HTTP_200_OK)
         except ValueError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
