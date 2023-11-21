@@ -1,3 +1,5 @@
+import os
+
 from config.components.global_settings import DEBUG
 
 REST_FRAMEWORK = {
@@ -27,7 +29,10 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle',
     ],
-    'DEFAULT_THROTTLE_RATES': {'anon': '15/hour', 'user': '100/hour'},
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': f'{os.environ.get("DEFAULT_ANON_THROTTLE_RATE", "15")}/hour',
+        'user': f'{os.environ.get("DEFAULT_USER_THROTTLE_RATE", "100")}/hour',
+    },
 }
 
 if DEBUG:
