@@ -138,6 +138,7 @@ class Team(models.Model):
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=255)
     home_venue = models.CharField(max_length=255)
+    logo = models.FileField(upload_to='logos/', null=True, blank=True)
     ticketmaster_id = models.IntegerField()
     timezone = models.CharField(max_length=255)
     credentials_website = models.CharField(max_length=255)
