@@ -3,7 +3,7 @@ LISTING_STATUSES = [
     ('Listed', 'Listed'),
     ('Requested for delisting', 'Requested for delisting'),
     ('Sold', 'Sold'),
-    ('Cancelled', 'Cancelled'),
+    ('Delisted', 'Delisted'),
 ]
 
 DELIVERY_STATUSES = [
