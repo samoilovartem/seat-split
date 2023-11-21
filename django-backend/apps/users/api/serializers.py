@@ -47,7 +47,7 @@ class PasswordResetRequestSerializer(serializers.Serializer):
 class SimpleTeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
-        fields = ('id', 'name', 'league')
+        fields = ('id', 'name', 'league', 'logo')
 
 
 class SimpleTicketHolderTeamSerializer(ShowAllSeatsMixin, serializers.ModelSerializer):
