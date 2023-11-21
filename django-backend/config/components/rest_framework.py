@@ -1,3 +1,5 @@
+import os
+
 from config.components.global_settings import DEBUG
 
 REST_FRAMEWORK = {
@@ -23,6 +25,14 @@ REST_FRAMEWORK = {
     ],
     'EXCEPTION_HANDLER': 'rollbar.contrib.django_rest_framework.post_exception_handler',
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': f'{os.environ.get("DEFAULT_ANON_THROTTLE_RATE", "15")}/hour',
+        'user': f'{os.environ.get("DEFAULT_USER_THROTTLE_RATE", "100")}/hour',
+    },
 }
 
 if DEBUG:
