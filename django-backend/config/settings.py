@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'health_check.cache',
     'health_check.contrib.celery',
     'django_celery_results',
+    'django_celery_beat',
     # ---- Project's apps ---- #
     'apps.users.apps.UsersConfig',
     'apps.stt.apps.SttConfig',
