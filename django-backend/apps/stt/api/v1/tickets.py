@@ -7,13 +7,14 @@ from rest_framework.viewsets import ModelViewSet
 from django.db import IntegrityError
 
 from apps.permissions import IsTicketHolder
+from apps.stt.api.filters import TicketFilter
 from apps.stt.api.serializers import TicketSerializer
 from apps.stt.models import Ticket
 
 
 class TicketViewSet(ModelViewSet):
     serializer_class = TicketSerializer
-    filterset_fields = ('ticket_holder', 'event', 'listing_status', 'sold_at', 'season')
+    filterset_class = TicketFilter
     permission_classes = (IsTicketHolder,)
     search_fields = (
         'ticket_holder__first_name',
