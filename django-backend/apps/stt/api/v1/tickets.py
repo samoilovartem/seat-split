@@ -27,12 +27,12 @@ class TicketViewSet(ModelViewSet):
         user = self.request.user
 
         if user.is_staff or user.is_superuser:
-            queryset = Ticket.objects.all().order_by('id')
+            queryset = Ticket.objects.all().order_by('-created_at', 'event__date_time')
 
         else:
             queryset = Ticket.objects.filter(
                 ticket_holder=user.ticket_holder_user
-            ).order_by('id')
+            ).order_by('-created_at', 'event__date_time')
 
         if is_expanded(self.request, 'event'):
             queryset = queryset.select_related('event')
