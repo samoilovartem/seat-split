@@ -46,6 +46,22 @@ services:
     networks:
       - backend
 
+  stt_celery_beat:
+    build:
+      context: ./django-backend/
+      dockerfile: "Dockerfile-dev"
+    command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    container_name: stt_celery_beat
+    env_file:
+      - ./django-backend/.env.dev
+    volumes:
+      - ./django-backend:/app
+    depends_on:
+      - stt_django
+      - stt_pgdb
+    networks:
+      - backend
+
   stt_redis:
     image: redis
     container_name: stt_redis
