@@ -1,5 +1,7 @@
 from uuid import UUID
 
+from rest_framework.authtoken.models import Token
+
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
@@ -13,7 +15,26 @@ from config.components.redis import redis_general_connection
 
 class VerificationService:
     @staticmethod
-    def verify_user(uidb64, token, new_password=None):
+    def _invalidate_user_auth_token(user: User) -> None:
+        """
+        Invalidate the authentication token for the given user.
+
+        :param user: User instance for which to invalidate the token.
+        """
+        Token.objects.filter(user=user).delete()
+
+    @staticmethod
+    def verify_user(uidb64: str, token: str, new_password: str | None = None) -> str:
+        """
+        Verify the user based on the UID and token provided. If a new password is provided,
+        reset the password. If not, perform standard verification or email change verification.
+
+        :param uidb64: The user's ID encoded in base64.
+        :param token: Token for verification.
+        :param new_password: New password to set for the user, if applicable.
+        :return: A message indicating the result of the verification.
+        :raises ValueError: If the UID format is invalid, user is not found, or token is not valid.
+        """
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
             user_id = UUID(uid)
@@ -29,20 +50,28 @@ class VerificationService:
             raise ValueError('Token is not valid')
 
         if new_password:
+            VerificationService._invalidate_user_auth_token(user)
             user.set_password(new_password)
             user.save()
             return 'Password has been reset successfully'
 
-        new_email = redis_general_connection.get(f'email_change_{uid}')
+        new_email = redis_general_connection.get(f'email_change_{user_id}')
         is_email_change_verification = bool(new_email)
 
         if is_email_change_verification:
-            return VerificationService._process_email_change(user, new_email, uid)
+            return VerificationService._process_email_change(user, new_email)
         else:
             return VerificationService._process_standard_verification(user)
 
     @staticmethod
-    def _process_standard_verification(user):
+    def _process_standard_verification(user: User) -> str:
+        """
+        Process the standard user verification.
+
+        :param user: The user instance to verify.
+        :return: A message indicating that standard verification was successful.
+        :raises ValueError: If the user is already verified.
+        """
         if user.is_verified:
             raise ValueError('User already verified')
 
@@ -55,11 +84,19 @@ class VerificationService:
         return 'Standard verification successful'
 
     @staticmethod
-    def _process_email_change(user, new_email, uid):
+    def _process_email_change(user: User, new_email: str) -> str:
+        """
+        Process the user's email change verification.
+
+        :param user: The user instance to update.
+        :param new_email: The new email to set for the user.
+        :return: A message indicating that the email change verification was successful.
+        """
+        VerificationService._invalidate_user_auth_token(user)
         user.email = new_email
         user.username = new_email
         user.save()
-        redis_general_connection.delete(f'email_change_{uid}')
+        redis_general_connection.delete(f'email_change_{user.id}')
         send_email_change_confirmed.apply_async(
             args=(new_email,), countdown=CELERY_GENERAL_COUNTDOWN
         )
