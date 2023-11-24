@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
@@ -15,6 +17,7 @@ from apps.stt.models import (
     TicketHolderTeam,
     User,
 )
+from config.components.business_related import EXPENSES_MULTIPLIER
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -102,6 +105,15 @@ class TicketSerializer(ShowAllSeatsMixin, FlexFieldsModelSerializer):
 
     def create(self, validated_data):
         return Ticket.objects.create(**validated_data)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if instance.price:
+            expenses_multiplier = Decimal(EXPENSES_MULTIPLIER)
+            representation['price'] = str(
+                (instance.price * expenses_multiplier).quantize(Decimal('0.01'))
+            )
+        return representation
 
 
 class TeamEventSerializer(FlexFieldsModelSerializer):
