@@ -124,6 +124,7 @@ class TicketAdminConfig(BaseModelAdmin):
         'section',
         'row',
         'seat',
+        'price',
         'id',
     )
     readonly_fields = ('id', 'created_at')
