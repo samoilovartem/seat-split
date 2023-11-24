@@ -18,7 +18,7 @@ from apps.users.api.serializers import (
 )
 from apps.users.tasks import send_email_change_confirmation, send_password_reset_email
 from config.components.celery import CELERY_GENERAL_COUNTDOWN
-from config.components.redis import redis_celery_connection
+from config.components.redis import redis_general_connection
 
 User = get_user_model()
 
@@ -86,7 +86,7 @@ class UserViewSet(ModelViewSet):
             )
 
             key = f'email_change_{user.id}'
-            redis_celery_connection.setex(
+            redis_general_connection.setex(
                 key, 86_400, new_email
             )  # 86,400 seconds = 24 hours
 
