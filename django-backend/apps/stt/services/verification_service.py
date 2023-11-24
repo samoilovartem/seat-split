@@ -1,5 +1,7 @@
 from uuid import UUID
 
+from rest_framework.authtoken.models import Token
+
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
@@ -12,6 +14,10 @@ from config.components.redis import redis_general_connection
 
 
 class VerificationService:
+    @staticmethod
+    def _invalidate_user_auth_token(user):
+        Token.objects.filter(user=user).delete()
+
     @staticmethod
     def verify_user(uidb64, token, new_password=None):
         try:
@@ -29,15 +35,16 @@ class VerificationService:
             raise ValueError('Token is not valid')
 
         if new_password:
+            VerificationService._invalidate_user_auth_token(user)
             user.set_password(new_password)
             user.save()
             return 'Password has been reset successfully'
 
-        new_email = redis_general_connection.get(f'email_change_{uid}')
+        new_email = redis_general_connection.get(f'email_change_{user_id}')
         is_email_change_verification = bool(new_email)
 
         if is_email_change_verification:
-            return VerificationService._process_email_change(user, new_email, uid)
+            return VerificationService._process_email_change(user, new_email)
         else:
             return VerificationService._process_standard_verification(user)
 
@@ -55,11 +62,12 @@ class VerificationService:
         return 'Standard verification successful'
 
     @staticmethod
-    def _process_email_change(user, new_email, uid):
+    def _process_email_change(user, new_email):
+        VerificationService._invalidate_user_auth_token(user)
         user.email = new_email
         user.username = new_email
         user.save()
-        redis_general_connection.delete(f'email_change_{uid}')
+        redis_general_connection.delete(f'email_change_{user.id}')
         send_email_change_confirmed.apply_async(
             args=(new_email,), countdown=CELERY_GENERAL_COUNTDOWN
         )
