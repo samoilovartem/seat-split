@@ -1,3 +1,8 @@
+import os
+
+BUSINESS_TOTAL_EXPENSES = float(os.environ.get('BUSINESS_TOTAL_EXPENSES', 0.2))
+EXPENSES_MULTIPLIER = 1 - BUSINESS_TOTAL_EXPENSES
+
 LISTING_STATUSES = [
     ('Pending', 'Pending'),
     ('Listed', 'Listed'),
