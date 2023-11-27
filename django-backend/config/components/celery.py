@@ -16,3 +16,6 @@ CELERY_RESULT_EXTENDED = True
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 CELERY_TASK_RESULT_EXPIRES = timedelta(days=7)
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = os.environ.get(
+    'CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP', True
+)
