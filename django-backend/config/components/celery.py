@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 from config.components.redis import REDIS_URL
 
@@ -13,3 +14,5 @@ CELERY_AGGREGATED_SLACK_NOTIFICATION_COUNTDOWN = int(
 CELERY_GENERAL_COUNTDOWN = int(os.environ.get('CELERY_GENERAL_COUNTDOWN', 5))
 CELERY_RESULT_EXTENDED = True
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+CELERY_TASK_RESULT_EXPIRES = timedelta(days=7)
