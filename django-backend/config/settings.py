@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_framework_api_key',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
@@ -173,3 +172,4 @@ GENERAL_SUPERUSER_EMAIL = os.environ.get('GENERAL_SUPERUSER_EMAIL', 'admin@examp
 GENERAL_SUPERUSER_PASSWORD = os.environ.get('GENERAL_SUPERUSER_PASSWORD', 'qwerty123@')
 
 HEALTH_CHECK_TOKEN = os.environ.get('HEALTH_CHECK_TOKEN', 'health_check_token')
+GENERATE_EMAILS_TOKEN = os.environ.get('GENERATE_EMAILS_TOKEN', 'generate_emails_token')

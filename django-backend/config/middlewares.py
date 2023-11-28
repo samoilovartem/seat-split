@@ -5,9 +5,9 @@ import uuid
 from loguru import logger
 from rollbar.contrib.django.middleware import RollbarNotifierMiddleware
 
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseBadRequest, HttpResponseForbidden
 
-from config.settings import HEALTH_CHECK_TOKEN
+from config.settings import GENERATE_EMAILS_TOKEN, HEALTH_CHECK_TOKEN
 
 
 class CustomRollbarNotifierMiddleware(RollbarNotifierMiddleware):
@@ -86,6 +86,20 @@ class SimpleTokenAuthenticationMiddleware:
         if '/health-check/' in request.path:
             token = request.headers.get('Authorization')
             if not token == HEALTH_CHECK_TOKEN:
+                return HttpResponseForbidden('Unauthorized')
+
+        if '/generate_random_data_with_provided_domain_or_state/' in request.path:
+            token = request.headers.get('Authorization')
+
+            if not token:
+                return HttpResponseBadRequest('No API token provided')
+
+            try:
+                split_token = token.split(' ')[1]
+            except IndexError:
+                return HttpResponseBadRequest('Token format is invalid')
+
+            if not split_token == GENERATE_EMAILS_TOKEN:
                 return HttpResponseForbidden('Unauthorized')
 
         return self.get_response(request)
