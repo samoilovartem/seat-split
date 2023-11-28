@@ -1,12 +1,12 @@
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework_api_key.permissions import HasAPIKey
 
 from apps.email_domains.services.data_generator import DataGenerator
 
 
 @api_view(['POST'])
-@permission_classes([HasAPIKey])
+@permission_classes((AllowAny,))
 def generate_random_data_with_provided_domain_or_state(request):
     domain_name = request.data.get('domain_name')
     state = request.data.get('state')
