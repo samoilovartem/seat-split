@@ -1,5 +1,7 @@
 from uuid import UUID
 
+from rest_framework.authtoken.models import Token
+
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
@@ -12,6 +14,15 @@ from config.components.slack_integration import (
     STT_NOTIFICATIONS_EMOJI,
 )
 from config.components.smtp_and_email import EMAIL_FRONTEND_BASE_URL
+
+
+def invalidate_user_auth_token(user: User) -> None:
+    """
+    Invalidate the authentication token for the given user.
+
+    :param user: User instance for which to invalidate the token.
+    """
+    Token.objects.filter(user=user).delete()
 
 
 def get_confirmation_link(user_id: UUID, specific_path: str):

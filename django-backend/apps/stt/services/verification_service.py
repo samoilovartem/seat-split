@@ -1,28 +1,18 @@
 from uuid import UUID
 
-from rest_framework.authtoken.models import Token
-
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 
 from apps.stt.models import User
 from apps.stt.tasks import send_email_confirmed
+from apps.stt.utils import invalidate_user_auth_token
 from apps.users.tasks import send_email_change_confirmed
 from config.components.celery import CELERY_GENERAL_COUNTDOWN
 from config.components.redis import redis_general_connection
 
 
 class VerificationService:
-    @staticmethod
-    def _invalidate_user_auth_token(user: User) -> None:
-        """
-        Invalidate the authentication token for the given user.
-
-        :param user: User instance for which to invalidate the token.
-        """
-        Token.objects.filter(user=user).delete()
-
     @staticmethod
     def _decode_uid(uidb64: str) -> UUID:
         """Decode the base64-encoded UID and return a UUID object."""
@@ -70,7 +60,7 @@ class VerificationService:
     @staticmethod
     def _reset_password(user: User, new_password: str) -> str:
         """Reset the user's password and log out the user."""
-        VerificationService._invalidate_user_auth_token(user)
+        invalidate_user_auth_token(user)
         user.set_password(new_password)
         user.save()
         return 'Password has been reset successfully'
@@ -114,7 +104,7 @@ class VerificationService:
         :param new_email: The new email to set for the user.
         :return: A message indicating that the email change verification was successful.
         """
-        VerificationService._invalidate_user_auth_token(user)
+        invalidate_user_auth_token(user)
 
         user.email = new_email
         user.username = new_email
