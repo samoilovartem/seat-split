@@ -82,6 +82,39 @@ Previously, the session middleware would crash when the database was in read-onl
 Closes #1234
 ```
 
+## Pull Request Guidelines
+
+Before submitting a pull request, please ensure you adhere to the following guidelines:
+
+### Before You Begin
+
+1. **Check open issues and pull requests** to avoid duplicate submissions.
+2. **Update your local repository** to the latest main branch to minimize merge conflicts.
+3. **Use the pull request template**: We have provided a pull request template to streamline the submission process. It is located at `.github/pull_request_template.md`. Please use it when creating your pull request.
+
+### Making Changes
+
+1. **Create a new branch** for your changes. Name it in a way that reflects the fix or feature (e.g., `fix/login-error`, `feature/oauth-integration`).
+2. **Make your changes** in small, incremental, and logical commits, adhering to the project's commit message guidelines.
+3. **Test your changes** thoroughly to ensure they address the issue or add the feature you're working on without introducing new issues.
+
+### Submitting Your Pull Request
+
+1. **Fill out the pull request template**: When you open a new pull request, it will automatically populate with the content from our `pull_request_template.md`. Please fill in all the relevant sections to help us understand your changes.
+2. **Title**: Give your pull request a descriptive title that provides an overview of the changes.
+3. **Assign a reviewer**: Assign @artem-ldsoftware as a reviewer for your pull request.
+4. **Reference Issues**: If your pull request addresses an open issue, include it under Development section in Github.
+5. **Draft Pull Requests**: If you're not ready for a full review but want to share your progress or ask for assistance, submit as a draft pull request.
+
+### Pull Request Best Practices
+
+- **Keep changes specific and related**: Your pull request should address a single issue or add a single feature. Avoid combining multiple issues or features into one pull request.
+- **Document your changes**: If your changes involve user-facing features or significant alterations, update the README, documentation, or any relevant guides.
+- **Follow the code style**: Ensure your code adheres to the existing code style guidelines for the project.
+- **Include screenshots or videos**: If your changes affect the UI or user flow, consider adding screenshots or videos to help reviewers understand your changes.
+
+By following these guidelines and using the provided pull request template, you'll help maintain the quality of the project.
+
 
 ## FAQ
 In backend development, the distinction between user-facing features and non-user-facing changes can sometimes be less clear than in frontend development, however the principle remains the same: a user-facing feature or fix is something that impacts the functionality, performance, or security of the application as experienced by the user, even if it doesn't directly change the UI.
