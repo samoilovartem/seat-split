@@ -6,10 +6,11 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from django.contrib.auth import get_user_model, update_session_auth_hash
+from django.contrib.auth import get_user_model
 from django.db.models import Prefetch
 
 from apps.stt.models import TicketHolderTeam
+from apps.stt.utils import invalidate_user_auth_token
 from apps.users.api.serializers import (
     ChangePasswordSerializer,
     EmailChangeSerializer,
@@ -65,7 +66,7 @@ class UserViewSet(ModelViewSet):
 
             user.set_password(serializer.validated_data['new_password'])
             user.save()
-            update_session_auth_hash(request, user)
+            invalidate_user_auth_token(user)
 
             return Response({'status': 'password changed'}, status=status.HTTP_200_OK)
 
