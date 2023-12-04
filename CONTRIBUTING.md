@@ -45,6 +45,7 @@ The scope should be the name of the Django module or feature affected by the cha
 * `middleware`: Changes to middleware components.
 * `signals`: Changes to Django signals.
 * `tests`: Changes to tests (e.g., tests.py or tests directory).
+* `tasks`: Changes to Celery tasks.
 * `api`: Changes specific to Django REST Framework or API-related code.
 * `auth`: Changes related to authentication and authorization.
 * `fixtures`: Changes to data fixtures.
