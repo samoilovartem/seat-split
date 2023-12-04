@@ -102,7 +102,7 @@ Before submitting a pull request, please ensure you adhere to the following guid
 
 1. **Fill out the pull request template**: When you open a new pull request, it will automatically populate with the content from our `pull_request_template.md`. Please fill in all the relevant sections to help us understand your changes.
 2. **Title**: Give your pull request a descriptive title that provides an overview of the changes.
-3. **Assign a reviewer**: Assign @artem-ldsoftware as a reviewer for your pull request.
+3. **Assign a reviewer**: Assign @samoilovartem as a reviewer for your pull request.
 4. **Reference Issues**: If your pull request addresses an open issue, include it under Development section in Github.
 5. **Draft Pull Requests**: If you're not ready for a full review but want to share your progress or ask for assistance, submit as a draft pull request.
 
