@@ -1,14 +1,18 @@
 import json
+from datetime import timedelta
 from uuid import UUID
 
 from celery import shared_task
+from django_celery_results.models import TaskResult
 from loguru import logger
 from slack_sdk.errors import SlackApiError
 
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.utils.timezone import now
 
 from apps.stt.utils import create_ticket_created_slack_message, get_confirmation_link
+from config.components.celery import CELERY_TASK_RESULT_EXPIRES
 from config.components.redis import redis_celery_connection
 from config.components.slack_integration import (
     STT_NOTIFICATIONS_CHANNEL_ID,
@@ -162,3 +166,15 @@ def send_aggregated_slack_notification(event_id: UUID, ticket_holder_id: UUID) -
             logger.error(
                 'There is an error sending a notification to slack. Error: {}', e
             )
+
+
+@shared_task
+def custom_backend_result_cleanup(max_age: int = None) -> None:
+    """Custom backend result cleanup task."""
+    if max_age is not None:
+        max_age = timedelta(days=max_age)
+    else:
+        max_age = CELERY_TASK_RESULT_EXPIRES
+
+    expiration_time = now() - max_age
+    TaskResult.objects.filter(date_done__lt=expiration_time).delete()
