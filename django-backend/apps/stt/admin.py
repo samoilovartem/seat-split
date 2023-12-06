@@ -20,6 +20,7 @@ from apps.stt.models import (
     Ticket,
     TicketHolder,
     TicketHolderTeam,
+    Venue,
 )
 from apps.stt.resources import EventResource
 from config.components.business_related import (
@@ -274,6 +275,30 @@ class TeamAdminConfig(ImportExportMixin, admin.ModelAdmin):
         'state',
     )
     list_filter = ('league',)
+
+
+@admin.register(Venue)
+class VenueAdminConfig(ImportExportMixin, admin.ModelAdmin):
+    model = Venue
+    save_as = True
+    save_on_top = True
+    list_display = (
+        'name',
+        'address',
+        'city',
+        'state',
+        'id',
+    )
+    readonly_fields = ('id',)
+    list_display_links = ('name',)
+    search_fields = (
+        'id',
+        'name',
+        'address',
+        'city',
+        'state',
+    )
+    list_filter = ('state',)
 
 
 admin.site.site_header = 'Season Tickets Tech Admin Dashboard'
