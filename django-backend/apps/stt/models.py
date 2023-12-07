@@ -136,6 +136,37 @@ class Event(models.Model):
         return f'{self.name} | {self.date_time.strftime("%m/%d/%Y, %H:%M:%S")}'
 
 
+class Venue(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    skybox_venue_id = models.IntegerField()
+    name = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    state = models.CharField(max_length=255)
+    postal_code = models.CharField(max_length=255)
+    country = models.CharField(max_length=255)
+    timezone = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = "content\".\"venue"
+        verbose_name = 'Venue'
+        verbose_name_plural = 'Venues'
+        permissions = (
+            ('import_events', 'Can import'),
+            ('export_events', 'Can export'),
+        )
+        constraints = (
+            UniqueConstraint(
+                fields=('skybox_venue_id', 'name'),
+                name='skybox_venue_id_name_idx',
+            ),
+        )
+
+    def __str__(self):
+        return f'{self.name}'
+
+
 class Team(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     name = models.CharField(max_length=255)
@@ -144,7 +175,9 @@ class Team(models.Model):
     league = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=255)
-    home_venue = models.CharField(max_length=255)
+    home_venue = models.ForeignKey(
+        Venue, on_delete=models.PROTECT, null=True, related_name='home_teams'
+    )
     logo = models.FileField(upload_to='logos/', null=True, blank=True)
     ticketmaster_id = models.IntegerField()
     timezone = models.CharField(max_length=255)
@@ -235,34 +268,3 @@ class TicketHolderTeam(models.Model):
 
 
 ticket_holders_teams = models.ManyToManyField(Team, through='TicketHolderTeam')
-
-
-class Venue(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    skybox_venue_id = models.IntegerField()
-    name = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
-    state = models.CharField(max_length=255)
-    postal_code = models.CharField(max_length=255)
-    country = models.CharField(max_length=255)
-    timezone = models.CharField(max_length=255)
-    phone = models.CharField(max_length=255)
-
-    class Meta:
-        db_table = "content\".\"venue"
-        verbose_name = 'Venue'
-        verbose_name_plural = 'Venues'
-        permissions = (
-            ('import_events', 'Can import'),
-            ('export_events', 'Can export'),
-        )
-        constraints = (
-            UniqueConstraint(
-                fields=('skybox_venue_id', 'name'),
-                name='skybox_venue_id_name_idx',
-            ),
-        )
-
-    def __str__(self):
-        return f'{self.name}'
