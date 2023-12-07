@@ -169,6 +169,7 @@ class Venue(models.Model):
 
 class Team(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    skybox_id = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=255)
     name_short = models.CharField(max_length=255)
     abbreviation = models.CharField(max_length=255)
