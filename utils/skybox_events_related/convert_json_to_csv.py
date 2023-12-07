@@ -1,14 +1,14 @@
 import csv
 import json
 
-JSON_FILE_PATH = 'json_source_files/MLB 2024.json'
+JSON_FILE_PATH = 'json_source_files/NHL2023-2024.json'
+CSV_OUTPUT_FILENAME = 'NHL20232024.csv'
 
 with open(JSON_FILE_PATH, 'r') as json_file:
     data = json.load(json_file)
 
 rows = data['rows']
 
-csv_filename = 'MLB2024.csv'
 
 fieldnames = [
     'id',
@@ -44,7 +44,7 @@ fieldnames = [
     'vividSeatsEventUrl',
 ]
 
-with open(csv_filename, 'w', newline='') as csv_file:
+with open(CSV_OUTPUT_FILENAME, 'w', newline='') as csv_file:
     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
     writer.writeheader()
@@ -63,4 +63,4 @@ with open(csv_filename, 'w', newline='') as csv_file:
 
         writer.writerow(row)
 
-print(f'Data has been written to {csv_filename}')
+print(f'Data has been written to {CSV_OUTPUT_FILENAME}')
