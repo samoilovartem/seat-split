@@ -67,7 +67,7 @@ class AvailableSeatsCalculator:
             'section': self.ticket_holder_team.section,
             'row': self.ticket_holder_team.row,
             'seat': self.ticket_holder_team.seat,
-            'venue': self.team.home_venue,
+            'venue': self.team.home_venue.name,
         }
 
     def calculate(self) -> list[dict[str, Any]]:
