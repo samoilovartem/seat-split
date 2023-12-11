@@ -57,7 +57,6 @@ class Ticket(models.Model):
     ticket_holder = models.ForeignKey(TicketHolder, on_delete=models.CASCADE)
     event = models.ForeignKey('Event', on_delete=models.CASCADE, related_name='tickets')
     season = models.CharField(max_length=255)
-    skybox_event_id = models.CharField(max_length=255, blank=True, default='')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     seat = models.CharField(max_length=255)
     row = models.CharField(max_length=255)
@@ -110,10 +109,13 @@ class Purchase(models.Model):
 
 class Event(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    skybox_event_id = models.CharField(max_length=255, blank=True, default='')
     name = models.CharField(max_length=255)
     additional_info = models.CharField(max_length=255, default='')
     date_time = models.DateTimeField()
     season = models.CharField(max_length=255)
+    stubhub_event_url = models.CharField(max_length=255, blank=True, default='')
+    league = models.CharField(max_length=255)
     history = HistoricalRecords()
 
     class Meta:
