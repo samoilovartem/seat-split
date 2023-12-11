@@ -37,7 +37,6 @@ class TicketHolder(models.Model):
     address = models.CharField(max_length=255, blank=True)
     is_card_interest = models.BooleanField(default=False)
     is_season_ticket_interest = models.BooleanField(default=False)
-    tickets_data = models.JSONField(null=True, blank=True, default=dict)
     created_at = models.DateTimeField(auto_now_add=True)
     avatar = models.ImageField(
         upload_to=ticket_holder_avatar_path, null=True, blank=True
