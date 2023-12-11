@@ -95,6 +95,8 @@ class SimpleEventSerializer(FlexFieldsModelSerializer):
 
 
 class TicketSerializer(ShowAllSeatsMixin, FlexFieldsModelSerializer):
+    season = serializers.SerializerMethodField()
+
     class Meta:
         model = Ticket
         fields = '__all__'
@@ -102,6 +104,9 @@ class TicketSerializer(ShowAllSeatsMixin, FlexFieldsModelSerializer):
             'ticket_holder': SimpleTicketHolderSerializer,
             'event': SimpleEventSerializer,
         }
+
+    def get_season(self, obj):
+        return obj.event.season if obj.event else None
 
     def create(self, validated_data):
         return Ticket.objects.create(**validated_data)
