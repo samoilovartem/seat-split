@@ -16,6 +16,7 @@ from apps.stt.models import (
     TicketHolder,
     TicketHolderTeam,
     User,
+    Venue,
 )
 from config.components.business_related import EXPENSES_MULTIPLIER
 
@@ -88,7 +89,25 @@ class SimpleTicketHolderSerializer(FlexFieldsModelSerializer):
         fields = '__all__'
 
 
+class VenueSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Venue
+        fields = (
+            'id',
+            'name',
+            'address',
+            'city',
+            'state',
+            'postal_code',
+            'country',
+            'timezone',
+            'phone',
+        )
+
+
 class SimpleEventSerializer(FlexFieldsModelSerializer):
+    venue = VenueSerializer(read_only=True)
+
     class Meta:
         model = Event
         fields = '__all__'
