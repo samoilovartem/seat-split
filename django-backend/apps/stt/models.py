@@ -113,6 +113,9 @@ class Event(models.Model):
     additional_info = models.CharField(max_length=255, default='')
     date_time = models.DateTimeField()
     season = models.CharField(max_length=255)
+    venue = models.ForeignKey(
+        'Venue', on_delete=models.SET_NULL, null=True, related_name='events'
+    )
     stubhub_event_url = models.CharField(max_length=255, blank=True, default='')
     league = models.CharField(max_length=255)
     history = HistoricalRecords()
