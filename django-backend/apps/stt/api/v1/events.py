@@ -5,8 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from apps.stt.api.filters import EventFilterSet
 from apps.stt.api.serializers import AvailableSeatsSerializer, EventSerializer
-from apps.stt.filters import EventFilterSet
 from apps.stt.models import Event, TicketHolderTeam
 from apps.stt.services.available_seats_calculator import AvailableSeatsCalculator
 
