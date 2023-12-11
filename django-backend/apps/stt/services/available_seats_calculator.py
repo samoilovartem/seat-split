@@ -56,7 +56,6 @@ class AvailableSeatsCalculator:
         return Ticket.objects.filter(
             ticket_holder=self.ticket_holder,
             event__in=self.applicable_events,
-            season__in=[event.season for event in self.applicable_events],
         ).values('event_id', 'seat')
 
     def _get_general_ticket_data(self) -> dict[str, Any]:
