@@ -52,6 +52,7 @@ The scope should be the name of the Django module or feature affected by the cha
 * `utils`: Changes to utility scripts and helper functions.
 * `dependencies`: Updates to external packages and dependencies.
 * `deployment`: Changes related to deployment configurations.
+* `services`: Changes to services (e.g., services.py or services folder).
 
 #### Description
 The description contains a succinct description of the change:
