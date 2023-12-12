@@ -136,7 +136,7 @@ class Event(models.Model):
         )
 
     def __str__(self):
-        return f'{self.name} | {self.date_time.strftime("%m/%d/%Y, %H:%M:%S")}'
+        return f'{self.name} | {self.date_time.strftime("%m/%d/%Y")}'
 
 
 class Venue(models.Model):

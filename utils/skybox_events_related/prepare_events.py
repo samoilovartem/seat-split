@@ -4,6 +4,16 @@ import pandas as pd
 import pytz
 
 
+def replace_values_in_column(df, column_name, old_value_regex, new_value):
+    """
+    Function to replace instances of an old value with a new value in a specific DataFrame column.
+    """
+    df[column_name] = df[column_name].apply(
+        lambda x: re.sub(old_value_regex, new_value, x, flags=re.IGNORECASE)
+    )
+    return df
+
+
 def convert_to_timezone_aware_and_remove_timezone_column(
     df, date_time_col, timezone_col
 ):
@@ -21,7 +31,9 @@ def convert_to_timezone_aware_and_remove_timezone_column(
     return df
 
 
-def clean_and_rename_columns(csv_file_path, season_value, league_value):
+def clean_and_rename_columns(
+    csv_file_path, season_value, league_value, replacements=None
+):
     """Function to clean and rename columns in a DataFrame."""
 
     df = pd.read_csv(csv_file_path)
@@ -59,6 +71,11 @@ def clean_and_rename_columns(csv_file_path, season_value, league_value):
         df, 'date_time', 'venue_timezone'
     )
 
+    if replacements:
+        for column_name, replacement_dict in replacements.items():
+            for old_value, new_value in replacement_dict.items():
+                df = replace_values_in_column(df, column_name, old_value, new_value)
+
     return df
 
 
@@ -95,6 +112,12 @@ LEAGUE = 'MLB'
 
 INPUT_CSV_FILE_PATH = 'MLB2024.csv'
 OUTPUT_CSV_FILE_PATH = f'{INPUT_CSV_FILE_PATH.split(".")[0]}_cleaned.csv'
-cleaned_df = clean_and_rename_columns(INPUT_CSV_FILE_PATH, SEASON, LEAGUE)
+REPLACEMENTS = {
+    'name': {
+        r'\bSt Louis Cardinals\b': 'St. Louis Cardinals',
+    }
+}
+
+cleaned_df = clean_and_rename_columns(INPUT_CSV_FILE_PATH, SEASON, LEAGUE, REPLACEMENTS)
 
 cleaned_df.to_csv(OUTPUT_CSV_FILE_PATH, index=False)
