@@ -116,7 +116,7 @@ class Event(models.Model):
     venue = models.ForeignKey(
         'Venue', on_delete=models.SET_NULL, null=True, related_name='events'
     )
-    stubhub_event_url = models.CharField(max_length=255, blank=True, default='')
+    stubhub_event_url = models.TextField(blank=True, default='')
     league = models.CharField(max_length=255)
     history = HistoricalRecords()
 
