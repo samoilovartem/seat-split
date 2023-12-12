@@ -10,7 +10,7 @@ from django.forms import BaseInlineFormSet, Select
 from django.utils.html import format_html
 
 from apps.common_services.utils import show_changed_fields
-from apps.stt.filters import FutureEventsFilter, HomeAwayFilter, LeagueListFilter
+from apps.stt.filters import FutureEventsFilter, HomeAwayFilter
 from apps.stt.forms import TicketAdminForm
 from apps.stt.models import (
     Event,
@@ -207,7 +207,7 @@ class EventAdminConfig(ImportExportMixin, BaseModelAdmin):
     list_display = (
         'name',
         'associated_teams',
-        'event_league',
+        'league',
         'date_time',
         'season',
         'id',
@@ -227,7 +227,7 @@ class EventAdminConfig(ImportExportMixin, BaseModelAdmin):
             ),
         ),
         'season',
-        LeagueListFilter,
+        'league',
         HomeAwayFilter,
         FutureEventsFilter,
     )
@@ -243,14 +243,7 @@ class EventAdminConfig(ImportExportMixin, BaseModelAdmin):
             return f'{teams[0]}, {teams[1]}'
         return ', '.join(teams)
 
-    def event_league(self, obj):
-        teams_leagues = [te.team.league for te in obj.teamevent_set.all()]
-        if teams_leagues[0] == teams_leagues[1]:
-            return teams_leagues[0]
-        return ', '.join(teams_leagues)
-
     associated_teams.short_description = 'Teams'
-    event_league.short_description = 'League'
 
 
 @admin.register(Team)
