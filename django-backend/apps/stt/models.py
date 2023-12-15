@@ -1,6 +1,7 @@
 from hashlib import md5
 from uuid import uuid4
 
+from django_cryptography.fields import encrypt
 from simple_history.models import HistoricalRecords
 
 from django.contrib.auth import get_user_model
@@ -238,8 +239,8 @@ class TicketHolderTeam(models.Model):
     row = models.CharField(max_length=255)
     seat = models.CharField(max_length=255)
     seats_quantity = models.PositiveIntegerField(default=1, editable=False)
-    credentials_website_username = models.CharField(max_length=255)
-    credentials_website_password = models.CharField(max_length=255)
+    credentials_website_username = encrypt(models.CharField(max_length=255))
+    credentials_website_password = encrypt(models.CharField(max_length=255))
     is_confirmed = models.BooleanField(
         default=False, help_text="Is the ticket holder's team data confirmed?"
     )
@@ -250,6 +251,7 @@ class TicketHolderTeam(models.Model):
         db_table = "content\".\"ticket_holder_team"
         verbose_name = "Ticket Holder's Team"
         verbose_name_plural = "Ticket Holder's Teams"
+        permissions = (('view_credentials', 'Can view credentials'),)
         constraints = (
             UniqueConstraint(
                 fields=('ticket_holder', 'team'),
