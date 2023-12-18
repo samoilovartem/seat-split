@@ -68,11 +68,19 @@ class LogRequestTimeMiddleware:
         response = self.get_response(request)
         end_time = time.time()
 
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+
+        if x_forwarded_for:
+            ip_address = x_forwarded_for.split(',')[0]
+        else:
+            ip_address = request.META.get('REMOTE_ADDR')
+
         execution_time_ms = (end_time - start_time) * 1000
         self.logger.info(
-            'Request %s completed. Execution time: %.2fms',
+            'Request %s completed. Execution time: %.2fms, IP: %s',
             request.path,
             execution_time_ms,
+            ip_address,
         )
 
         return response
