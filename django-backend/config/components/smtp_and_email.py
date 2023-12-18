@@ -20,5 +20,7 @@ SMTP2GO_EMAIL_CONFIRMATION_TEMPLATE_ID = os.environ.get(
 SMTP2GO_FROM_EMAIL = os.environ.get('SMTP2GO_FROM_EMAIL')
 SMTP2GO_SUPPORT_EMAIL = os.environ.get('SMTP2GO_SUPPORT_EMAIL')
 
+LOGO_IMG_URL = 'https://www.seatsplit.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fseatsplit.9385130c.png&w=256&q=75'
+
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
