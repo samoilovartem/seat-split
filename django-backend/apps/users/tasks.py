@@ -11,6 +11,7 @@ from config.components.smtp_and_email import (
     EMAIL_CONTENT_TYPE,
     EMAIL_FRONTEND_BASE_URL,
     EMAIL_PROJECT_NAME,
+    LOGO_IMG_URL,
     SMTP2GO_FROM_EMAIL,
 )
 
@@ -27,6 +28,7 @@ def send_email_change_confirmation(user_email: str, user_id: UUID):
                 user_id=user_id, specific_path='email-change'
             ),
             'project_name': EMAIL_PROJECT_NAME,
+            'logo_img_url': LOGO_IMG_URL,
         },
     )
     email = EmailMessage(
@@ -59,6 +61,7 @@ def send_email_change_confirmed(user_email: str):
             'email': user_email,
             'link': f'https://{EMAIL_FRONTEND_BASE_URL}/',
             'project_name': EMAIL_PROJECT_NAME,
+            'logo_img_url': LOGO_IMG_URL,
         },
     )
 
@@ -93,6 +96,7 @@ def send_password_reset_email(user_email: str, user_id: UUID):
                 user_id=user_id, specific_path='reset-password'
             ),
             'project_name': EMAIL_PROJECT_NAME,
+            'logo_img_url': LOGO_IMG_URL,
         },
     )
     email = EmailMessage(

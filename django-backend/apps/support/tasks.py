@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 from config.components.smtp_and_email import (
     EMAIL_CONTENT_TYPE,
     EMAIL_PROJECT_NAME,
+    LOGO_IMG_URL,
     SMTP2GO_FROM_EMAIL,
     SMTP2GO_SUPPORT_EMAIL,
 )
@@ -25,6 +26,7 @@ def send_contact_us_notification(
             'user_email': user_email,
             'message': message,
             'subject': subject,
+            'logo_img_url': LOGO_IMG_URL,
         },
     )
     email = EmailMessage(
