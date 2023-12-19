@@ -1,5 +1,6 @@
-from datetime import datetime
 from typing import Any
+
+from django.utils.timezone import now
 
 from apps.stt.api.serializers import SimpleEventSerializer
 from apps.stt.models import Event, Ticket, TicketHolderTeam
@@ -43,7 +44,7 @@ class AvailableSeatsCalculator:
         """
         return list(
             Event.objects.filter(
-                name__endswith=self.team.name, date_time__gte=datetime.now()
+                name__endswith=self.team.name, date_time__gte=now()
             ).select_related('venue')
         )
 
