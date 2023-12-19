@@ -5,6 +5,7 @@ from apps.email_domains.api.v1.email_domains import (
 )
 from apps.stt.api.v1.authentication import CustomTokenCreateView, TokenDestroyView
 from apps.stt.api.v1.registration import RegisterView, VerifyView
+from apps.stt.api.v1.timezones import TimezoneListView
 
 urlpatterns = [
     path(
@@ -15,4 +16,5 @@ urlpatterns = [
     path('token-auth/token/logout/', TokenDestroyView.as_view(), name='logout'),
     path('register/', RegisterView.as_view(), name='register'),
     path('verify/<str:uidb64>/<str:token>/', VerifyView.as_view(), name='verify'),
+    path('timezones/', TimezoneListView.as_view(), name='timezones'),
 ]
