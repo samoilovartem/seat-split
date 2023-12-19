@@ -44,7 +44,7 @@ class AvailableSeatsCalculator:
         return list(
             Event.objects.filter(
                 name__endswith=self.team.name, date_time__gte=datetime.now()
-            )
+            ).select_related('venue')
         )
 
     def _get_tickets_for_events(self) -> list[dict[str, Any]]:
