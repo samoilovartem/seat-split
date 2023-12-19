@@ -1,9 +1,12 @@
 from decimal import Decimal
 
+from pytz import timezone
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from django.utils.timezone import localtime
 
 from apps.serializers import ShowAllSeatsMixin
 from apps.stt.api.validators import validate_seat_range
@@ -111,6 +114,24 @@ class SimpleEventSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Event
         fields = '__all__'
+
+    def to_representation(self, instance):
+        """
+        Convert `date_time` to the timezone specified in the TicketHolder's profile
+        before serializing the object.
+        """
+        ret = super().to_representation(instance)
+        request = self.context.get('request')
+
+        if request and hasattr(request.user, 'ticket_holder_user'):
+            user_timezone = request.user.ticket_holder_user.timezone
+            tz = timezone(user_timezone)
+            date_time = instance.date_time.astimezone(tz)
+        else:
+            date_time = localtime(instance.date_time)
+
+        ret['date_time'] = date_time.strftime('%Y-%m-%d %H:%M')
+        return ret
 
 
 class TicketSerializer(ShowAllSeatsMixin, FlexFieldsModelSerializer):

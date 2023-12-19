@@ -1,5 +1,6 @@
-from datetime import datetime
 from typing import Any
+
+from django.utils.timezone import now
 
 from apps.stt.api.serializers import SimpleEventSerializer
 from apps.stt.models import Event, Ticket, TicketHolderTeam
@@ -43,8 +44,8 @@ class AvailableSeatsCalculator:
         """
         return list(
             Event.objects.filter(
-                name__endswith=self.team.name, date_time__gte=datetime.now()
-            )
+                name__endswith=self.team.name, date_time__gte=now()
+            ).select_related('venue')
         )
 
     def _get_tickets_for_events(self) -> list[dict[str, Any]]:
@@ -68,7 +69,7 @@ class AvailableSeatsCalculator:
             'seat': self.ticket_holder_team.seat,
         }
 
-    def calculate(self) -> list[dict[str, Any]]:
+    def calculate(self, context=None) -> list[dict[str, Any]]:
         """
         Calculate the available seats for the ticket holder for each upcoming event.
 
@@ -87,7 +88,7 @@ class AvailableSeatsCalculator:
             if available_seats:
                 results.append(
                     {
-                        'event': SimpleEventSerializer(event).data,
+                        'event': SimpleEventSerializer(event, context=context).data,
                         'available_seats': sorted(list(available_seats), key=int),
                         'general_ticket_data': self._get_general_ticket_data(),
                     }
