@@ -2,6 +2,7 @@ from hashlib import md5
 from uuid import uuid4
 
 from django_cryptography.fields import encrypt
+from pytz import all_timezones
 from simple_history.models import HistoricalRecords
 
 from django.contrib.auth import get_user_model
@@ -41,6 +42,9 @@ class TicketHolder(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     avatar = models.ImageField(
         upload_to=ticket_holder_avatar_path, null=True, blank=True
+    )
+    timezone = models.CharField(
+        max_length=255, choices=[(tz, tz) for tz in all_timezones], default='UTC'
     )
     history = HistoricalRecords()
 
