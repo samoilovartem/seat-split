@@ -50,7 +50,9 @@ class EventViewSet(ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
+            context = {'request': request}
+
             calculator = AvailableSeatsCalculator(ticket_holder, team)
-            return Response(calculator.calculate())
+            return Response(calculator.calculate(context=context))
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
