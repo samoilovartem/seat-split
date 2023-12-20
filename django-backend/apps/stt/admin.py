@@ -128,7 +128,7 @@ class TicketAdminConfig(BaseModelAdmin):
         'price',
         'id',
     )
-    readonly_fields = ('id', 'created_at')
+    readonly_fields = ('id', 'created_at', 'sold_at')
     search_fields = (
         'id',
         'ticket_holder__id',

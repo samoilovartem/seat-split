@@ -5,7 +5,11 @@ from loguru import logger
 from django.utils import timezone
 
 from apps.stt.models import Purchase, Ticket
-from apps.stt.tasks import send_aggregated_slack_notification, send_slack_notification
+from apps.stt.tasks import (
+    send_aggregated_slack_notification,
+    send_slack_notification,
+    send_ticket_sold_email,
+)
 from apps.stt.utils import create_ticket_status_requested_for_delisting_slack_message
 from config.components.business_related import DELIVERY_STATUSES, MARKETPLACES
 from config.components.celery import (
@@ -96,6 +100,19 @@ class TicketHandler:
                 delivery_status=DELIVERY_STATUSES[0][0],
                 purchased_at=timezone.now(),
             )
+
+        send_ticket_sold_email.apply_async(
+            args=(
+                self.instance.ticket_holder.user.email,
+                self.instance.event.name,
+                self.instance.event.date_time,
+                self.instance.section,
+                self.instance.row,
+                self.instance.seat,
+                self.instance.price,
+            ),
+            countdown=CELERY_GENERAL_COUNTDOWN,
+        )
 
     def _was_requested_for_delisting(self, previous_status: str) -> bool:
         """Check if the ticket was requested for delisting."""

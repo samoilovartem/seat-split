@@ -14,6 +14,7 @@ User = get_user_model()
 
 
 def ticket_holder_avatar_path(instance, filename):
+    """Generate unique path for ticket holder avatar."""
     ext = filename.split('.')[-1]
 
     unique_filename = f'{uuid4().hex}.{ext}'

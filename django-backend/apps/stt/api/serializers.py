@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from pytz import timezone
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
@@ -21,7 +19,7 @@ from apps.stt.models import (
     User,
     Venue,
 )
-from config.components.business_related import EXPENSES_MULTIPLIER
+from apps.stt.utils import calculate_price_with_expenses
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -153,11 +151,7 @@ class TicketSerializer(ShowAllSeatsMixin, FlexFieldsModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        if instance.price:
-            expenses_multiplier = Decimal(EXPENSES_MULTIPLIER)
-            representation['price'] = str(
-                (instance.price * expenses_multiplier).quantize(Decimal('0.01'))
-            )
+        representation['price'] = calculate_price_with_expenses(instance.price)
         return representation
 
 

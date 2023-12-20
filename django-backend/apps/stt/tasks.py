@@ -173,6 +173,54 @@ def send_aggregated_slack_notification(event_id: UUID, ticket_holder_id: UUID) -
 
 
 @shared_task
+def send_ticket_sold_email(
+    ticket_holder_email: str,
+    event_name: str,
+    event_date: str,
+    section: str,
+    row: str,
+    seat: str,
+    price: str,
+) -> None:
+    """Sends email notification that ticket holder's ticket has been sold."""
+    mail_subject = 'Your ticket has been sold'
+    message = render_to_string(
+        'emails/ticket_sold.html',
+        {
+            'event_name': event_name,
+            'event_date': event_date,
+            'section': section,
+            'row': row,
+            'seat': seat,
+            'price': price,
+            'project_name': EMAIL_PROJECT_NAME,
+            'logo_img_url': LOGO_IMG_URL,
+        },
+    )
+
+    email = EmailMessage(
+        subject=mail_subject,
+        body=message,
+        to=[ticket_holder_email],
+        from_email=SMTP2GO_FROM_EMAIL,
+    )
+    email.content_subtype = EMAIL_CONTENT_TYPE
+    try:
+        email.send()
+        logger.info(
+            '`Ticket sold` email has been successfully sent to {}',
+            ticket_holder_email,
+        )
+    except Exception as e:
+        logger.exception(
+            'There is an error sending `ticket sold` email to {}. Error: {}',
+            ticket_holder_email,
+            e,
+        )
+        return
+
+
+@shared_task
 def custom_backend_result_cleanup(max_age: int = None) -> None:
     """Custom backend result cleanup task."""
     if max_age is not None:

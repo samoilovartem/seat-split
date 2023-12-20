@@ -1,3 +1,4 @@
+from decimal import Decimal
 from uuid import UUID
 
 from rest_framework.authtoken.models import Token
@@ -8,12 +9,34 @@ from django.utils.http import urlsafe_base64_encode
 
 from apps.stt.models import Ticket, TicketHolderTeam
 from apps.users.models import User
+from config.components.business_related import EXPENSES_MULTIPLIER
 from config.components.slack_integration import (
     STT_NOTIFICATIONS_CHANNEL_TICKET_HOLDER_URL,
     STT_NOTIFICATIONS_CHANNEL_TICKET_URL,
     STT_NOTIFICATIONS_EMOJI,
 )
 from config.components.smtp_and_email import EMAIL_FRONTEND_BASE_URL
+
+
+def calculate_price_with_expenses(price: Decimal | None) -> str | None:
+    """
+    Calculate the price including expenses.
+
+    This function takes the original price and applies an expenses multiplier
+    to it, then returns the result as a string formatted to two decimal places.
+    If the price is None, it returns None, indicating that no calculation is needed.
+
+    Parameters:
+    price (Decimal | None): The original price of the ticket.
+
+    Returns:
+    str | None: The price including expenses, formatted as a string,
+                    or None if the input price is None.
+    """
+    if price is not None:
+        expenses_multiplier = Decimal(EXPENSES_MULTIPLIER)
+        return str((price * expenses_multiplier).quantize(Decimal('0.01')))
+    return None
 
 
 def invalidate_user_auth_token(user: User) -> None:
