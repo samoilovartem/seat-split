@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{ project_name }} - Your ticket has been successfully sold</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .card-container {
+            width: 600px;
+            max-width: 100%;
+            background: white;
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .header {
+            background: #FFE27B;
+            padding: 7px 0;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .header img {
+            height: 61px;
+            margin: auto;
+            display: block;
+        }
+
+        .content {
+            padding: 10px;
+        }
+
+        .signature {
+            color: #667085;
+            font-size: 16px;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .ticket-info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .ticket-info-table td {
+            padding: 10px;
+            color: black;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        .ticket-info-table td.value {
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .ticket-info-table tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+<div class="card-container">
+    <div class="header">
+        <img src="{{ logo_img_url }}"
+             alt="{{ project_name }}"/>
+    </div>
+    <div class="content">
+        <div>
+            <h1 style="color: black; font-size: 24px; font-weight: 700; text-align: center;">Your ticket has been
+                successfully sold</h1>
+            <p style="color: #E6BA0D; font-size: 20px; font-weight: 700; text-align: center;">Hi from {{ project_name }}!</p>
+            <p style="color: black; font-size: 16px; font-weight: 400; text-align: center;">This is to inform you that
+                your ticket "{{ event_name }}" has been successfully sold for <strong>${{ price }}</strong>.</p>
+            <p style="color: black; font-size: 16px; font-weight: 400; text-align: center;">Here is full ticket
+                information:</p>
+            <table class="ticket-info-table">
+                <tr>
+                    <td>Event:</td>
+                    <td class="value">{{ event_name }}</td>
+                </tr>
+                <tr>
+                    <td>Date:</td>
+                    <td class="value">{{ event_date }}</td>
+                </tr>
+                <tr>
+                    <td>Section:</td>
+                    <td class="value">{{ section }}</td>
+                </tr>
+                <tr>
+                    <td>Row:</td>
+                    <td class="value">{{ row }}</td>
+                </tr>
+                <tr>
+                    <td>Seat:</td>
+                    <td class="value">{{ seat }}</td>
+                </tr>
+                <tr>
+                    <td>Price:</td>
+                    <td class="value">${{ price }}</td>
+                </tr>
+            </table>
+        </div>
+        <p class="signature">The {{ project_name }} Team</p>
+    </div>
+</div>
+</body>
+</html>
