@@ -50,28 +50,6 @@
             font-weight: 400;
             text-align: center;
         }
-
-        .ticket-info-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        .ticket-info-table td {
-            padding: 10px;
-            color: black;
-            font-size: 16px;
-            text-align: left;
-        }
-
-        .ticket-info-table td.value {
-            font-weight: 700;
-            text-align: right;
-        }
-
-        .ticket-info-table tr:nth-child(odd) {
-            background-color: #f9f9f9;
-        }
     </style>
 </head>
 <body>
@@ -89,30 +67,41 @@
                 your ticket "{{ event_name }}" has been successfully sold for <strong>${{ price }}</strong>.</p>
             <p style="color: black; font-size: 16px; font-weight: 400; text-align: center;">Here is full ticket
                 information:</p>
-            <table class="ticket-info-table">
-                <tr>
-                    <td>Event:</td>
-                    <td class="value">{{ event_name }}</td>
+            <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                <tr style="background-color: #f9f9f9;">
+                    <td style="padding: 10px; color: black; font-size: 16px; font-weight: 400; text-align: left;">
+                        Event:
+                    </td>
+                    <td style="padding: 10px; color: black; font-size: 16px; font-weight: 700; text-align: right;">{{ event_name }}</td>
                 </tr>
                 <tr>
-                    <td>Date:</td>
-                    <td class="value">{{ event_date }}</td>
+                    <td style="padding: 10px; color: black; font-size: 16px; font-weight: 400; text-align: left;">
+                        Date:
+                    </td>
+                    <td style="padding: 10px; color: black; font-size: 16px; font-weight: 700; text-align: right;">{{ event_date }}</td>
+                </tr>
+                <tr style="background-color: #f9f9f9;">
+                    <td style="padding: 10px; color: black; font-size: 16px; font-weight: 400; text-align: left;">
+                        Section:
+                    </td>
+                    <td style="padding: 10px; color: black; font-size: 16px; font-weight: 700; text-align: right;">{{ section }}</td>
                 </tr>
                 <tr>
-                    <td>Section:</td>
-                    <td class="value">{{ section }}</td>
+                    <td style="padding: 10px; color: black; font-size: 16px; font-weight: 400; text-align: left;">Row:
+                    </td>
+                    <td style="padding: 10px; color: black; font-size: 16px; font-weight: 700; text-align: right;">{{ row }}</td>
+                </tr>
+                <tr style="background-color: #f9f9f9;">
+                    <td style="padding: 10px; color: black; font-size: 16px; font-weight: 400; text-align: left;">
+                        Seat:
+                    </td>
+                    <td style="padding: 10px; color: black; font-size: 16px; font-weight: 700; text-align: right;">{{ seat }}</td>
                 </tr>
                 <tr>
-                    <td>Row:</td>
-                    <td class="value">{{ row }}</td>
-                </tr>
-                <tr>
-                    <td>Seat:</td>
-                    <td class="value">{{ seat }}</td>
-                </tr>
-                <tr>
-                    <td>Price:</td>
-                    <td class="value">${{ price }}</td>
+                    <td style="padding: 10px; color: black; font-size: 16px; font-weight: 400; text-align: left;">
+                        Price:
+                    </td>
+                    <td style="padding: 10px; color: black; font-size: 16px; font-weight: 700; text-align: right;">${{ price }}</td>
                 </tr>
             </table>
         </div>
