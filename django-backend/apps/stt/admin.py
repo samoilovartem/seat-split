@@ -15,6 +15,7 @@ from apps.stt.forms import TicketAdminForm
 from apps.stt.models import (
     Event,
     Purchase,
+    Season,
     Team,
     TeamEvent,
     Ticket,
@@ -75,6 +76,40 @@ class TicketHolderTeamInline(admin.StackedInline):
         'seats_quantity',
         'credentials_website_username',
         'credentials_website_password',
+    )
+
+
+@admin.register(Season)
+class SeasonAdminConfig(BaseModelAdmin):
+    model = Season
+    save_as = True
+    save_on_top = True
+    list_display = (
+        'name',
+        'start_year',
+        'official_start_date',
+        'official_end_date',
+        'id',
+    )
+    readonly_fields = ('id',)
+    list_display_links = ('name',)
+    search_fields = ('id', 'name')
+    ordering = ('name',)
+    list_filter = (
+        (
+            'official_start_date',
+            DateRangeFilterBuilder(
+                title='Official start date',
+                default_start=datetime.now(),
+            ),
+        ),
+        (
+            'official_end_date',
+            DateRangeFilterBuilder(
+                title='Official end date',
+                default_start=datetime.now(),
+            ),
+        ),
     )
 
 
