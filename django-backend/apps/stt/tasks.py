@@ -1,5 +1,6 @@
 import json
 from datetime import timedelta
+from decimal import Decimal
 from uuid import UUID
 
 from celery import shared_task
@@ -11,7 +12,11 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.utils.timezone import now
 
-from apps.stt.utils import create_ticket_created_slack_message, get_confirmation_link
+from apps.stt.utils import (
+    calculate_price_with_expenses,
+    create_ticket_created_slack_message,
+    get_confirmation_link,
+)
 from config.components.celery import CELERY_TASK_RESULT_MAX_AGE
 from config.components.redis import redis_celery_connection
 from config.components.slack_integration import (
@@ -180,7 +185,7 @@ def send_ticket_sold_email(
     section: str,
     row: str,
     seat: str,
-    price: str,
+    price: Decimal,
 ) -> None:
     """Sends email notification that ticket holder's ticket has been sold."""
     mail_subject = 'Your ticket has been sold'
@@ -192,7 +197,7 @@ def send_ticket_sold_email(
             'section': section,
             'row': row,
             'seat': seat,
-            'price': price,
+            'price': calculate_price_with_expenses(price),
             'project_name': EMAIL_PROJECT_NAME,
             'logo_img_url': LOGO_IMG_URL,
         },
