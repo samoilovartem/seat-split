@@ -227,28 +227,28 @@ class Season(models.Model):
         help_text='The sports league to which the season belongs',
     )
     official_start_date = models.DateField(
-        blank=True, help_text='The date when the season officially starts'
+        blank=True, null=True, help_text='The date when the season officially starts'
     )
     official_end_date = models.DateField(
-        blank=True, help_text='The date when the season officially ends'
+        blank=True, null=True, help_text='The date when the season officially ends'
     )
 
     start_selling_season_date = models.DateField(
-        blank=True, help_text='The date when sales for season-related tickets begin'
+        blank=True, null=True, help_text='The date when sales for season-related tickets begin'
     )
 
     start_regular_season_date = models.DateField(
-        blank=True, help_text='The date when the regular season is scheduled to begin'
+        blank=True, null=True, help_text='The date when the regular season is scheduled to begin'
     )
     end_regular_season_date = models.DateField(
-        blank=True, help_text='The date when the regular season is scheduled to end'
+        blank=True, null=True, help_text='The date when the regular season is scheduled to end'
     )
 
     start_playoff_date = models.DateField(
-        blank=True, help_text='The date when the playoff season is scheduled to begin'
+        blank=True, null=True, help_text='The date when the playoff season is scheduled to begin'
     )
     end_playoff_date = models.DateField(
-        blank=True, help_text='The date when the playoff season is scheduled to end'
+        blank=True, null=True, help_text='The date when the playoff season is scheduled to end'
     )
 
     is_selling_season = models.BooleanField(
