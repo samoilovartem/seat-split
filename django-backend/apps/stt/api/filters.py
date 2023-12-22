@@ -20,7 +20,7 @@ class TicketFilter(FilterSet):
             'event',
             'listing_status',
             'sold_at',
-            'event__season',
+            'event__season__name',
         )
 
 

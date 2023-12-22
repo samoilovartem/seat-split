@@ -86,6 +86,7 @@ class SeasonAdminConfig(BaseModelAdmin):
     save_on_top = True
     list_display = (
         'name',
+        'league',
         'start_year',
         'official_start_date',
         'official_end_date',
@@ -96,6 +97,7 @@ class SeasonAdminConfig(BaseModelAdmin):
     search_fields = ('id', 'name')
     ordering = ('name',)
     list_filter = (
+        'league',
         (
             'official_start_date',
             DateRangeFilterBuilder(
@@ -250,7 +252,7 @@ class EventAdminConfig(ImportExportMixin, BaseModelAdmin):
     readonly_fields = ('id',)
     list_display_links = ('name',)
     inlines = (TeamEventInline,)
-    search_fields = ('id', 'name', 'season')
+    search_fields = ('id', 'name', 'season__name')
     ordering = ('date_time',)
     list_filter = (
         (
@@ -261,7 +263,7 @@ class EventAdminConfig(ImportExportMixin, BaseModelAdmin):
                 default_end=datetime.now(),
             ),
         ),
-        'season',
+        'season__name',
         'league',
         HomeAwayFilter,
         FutureEventsFilter,
