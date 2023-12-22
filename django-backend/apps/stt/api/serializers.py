@@ -108,10 +108,14 @@ class VenueSerializer(serializers.ModelSerializer):
 
 class SimpleEventSerializer(FlexFieldsModelSerializer):
     venue = VenueSerializer(read_only=True)
+    season = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
         fields = '__all__'
+
+    def get_season(self, obj):
+        return obj.season.name if obj.season else None
 
     def to_representation(self, instance):
         """
@@ -144,7 +148,7 @@ class TicketSerializer(ShowAllSeatsMixin, FlexFieldsModelSerializer):
         }
 
     def get_season(self, obj):
-        return obj.event.season if obj.event else None
+        return obj.event.season.name if obj.event else None
 
     def create(self, validated_data):
         return Ticket.objects.create(**validated_data)
