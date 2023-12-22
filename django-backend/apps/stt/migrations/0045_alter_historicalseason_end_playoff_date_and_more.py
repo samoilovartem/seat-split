@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('stt', '0044_historicalseason_season_season_unique_season_details_and_more'),
     ]
@@ -13,71 +12,127 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='historicalseason',
             name='end_playoff_date',
-            field=models.DateField(blank=True, help_text='The date when the playoff season is scheduled to end', null=True),
+            field=models.DateField(
+                blank=True,
+                help_text='The date when the playoff season is scheduled to end',
+                null=True,
+            ),
         ),
         migrations.AlterField(
             model_name='historicalseason',
             name='end_regular_season_date',
-            field=models.DateField(blank=True, help_text='The date when the regular season is scheduled to end', null=True),
+            field=models.DateField(
+                blank=True,
+                help_text='The date when the regular season is scheduled to end',
+                null=True,
+            ),
         ),
         migrations.AlterField(
             model_name='historicalseason',
             name='official_end_date',
-            field=models.DateField(blank=True, help_text='The date when the season officially ends', null=True),
+            field=models.DateField(
+                blank=True,
+                help_text='The date when the season officially ends',
+                null=True,
+            ),
         ),
         migrations.AlterField(
             model_name='historicalseason',
             name='official_start_date',
-            field=models.DateField(blank=True, help_text='The date when the season officially starts', null=True),
+            field=models.DateField(
+                blank=True,
+                help_text='The date when the season officially starts',
+                null=True,
+            ),
         ),
         migrations.AlterField(
             model_name='historicalseason',
             name='start_playoff_date',
-            field=models.DateField(blank=True, help_text='The date when the playoff season is scheduled to begin', null=True),
+            field=models.DateField(
+                blank=True,
+                help_text='The date when the playoff season is scheduled to begin',
+                null=True,
+            ),
         ),
         migrations.AlterField(
             model_name='historicalseason',
             name='start_regular_season_date',
-            field=models.DateField(blank=True, help_text='The date when the regular season is scheduled to begin', null=True),
+            field=models.DateField(
+                blank=True,
+                help_text='The date when the regular season is scheduled to begin',
+                null=True,
+            ),
         ),
         migrations.AlterField(
             model_name='historicalseason',
             name='start_selling_season_date',
-            field=models.DateField(blank=True, help_text='The date when sales for season-related tickets begin', null=True),
+            field=models.DateField(
+                blank=True,
+                help_text='The date when sales for season-related tickets begin',
+                null=True,
+            ),
         ),
         migrations.AlterField(
             model_name='season',
             name='end_playoff_date',
-            field=models.DateField(blank=True, help_text='The date when the playoff season is scheduled to end', null=True),
+            field=models.DateField(
+                blank=True,
+                help_text='The date when the playoff season is scheduled to end',
+                null=True,
+            ),
         ),
         migrations.AlterField(
             model_name='season',
             name='end_regular_season_date',
-            field=models.DateField(blank=True, help_text='The date when the regular season is scheduled to end', null=True),
+            field=models.DateField(
+                blank=True,
+                help_text='The date when the regular season is scheduled to end',
+                null=True,
+            ),
         ),
         migrations.AlterField(
             model_name='season',
             name='official_end_date',
-            field=models.DateField(blank=True, help_text='The date when the season officially ends', null=True),
+            field=models.DateField(
+                blank=True,
+                help_text='The date when the season officially ends',
+                null=True,
+            ),
         ),
         migrations.AlterField(
             model_name='season',
             name='official_start_date',
-            field=models.DateField(blank=True, help_text='The date when the season officially starts', null=True),
+            field=models.DateField(
+                blank=True,
+                help_text='The date when the season officially starts',
+                null=True,
+            ),
         ),
         migrations.AlterField(
             model_name='season',
             name='start_playoff_date',
-            field=models.DateField(blank=True, help_text='The date when the playoff season is scheduled to begin', null=True),
+            field=models.DateField(
+                blank=True,
+                help_text='The date when the playoff season is scheduled to begin',
+                null=True,
+            ),
         ),
         migrations.AlterField(
             model_name='season',
             name='start_regular_season_date',
-            field=models.DateField(blank=True, help_text='The date when the regular season is scheduled to begin', null=True),
+            field=models.DateField(
+                blank=True,
+                help_text='The date when the regular season is scheduled to begin',
+                null=True,
+            ),
         ),
         migrations.AlterField(
             model_name='season',
             name='start_selling_season_date',
-            field=models.DateField(blank=True, help_text='The date when sales for season-related tickets begin', null=True),
+            field=models.DateField(
+                blank=True,
+                help_text='The date when sales for season-related tickets begin',
+                null=True,
+            ),
         ),
     ]

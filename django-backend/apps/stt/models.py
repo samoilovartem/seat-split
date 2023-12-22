@@ -236,21 +236,31 @@ class Season(models.Model):
     )
 
     start_selling_season_date = models.DateField(
-        blank=True, null=True, help_text='The date when sales for season-related tickets begin'
+        blank=True,
+        null=True,
+        help_text='The date when sales for season-related tickets begin',
     )
 
     start_regular_season_date = models.DateField(
-        blank=True, null=True, help_text='The date when the regular season is scheduled to begin'
+        blank=True,
+        null=True,
+        help_text='The date when the regular season is scheduled to begin',
     )
     end_regular_season_date = models.DateField(
-        blank=True, null=True, help_text='The date when the regular season is scheduled to end'
+        blank=True,
+        null=True,
+        help_text='The date when the regular season is scheduled to end',
     )
 
     start_playoff_date = models.DateField(
-        blank=True, null=True, help_text='The date when the playoff season is scheduled to begin'
+        blank=True,
+        null=True,
+        help_text='The date when the playoff season is scheduled to begin',
     )
     end_playoff_date = models.DateField(
-        blank=True, null=True, help_text='The date when the playoff season is scheduled to end'
+        blank=True,
+        null=True,
+        help_text='The date when the playoff season is scheduled to end',
     )
 
     is_selling_season = models.BooleanField(
