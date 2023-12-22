@@ -120,7 +120,9 @@ class Event(models.Model):
     name = models.CharField(max_length=255)
     additional_info = models.CharField(max_length=255, default='')
     date_time = models.DateTimeField()
-    season = models.CharField(max_length=255)
+    season = models.ForeignKey(
+        'Season', on_delete=models.SET_NULL, null=True, related_name='events'
+    )
     venue = models.ForeignKey(
         'Venue', on_delete=models.SET_NULL, null=True, related_name='events'
     )
