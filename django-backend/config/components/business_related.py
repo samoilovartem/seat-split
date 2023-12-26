@@ -46,4 +46,9 @@ STT_STAFF_GROUP_PERMISSIONS = [
     'view_team',
     'change_ticketholderteam',
     'view_ticketholderteam',
+    'add_season',
+    'change_season',
+    'view_season',
+    'view_venue',
+    'view_inquiry',
 ]
