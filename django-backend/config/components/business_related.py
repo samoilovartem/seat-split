@@ -3,6 +3,8 @@ import os
 BUSINESS_TOTAL_EXPENSES = float(os.environ.get('BUSINESS_TOTAL_EXPENSES', 0.2))
 EXPENSES_MULTIPLIER = 1 - BUSINESS_TOTAL_EXPENSES
 
+GITHUB_ACCESS_TOKEN = os.environ.get('GITHUB_ACCESS_TOKEN', '')
+
 LISTING_STATUSES = [
     ('Pending', 'Pending'),
     ('Listed', 'Listed'),
@@ -46,4 +48,9 @@ STT_STAFF_GROUP_PERMISSIONS = [
     'view_team',
     'change_ticketholderteam',
     'view_ticketholderteam',
+    'add_season',
+    'change_season',
+    'view_season',
+    'view_venue',
+    'view_inquiry',
 ]

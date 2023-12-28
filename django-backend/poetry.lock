@@ -1024,6 +1024,24 @@ files = [
 python-dateutil = ">=2.4"
 
 [[package]]
+name = "fastcore"
+version = "1.5.29"
+description = "Python supercharged for fastai development"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "fastcore-1.5.29-py3-none-any.whl", hash = "sha256:a7d7e89faf968f2d8584df2deca344c3974f6cf476e1299cd3c067d8fa7440e9"},
+    {file = "fastcore-1.5.29.tar.gz", hash = "sha256:f1a2eb04eb7933f3f9eb4064852817df44dc96e20fab5658c14c035815269a3f"},
+]
+
+[package.dependencies]
+packaging = "*"
+pip = "*"
+
+[package.extras]
+dev = ["jupyterlab", "matplotlib", "nbdev (>=0.2.39)", "numpy", "pandas", "pillow", "torch"]
+
+[[package]]
 name = "filelock"
 version = "3.13.1"
 description = "A platform independent file lock."
@@ -1108,6 +1126,25 @@ files = [
     {file = "frozenlist-1.4.0-cp39-cp39-win_amd64.whl", hash = "sha256:6221d84d463fb110bdd7619b69cb43878a11d51cbb9394ae3105d082d5199167"},
     {file = "frozenlist-1.4.0.tar.gz", hash = "sha256:09163bdf0b2907454042edb19f887c6d33806adc71fbd54afc14908bfdc22251"},
 ]
+
+[[package]]
+name = "ghapi"
+version = "1.0.4"
+description = "A python client for the GitHub API"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "ghapi-1.0.4-py3-none-any.whl", hash = "sha256:cb5c7008a89c270157adbaf5b2fd6951e9d9fc76131b9bec16118a558a6a4c04"},
+    {file = "ghapi-1.0.4.tar.gz", hash = "sha256:9e7632c762d6f9c288e3b046b2d58c2f7992dda7c925683df435440912b10625"},
+]
+
+[package.dependencies]
+fastcore = ">=1.5.4"
+packaging = "*"
+pip = "*"
+
+[package.extras]
+dev = ["jsonref", "matplotlib"]
 
 [[package]]
 name = "gitdb"
@@ -1601,6 +1638,17 @@ files = [
 [package.extras]
 docs = ["furo", "olefile", "sphinx (>=2.4)", "sphinx-copybutton", "sphinx-inline-tabs", "sphinx-removed-in", "sphinxext-opengraph"]
 tests = ["check-manifest", "coverage", "defusedxml", "markdown2", "olefile", "packaging", "pyroma", "pytest", "pytest-cov", "pytest-timeout"]
+
+[[package]]
+name = "pip"
+version = "23.3.2"
+description = "The PyPA recommended tool for installing Python packages."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pip-23.3.2-py3-none-any.whl", hash = "sha256:5052d7889c1f9d05224cd41741acb7c5d6fa735ab34e339624a614eaaa7e7d76"},
+    {file = "pip-23.3.2.tar.gz", hash = "sha256:7fd9972f96db22c8077a1ee2691b172c8089b17a5652a44494a9ecb0d78f9149"},
+]
 
 [[package]]
 name = "platformdirs"
@@ -2476,4 +2524,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "7900f9da28b88e49ba4977715c2e57989fc074ac8b5bbb9e170445ae26f9983e"
+content-hash = "99b0f0139f58b59cfa1d12028f0176bcb52aa0082604772325446902f4e4999e"

@@ -12,15 +12,22 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.utils.timezone import now
 
+from apps.stt.services.github_issues_reporter import GitHubIssuesReporter
 from apps.stt.utils import (
     calculate_price_with_expenses,
     create_ticket_created_slack_message,
     get_confirmation_link,
 )
-from config.components.celery import CELERY_TASK_RESULT_MAX_AGE
+from config.components.business_related import GITHUB_ACCESS_TOKEN
+from config.components.celery import (
+    CELERY_GENERAL_COUNTDOWN,
+    CELERY_TASK_RESULT_MAX_AGE,
+)
 from config.components.redis import redis_celery_connection
 from config.components.slack_integration import (
     STT_NOTIFICATIONS_CHANNEL_ID,
+    STT_WEEKLY_ISSUES_REPO_NAMES,
+    STT_WEEKLY_ISSUES_REPORT_CHANNEL_ID,
     slack_client,
 )
 from config.components.smtp_and_email import (
@@ -74,7 +81,7 @@ def send_email_confirmed(user_email: str):
         'emails/account_verified.html',
         {
             'email': user_email,
-            'link': f'https://{EMAIL_FRONTEND_BASE_URL}/',
+            'link': f'https://{EMAIL_FRONTEND_BASE_URL}/',  # noqa: E231
             'project_name': EMAIL_PROJECT_NAME,
             'logo_img_url': LOGO_IMG_URL,
         },
@@ -108,7 +115,7 @@ def send_ticket_holder_team_confirmed(user_email: str, team_name: str):
         {
             'email': user_email,
             'team_name': team_name,
-            'link': f'https://{EMAIL_FRONTEND_BASE_URL}/',
+            'link': f'https://{EMAIL_FRONTEND_BASE_URL}/',  # noqa: E231
             'project_name': EMAIL_PROJECT_NAME,
             'logo_img_url': LOGO_IMG_URL,
         },
@@ -235,3 +242,20 @@ def custom_backend_result_cleanup(max_age: int = None) -> None:
 
     expiration_time = now() - max_age
     TaskResult.objects.filter(date_done__lt=expiration_time).delete()
+
+
+@shared_task
+def fetch_and_send_issues_report():
+    """
+    Fetches closed issues from GitHub and prints a report.
+    Important: executes every Sunday.
+    """
+    reporter = GitHubIssuesReporter(GITHUB_ACCESS_TOKEN)
+    issues_by_user = reporter.generate_report(STT_WEEKLY_ISSUES_REPO_NAMES)
+
+    slack_message = reporter.format_slack_message(issues_by_user)
+
+    send_slack_notification.apply_async(
+        args=(slack_message, STT_WEEKLY_ISSUES_REPORT_CHANNEL_ID),
+        countdown=CELERY_GENERAL_COUNTDOWN,
+    )
