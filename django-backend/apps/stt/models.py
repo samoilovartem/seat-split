@@ -331,8 +331,7 @@ class TicketHolderTeam(models.Model):
     is_confirmed = models.BooleanField(
         default=False, help_text="Is the ticket holder's team data confirmed?"
     )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     class Meta:
         db_table = "content\".\"ticket_holder_team"
