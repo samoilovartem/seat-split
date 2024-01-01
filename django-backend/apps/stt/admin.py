@@ -84,6 +84,7 @@ class SeasonAdminConfig(BaseModelAdmin):
     model = Season
     save_as = True
     save_on_top = True
+    ordering = ('name',)
     list_display = (
         'name',
         'league',
@@ -95,7 +96,6 @@ class SeasonAdminConfig(BaseModelAdmin):
     readonly_fields = ('id',)
     list_display_links = ('name',)
     search_fields = ('id', 'name')
-    ordering = ('name',)
     list_filter = (
         'league',
         (
@@ -120,6 +120,7 @@ class TicketHolderAdminConfig(BaseModelAdmin):
     model = TicketHolder
     save_as = True
     save_on_top = True
+    ordering = ('-created_at',)
     list_display = (
         'first_name',
         'last_name',
@@ -198,6 +199,7 @@ class PurchaseAdminConfig(admin.ModelAdmin):
     model = Purchase
     save_as = True
     save_on_top = True
+    ordering = ('-created_at',)
     list_display = (
         'ticket',
         'invoice_number',
@@ -241,6 +243,7 @@ class EventAdminConfig(ImportExportMixin, BaseModelAdmin):
     resource_class = EventResource
     save_as = True
     save_on_top = True
+    ordering = ('date_time',)
     list_display = (
         'name',
         'associated_teams',
@@ -253,7 +256,6 @@ class EventAdminConfig(ImportExportMixin, BaseModelAdmin):
     list_display_links = ('name',)
     inlines = (TeamEventInline,)
     search_fields = ('id', 'name', 'season__name')
-    ordering = ('date_time',)
     list_filter = (
         (
             'date_time',
@@ -312,6 +314,7 @@ class VenueAdminConfig(ImportExportMixin, admin.ModelAdmin):
     model = Venue
     save_as = True
     save_on_top = True
+    ordering = ('-created_at',)
     list_display = (
         'name',
         'address',
