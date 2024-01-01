@@ -24,7 +24,7 @@ from config.components.redis import (
 from config.components.slack_integration import STT_NOTIFICATIONS_CHANNEL_ID
 
 
-class TicketHandler:
+class TicketPostSaveHandler:
     def __init__(self, instance: Ticket, created: bool = False):
         """
         Initialize the ticket handler with a ticket instance and a created flag.

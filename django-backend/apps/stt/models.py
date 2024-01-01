@@ -128,6 +128,7 @@ class Event(models.Model):
     )
     stubhub_event_url = models.TextField(blank=True, default='')
     league = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
     history = HistoricalRecords()
 
     class Meta:
@@ -160,6 +161,7 @@ class Venue(models.Model):
     country = models.CharField(max_length=255)
     timezone = models.CharField(max_length=255)
     phone = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "content\".\"venue"
@@ -197,6 +199,7 @@ class Team(models.Model):
     timezone = models.CharField(max_length=255)
     credentials_website = models.CharField(max_length=255)
     ticketmaster_name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "content\".\"team"
@@ -275,6 +278,7 @@ class Season(models.Model):
         default=False,
         help_text='A boolean indicating if the season is currently in the playoff period',
     )
+    created_at = models.DateTimeField(auto_now_add=True)
     history = HistoricalRecords()
 
     class Meta:
@@ -297,7 +301,7 @@ class TeamEvent(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     class Meta:
         db_table = "content\".\"team_event"
@@ -332,7 +336,7 @@ class TicketHolderTeam(models.Model):
         default=False, help_text="Is the ticket holder's team data confirmed?"
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     class Meta:
         db_table = "content\".\"ticket_holder_team"
