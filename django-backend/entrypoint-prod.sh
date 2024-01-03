@@ -1,6 +1,13 @@
 #!/bin/sh
 
-echo "Running as user: $(whoami)"
+if [ "$(id -u)" = "0" ]; then
+    echo "Setting permissions on /app/media..."
+    chown -R django_user:django_group /app/media
+    chmod -R 775 /app/media
+    echo "Permissions set. Switching to django_user..."
+    su-exec django_user "\$0" "$@"
+else
+    echo "Running as user: $(whoami)"
 
 chown -R django_user:django_group /app/media
 chmod -R 775 /app/media
@@ -24,3 +31,5 @@ echo "Starting server..."
 gunicorn --timeout "$GUNICORN_TIMEOUT" --bind 0.0.0.0:"$PORT" config.wsgi:application
 
 echo "Server has started!"
+
+fi
