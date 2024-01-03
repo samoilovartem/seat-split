@@ -4,8 +4,7 @@ WORKDIR /app
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    POETRY_VERSION=1.7.1 \
-    GUNICORN_TIMEOUT=0
+    POETRY_VERSION=1.7.1
 
 RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
@@ -20,6 +19,8 @@ RUN poetry config virtualenvs.create false && \
 FROM --platform=linux/amd64 python:3.12
 
 WORKDIR /app
+
+ENV GUNICORN_TIMEOUT=0
 
 COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
