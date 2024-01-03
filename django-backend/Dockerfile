@@ -27,12 +27,6 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 
 COPY . ./
 
-RUN groupadd -r django_group && \
-    useradd -r -g django_group django_user
-
-RUN chown -R django_user:django_group /app && \
-    chmod +x ./entrypoint-prod.sh
-
-USER django_user
+RUN chmod +x ./entrypoint-prod.sh
 
 CMD ["./entrypoint-prod.sh"]

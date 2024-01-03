@@ -27,9 +27,4 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 
 COPY . ./
 
-RUN groupadd -r appuser && useradd -r -g appuser appuser && \
-    chown -R appuser:appuser /app
-
-USER appuser
-
 CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
