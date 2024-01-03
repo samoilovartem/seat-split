@@ -4,7 +4,8 @@ WORKDIR /app
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    POETRY_VERSION=1.7.1
+    POETRY_VERSION=1.7.1 \
+    GUNICORN_TIMEOUT=0
 
 RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
