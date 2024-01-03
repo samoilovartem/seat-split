@@ -32,7 +32,8 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser && \
 
 RUN mkdir -p /app/media && \
     chown -R appuser:appuser /app/media && \
-    chmod -R 755 /app/media
+    find /app/media -type d -exec chmod 755 {} \; && \
+    find /app/media -type f -exec chmod 644 {} \;
 
 USER appuser
 
