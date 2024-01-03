@@ -94,10 +94,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'config.middlewares.CustomRollbarNotifierMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
-    'querycount.middleware.QueryCountMiddleware',
     'request_logging.middleware.LoggingMiddleware',
     'config.middlewares.SimpleTokenAuthenticationMiddleware',
 ]
+
+if DEBUG:
+    MIDDLEWARE += ['querycount.middleware.QueryCountMiddleware']
 
 TEMPLATES = [
     {
