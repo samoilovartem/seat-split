@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo "Running as user: $(whoami)"
+
 echo "Collecting static files..."
 python manage.py collectstatic --noinput
 
