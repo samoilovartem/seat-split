@@ -30,10 +30,13 @@ COPY . ./
 RUN groupadd -r appuser && useradd -r -g appuser appuser && \
     chown -R appuser:appuser /app
 
-RUN mkdir -p /app/media && \
-    chown -R appuser:appuser /app/media && \
-    find /app/media -type d -exec chmod 755 {} \; && \
-    find /app/media -type f -exec chmod 644 {} \;
+RUN mkdir -p /app/media/avatars && \
+    chown -R appuser:appuser /app/media/avatars && \
+    chmod -R 755 /app/media/avatars
+
+RUN mkdir -p /app/media/django-import-export && \
+    chown -R appuser:appuser /app/media/django-import-export && \
+    chmod -R 755 /app/media/django-import-export
 
 USER appuser
 
