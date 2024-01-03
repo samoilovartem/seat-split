@@ -38,7 +38,7 @@ RUN mkdir -p /app/media/django-import-export && \
     chown -R django_user:django_group /app/media/django-import-export && \
     chown -R django_user:django_group /app/media/avatars && \
     chmod -R 775 /app/media/django-import-export && \
-    chmod -R 775 /app/media/avatars \
+    chmod -R 775 /app/media/avatars
 
 USER django_user
 
