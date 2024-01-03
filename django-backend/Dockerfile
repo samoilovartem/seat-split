@@ -30,8 +30,9 @@ COPY . ./
 RUN groupadd -r django_group && \
     useradd -r -g django_group django_user
 
-USER django_user
+RUN chown -R django_user:django_group /app && \
+    chmod +x ./entrypoint-prod.sh
 
-RUN chmod +x ./entrypoint-prod.sh
+USER django_user
 
 CMD ["./entrypoint-prod.sh"]
