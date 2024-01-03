@@ -30,16 +30,6 @@ COPY . ./
 RUN groupadd -r django_group && \
     useradd -r -g django_group django_user
 
-RUN chown -R django_user:django_group /app
-RUN mkdir -p /app/media/django-import-export && \
-    mkdir -p /app/media/avatars && \
-    chown -R django_user:django_group /app/media && \
-    chmod -R 775 /app/media && \
-    chown -R django_user:django_group /app/media/django-import-export && \
-    chown -R django_user:django_group /app/media/avatars && \
-    chmod -R 775 /app/media/django-import-export && \
-    chmod -R 775 /app/media/avatars
-
 USER django_user
 
 RUN chmod +x ./entrypoint-prod.sh

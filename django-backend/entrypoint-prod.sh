@@ -2,6 +2,9 @@
 
 echo "Running as user: $(whoami)"
 
+chown -R django_user:django_group /app/media
+chmod -R 775 /app/media
+
 echo "Collecting static files..."
 python manage.py collectstatic --noinput
 
