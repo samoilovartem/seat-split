@@ -27,18 +27,20 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 
 COPY . ./
 
-RUN groupadd -r appuser && useradd -r -g appuser appuser && \
-    chown -R appuser:appuser /app
+RUN groupadd -r django_group && \
+    useradd -r -g django_group django_user
 
-RUN mkdir -p /app/media/avatars && \
-    chown -R appuser:appuser /app/media/avatars && \
-    chmod -R 755 /app/media/avatars
-
+RUN chown -R django_user:django_group /app
 RUN mkdir -p /app/media/django-import-export && \
-    chown -R appuser:appuser /app/media/django-import-export && \
-    chmod -R 755 /app/media/django-import-export
+    mkdir -p /app/media/avatars && \
+    chown -R django_user:django_group /app/media && \
+    chmod -R 775 /app/media && \
+    chown -R django_user:django_group /app/media/django-import-export && \
+    chown -R django_user:django_group /app/media/avatars && \
+    chmod -R 775 /app/media/django-import-export && \
+    chmod -R 775 /app/media/avatars \
 
-USER appuser
+USER django_user
 
 RUN chmod +x ./entrypoint-prod.sh
 
