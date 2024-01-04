@@ -13,6 +13,19 @@ class Command(BaseCommand):
             period=IntervalSchedule.DAYS,
         )
 
+        # Every day at 03:00 AM (Clean Old History Daily, Clean Duplicate History Daily)
+        (
+            crontab_schedule_daily_for_history_cleanup,
+            _,
+        ) = CrontabSchedule.objects.get_or_create(
+            minute='0',
+            hour='3',
+            day_of_week='*',
+            day_of_month='*',
+            month_of_year='*',
+            timezone='UTC',
+        )
+
         # Every day at 04:00 AM (Backend Results Cleanup)
         crontab_schedule_daily, _ = CrontabSchedule.objects.get_or_create(
             minute='0',
@@ -37,7 +50,7 @@ class Command(BaseCommand):
         PeriodicTask.objects.update_or_create(
             name='Clean Duplicate History Daily',
             defaults={
-                'interval': interval_schedule_daily,
+                'interval': crontab_schedule_daily_for_history_cleanup,
                 'task': 'apps.stt.tasks.clean_duplicate_history',
             },
         )
@@ -46,7 +59,7 @@ class Command(BaseCommand):
         PeriodicTask.objects.update_or_create(
             name='Clean Old History Daily',
             defaults={
-                'interval': interval_schedule_daily,
+                'interval': crontab_schedule_daily_for_history_cleanup,
                 'task': 'apps.stt.tasks.clean_old_history',
             },
         )
