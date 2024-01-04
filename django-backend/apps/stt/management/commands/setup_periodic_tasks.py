@@ -50,7 +50,7 @@ class Command(BaseCommand):
         PeriodicTask.objects.update_or_create(
             name='Clean Duplicate History Daily',
             defaults={
-                'interval': crontab_schedule_daily_for_history_cleanup,
+                'crontab': crontab_schedule_daily_for_history_cleanup,
                 'task': 'apps.stt.tasks.clean_duplicate_history',
             },
         )
@@ -59,7 +59,7 @@ class Command(BaseCommand):
         PeriodicTask.objects.update_or_create(
             name='Clean Old History Daily',
             defaults={
-                'interval': crontab_schedule_daily_for_history_cleanup,
+                'crontab': crontab_schedule_daily_for_history_cleanup,
                 'task': 'apps.stt.tasks.clean_old_history',
             },
         )
