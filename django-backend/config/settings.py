@@ -69,11 +69,13 @@ INSTALLED_APPS = [
     'health_check.contrib.celery',
     'django_celery_results',
     'django_celery_beat',
+    'notifications',
     # ---- Project's apps ---- #
     'apps.users.apps.UsersConfig',
     'apps.stt.apps.SttConfig',
     'apps.email_domains.apps.EmailDomainsConfig',
     'apps.support.apps.SupportConfig',
+    'apps.in_app_notifications.apps.InAppNotificationsConfig',
 ]
 
 if DEBUG:
