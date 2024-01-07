@@ -248,18 +248,19 @@ def custom_backend_result_cleanup(max_age: int = None) -> None:
 @shared_task
 def fetch_and_send_issues_report():
     """
-    Fetches closed issues from GitHub and prints a report.
+    Fetches closed issues from GitHub and sends a report in multiple Slack messages if needed.
     Important: executes every Sunday.
     """
     reporter = GitHubIssuesReporter(GITHUB_ACCESS_TOKEN)
     issues_by_user = reporter.generate_report(STT_WEEKLY_ISSUES_REPO_NAMES)
 
-    slack_message = reporter.format_slack_message(issues_by_user)
+    slack_messages = reporter.format_slack_messages(issues_by_user)
 
-    send_slack_notification.apply_async(
-        args=(slack_message, STT_WEEKLY_ISSUES_REPORT_CHANNEL_ID),
-        countdown=CELERY_GENERAL_COUNTDOWN,
-    )
+    for message in slack_messages:
+        send_slack_notification.apply_async(
+            args=(message, STT_WEEKLY_ISSUES_REPORT_CHANNEL_ID),
+            countdown=CELERY_GENERAL_COUNTDOWN,
+        )
 
 
 @shared_task

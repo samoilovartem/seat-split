@@ -71,10 +71,13 @@ class GitHubIssuesReporter:
 
         return issues_by_user
 
-    def format_slack_message(self, issues_by_user: dict[str, list[dict]]) -> dict:
+    def format_slack_messages(
+        self, issues_by_user: dict[str, list[dict]]
+    ) -> list[dict]:
         """
-        Formats the issues report as a Slack message.
+        Formats the issues report as a list of Slack messages.
         """
+        messages = []
         blocks = [
             {
                 'type': 'header',
@@ -91,6 +94,18 @@ class GitHubIssuesReporter:
             blocks.append(user_section)
 
             for issue in issues:
+                if len(blocks) >= 47:
+                    messages.append(
+                        {'text': 'Weekly GitHub Issues Report', 'blocks': blocks}
+                    )
+                    blocks = [
+                        {
+                            'type': 'header',
+                            'text': {'type': 'plain_text', 'text': 'Continued...'},
+                        },
+                        {'type': 'divider'},
+                    ]
+
                 issue_title = issue['title']
                 issue_url = issue['html_url']
                 issue_labels = issue['labels']
@@ -108,6 +123,7 @@ class GitHubIssuesReporter:
                 blocks.append(issue_block)
                 blocks.append({'type': 'divider'})
 
-        message = {'text': 'Weekly GitHub Issues Report', 'blocks': blocks}
+        if blocks:
+            messages.append({'text': 'Weekly GitHub Issues Report', 'blocks': blocks})
 
-        return message
+        return messages
