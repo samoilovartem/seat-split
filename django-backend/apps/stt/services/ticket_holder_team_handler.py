@@ -1,4 +1,5 @@
 from loguru import logger
+from notifications.signals import notify
 
 from apps.stt.models import TicketHolderTeam
 from apps.stt.tasks import send_slack_notification, send_ticket_holder_team_confirmed
@@ -44,4 +45,9 @@ class TicketHolderTeamPostSaveHandler:
         send_ticket_holder_team_confirmed.apply_async(
             args=(self.instance.ticket_holder.user.email, self.instance.team.name),
             countdown=CELERY_GENERAL_COUNTDOWN,
+        )
+        notify.send(
+            sender=self.instance,
+            recipient=self.instance.ticket_holder.user,
+            verb=f'Your team "{self.instance.team.name}" data has been confirmed.',
         )
