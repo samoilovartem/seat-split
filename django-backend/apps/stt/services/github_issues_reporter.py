@@ -18,7 +18,7 @@ class GitHubIssuesReporter:
         self.start_date = self.end_date - timedelta(days=7)
         self.issue_title_pattern = r'\[.+\] .+'
 
-    def fetch_closed_issues(self, repo_name: str):
+    def _fetch_closed_issues(self, repo_name: str):
         issues = self.api.issues.list_for_repo(
             repo=repo_name, state='closed', since=self.start_date
         )
@@ -43,41 +43,72 @@ class GitHubIssuesReporter:
 
         return valid_issues
 
-    def generate_report(self, repo_names: list[str]):
+    def _fetch_user_real_name(self, username: str) -> str:
+        """
+        Fetches the real name of a GitHub user given their username.
+        """
+        try:
+            user_data = self.api.users.get_by_username(username)
+            return user_data.name or username
+        except Exception as e:
+            logger.error(f'Error fetching user data for {username}: {e}')
+            return username
+
+    def _process_assignees(
+        self, assignees: list[dict], user_real_names: dict
+    ) -> list[str]:
+        """
+        Process assignees and return a list of real names.
+        """
+        real_names = []
+        for assignee in assignees:
+            username = assignee.get('login')
+            if username not in user_real_names:
+                user_real_names[username] = self._fetch_user_real_name(username)
+            real_names.append(user_real_names[username])
+        return real_names
+
+    def _process_issue(self, issue: dict, user_real_names: dict) -> dict:
+        """
+        Process a single issue and return a dictionary of real names to issue info.
+        """
+        labels = issue.get('labels')
+        label_info = [
+            {'name': label['name'], 'color': label['color']} for label in labels
+        ]
+
+        issue_info = {
+            'title': issue.get('title'),
+            'html_url': issue.get('html_url'),
+            'labels': label_info,
+        }
+
+        assignees = issue.get('assignees', [])
+        real_names = self._process_assignees(assignees, user_real_names)
+
+        return {real_name: issue_info for real_name in real_names}
+
+    def generate_report(self, repo_names: list[str]) -> dict[str, list[dict]]:
+        """Generates a report of closed issues for the given repositories."""
         issues_by_user = {}
+        user_real_names = {}
 
         for repo_name in repo_names:
-            issues = self.fetch_closed_issues(repo_name)
+            issues = self._fetch_closed_issues(repo_name)
             for issue in issues:
                 if not re.match(self.issue_title_pattern, issue.get('title')):
                     continue
 
-                labels = issue.get('labels')
-                label_info = [
-                    {'name': label['name'], 'color': label['color']} for label in labels
-                ]
-
-                issue_info = {
-                    'title': issue.get('title'),
-                    'html_url': issue.get('html_url'),
-                    'labels': label_info,
-                }
-
-                assignees = [
-                    assignee.get('login') for assignee in issue.get('assignees', [])
-                ]
-                for assignee in assignees:
-                    issues_by_user.setdefault(assignee, []).append(issue_info)
+                issue_info_by_user = self._process_issue(issue, user_real_names)
+                for real_name, issue_info in issue_info_by_user.items():
+                    issues_by_user.setdefault(real_name, []).append(issue_info)
 
         return issues_by_user
 
-    def format_slack_messages(
-        self, issues_by_user: dict[str, list[dict]]
-    ) -> list[dict]:
+    def format_slack_message(self, issues_by_user: dict[str, list[dict]]) -> dict:
         """
-        Formats the issues report as a list of Slack messages.
+        Formats the issues report as a Slack message.
         """
-        messages = []
         blocks = [
             {
                 'type': 'header',
@@ -94,36 +125,16 @@ class GitHubIssuesReporter:
             blocks.append(user_section)
 
             for issue in issues:
-                if len(blocks) >= 47:
-                    messages.append(
-                        {'text': 'Weekly GitHub Issues Report', 'blocks': blocks}
-                    )
-                    blocks = [
-                        {
-                            'type': 'header',
-                            'text': {'type': 'plain_text', 'text': 'Continued...'},
-                        },
-                        {'type': 'divider'},
-                    ]
-
                 issue_title = issue['title']
                 issue_url = issue['html_url']
-                issue_labels = issue['labels']
-                label_fields = [f"`{label['name']}`" for label in issue_labels]
 
                 issue_block = {
                     'type': 'section',
                     'text': {'type': 'mrkdwn', 'text': f'<{issue_url}|{issue_title}>'},
                 }
-                if label_fields:
-                    issue_block['fields'] = [
-                        {'type': 'mrkdwn', 'text': label} for label in label_fields
-                    ]
 
                 blocks.append(issue_block)
-                blocks.append({'type': 'divider'})
 
-        if blocks:
-            messages.append({'text': 'Weekly GitHub Issues Report', 'blocks': blocks})
+        message = {'text': 'Weekly GitHub Issues Report', 'blocks': blocks}
 
-        return messages
+        return message
