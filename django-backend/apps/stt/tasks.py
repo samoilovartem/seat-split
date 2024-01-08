@@ -248,7 +248,7 @@ def custom_backend_result_cleanup(max_age: int = None) -> None:
 @shared_task
 def fetch_and_send_issues_report():
     """
-    Fetches closed issues from GitHub and prints a report.
+    Fetches closed issues from GitHub and sends a report in multiple Slack messages if needed.
     Important: executes every Sunday.
     """
     reporter = GitHubIssuesReporter(GITHUB_ACCESS_TOKEN)
