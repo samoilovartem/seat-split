@@ -254,13 +254,12 @@ def fetch_and_send_issues_report():
     reporter = GitHubIssuesReporter(GITHUB_ACCESS_TOKEN)
     issues_by_user = reporter.generate_report(STT_WEEKLY_ISSUES_REPO_NAMES)
 
-    slack_messages = reporter.format_slack_messages(issues_by_user)
+    slack_message = reporter.format_slack_message(issues_by_user)
 
-    for message in slack_messages:
-        send_slack_notification.apply_async(
-            args=(message, STT_WEEKLY_ISSUES_REPORT_CHANNEL_ID),
-            countdown=CELERY_GENERAL_COUNTDOWN,
-        )
+    send_slack_notification.apply_async(
+        args=(slack_message, STT_WEEKLY_ISSUES_REPORT_CHANNEL_ID),
+        countdown=CELERY_GENERAL_COUNTDOWN,
+    )
 
 
 @shared_task
