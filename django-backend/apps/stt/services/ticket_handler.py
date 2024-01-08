@@ -1,6 +1,7 @@
 import json
 
 from loguru import logger
+from notifications.signals import notify
 
 from django.utils import timezone
 
@@ -112,6 +113,11 @@ class TicketPostSaveHandler:
                 self.instance.price,
             ),
             countdown=CELERY_GENERAL_COUNTDOWN,
+        )
+        notify.send(
+            sender=self.instance,
+            recipient=self.instance.ticket_holder.user,
+            verb=f'Your ticket for "{self.instance.event.name}" with seat number "{self.instance.seat}" has been sold.',
         )
 
     def _was_requested_for_delisting(self, previous_status: str) -> bool:

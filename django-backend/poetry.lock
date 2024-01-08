@@ -846,6 +846,37 @@ Django = ">=3.2"
 tablib = {version = "3.5.0", extras = ["html", "ods", "xls", "xlsx", "yaml"]}
 
 [[package]]
+name = "django-model-utils"
+version = "4.3.1"
+description = "Django model mixins and utilities"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "django-model-utils-4.3.1.tar.gz", hash = "sha256:2e2e4f13e4f14613134a9777db7ad4265f59a1d8f1384107bcaa3028fe3c87c1"},
+    {file = "django_model_utils-4.3.1-py3-none-any.whl", hash = "sha256:8c0b0177bab909a8635b602d960daa67e80607aa5469217857271a60726d7a4b"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+
+[[package]]
+name = "django-notifications-hq"
+version = "1.8.3"
+description = "GitHub notifications alike app for Django."
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-notifications-hq-1.8.3.tar.gz", hash = "sha256:0f4b216bb382b7c7c4eef273eb211e59c1c6a0ea38cba6077415ac031d330725"},
+]
+
+[package.dependencies]
+django = ">=3.2"
+django-model-utils = ">=3.1.0"
+jsonfield = ">=2.1.0"
+pytz = "*"
+swapper = "*"
+
+[[package]]
 name = "django-querycount"
 version = "0.8.3"
 description = "Middleware that Prints the number of DB queries to the runserver console."
@@ -1232,6 +1263,20 @@ files = [
     {file = "inflection-0.5.1-py2.py3-none-any.whl", hash = "sha256:f38b2b640938a4f35ade69ac3d053042959b62a0f1076a5bbaa1b9526605a8a2"},
     {file = "inflection-0.5.1.tar.gz", hash = "sha256:1a29730d366e996aaacffb2f1f1cb9593dc38e2ddd30c91250c6dde09ea9b417"},
 ]
+
+[[package]]
+name = "jsonfield"
+version = "3.1.0"
+description = "A reusable Django field that allows you to store validated JSON in your model."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "jsonfield-3.1.0-py3-none-any.whl", hash = "sha256:df857811587f252b97bafba42e02805e70a398a7a47870bc6358a0308dd689ed"},
+    {file = "jsonfield-3.1.0.tar.gz", hash = "sha256:7e4e84597de21eeaeeaaa7cc5da08c61c48a9b64d0c446b2d71255d01812887a"},
+]
+
+[package.dependencies]
+Django = ">=2.2"
 
 [[package]]
 name = "kombu"
@@ -2244,6 +2289,17 @@ doc = ["sphinx"]
 test = ["pytest", "pytest-cov"]
 
 [[package]]
+name = "swapper"
+version = "1.3.0"
+description = "The unofficial Django swappable models API."
+optional = false
+python-versions = "*"
+files = [
+    {file = "swapper-1.3.0-py2.py3-none-any.whl", hash = "sha256:5d7667c0bfcd2f27e10c77d8096925eb547764d7b9ff4824430aa9b3c63b7aa0"},
+    {file = "swapper-1.3.0.tar.gz", hash = "sha256:48a814f67be1abefe6c1495013808d1ff8e6b294f78384c88f5a93b81f7015fd"},
+]
+
+[[package]]
 name = "tablib"
 version = "3.5.0"
 description = "Format agnostic tabular data library (XLS, JSON, YAML, CSV, etc.)"
@@ -2524,4 +2580,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "ddd4c1ce051aec0c0a14322e75fc9eeecee5723ef6e40ba04f6133a38f743a6a"
+content-hash = "8b935e03f1ced83379607bffe3eb1e0f2e03e8ea3db2e0b8182943389a0ae0cd"
