@@ -11,7 +11,10 @@ from apps.stt.tasks import (
     send_slack_notification,
     send_ticket_sold_email,
 )
-from apps.stt.utils import create_ticket_status_requested_for_delisting_slack_message
+from apps.stt.utils import (
+    calculate_price_with_expenses,
+    create_ticket_status_requested_for_delisting_slack_message,
+)
 from config.components.business_related import DELIVERY_STATUSES, MARKETPLACES
 from config.components.celery import (
     CELERY_AGGREGATED_SLACK_NOTIFICATION_COUNTDOWN,
@@ -86,6 +89,10 @@ class TicketPostSaveHandler:
             self._handle_ticket_sold()
         elif self._was_requested_for_delisting(previous_status):
             self._handle_ticket_requested_for_delisting()
+        elif self._was_delisted(previous_status):
+            self._handle_ticket_delisted()
+        elif self._was_listed(previous_status):
+            self._handle_ticket_listed()
 
     def _was_sold(self, previous_status: str) -> bool:
         """Check if the ticket was sold."""
@@ -117,7 +124,8 @@ class TicketPostSaveHandler:
         notify.send(
             sender=self.instance,
             recipient=self.instance.ticket_holder.user,
-            verb=f'Your ticket for "{self.instance.event.name}" with seat number "{self.instance.seat}" has been sold.',
+            verb=f'Your ticket for "{self.instance.event.name}" with seat number "{self.instance.seat}" has been sold '
+            f'for ${calculate_price_with_expenses(self.instance.price)}.',
         )
 
     def _was_requested_for_delisting(self, previous_status: str) -> bool:
@@ -138,4 +146,32 @@ class TicketPostSaveHandler:
         send_slack_notification.apply_async(
             args=(message, STT_NOTIFICATIONS_CHANNEL_ID),
             countdown=CELERY_GENERAL_COUNTDOWN,
+        )
+
+    def _was_listed(self, previous_status: str) -> bool:
+        """Check if the ticket was listed."""
+        return self.instance.listing_status == 'Listed' and previous_status != 'Listed'
+
+    def _handle_ticket_listed(self) -> None:
+        """Logic for when a ticket is listed."""
+        notify.send(
+            sender=self.instance,
+            recipient=self.instance.ticket_holder.user,
+            verb=f'Your ticket for "{self.instance.event.name}" with seat number "{self.instance.seat}" has been '
+            f'listed for ${calculate_price_with_expenses(self.instance.price)}.',
+        )
+
+    def _was_delisted(self, previous_status: str) -> bool:
+        """Check if the ticket was delisted."""
+        return (
+            self.instance.listing_status == 'Delisted' and previous_status != 'Delisted'
+        )
+
+    def _handle_ticket_delisted(self) -> None:
+        """Logic for when a ticket is delisted."""
+        notify.send(
+            sender=self.instance,
+            recipient=self.instance.ticket_holder.user,
+            verb=f'Your ticket for "{self.instance.event.name}" with seat number "{self.instance.seat}" has been '
+            f'delisted.',
         )
