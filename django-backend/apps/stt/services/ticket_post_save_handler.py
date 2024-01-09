@@ -6,7 +6,6 @@ from apps.stt.services.ticket_services import (
     TicketNotifier,
     TicketStatusChecker,
 )
-from config.components.global_settings import DEBUG
 
 
 class TicketPostSaveHandler:
@@ -26,10 +25,6 @@ class TicketPostSaveHandler:
         )
 
     def handle(self) -> None:
-        if DEBUG:
-            self._send_debug_logger_slack_message()
-            return
-
         if self.created:
             self._handle_ticket_creation()
         self._handle_ticket_status_change()
