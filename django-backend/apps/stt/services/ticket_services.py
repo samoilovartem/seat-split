@@ -23,7 +23,7 @@ from config.components.redis import REDIS_NEW_TICKETS_KEY_EXPIRE
 from config.components.slack_integration import STT_NOTIFICATIONS_CHANNEL_ID
 
 
-class TicketNotifier:
+class TicketInAppNotifier:
     def __init__(self, ticket):
         self.ticket = ticket
 
@@ -32,20 +32,6 @@ class TicketNotifier:
             f'Event: {self.ticket.event.name}, \n'
             f'Date: {self.ticket.event.date_time.strftime("%Y-%m-%d %H:%M")} (UTC), \n'
             f'Section: {self.ticket.section}, Row: {self.ticket.row}, Seat: {self.ticket.seat}'
-        )
-
-    def send_ticket_sold_email(self):
-        send_ticket_sold_email.apply_async(
-            args=(
-                self.ticket.ticket_holder.user.email,
-                self.ticket.event.name,
-                self.ticket.event.date_time,
-                self.ticket.section,
-                self.ticket.row,
-                self.ticket.seat,
-                self.ticket.price,
-            ),
-            countdown=CELERY_GENERAL_COUNTDOWN,
         )
 
     def send_ticket_sold_notification(self):
@@ -60,15 +46,6 @@ class TicketNotifier:
             recipient=self.ticket.ticket_holder.user,
             verb=verb,
             description=description,
-        )
-
-    def send_ticket_requested_for_delisting_notification(self):
-        message = create_ticket_status_requested_for_delisting_slack_message(
-            self.ticket
-        )
-        send_slack_notification.apply_async(
-            args=(message, STT_NOTIFICATIONS_CHANNEL_ID),
-            countdown=CELERY_GENERAL_COUNTDOWN,
         )
 
     def send_ticket_listed_notification(self):
@@ -97,6 +74,44 @@ class TicketNotifier:
             verb=verb,
             description=description,
         )
+
+
+class TicketNotifier:
+    def __init__(self, ticket):
+        self.ticket = ticket
+        self.in_app_notifier = TicketInAppNotifier(ticket)
+
+    def send_ticket_sold_email(self):
+        send_ticket_sold_email.apply_async(
+            args=(
+                self.ticket.ticket_holder.user.email,
+                self.ticket.event.name,
+                self.ticket.event.date_time,
+                self.ticket.section,
+                self.ticket.row,
+                self.ticket.seat,
+                self.ticket.price,
+            ),
+            countdown=CELERY_GENERAL_COUNTDOWN,
+        )
+
+    def send_ticket_sold_notification(self):
+        self.in_app_notifier.send_ticket_sold_notification()
+
+    def send_ticket_requested_for_delisting_notification(self):
+        message = create_ticket_status_requested_for_delisting_slack_message(
+            self.ticket
+        )
+        send_slack_notification.apply_async(
+            args=(message, STT_NOTIFICATIONS_CHANNEL_ID),
+            countdown=CELERY_GENERAL_COUNTDOWN,
+        )
+
+    def send_ticket_listed_notification(self):
+        self.in_app_notifier.send_ticket_listed_notification()
+
+    def send_ticket_delisted_notification(self):
+        self.in_app_notifier.send_ticket_delisted_notification()
 
     def send_aggregated_slack_notification(self):
         send_aggregated_slack_notification.apply_async(
