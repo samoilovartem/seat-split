@@ -23,9 +23,63 @@ from config.components.redis import REDIS_NEW_TICKETS_KEY_EXPIRE
 from config.components.slack_integration import STT_NOTIFICATIONS_CHANNEL_ID
 
 
+class TicketInAppNotifier:
+    def __init__(self, ticket):
+        self.ticket = ticket
+
+    def _format_ticket_details(self):
+        return (
+            f'Event: {self.ticket.event.name}, \n'
+            f'Date: {self.ticket.event.date_time.strftime("%Y-%m-%d %H:%M")} (UTC), \n'
+            f'Section: {self.ticket.section}, Row: {self.ticket.row}, Seat: {self.ticket.seat}'
+        )
+
+    def send_ticket_sold_notification(self):
+        verb = 'Ticket Sold'
+        description = (
+            f'Your ticket with the following details has been sold for '
+            f'${calculate_price_with_expenses(self.ticket.price)}: \n\n'
+            f'{self._format_ticket_details()}'
+        )
+        notify.send(
+            sender=self.ticket,
+            recipient=self.ticket.ticket_holder.user,
+            verb=verb,
+            description=description,
+        )
+
+    def send_ticket_listed_notification(self):
+        verb = 'Ticket Listed'
+        description = (
+            f'Your ticket with the following details has been listed for '
+            f'${calculate_price_with_expenses(self.ticket.price)}: \n\n'
+            f'{self._format_ticket_details()}'
+        )
+        notify.send(
+            sender=self.ticket,
+            recipient=self.ticket.ticket_holder.user,
+            verb=verb,
+            description=description,
+        )
+
+    def send_ticket_delisted_notification(self):
+        verb = 'Ticket Delisted'
+        description = (
+            f'Your ticket with the following details has been delisted: \n\n'
+            f'{self._format_ticket_details()}'
+        )
+        notify.send(
+            sender=self.ticket,
+            recipient=self.ticket.ticket_holder.user,
+            verb=verb,
+            description=description,
+        )
+
+
 class TicketNotifier:
     def __init__(self, ticket):
         self.ticket = ticket
+        self.in_app_notifier = TicketInAppNotifier(ticket)
 
     def send_ticket_sold_email(self):
         send_ticket_sold_email.apply_async(
@@ -42,12 +96,7 @@ class TicketNotifier:
         )
 
     def send_ticket_sold_notification(self):
-        notify.send(
-            sender=self.ticket,
-            recipient=self.ticket.ticket_holder.user,
-            verb=f'Your ticket for "{self.ticket.event.name}" with seat number "{self.ticket.seat}" has been sold '
-            f'for ${calculate_price_with_expenses(self.ticket.price)}.',
-        )
+        self.in_app_notifier.send_ticket_sold_notification()
 
     def send_ticket_requested_for_delisting_notification(self):
         message = create_ticket_status_requested_for_delisting_slack_message(
@@ -59,20 +108,10 @@ class TicketNotifier:
         )
 
     def send_ticket_listed_notification(self):
-        notify.send(
-            sender=self.ticket,
-            recipient=self.ticket.ticket_holder.user,
-            verb=f'Your ticket for "{self.ticket.event.name}" with seat number "{self.ticket.seat}" has been '
-            f'listed for ${calculate_price_with_expenses(self.ticket.price)}.',
-        )
+        self.in_app_notifier.send_ticket_listed_notification()
 
     def send_ticket_delisted_notification(self):
-        notify.send(
-            sender=self.ticket,
-            recipient=self.ticket.ticket_holder.user,
-            verb=f'Your ticket for "{self.ticket.event.name}" with seat number "{self.ticket.seat}" has been '
-            f'delisted.',
-        )
+        self.in_app_notifier.send_ticket_delisted_notification()
 
     def send_aggregated_slack_notification(self):
         send_aggregated_slack_notification.apply_async(
