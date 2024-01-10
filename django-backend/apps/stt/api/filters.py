@@ -12,6 +12,9 @@ class TicketFilter(FilterSet):
     event__date_time_gte = DateTimeFilter(
         field_name='event__date_time', lookup_expr='gte'
     )
+    event__date_time_lte = DateTimeFilter(
+        field_name='event__date_time', lookup_expr='lte'
+    )
 
     class Meta:
         model = Ticket
