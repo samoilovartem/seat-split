@@ -1,4 +1,4 @@
-from django_filters import DateTimeFilter, FilterSet
+from django_filters import CharFilter, DateTimeFilter, FilterSet
 
 from apps.stt.models import Event, Purchase, Team, Ticket
 from config.components.django_filters import (
@@ -15,6 +15,7 @@ class TicketFilter(FilterSet):
     event__date_time_lte = DateTimeFilter(
         field_name='event__date_time', lookup_expr='lte'
     )
+    exclude_listing_status = CharFilter(method='filter_exclude_listing_status')
 
     class Meta:
         model = Ticket
@@ -25,6 +26,9 @@ class TicketFilter(FilterSet):
             'sold_at',
             'event__season__name',
         )
+
+    def filter_exclude_listing_status(self, queryset, name, value):
+        return queryset.exclude(listing_status=value)
 
 
 class TeamFilterSet(FilterSet):
