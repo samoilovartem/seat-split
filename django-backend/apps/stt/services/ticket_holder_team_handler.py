@@ -46,8 +46,15 @@ class TicketHolderTeamPostSaveHandler:
             args=(self.instance.ticket_holder.user.email, self.instance.team.name),
             countdown=CELERY_GENERAL_COUNTDOWN,
         )
+        description = (
+            f'Your team with the following details has been confirmed: \n\n'
+            f'Team: {self.instance.team.name} \n'
+            f'Section: {self.instance.section}, Row: {self.instance.row}, Seat: {self.instance.seat} \n\n'
+            f'You can start selling tickets right away.'
+        )
         notify.send(
             sender=self.instance,
             recipient=self.instance.ticket_holder.user,
-            verb=f'Your team "{self.instance.team.name}" data has been confirmed.',
+            verb='Team Data Confirmed',
+            description=description,
         )
