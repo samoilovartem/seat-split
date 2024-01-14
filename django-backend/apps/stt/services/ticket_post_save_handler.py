@@ -1,4 +1,5 @@
 from loguru import logger
+from redis import Redis
 
 from apps.stt.models import Ticket
 from apps.stt.services.ticket_services import (
@@ -10,7 +11,10 @@ from apps.stt.services.ticket_services import (
 
 class TicketPostSaveHandler:
     def __init__(
-        self, instance: Ticket, created: bool = False, redis_celery_connection=None
+        self,
+        instance: Ticket,
+        created: bool = False,
+        redis_celery_connection: Redis = None,
     ):
         self.instance = instance
         self.created = created
