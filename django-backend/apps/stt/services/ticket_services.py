@@ -1,10 +1,11 @@
 import json
 
 from notifications.signals import notify
+from redis import Redis
 
 from django.utils import timezone
 
-from apps.stt.models import Purchase
+from apps.stt.models import Purchase, Ticket
 from apps.stt.tasks import (
     send_aggregated_slack_notification,
     send_slack_notification,
@@ -24,7 +25,7 @@ from config.components.slack_integration import STT_NOTIFICATIONS_CHANNEL_ID
 
 
 class TicketInAppNotifier:
-    def __init__(self, ticket):
+    def __init__(self, ticket: Ticket):
         self.ticket = ticket
 
     def _format_ticket_details(self):
@@ -77,7 +78,7 @@ class TicketInAppNotifier:
 
 
 class TicketNotifier:
-    def __init__(self, ticket):
+    def __init__(self, ticket: Ticket):
         self.ticket = ticket
         self.in_app_notifier = TicketInAppNotifier(ticket)
 
@@ -121,22 +122,22 @@ class TicketNotifier:
 
 
 class TicketStatusChecker:
-    def __init__(self, ticket):
+    def __init__(self, ticket: Ticket):
         self.ticket = ticket
 
-    def was_sold(self, previous_status):
+    def was_sold(self, previous_status: str):
         return self.ticket.listing_status == 'Sold' and previous_status != 'Sold'
 
-    def was_requested_for_delisting(self, previous_status):
+    def was_requested_for_delisting(self, previous_status: str):
         return (
             self.ticket.listing_status == 'Requested for delisting'
             and previous_status != 'Requested for delisting'
         )
 
-    def was_listed(self, previous_status):
+    def was_listed(self, previous_status: str):
         return self.ticket.listing_status == 'Listed' and previous_status != 'Listed'
 
-    def was_delisted(self, previous_status):
+    def was_delisted(self, previous_status: str):
         return (
             self.ticket.listing_status == 'Delisted' and previous_status != 'Delisted'
         )
@@ -153,7 +154,7 @@ class TicketStatusChecker:
 
 
 class TicketCacheService:
-    def __init__(self, ticket, redis_celery_connection):
+    def __init__(self, ticket: Ticket, redis_celery_connection: Redis):
         self.ticket = ticket
         self.redis_celery_connection = redis_celery_connection
 
