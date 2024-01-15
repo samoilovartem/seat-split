@@ -13,6 +13,7 @@ from apps.stt.tasks import (
 )
 from apps.stt.utils import (
     calculate_price_with_expenses,
+    create_ticket_relisted_slack_message,
     create_ticket_status_requested_for_delisting_slack_message,
 )
 from config.components.business_related import DELIVERY_STATUSES, MARKETPLACES
@@ -108,6 +109,13 @@ class TicketNotifier:
             countdown=CELERY_GENERAL_COUNTDOWN,
         )
 
+    def send_ticket_relisted_notification(self):
+        message = create_ticket_relisted_slack_message(self.ticket)
+        send_slack_notification.apply_async(
+            args=(message, STT_NOTIFICATIONS_CHANNEL_ID),
+            countdown=CELERY_GENERAL_COUNTDOWN,
+        )
+
     def send_ticket_listed_notification(self):
         self.in_app_notifier.send_ticket_listed_notification()
 
@@ -136,6 +144,9 @@ class TicketStatusChecker:
 
     def was_listed(self, previous_status: str):
         return self.ticket.listing_status == 'Listed' and previous_status != 'Listed'
+
+    def was_relisted(self, previous_status: str):
+        return self.ticket.listing_status == 'Pending' and previous_status == 'Delisted'
 
     def was_delisted(self, previous_status: str):
         return (
