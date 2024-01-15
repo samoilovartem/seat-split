@@ -10,6 +10,7 @@ STT_NOTIFICATIONS_EMOJI = {
         'TICKET_HOLDER_TEAM_CREATED', ':sparkle:'
     ),
     'TICKET_DELISTING_REQUEST': os.environ.get('TICKET_DELISTING_REQUEST', ':x:'),
+    'TICKET_RELISTING_REQUEST': os.environ.get('TICKET_RELISTING_REQUEST', ':zap:'),
 }
 
 STT_WEEKLY_ISSUES_REPO_NAMES = ['stt_django_backend', 'sst_frontend']
