@@ -53,3 +53,5 @@ class TicketPostSaveHandler:
             self.notifier.send_ticket_listed_notification()
         elif self.status_checker.was_delisted(previous_status):
             self.notifier.send_ticket_delisted_notification()
+        elif self.status_checker.was_relisted(previous_status):
+            self.notifier.send_ticket_relisted_notification()
