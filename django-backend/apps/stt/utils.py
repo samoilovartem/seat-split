@@ -58,9 +58,7 @@ def get_confirmation_link(user_id: UUID, specific_path: str):
     token = default_token_generator.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-    confirmation_link = (
-        f'https://{EMAIL_FRONTEND_BASE_URL}/api/{specific_path}?uid={uid}&token={token}'
-    )
+    confirmation_link = f'https://{EMAIL_FRONTEND_BASE_URL}/api/{specific_path}?uid={uid}&token={token}'  # noqa: E231
 
     return confirmation_link
 
@@ -84,11 +82,20 @@ def create_ticket_status_requested_for_delisting_slack_message(
                 'fields': [
                     {
                         'type': 'mrkdwn',
-                        'text': f'*TICKET HOLDER:*\n{instance.ticket_holder}',
+                        'text': f'*TICKET HOLDER:*\n{instance.ticket_holder}',  # noqa: E231
                     },
-                    {'type': 'mrkdwn', 'text': f'*ID:*\n`{instance.ticket_holder.id}`'},
-                    {'type': 'mrkdwn', 'text': f'*EVENT:*\n{instance.event}'},
-                    {'type': 'mrkdwn', 'text': f'*TICKET ID:*\n`{instance.id}`'},
+                    {
+                        'type': 'mrkdwn',
+                        'text': f'*ID:*\n`{instance.ticket_holder.id}`',  # noqa: E231
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': f'*EVENT:*\n{instance.event}',  # noqa: E231
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': f'*TICKET ID:*\n`{instance.id}`',  # noqa: E231
+                    },
                 ],
             },
             {'type': 'divider'},
@@ -109,7 +116,8 @@ def create_ticket_holder_team_slack_message(
 ) -> dict[str, str]:
     """Function to create the Slack message payload for TicketHolderTeam."""
     return {
-        'text': f"New Ticket Holder's Team {instance.id} for {instance.ticket_holder} - {instance.team} has been added!",
+        'text': f"New Ticket Holder's Team {instance.id} for "
+        f"{instance.ticket_holder} - {instance.team} has been added!",
         'blocks': [
             {
                 'type': 'header',
@@ -123,19 +131,19 @@ def create_ticket_holder_team_slack_message(
                 'fields': [
                     {
                         'type': 'mrkdwn',
-                        'text': f"*TICKET HOLDER:*\n{instance.ticket_holder}",
+                        'text': f"*TICKET HOLDER:*\n{instance.ticket_holder}",  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*TICKET HOLDER ID:*\n`{instance.ticket_holder.id}`",
+                        'text': f"*TICKET HOLDER ID:*\n`{instance.ticket_holder.id}`",  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*TEAM:*\n{instance.team}",
+                        'text': f"*TEAM:*\n{instance.team}",  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*TICKET HOLDER'S TEAM ID:*\n`{instance.id}`",
+                        'text': f"*TICKET HOLDER'S TEAM ID:*\n`{instance.id}`",  # noqa: E231
                     },
                 ],
             },
@@ -186,25 +194,25 @@ def create_ticket_created_slack_message(
                 'fields': [
                     {
                         'type': 'mrkdwn',
-                        'text': f"*TICKET HOLDER:*\n{ticket_holder}",
+                        'text': f"*TICKET HOLDER:*\n{ticket_holder}",  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*EVENT:*\n{event}",
+                        'text': f"*EVENT:*\n{event}",  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*SECTION:*\n{section}",
+                        'text': f"*SECTION:*\n{section}",  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*ROW:*\n{row}",
+                        'text': f"*ROW:*\n{row}",  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*SEAT :*\n{seats_text}"
+                        'text': f"*SEAT:*\n{seats_text}"  # noqa: E231
                         if tickets_data_length == 1
-                        else f"*SEATS :*\n{seats_text}",
+                        else f"*SEATS:*\n{seats_text}",  # noqa: E231
                     },
                 ],
             },
@@ -217,6 +225,61 @@ def create_ticket_created_slack_message(
                     if tickets_data_length == 1
                     else "New tickets have been created. "
                     "Please review the details and take necessary actions.",
+                },
+            },
+        ],
+    }
+
+
+def create_ticket_relisted_slack_message(ticket: Ticket) -> dict[str, str]:
+    """Function to create the Slack message payload for a relisted Ticket."""
+    ticket_link = (
+        f"<{STT_NOTIFICATIONS_CHANNEL_TICKET_URL}/{ticket.id}/change/|View Ticket>"
+    )
+
+    return {
+        'text': f"Ticket for {ticket.ticket_holder} is requested to be relisted!",
+        'blocks': [
+            {
+                'type': 'header',
+                'text': {
+                    'type': 'plain_text',
+                    'text': f"Ticket Relisting Alert {STT_NOTIFICATIONS_EMOJI['TICKET_RELISTING_REQUEST']}",
+                },
+            },
+            {
+                'type': 'section',
+                'fields': [
+                    {
+                        'type': 'mrkdwn',
+                        'text': f"*TICKET HOLDER:*\n{ticket.ticket_holder}",  # noqa: E231
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': f"*EVENT:*\n{ticket.event.name}",  # noqa: E231
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': f"*SECTION:*\n{ticket.section}",  # noqa: E231
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': f"*ROW:*\n{ticket.row}",  # noqa: E231
+                    },
+                    {
+                        'type': 'mrkdwn',
+                        'text': f"*SEAT:*\n{ticket.seat}",  # noqa: E231
+                    },
+                ],
+            },
+            {'type': 'divider'},
+            {
+                'type': 'section',
+                'text': {
+                    'type': 'mrkdwn',
+                    'text': "The ticket is requested to be relisted. "
+                    "Please review the details and take necessary actions. \n\n"
+                    f"{ticket_link}",
                 },
             },
         ],
