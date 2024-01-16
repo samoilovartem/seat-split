@@ -122,7 +122,7 @@ class SimpleEventSerializer(FlexFieldsModelSerializer):
         Convert `date_time` to the timezone specified in the TicketHolder's profile
         before serializing the object.
         """
-        ret = super().to_representation(instance)
+        representation = super().to_representation(instance)
         request = self.context.get('request')
 
         if request and hasattr(request.user, 'ticket_holder_user'):
@@ -132,8 +132,9 @@ class SimpleEventSerializer(FlexFieldsModelSerializer):
         else:
             date_time = localtime(instance.date_time)
 
-        ret['date_time'] = date_time.strftime('%Y-%m-%d %H:%M')
-        return ret
+        representation['name'] = instance.get_formatted_name()
+        representation['date_time'] = date_time.strftime('%Y-%m-%d %H:%M')
+        return representation
 
 
 class TicketSerializer(ShowAllSeatsMixin, FlexFieldsModelSerializer):
@@ -180,6 +181,11 @@ class EventSerializer(FlexFieldsModelSerializer):
         teams = [team_event.team for team_event in team_events]
 
         return TeamSerializer(teams, many=True).data
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['name'] = instance.get_formatted_name()
+        return representation
 
 
 class PurchaseSerializer(FlexFieldsModelSerializer):
