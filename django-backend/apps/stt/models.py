@@ -149,6 +149,11 @@ class Event(models.Model):
     def __str__(self):
         return f'{self.name} | {self.date_time.strftime("%m/%d/%Y")}'
 
+    def get_formatted_name(self):
+        if self.additional_info:
+            return f'{self.name} ({self.additional_info})'
+        return self.name
+
 
 class Venue(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
