@@ -50,6 +50,20 @@ Current repository is a backend part of comprehensive STT project, which is a wo
 - **Dockerfile-prod** - file-instruction of how to build docker image for production deployment in case we use VPS.
 - **pyproject.toml** - custom project's settings. This file contains all necessary information about the project itself, dev and prod dependencies. Used to create `dev-requirements.txt` and `prod-requirements.txt` files.
 
+### Important environment variables:
+
+First of all, check out `.env.dev.example` file. It contains all necessary environment variables that are used in the project.
+Here is the detailed explanation of some of them (the rest are self-explanatory):
+- `ROLLBAR_ACCESS_TOKEN` - token for [Rollbar](https://rollbar.com/) service, which is used for error tracking.
+- `CELERY_AGGREGATED_SLACK_NOTIFICATION_COUNTDOWN` - countdown for Celery task, which aggregates all ticket created notifications and sends them to Slack.
+- `STT_NOTIFICATIONS_BOT_API_TOKEN` - token for [Slack](https://slack.com/) bot, which is used for sending notifications to Slack.
+- `STT_NOTIFICATIONS_CHANNEL_ID` and `STT_WEEKLY_ISSUES_REPORT_CHANNEL_ID` - ids of Slack channels, where notifications and weekly reports are sent. For test purposes we are using `#test-channel` channel with id `C06BH3YAPV4`.
+- `HEALTH_CHECK_TOKEN` - token for health check endpoint. Used for monitoring purposes. Basically you are the one who generates it and inputs as an environment variable. Then you use it while sending requests to health check endpoint.
+- `BUSINESS_TOTAL_EXPENSES` - percentage of total expenses that are used for business purposes. For example, if we list clint's ticket for $100 and our percentage is 20% (insert as 0.2), then client will get $80 and we will get $20.
+- `GENERATE_EMAILS_TOKEN` - token for `/generate_random_data_with_provided_domain_or_state/` endpoint. Used for generating random emails with provided domain or state.
+- `GITHUB_ACCESS_TOKEN` - token for Weekly Issues Report. Used for getting all issues from Github and sending them to Slack.
+
+
 ### Deployment to Heroku
 
 #### Using Container Registry:
