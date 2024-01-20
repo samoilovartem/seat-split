@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 class TimezoneListView(APIView):
     """Returns a list of all timezones."""
 
-    def get(self, request, format=None):
+    def get(self, request):
         timezones = common_timezones
         response_data = {
             'meta': {
