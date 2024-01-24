@@ -17,7 +17,7 @@ start_django() {
     python manage.py setup_periodic_tasks
 
     echo "Starting server..."
-    gunicorn --timeout "$GUNICORN_TIMEOUT" --bind 0.0.0.0:"$PORT" config.wsgi:application
+    gunicorn --timeout "$GUNICORN_TIMEOUT" --workers 3 --bind 0.0.0.0:"$PORT" config.wsgi:application
 
     echo "Server has started!"
 }
