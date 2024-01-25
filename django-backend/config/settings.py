@@ -6,7 +6,7 @@ from split_settings.tools import include
 
 from config.components.global_settings import BASE_DIR, DEBUG
 
-dotenv_file = BASE_DIR / ('.env.dev' if DEBUG else '.env.prod')
+dotenv_file = os.path.join(BASE_DIR, '.env')
 if os.path.isfile(dotenv_file):
     load_dotenv(dotenv_file)
 
