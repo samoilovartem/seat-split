@@ -7,7 +7,7 @@ services:
       dockerfile: "Dockerfile-dev"
     container_name: stt_django
     env_file:
-      - ./django-backend/.env.dev
+      - django-backend/.env
     volumes:
       - ./django-backend:/app
     ports:
@@ -21,7 +21,7 @@ services:
     image: postgres
     container_name: stt_pgdb
     env_file:
-      - ./django-backend/.env.dev
+      - django-backend/.env
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
@@ -37,7 +37,7 @@ services:
     command: celery -A config worker --loglevel=info
     container_name: stt_celery
     env_file:
-      - ./django-backend/.env.dev
+      - django-backend/.env
     volumes:
       - ./django-backend:/app
     depends_on:
@@ -53,7 +53,7 @@ services:
     command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     container_name: stt_celery_beat
     env_file:
-      - ./django-backend/.env.dev
+      - django-backend/.env
     volumes:
       - ./django-backend:/app
     depends_on:
