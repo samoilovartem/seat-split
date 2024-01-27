@@ -10,6 +10,4 @@ urlpatterns = [
     path('', include('apps.urls')),
 ]
 
-urlpatterns += swagger_urls + [
-    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT})
-]
+urlpatterns += swagger_urls + [re_path(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT})]

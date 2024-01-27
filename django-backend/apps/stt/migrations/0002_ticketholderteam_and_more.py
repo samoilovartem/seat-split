@@ -29,9 +29,7 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 (
                     'team',
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to='stt.team'
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stt.team'),
                 ),
                 (
                     'ticket_holder',

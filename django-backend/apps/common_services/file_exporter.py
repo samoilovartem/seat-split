@@ -38,9 +38,7 @@ class CSVExporter:
         """
         invalid_exclude_fields = self._get_invalid_fields(self.exclude_fields)
         if invalid_exclude_fields:
-            return self._error_response(
-                'Invalid exclude_field(s)', invalid_exclude_fields
-            )
+            return self._error_response('Invalid exclude_field(s)', invalid_exclude_fields)
 
         if self.include_fields:
             invalid_include_fields = self._get_invalid_fields(self.include_fields)

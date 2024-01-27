@@ -24,9 +24,7 @@ class TicketPostSaveHandler:
 
     @staticmethod
     def _send_debug_logger_slack_message() -> None:
-        logger.info(
-            'DEBUG MODE: Slack notification has not been sent due to DEBUG mode.'
-        )
+        logger.info('DEBUG MODE: Slack notification has not been sent due to DEBUG mode.')
 
     def handle(self) -> None:
         if self.created:

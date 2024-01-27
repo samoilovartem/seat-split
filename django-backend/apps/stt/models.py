@@ -31,9 +31,7 @@ class TicketHolder(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
-    user = models.OneToOneField(
-        User, related_name='ticket_holder_user', on_delete=models.CASCADE
-    )
+    user = models.OneToOneField(User, related_name='ticket_holder_user', on_delete=models.CASCADE)
     phone = models.CharField(
         verbose_name='Phone number',
         blank=True,
@@ -43,16 +41,12 @@ class TicketHolder(models.Model):
     is_card_interest = models.BooleanField(default=False)
     is_season_ticket_interest = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    avatar = models.ImageField(
-        upload_to=ticket_holder_avatar_path, null=True, blank=True
-    )
-    timezone = models.CharField(
-        max_length=255, choices=[(tz, tz) for tz in common_timezones], default='UTC'
-    )
+    avatar = models.ImageField(upload_to=ticket_holder_avatar_path, null=True, blank=True)
+    timezone = models.CharField(max_length=255, choices=[(tz, tz) for tz in common_timezones], default='UTC')
     history = HistoricalRecords()
 
     class Meta:
-        db_table = "content\".\"ticket_holder"
+        db_table = 'content"."ticket_holder'
         verbose_name = 'Ticket Holder'
         verbose_name_plural = 'Ticket Holders'
 
@@ -75,7 +69,7 @@ class Ticket(models.Model):
     history = HistoricalRecords()
 
     class Meta:
-        db_table = "content\".\"ticket"
+        db_table = 'content"."ticket'
         verbose_name = 'Ticket'
         verbose_name_plural = 'Tickets'
         constraints = (
@@ -106,7 +100,7 @@ class Purchase(models.Model):
     history = HistoricalRecords()
 
     class Meta:
-        db_table = "content\".\"purchase"
+        db_table = 'content"."purchase'
         verbose_name = 'Purchase'
         verbose_name_plural = 'Purchases'
 
@@ -120,19 +114,15 @@ class Event(models.Model):
     name = models.CharField(max_length=255)
     additional_info = models.CharField(max_length=255, default='')
     date_time = models.DateTimeField()
-    season = models.ForeignKey(
-        'Season', on_delete=models.SET_NULL, null=True, related_name='events'
-    )
-    venue = models.ForeignKey(
-        'Venue', on_delete=models.SET_NULL, null=True, related_name='events'
-    )
+    season = models.ForeignKey('Season', on_delete=models.SET_NULL, null=True, related_name='events')
+    venue = models.ForeignKey('Venue', on_delete=models.SET_NULL, null=True, related_name='events')
     stubhub_event_url = models.TextField(blank=True, default='')
     league = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     history = HistoricalRecords()
 
     class Meta:
-        db_table = "content\".\"event"
+        db_table = 'content"."event'
         verbose_name = 'Event'
         verbose_name_plural = 'Events'
         constraints = (
@@ -169,7 +159,7 @@ class Venue(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = "content\".\"venue"
+        db_table = 'content"."venue'
         verbose_name = 'Venue'
         verbose_name_plural = 'Venues'
         permissions = (
@@ -196,9 +186,7 @@ class Team(models.Model):
     league = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=255)
-    home_venue = models.ForeignKey(
-        Venue, on_delete=models.PROTECT, null=True, related_name='home_teams'
-    )
+    home_venue = models.ForeignKey(Venue, on_delete=models.PROTECT, null=True, related_name='home_teams')
     logo = models.FileField(upload_to='logos/', null=True, blank=True)
     ticketmaster_id = models.IntegerField()
     timezone = models.CharField(max_length=255)
@@ -207,7 +195,7 @@ class Team(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = "content\".\"team"
+        db_table = 'content"."team'
         verbose_name = 'Team'
         verbose_name_plural = 'Teams'
         permissions = (
@@ -228,9 +216,7 @@ class Season(models.Model):
         max_length=255,
         help_text='The name or title of the season. For example, "2023", "2023-2024".',
     )
-    start_year = models.IntegerField(
-        help_text='The calendar year when the season starts'
-    )
+    start_year = models.IntegerField(help_text='The calendar year when the season starts')
     league = models.CharField(
         max_length=255,
         choices=((league, league) for league in SUPPORTED_LEAGUES),
@@ -287,7 +273,7 @@ class Season(models.Model):
     history = HistoricalRecords()
 
     class Meta:
-        db_table = "content\".\"season"
+        db_table = 'content"."season'
         verbose_name = 'Season'
         verbose_name_plural = 'Seasons'
         constraints = (
@@ -309,7 +295,7 @@ class TeamEvent(models.Model):
     history = HistoricalRecords()
 
     class Meta:
-        db_table = "content\".\"team_event"
+        db_table = 'content"."team_event'
         verbose_name = "Event's Team"
         verbose_name_plural = "Event's Teams"
         constraints = (
@@ -328,23 +314,19 @@ class TicketHolderTeam(models.Model):
     ticket_holder = models.ForeignKey(
         TicketHolder, related_name='ticket_holder_teams', on_delete=models.CASCADE
     )
-    team = models.ForeignKey(
-        Team, related_name='ticket_holder_teams', on_delete=models.CASCADE
-    )
+    team = models.ForeignKey(Team, related_name='ticket_holder_teams', on_delete=models.CASCADE)
     section = models.CharField(max_length=255)
     row = models.CharField(max_length=255)
     seat = models.CharField(max_length=255)
     seats_quantity = models.PositiveIntegerField(default=1, editable=False)
     credentials_website_username = encrypt(models.CharField(max_length=255))
     credentials_website_password = encrypt(models.CharField(max_length=255))
-    is_confirmed = models.BooleanField(
-        default=False, help_text="Is the ticket holder's team data confirmed?"
-    )
+    is_confirmed = models.BooleanField(default=False, help_text="Is the ticket holder's team data confirmed?")
     created_at = models.DateTimeField(auto_now_add=True)
     history = HistoricalRecords()
 
     class Meta:
-        db_table = "content\".\"ticket_holder_team"
+        db_table = 'content"."ticket_holder_team'
         verbose_name = "Ticket Holder's Team"
         verbose_name_plural = "Ticket Holder's Teams"
         permissions = (('view_credentials', 'Can view credentials'),)

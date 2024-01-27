@@ -18,6 +18,4 @@ class PurchaseViewSet(ModelViewSet):
         if user.is_staff or user.is_superuser:
             return Purchase.objects.all().order_by('id')
 
-        return Purchase.objects.filter(
-            ticket__ticket_holder=user.ticket_holder_user
-        ).order_by('id')
+        return Purchase.objects.filter(ticket__ticket_holder=user.ticket_holder_user).order_by('id')

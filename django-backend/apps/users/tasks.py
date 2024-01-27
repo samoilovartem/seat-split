@@ -24,9 +24,7 @@ def send_email_change_confirmation(user_email: str, user_id: UUID):
         'emails/email_change_confirmation.html',
         {
             'email': user_email,
-            'link': get_confirmation_link(
-                user_id=user_id, specific_path='email-change'
-            ),
+            'link': get_confirmation_link(user_id=user_id, specific_path='email-change'),
             'project_name': EMAIL_PROJECT_NAME,
             'logo_img_url': LOGO_IMG_URL,
         },
@@ -92,9 +90,7 @@ def send_password_reset_email(user_email: str, user_id: UUID):
         'emails/password_reset_email.html',
         {
             'email': user_email,
-            'link': get_confirmation_link(
-                user_id=user_id, specific_path='reset-password'
-            ),
+            'link': get_confirmation_link(user_id=user_id, specific_path='reset-password'),
             'project_name': EMAIL_PROJECT_NAME,
             'logo_img_url': LOGO_IMG_URL,
         },

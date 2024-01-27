@@ -26,9 +26,7 @@ class Migration(migrations.Migration):
             name='created_at',
             field=models.DateTimeField(
                 auto_now_add=True,
-                default=datetime.datetime(
-                    2024, 1, 1, 6, 48, 33, 495761, tzinfo=datetime.timezone.utc
-                ),
+                default=datetime.datetime(2024, 1, 1, 6, 48, 33, 495761, tzinfo=datetime.timezone.utc),
             ),
             preserve_default=False,
         ),
@@ -37,9 +35,7 @@ class Migration(migrations.Migration):
             name='created_at',
             field=models.DateTimeField(
                 blank=True,
-                default=datetime.datetime(
-                    2024, 1, 1, 6, 48, 43, 318167, tzinfo=datetime.timezone.utc
-                ),
+                default=datetime.datetime(2024, 1, 1, 6, 48, 43, 318167, tzinfo=datetime.timezone.utc),
                 editable=False,
             ),
             preserve_default=False,
@@ -49,9 +45,7 @@ class Migration(migrations.Migration):
             name='created_at',
             field=models.DateTimeField(
                 blank=True,
-                default=datetime.datetime(
-                    2024, 1, 1, 6, 48, 45, 344950, tzinfo=datetime.timezone.utc
-                ),
+                default=datetime.datetime(2024, 1, 1, 6, 48, 45, 344950, tzinfo=datetime.timezone.utc),
                 editable=False,
             ),
             preserve_default=False,
@@ -61,9 +55,7 @@ class Migration(migrations.Migration):
             name='created_at',
             field=models.DateTimeField(
                 blank=True,
-                default=datetime.datetime(
-                    2024, 1, 1, 6, 48, 47, 768976, tzinfo=datetime.timezone.utc
-                ),
+                default=datetime.datetime(2024, 1, 1, 6, 48, 47, 768976, tzinfo=datetime.timezone.utc),
                 editable=False,
             ),
             preserve_default=False,
@@ -73,9 +65,7 @@ class Migration(migrations.Migration):
             name='created_at',
             field=models.DateTimeField(
                 auto_now_add=True,
-                default=datetime.datetime(
-                    2024, 1, 1, 6, 48, 49, 277212, tzinfo=datetime.timezone.utc
-                ),
+                default=datetime.datetime(2024, 1, 1, 6, 48, 49, 277212, tzinfo=datetime.timezone.utc),
             ),
             preserve_default=False,
         ),
@@ -84,9 +74,7 @@ class Migration(migrations.Migration):
             name='created_at',
             field=models.DateTimeField(
                 auto_now_add=True,
-                default=datetime.datetime(
-                    2024, 1, 1, 6, 48, 50, 722248, tzinfo=datetime.timezone.utc
-                ),
+                default=datetime.datetime(2024, 1, 1, 6, 48, 50, 722248, tzinfo=datetime.timezone.utc),
             ),
             preserve_default=False,
         ),
@@ -95,9 +83,7 @@ class Migration(migrations.Migration):
             name='created_at',
             field=models.DateTimeField(
                 auto_now_add=True,
-                default=datetime.datetime(
-                    2024, 1, 1, 6, 48, 52, 576018, tzinfo=datetime.timezone.utc
-                ),
+                default=datetime.datetime(2024, 1, 1, 6, 48, 52, 576018, tzinfo=datetime.timezone.utc),
             ),
             preserve_default=False,
         ),
@@ -106,9 +92,7 @@ class Migration(migrations.Migration):
             name='created_at',
             field=models.DateTimeField(
                 auto_now_add=True,
-                default=datetime.datetime(
-                    2024, 1, 1, 6, 48, 55, 358771, tzinfo=datetime.timezone.utc
-                ),
+                default=datetime.datetime(2024, 1, 1, 6, 48, 55, 358771, tzinfo=datetime.timezone.utc),
             ),
             preserve_default=False,
         ),

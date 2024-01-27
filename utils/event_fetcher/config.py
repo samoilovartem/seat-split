@@ -7,12 +7,8 @@ ROOT_DIR: Path = Path(__file__).parents[1].resolve()
 
 
 class Config(BaseSettings):
-    skybox_endpoint: str = Field(
-        'https://skybox.vividseats.com/services/events', env='SKYBOX_ENDPOINT'
-    )
-    sentinel_endpoint: str = Field(
-        'https://api.lewanddowski.com/scripts.php?token=', env='SENTINEL_ENDPOINT'
-    )
+    skybox_endpoint: str = Field('https://skybox.vividseats.com/services/events', env='SKYBOX_ENDPOINT')
+    sentinel_endpoint: str = Field('https://api.lewanddowski.com/scripts.php?token=', env='SENTINEL_ENDPOINT')
     sentinel_token: str = Field('', env='SENTINEL_TOKEN')
     stt_teams_endpoint: str = Field(
         'https://django-docker.herokuapp.com/api/v1/teams/', env='STT_TEAMS_ENDPOINT'

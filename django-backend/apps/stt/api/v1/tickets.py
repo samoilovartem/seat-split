@@ -31,9 +31,9 @@ class TicketViewSet(ModelViewSet):
             queryset = Ticket.objects.all().order_by('-created_at', 'event__date_time')
 
         else:
-            queryset = Ticket.objects.filter(
-                ticket_holder=user.ticket_holder_user
-            ).order_by('-created_at', 'event__date_time')
+            queryset = Ticket.objects.filter(ticket_holder=user.ticket_holder_user).order_by(
+                '-created_at', 'event__date_time'
+            )
 
         if is_expanded(self.request, 'event'):
             queryset = queryset.select_related('event')

@@ -36,9 +36,7 @@ class LeagueListFilter(SimpleListFilter):
         :return: A filtered queryset.
         """
         if self.value():
-            return queryset.filter(
-                teamevent__team__league__icontains=self.value()
-            ).distinct()
+            return queryset.filter(teamevent__team__league__icontains=self.value()).distinct()
         else:
             return queryset
 

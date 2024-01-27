@@ -22,12 +22,8 @@ class Command(BaseCommand):
                     permission = Permission.objects.get(codename=perm_codename)
                     group.permissions.add(permission)
                 except Permission.DoesNotExist:
-                    self.stderr.write(
-                        self.style.ERROR(f'Permission {perm_codename} not found.')
-                    )
+                    self.stderr.write(self.style.ERROR(f'Permission {perm_codename} not found.'))
 
-            self.stdout.write(
-                self.style.SUCCESS(f'Group {group_name} created successfully!')
-            )
+            self.stdout.write(self.style.SUCCESS(f'Group {group_name} created successfully!'))
         else:
             self.stdout.write(self.style.SUCCESS(f'Group {group_name} already exists.'))

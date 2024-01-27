@@ -57,9 +57,7 @@ class TeamEventFormset(BaseInlineFormSet):
         count = sum(1 for form in self.forms if not form.cleaned_data.get('DELETE'))
 
         if count > 2:
-            raise ValidationError(
-                'You can associate a maximum of 2 teams with an event.'
-            )
+            raise ValidationError('You can associate a maximum of 2 teams with an event.')
 
 
 class TeamEventInline(admin.TabularInline):

@@ -10,20 +10,12 @@ dotenv_file = os.path.join(BASE_DIR, '.env')
 if os.path.isfile(dotenv_file):
     load_dotenv(dotenv_file)
 
-ALLOWED_HOSTS = (
-    os.environ.get('ALLOWED_HOSTS', '').split(', ')
-    if os.environ.get('ALLOWED_HOSTS')
-    else []
-)
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(', ') if os.environ.get('ALLOWED_HOSTS') else []
 CSRF_TRUSTED_ORIGINS = (
-    os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(', ')
-    if os.environ.get('CSRF_TRUSTED_ORIGINS')
-    else []
+    os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(', ') if os.environ.get('CSRF_TRUSTED_ORIGINS') else []
 )
 CORS_ALLOWED_ORIGINS = (
-    os.environ.get('CORS_ALLOWED_ORIGINS', '').split(', ')
-    if os.environ.get('CORS_ALLOWED_ORIGINS')
-    else []
+    os.environ.get('CORS_ALLOWED_ORIGINS', '').split(', ') if os.environ.get('CORS_ALLOWED_ORIGINS') else []
 )
 
 include(

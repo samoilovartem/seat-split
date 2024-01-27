@@ -9,12 +9,8 @@ from config.components.django_filters import (
 
 
 class TicketFilter(FilterSet):
-    event__date_time_gte = DateTimeFilter(
-        field_name='event__date_time', lookup_expr='gte'
-    )
-    event__date_time_lte = DateTimeFilter(
-        field_name='event__date_time', lookup_expr='lte'
-    )
+    event__date_time_gte = DateTimeFilter(field_name='event__date_time', lookup_expr='gte')
+    event__date_time_lte = DateTimeFilter(field_name='event__date_time', lookup_expr='lte')
     exclude_listing_status = CharFilter(method='filter_exclude_listing_status')
 
     class Meta:

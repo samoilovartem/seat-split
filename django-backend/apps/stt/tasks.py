@@ -48,9 +48,7 @@ def send_email_confirmation(user_email: str, user_id: UUID):
         'emails/account_verification.html',
         {
             'email': user_email,
-            'link': get_confirmation_link(
-                user_id=user_id, specific_path='confirm-email'
-            ),
+            'link': get_confirmation_link(user_id=user_id, specific_path='confirm-email'),
             'project_name': EMAIL_PROJECT_NAME,
             'logo_img_url': LOGO_IMG_URL,
         },
@@ -176,13 +174,9 @@ def send_aggregated_slack_notification(event_id: UUID, ticket_holder_id: UUID) -
         )
 
         try:
-            slack_client.chat_postMessage(
-                channel=STT_NOTIFICATIONS_CHANNEL_ID, **message_payload
-            )
+            slack_client.chat_postMessage(channel=STT_NOTIFICATIONS_CHANNEL_ID, **message_payload)
         except SlackApiError as e:
-            logger.error(
-                'There is an error sending a notification to slack. Error: {}', e
-            )
+            logger.error('There is an error sending a notification to slack. Error: {}', e)
 
 
 @shared_task

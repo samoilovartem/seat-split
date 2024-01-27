@@ -89,9 +89,7 @@ class VerificationService:
         user.is_verified = True
         user.save()
 
-        send_email_confirmed.apply_async(
-            args=(user.email,), countdown=CELERY_GENERAL_COUNTDOWN
-        )
+        send_email_confirmed.apply_async(args=(user.email,), countdown=CELERY_GENERAL_COUNTDOWN)
 
         return 'Standard verification successful'
 
@@ -111,8 +109,6 @@ class VerificationService:
         user.save()
 
         redis_general_connection.delete(f'email_change_{user.id}')
-        send_email_change_confirmed.apply_async(
-            args=(new_email,), countdown=CELERY_GENERAL_COUNTDOWN
-        )
+        send_email_change_confirmed.apply_async(args=(new_email,), countdown=CELERY_GENERAL_COUNTDOWN)
 
         return 'Email change verification successful'

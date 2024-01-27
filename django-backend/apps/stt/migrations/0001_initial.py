@@ -82,9 +82,7 @@ class Migration(migrations.Migration):
                 ('last_name', models.CharField(blank=True, max_length=255)),
                 (
                     'phone',
-                    models.CharField(
-                        blank=True, max_length=255, verbose_name='Phone number'
-                    ),
+                    models.CharField(blank=True, max_length=255, verbose_name='Phone number'),
                 ),
                 ('address', models.CharField(blank=True, max_length=255)),
                 ('is_card_interest', models.BooleanField(default=False)),
@@ -163,15 +161,11 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 (
                     'event',
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to='stt.event'
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stt.event'),
                 ),
                 (
                     'team',
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to='stt.team'
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stt.team'),
                 ),
             ],
             options={
@@ -200,9 +194,7 @@ class Migration(migrations.Migration):
                 ('delivery_status', models.CharField(max_length=255)),
                 (
                     'ticket',
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to='stt.ticket'
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stt.ticket'),
                 ),
             ],
             options={
@@ -213,8 +205,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='teamevent',
-            constraint=models.UniqueConstraint(
-                fields=('event', 'team'), name='event_team_idx'
-            ),
+            constraint=models.UniqueConstraint(fields=('event', 'team'), name='event_team_idx'),
         ),
     ]

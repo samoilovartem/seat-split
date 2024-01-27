@@ -24,4 +24,4 @@ if response.status_code == 200:
 
     print(f"CSV file '{csv_file}' created successfully.")
 else:
-    print(f"Failed to fetch data: {response.status_code}")
+    print(f'Failed to fetch data: {response.status_code}')

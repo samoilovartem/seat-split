@@ -23,9 +23,7 @@ class TeamViewSet(ModelViewSet):
         ticket_holder = TicketHolder.objects.filter(user=user).first()
 
         if ticket_holder:
-            associated_teams = ticket_holder.ticket_holder_teams.values_list(
-                'team', flat=True
-            )
+            associated_teams = ticket_holder.ticket_holder_teams.values_list('team', flat=True)
             queryset = queryset.exclude(id__in=associated_teams)
 
         return queryset

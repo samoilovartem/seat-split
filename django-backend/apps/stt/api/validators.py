@@ -23,7 +23,9 @@ def validate_seat_range(value: str) -> str:
     Raises:
         ValidationError: Raised with an appropriate error message if any validation fails.
     """
-    error_message = 'Invalid seat number. Seat(s) should be a positive integer or a range of positive integers.'
+    error_message = (
+        'Invalid seat number. Seat(s) should be a positive integer or a range of positive integers.'
+    )
 
     if '-' in value:
         try:

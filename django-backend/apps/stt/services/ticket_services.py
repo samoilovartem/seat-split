@@ -101,9 +101,7 @@ class TicketNotifier:
         self.in_app_notifier.send_ticket_sold_notification()
 
     def send_ticket_requested_for_delisting_notification(self):
-        message = create_ticket_status_requested_for_delisting_slack_message(
-            self.ticket
-        )
+        message = create_ticket_status_requested_for_delisting_slack_message(self.ticket)
         send_slack_notification.apply_async(
             args=(message, STT_NOTIFICATIONS_CHANNEL_ID),
             countdown=CELERY_GENERAL_COUNTDOWN,
@@ -149,9 +147,7 @@ class TicketStatusChecker:
         return self.ticket.listing_status == 'Pending' and previous_status == 'Delisted'
 
     def was_delisted(self, previous_status: str):
-        return (
-            self.ticket.listing_status == 'Delisted' and previous_status != 'Delisted'
-        )
+        return self.ticket.listing_status == 'Delisted' and previous_status != 'Delisted'
 
     def create_purchase_record_if_needed(self):
         if not Purchase.objects.filter(ticket=self.ticket).exists():

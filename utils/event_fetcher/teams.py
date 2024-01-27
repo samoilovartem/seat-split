@@ -33,9 +33,7 @@ def get_teams():
         req = requests.get(config.stt_teams_endpoint, headers=headers)
         data = req.json()['results']
         for team in data:
-            target = add_home_venue(
-                Team(team['name'], team['league'], team['home_venue'])
-            )
+            target = add_home_venue(Team(team['name'], team['league'], team['home_venue']))
             team_list.append(target)
 
     except Exception as e:

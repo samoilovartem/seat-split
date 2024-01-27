@@ -41,15 +41,11 @@ class Migration(migrations.Migration):
                 ),
                 (
                     'credentials_website_username',
-                    django_cryptography.fields.encrypt(
-                        models.CharField(max_length=255)
-                    ),
+                    django_cryptography.fields.encrypt(models.CharField(max_length=255)),
                 ),
                 (
                     'credentials_website_password',
-                    django_cryptography.fields.encrypt(
-                        models.CharField(max_length=255)
-                    ),
+                    django_cryptography.fields.encrypt(models.CharField(max_length=255)),
                 ),
                 (
                     'is_confirmed',

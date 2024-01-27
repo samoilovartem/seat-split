@@ -64,12 +64,8 @@ class CSVImporter:
             return Response({'success': False, 'error': error_message})
 
         if self.duplicate_check_column:
-            duplicate_check_column_index = csv_columns.index(
-                self.duplicate_check_column
-            )
-            existing_records = self._get_existing_records(
-                duplicate_check_column_index, dataset
-            )
+            duplicate_check_column_index = csv_columns.index(self.duplicate_check_column)
+            existing_records = self._get_existing_records(duplicate_check_column_index, dataset)
 
             if existing_records:
                 return Response({'success': False, 'errors': existing_records})
@@ -80,9 +76,7 @@ class CSVImporter:
         if result.has_validation_errors():
             if self.duplicate_check_column:
                 invalid_rows = result.invalid_rows
-                error_messages = self._get_validation_errors(
-                    duplicate_check_column_index, invalid_rows
-                )
+                error_messages = self._get_validation_errors(duplicate_check_column_index, invalid_rows)
             else:
                 error_messages = result.invalid_rows
 
@@ -107,7 +101,7 @@ class CSVImporter:
 
         duplicate_check_values = [row[duplicate_check_column_index] for row in dataset]
         existing_records = self.model.objects.filter(
-            **{f"{self.duplicate_check_column}__in": duplicate_check_values}
+            **{f'{self.duplicate_check_column}__in': duplicate_check_values}
         ).values_list(self.duplicate_check_column, flat=True)
         unique_existing_records = set(existing_records)
         error_messages = [

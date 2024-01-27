@@ -53,9 +53,7 @@ class UserViewSet(ModelViewSet):
     @action(detail=False, methods=['POST'])
     def change_password(self, request, pk=None):
         user = request.user
-        serializer = ChangePasswordSerializer(
-            data=request.data, context={'request': request}
-        )
+        serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
 
         if serializer.is_valid():
             if not user.check_password(serializer.validated_data['old_password']):
@@ -75,9 +73,7 @@ class UserViewSet(ModelViewSet):
     @swagger_auto_schema(request_body=EmailChangeSerializer)
     @action(detail=False, methods=['POST'])
     def change_email(self, request, pk=None):
-        serializer = EmailChangeSerializer(
-            data=request.data, context={'request': request}
-        )
+        serializer = EmailChangeSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             user = request.user
             new_email = serializer.validated_data['new_email']
@@ -87,9 +83,7 @@ class UserViewSet(ModelViewSet):
             )
 
             key = f'email_change_{user.id}'
-            redis_general_connection.setex(
-                key, 86_400, new_email
-            )  # 86,400 seconds = 24 hours
+            redis_general_connection.setex(key, 86_400, new_email)  # 86,400 seconds = 24 hours
 
             return Response(
                 {'message': 'Verification email sent to the new address.'},

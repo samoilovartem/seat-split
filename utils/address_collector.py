@@ -110,9 +110,7 @@ class AddressCollector:
 
                 offset += self.limit
 
-                if total_records >= total or (
-                    self.max_records and total_records >= self.max_records
-                ):
+                if total_records >= total or (self.max_records and total_records >= self.max_records):
                     more_records = False
 
         logger.info('Saved {} addresses to {}', total_records, self.file_name)

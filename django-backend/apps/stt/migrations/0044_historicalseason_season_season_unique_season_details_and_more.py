@@ -32,9 +32,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     'start_year',
-                    models.IntegerField(
-                        help_text='The calendar year when the season starts'
-                    ),
+                    models.IntegerField(help_text='The calendar year when the season starts'),
                 ),
                 (
                     'league',
@@ -59,9 +57,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     'official_end_date',
-                    models.DateField(
-                        blank=True, help_text='The date when the season officially ends'
-                    ),
+                    models.DateField(blank=True, help_text='The date when the season officially ends'),
                 ),
                 (
                     'start_selling_season_date',
@@ -159,9 +155,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     'start_year',
-                    models.IntegerField(
-                        help_text='The calendar year when the season starts'
-                    ),
+                    models.IntegerField(help_text='The calendar year when the season starts'),
                 ),
                 (
                     'league',
@@ -186,9 +180,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     'official_end_date',
-                    models.DateField(
-                        blank=True, help_text='The date when the season officially ends'
-                    ),
+                    models.DateField(blank=True, help_text='The date when the season officially ends'),
                 ),
                 (
                     'start_selling_season_date',

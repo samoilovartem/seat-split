@@ -26,9 +26,7 @@ class DataGenerator:
         return transformed_first, transformed_last
 
     def generate_email(self, first_name: str, last_name: str):
-        transformed_first, transformed_last = self.generate_transformed_name_parts(
-            first_name, last_name
-        )
+        transformed_first, transformed_last = self.generate_transformed_name_parts(first_name, last_name)
 
         random_number = str(randint(1, 99999))
         if choice([True, False]):
@@ -49,9 +47,7 @@ class DataGenerator:
         city = self.fake.city()
         state = self.fake.state_abbr() if not self.state_abbr else self.state_abbr
         zip_code = (
-            self.fake.zipcode()
-            if not self.state_abbr
-            else self.fake.zipcode_in_state(state_abbr=state)
+            self.fake.zipcode() if not self.state_abbr else self.fake.zipcode_in_state(state_abbr=state)
         )
 
         full_address = f'{street_address}, {city}, {state} {zip_code}'

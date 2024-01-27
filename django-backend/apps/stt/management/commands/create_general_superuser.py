@@ -15,12 +15,8 @@ class Command(BaseCommand):
                     GENERAL_SUPERUSER_EMAIL,
                     GENERAL_SUPERUSER_PASSWORD,
                 )
-                self.stdout.write(
-                    self.style.SUCCESS('Successfully created a new superuser')
-                )
+                self.stdout.write(self.style.SUCCESS('Successfully created a new superuser'))
             except IntegrityError:
-                self.stdout.write(
-                    self.style.WARNING('A superuser with that username already exists.')
-                )
+                self.stdout.write(self.style.WARNING('A superuser with that username already exists.'))
         else:
             self.stdout.write(self.style.SUCCESS('A superuser already exists.'))
