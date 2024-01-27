@@ -1,0 +1,6 @@
+line-length = 110
+
+[format]
+quote-style = "single"
+
+line-ending = "auto"
