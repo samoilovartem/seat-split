@@ -32,9 +32,7 @@ class EmailDomains(UUIDMixin, TimeStampedMixin):
         NOT_ACTIVE = 'not active'
         NOT_APPLICABLE = 'not applicable'
 
-    status = models.TextField(
-        choices=StatusChoice.choices, default=StatusChoice.NOT_APPLICABLE
-    )
+    status = models.TextField(choices=StatusChoice.choices, default=StatusChoice.NOT_APPLICABLE)
     expiration_date = models.DateField(null=True, blank=True)
     auto_renew = models.BooleanField(default=False)
     is_private = models.BooleanField(default=False)
@@ -51,7 +49,7 @@ class EmailDomains(UUIDMixin, TimeStampedMixin):
         return self.domain_name
 
     class Meta:
-        db_table = "content\".\"email_domains"
+        db_table = 'content"."email_domains'
         verbose_name = 'Email Domain'
         verbose_name_plural = 'Email Domains'
         ordering = ['-created_at']

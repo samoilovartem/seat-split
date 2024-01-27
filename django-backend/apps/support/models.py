@@ -14,7 +14,7 @@ class Inquiry(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = "content\".\"inquiry"
+        db_table = 'content"."inquiry'
         verbose_name = 'Inquiry'
         verbose_name_plural = 'Inquiries'
 

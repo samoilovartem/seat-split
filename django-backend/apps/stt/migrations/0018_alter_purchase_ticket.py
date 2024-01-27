@@ -13,8 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='purchase',
             name='ticket',
-            field=models.OneToOneField(
-                on_delete=django.db.models.deletion.CASCADE, to='stt.ticket'
-            ),
+            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='stt.ticket'),
         ),
     ]

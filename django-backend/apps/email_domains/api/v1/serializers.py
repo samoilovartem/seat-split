@@ -7,9 +7,7 @@ from apps.users.models import User
 
 
 class EmailDomainsSerializer(FlexFieldsModelSerializer):
-    created_by = serializers.PrimaryKeyRelatedField(
-        read_only=False, queryset=User.objects.all()
-    )
+    created_by = serializers.PrimaryKeyRelatedField(read_only=False, queryset=User.objects.all())
 
     class Meta:
         model = EmailDomains

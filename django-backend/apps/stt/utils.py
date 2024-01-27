@@ -117,7 +117,7 @@ def create_ticket_holder_team_slack_message(
     """Function to create the Slack message payload for TicketHolderTeam."""
     return {
         'text': f"New Ticket Holder's Team {instance.id} for "
-        f"{instance.ticket_holder} - {instance.team} has been added!",
+        f'{instance.ticket_holder} - {instance.team} has been added!',
         'blocks': [
             {
                 'type': 'header',
@@ -131,15 +131,15 @@ def create_ticket_holder_team_slack_message(
                 'fields': [
                     {
                         'type': 'mrkdwn',
-                        'text': f"*TICKET HOLDER:*\n{instance.ticket_holder}",  # noqa: E231
+                        'text': f'*TICKET HOLDER:*\n{instance.ticket_holder}',  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*TICKET HOLDER ID:*\n`{instance.ticket_holder.id}`",  # noqa: E231
+                        'text': f'*TICKET HOLDER ID:*\n`{instance.ticket_holder.id}`',  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*TEAM:*\n{instance.team}",  # noqa: E231
+                        'text': f'*TEAM:*\n{instance.team}',  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
@@ -153,8 +153,8 @@ def create_ticket_holder_team_slack_message(
                 'text': {
                     'type': 'mrkdwn',
                     'text': f"The above record for the ticket holder's team has been added. "
-                    f"Please review the details and *confirm* the team if data is correct. \n\n"
-                    f"<{STT_NOTIFICATIONS_CHANNEL_TICKET_HOLDER_URL}/{instance.ticket_holder.id}/change/|View Record>",
+                    f'Please review the details and *confirm* the team if data is correct. \n\n'
+                    f'<{STT_NOTIFICATIONS_CHANNEL_TICKET_HOLDER_URL}/{instance.ticket_holder.id}/change/|View Record>',
                 },
             },
         ],
@@ -174,11 +174,11 @@ def create_ticket_created_slack_message(
         f"<{STT_NOTIFICATIONS_CHANNEL_TICKET_URL}/{ticket['id']}/change/|{ticket['seat']}>"
         for ticket in tickets_data
     ]
-    seats_text = ", ".join(seats_links)
+    seats_text = ', '.join(seats_links)
     tickets_data_length = len(tickets_data)
 
     return {
-        'text': f"New Tickets for {ticket_holder} have been created!",
+        'text': f'New Tickets for {ticket_holder} have been created!',
         'blocks': [
             {
                 'type': 'header',
@@ -194,25 +194,25 @@ def create_ticket_created_slack_message(
                 'fields': [
                     {
                         'type': 'mrkdwn',
-                        'text': f"*TICKET HOLDER:*\n{ticket_holder}",  # noqa: E231
+                        'text': f'*TICKET HOLDER:*\n{ticket_holder}',  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*EVENT:*\n{event}",  # noqa: E231
+                        'text': f'*EVENT:*\n{event}',  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*SECTION:*\n{section}",  # noqa: E231
+                        'text': f'*SECTION:*\n{section}',  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*ROW:*\n{row}",  # noqa: E231
+                        'text': f'*ROW:*\n{row}',  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*SEAT:*\n{seats_text}"  # noqa: E231
+                        'text': f'*SEAT:*\n{seats_text}'  # noqa: E231
                         if tickets_data_length == 1
-                        else f"*SEATS:*\n{seats_text}",  # noqa: E231
+                        else f'*SEATS:*\n{seats_text}',  # noqa: E231
                     },
                 ],
             },
@@ -221,10 +221,10 @@ def create_ticket_created_slack_message(
                 'type': 'section',
                 'text': {
                     'type': 'mrkdwn',
-                    'text': "New ticket has been created. Please review the details and take necessary actions."
+                    'text': 'New ticket has been created. Please review the details and take necessary actions.'
                     if tickets_data_length == 1
-                    else "New tickets have been created. "
-                    "Please review the details and take necessary actions.",
+                    else 'New tickets have been created. '
+                    'Please review the details and take necessary actions.',
                 },
             },
         ],
@@ -233,12 +233,10 @@ def create_ticket_created_slack_message(
 
 def create_ticket_relisted_slack_message(ticket: Ticket) -> dict[str, str]:
     """Function to create the Slack message payload for a relisted Ticket."""
-    ticket_link = (
-        f"<{STT_NOTIFICATIONS_CHANNEL_TICKET_URL}/{ticket.id}/change/|View Ticket>"
-    )
+    ticket_link = f'<{STT_NOTIFICATIONS_CHANNEL_TICKET_URL}/{ticket.id}/change/|View Ticket>'
 
     return {
-        'text': f"Ticket for {ticket.ticket_holder} is requested to be relisted!",
+        'text': f'Ticket for {ticket.ticket_holder} is requested to be relisted!',
         'blocks': [
             {
                 'type': 'header',
@@ -252,23 +250,23 @@ def create_ticket_relisted_slack_message(ticket: Ticket) -> dict[str, str]:
                 'fields': [
                     {
                         'type': 'mrkdwn',
-                        'text': f"*TICKET HOLDER:*\n{ticket.ticket_holder}",  # noqa: E231
+                        'text': f'*TICKET HOLDER:*\n{ticket.ticket_holder}',  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*EVENT:*\n{ticket.event.name}",  # noqa: E231
+                        'text': f'*EVENT:*\n{ticket.event.name}',  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*SECTION:*\n{ticket.section}",  # noqa: E231
+                        'text': f'*SECTION:*\n{ticket.section}',  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*ROW:*\n{ticket.row}",  # noqa: E231
+                        'text': f'*ROW:*\n{ticket.row}',  # noqa: E231
                     },
                     {
                         'type': 'mrkdwn',
-                        'text': f"*SEAT:*\n{ticket.seat}",  # noqa: E231
+                        'text': f'*SEAT:*\n{ticket.seat}',  # noqa: E231
                     },
                 ],
             },
@@ -277,9 +275,9 @@ def create_ticket_relisted_slack_message(ticket: Ticket) -> dict[str, str]:
                 'type': 'section',
                 'text': {
                     'type': 'mrkdwn',
-                    'text': "The ticket is requested to be relisted. "
-                    "Please review the details and take necessary actions. \n\n"
-                    f"{ticket_link}",
+                    'text': 'The ticket is requested to be relisted. '
+                    'Please review the details and take necessary actions. \n\n'
+                    f'{ticket_link}',
                 },
             },
         ],

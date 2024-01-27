@@ -5,11 +5,7 @@ from django.db.models import Count, Model
 
 
 def records_per_value(model: type[Model], filter_name: str) -> list[dict[str, int]]:
-    result = (
-        model.objects.values(filter_name)
-        .order_by(filter_name)
-        .annotate(count=Count(filter_name))
-    )
+    result = model.objects.values(filter_name).order_by(filter_name).annotate(count=Count(filter_name))
     return result
 
 
@@ -58,17 +54,13 @@ def get_missing_date_fields(
         return []
 
     missing_dates = [
-        date_field
-        for date_field, date in csv_dict[0].items()
-        if date_field in date_fields and date == 'NA'
+        date_field for date_field, date in csv_dict[0].items() if date_field in date_fields and date == 'NA'
     ]
 
     return missing_dates
 
 
-def get_model_fields(
-    app_name: str, model_name: str, exclude_fields: Optional[list[str]] = None
-) -> list[str]:
+def get_model_fields(app_name: str, model_name: str, exclude_fields: Optional[list[str]] = None) -> list[str]:
     model = apps.get_model(app_name, model_name)
     fields = [field.name for field in model._meta.fields]
 

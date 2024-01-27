@@ -12,8 +12,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='ticketholderteam',
             name='is_confirmed',
-            field=models.BooleanField(
-                default=False, help_text="Is the ticket holder's team data confirmed?"
-            ),
+            field=models.BooleanField(default=False, help_text="Is the ticket holder's team data confirmed?"),
         ),
     ]

@@ -9,12 +9,8 @@ from apps.stt.api.v1.tickets import TicketViewSet
 
 stt_router_v1 = routers.DefaultRouter()
 stt_router_v1.register(r'teams', TeamViewSet, basename='teams')
-stt_router_v1.register(
-    r'ticket-holders', TicketHolderViewSet, basename='ticket-holders'
-)
-stt_router_v1.register(
-    'ticket-holders-teams', TicketHolderTeamViewSet, basename='ticket-holders-teams'
-)
+stt_router_v1.register(r'ticket-holders', TicketHolderViewSet, basename='ticket-holders')
+stt_router_v1.register('ticket-holders-teams', TicketHolderTeamViewSet, basename='ticket-holders-teams')
 stt_router_v1.register(r'tickets', TicketViewSet, basename='tickets')
 stt_router_v1.register(r'events', EventViewSet, basename='events')
 stt_router_v1.register(r'purchases', PurchaseViewSet, basename='purchases')

@@ -19,9 +19,7 @@ class CustomTokenCreateView(ObtainAuthToken):
     my_tags = ['token-auth']
 
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(
-            data=request.data, context={'request': request}
-        )
+        serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         if not user.is_verified:
@@ -42,9 +40,7 @@ class TokenDestroyView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        return Response(
-            {'detail': 'Successfully logged out.'}, status=status.HTTP_200_OK
-        )
+        return Response({'detail': 'Successfully logged out.'}, status=status.HTTP_200_OK)
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):

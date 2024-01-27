@@ -12,9 +12,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='historicalpurchase',
             name='created_at',
-            field=models.DateTimeField(
-                blank=True, default='2023-10-20', editable=False
-            ),
+            field=models.DateTimeField(blank=True, default='2023-10-20', editable=False),
             preserve_default=False,
         ),
         migrations.AddField(

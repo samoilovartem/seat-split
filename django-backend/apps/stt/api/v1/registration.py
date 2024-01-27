@@ -25,9 +25,7 @@ class RegisterView(APIView):
             try:
                 password_validation.validate_password(password)
             except Exception as e:
-                return Response(
-                    {'password': list(e.messages)}, status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response({'password': list(e.messages)}, status=status.HTTP_400_BAD_REQUEST)
 
             user = User.objects.create_user(
                 email=serializer.validated_data['email'],
@@ -42,9 +40,7 @@ class RegisterView(APIView):
                 last_name=serializer.validated_data['last_name'],
                 phone=serializer.validated_data['phone'],
                 address=serializer.validated_data['address'],
-                is_season_ticket_interest=serializer.validated_data[
-                    'is_season_ticket_interest'
-                ],
+                is_season_ticket_interest=serializer.validated_data['is_season_ticket_interest'],
                 is_card_interest=serializer.validated_data['is_card_interest'],
             )
 

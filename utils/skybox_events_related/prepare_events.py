@@ -14,9 +14,7 @@ def replace_values_in_column(df, column_name, old_value_regex, new_value):
     return df
 
 
-def convert_to_timezone_aware_and_remove_timezone_column(
-    df, date_time_col, timezone_col
-):
+def convert_to_timezone_aware_and_remove_timezone_column(df, date_time_col, timezone_col):
     """Function to convert a DataFrame's date_time column to timezone-aware datetime objects."""
     df[date_time_col] = pd.to_datetime(df[date_time_col])
 
@@ -31,9 +29,7 @@ def convert_to_timezone_aware_and_remove_timezone_column(
     return df
 
 
-def clean_and_rename_columns(
-    csv_file_path, season_value, league_value, replacements=None
-):
+def clean_and_rename_columns(csv_file_path, season_value, league_value, replacements=None):
     """Function to clean and rename columns in a DataFrame."""
 
     df = pd.read_csv(csv_file_path)
@@ -67,9 +63,7 @@ def clean_and_rename_columns(
     df['season'] = season_value
     df['league'] = league_value
 
-    df = convert_to_timezone_aware_and_remove_timezone_column(
-        df, 'date_time', 'venue_timezone'
-    )
+    df = convert_to_timezone_aware_and_remove_timezone_column(df, 'date_time', 'venue_timezone')
 
     if replacements:
         for column_name, replacement_dict in replacements.items():

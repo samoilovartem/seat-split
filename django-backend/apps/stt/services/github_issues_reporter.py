@@ -19,9 +19,7 @@ class GitHubIssuesReporter:
         self.issue_title_pattern = r'\[.+\] .+'
 
     def _fetch_closed_issues(self, repo_name: str):
-        issues = self.api.issues.list_for_repo(
-            repo=repo_name, state='closed', since=self.start_date
-        )
+        issues = self.api.issues.list_for_repo(repo=repo_name, state='closed', since=self.start_date)
         valid_issues = []
 
         logger.info(
@@ -34,9 +32,7 @@ class GitHubIssuesReporter:
             if (
                 issue.get('closed_at')
                 and self.start_date
-                <= datetime.strptime(
-                    issue.get('closed_at'), '%Y-%m-%dT%H:%M:%SZ'
-                ).replace(tzinfo=UTC)
+                <= datetime.strptime(issue.get('closed_at'), '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=UTC)
                 <= self.end_date
             ):
                 valid_issues.append(issue)
@@ -54,9 +50,7 @@ class GitHubIssuesReporter:
             logger.error(f'Error fetching user data for {username}: {e}')
             return username
 
-    def _process_assignees(
-        self, assignees: list[dict], user_real_names: dict
-    ) -> list[str]:
+    def _process_assignees(self, assignees: list[dict], user_real_names: dict) -> list[str]:
         """
         Process assignees and return a list of real names.
         """
@@ -73,9 +67,7 @@ class GitHubIssuesReporter:
         Process a single issue and return a dictionary of real names to issue info.
         """
         labels = issue.get('labels')
-        label_info = [
-            {'name': label['name'], 'color': label['color']} for label in labels
-        ]
+        label_info = [{'name': label['name'], 'color': label['color']} for label in labels]
 
         issue_info = {
             'title': issue.get('title'),

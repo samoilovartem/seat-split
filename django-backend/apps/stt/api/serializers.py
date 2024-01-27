@@ -195,7 +195,5 @@ class PurchaseSerializer(FlexFieldsModelSerializer):
 
 
 class AvailableSeatsSerializer(serializers.Serializer):
-    ticket_holder = serializers.PrimaryKeyRelatedField(
-        queryset=TicketHolder.objects.all()
-    )
+    ticket_holder = serializers.PrimaryKeyRelatedField(queryset=TicketHolder.objects.all())
     team = serializers.PrimaryKeyRelatedField(queryset=Team.objects.all())

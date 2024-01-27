@@ -8,9 +8,7 @@ class ShowAllSeatsMixin:
         representation = super().to_representation(instance)
         if '-' in representation['seat']:
             first_seat, last_seat = representation['seat'].split('-')
-            representation['seat'] = [
-                str(i) for i in range(int(first_seat), int(last_seat) + 1)
-            ]
+            representation['seat'] = [str(i) for i in range(int(first_seat), int(last_seat) + 1)]
         else:
             representation['seat'] = [representation['seat']]
         return representation

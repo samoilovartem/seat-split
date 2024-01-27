@@ -12,7 +12,7 @@ class CustomUserCreationForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get('email', '').lower()
         if not email:
-            raise forms.ValidationError("The email field cannot be blank.")
+            raise forms.ValidationError('The email field cannot be blank.')
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError(f"The email {email} is already in use.")
+            raise forms.ValidationError(f'The email {email} is already in use.')
         return email

@@ -12,9 +12,7 @@ from apps.stt.services.available_seats_calculator import AvailableSeatsCalculato
 
 
 class EventViewSet(ModelViewSet):
-    queryset = (
-        Event.objects.all().prefetch_related('teamevent_set__team').order_by('id')
-    )
+    queryset = Event.objects.all().prefetch_related('teamevent_set__team').order_by('id')
     search_fields = ('name', 'date_time')
     filterset_class = EventFilterSet
     serializer_class = EventSerializer
@@ -40,13 +38,9 @@ class EventViewSet(ModelViewSet):
             ticket_holder = serializer.validated_data['ticket_holder']
             team = serializer.validated_data['team']
 
-            if not TicketHolderTeam.objects.filter(
-                ticket_holder=ticket_holder, team=team
-            ).exists():
+            if not TicketHolderTeam.objects.filter(ticket_holder=ticket_holder, team=team).exists():
                 return Response(
-                    {
-                        'detail': 'The provided team does not belong to the ticket holder.'
-                    },
+                    {'detail': 'The provided team does not belong to the ticket holder.'},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 

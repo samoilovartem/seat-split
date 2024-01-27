@@ -93,9 +93,7 @@ class UserSerializer(FlexFieldsModelSerializer):
         if ticket_holder_data is not None:
             ticket_holder = TicketHolder.objects.filter(user=user).first()
             if not ticket_holder:
-                raise ValidationError(
-                    {'ticket_holder_data': 'No associated Ticket Holder to update.'}
-                )
+                raise ValidationError({'ticket_holder_data': 'No associated Ticket Holder to update.'})
             for key, value in ticket_holder_data.items():
                 setattr(ticket_holder, key, value)
             ticket_holder.save()

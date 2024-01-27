@@ -53,7 +53,5 @@ class IsTicketHolder(BasePermission):
     def has_permission(self, request, view):
         # Allow ticket access if user is a ticket holder or if they're a staff member or superuser
         return (
-            hasattr(request.user, 'ticket_holder_user')
-            or request.user.is_staff
-            or request.user.is_superuser
+            hasattr(request.user, 'ticket_holder_user') or request.user.is_staff or request.user.is_superuser
         )

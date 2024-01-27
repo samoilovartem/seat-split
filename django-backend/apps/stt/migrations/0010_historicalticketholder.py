@@ -27,9 +27,7 @@ class Migration(migrations.Migration):
                 ('last_name', models.CharField(blank=True, max_length=255)),
                 (
                     'phone',
-                    models.CharField(
-                        blank=True, max_length=255, verbose_name='Phone number'
-                    ),
+                    models.CharField(blank=True, max_length=255, verbose_name='Phone number'),
                 ),
                 ('address', models.CharField(blank=True, max_length=255)),
                 ('is_card_interest', models.BooleanField(default=False)),
