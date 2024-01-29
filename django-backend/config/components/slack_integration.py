@@ -1,7 +1,8 @@
 import os
 
-from config.components.global_settings import DJANGO_HOST_URL
 from slack_sdk import WebClient
+
+from config.components.global_settings import DJANGO_HOST_URL
 
 STT_NOTIFICATIONS_EMOJI = {
     'TICKET_CREATED': os.environ.get('TICKET_CREATED', ':season_ticket:'),

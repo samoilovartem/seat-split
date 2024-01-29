@@ -1,14 +1,16 @@
 from hashlib import md5
 from uuid import uuid4
 
-from config.components.business_related import SUPPORTED_LEAGUES
+from django_cryptography.fields import encrypt
+from pytz import common_timezones
+from simple_history.models import HistoricalRecords
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.timezone import now
-from django_cryptography.fields import encrypt
-from pytz import common_timezones
-from simple_history.models import HistoricalRecords
+
+from config.components.business_related import SUPPORTED_LEAGUES
 
 User = get_user_model()
 

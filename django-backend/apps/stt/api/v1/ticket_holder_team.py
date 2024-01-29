@@ -1,10 +1,12 @@
-from apps.permissions import IsTicketHolder
-from apps.stt.api.serializers import TicketHolderTeamSerializer
-from apps.stt.models import TicketHolderTeam
-from django.db import IntegrityError
 from rest_flex_fields import FlexFieldsModelViewSet, is_expanded
 from rest_framework import status
 from rest_framework.response import Response
+
+from django.db import IntegrityError
+
+from apps.permissions import IsTicketHolder
+from apps.stt.api.serializers import TicketHolderTeamSerializer
+from apps.stt.models import TicketHolderTeam
 
 
 class TicketHolderTeamViewSet(

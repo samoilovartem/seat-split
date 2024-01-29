@@ -1,6 +1,7 @@
+from django_filters import CharFilter, DateTimeFilter, FilterSet
+
 from apps.stt.models import Event, Purchase, Team, Ticket
 from config.components.django_filters import BOOL_OR_EXACT_LOOKUPS, CHAR_LOOKUPS, DATE_AND_ID_LOOKUPS
-from django_filters import CharFilter, DateTimeFilter, FilterSet
 
 
 class TicketFilter(FilterSet):

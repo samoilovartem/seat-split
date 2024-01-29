@@ -3,13 +3,22 @@ from datetime import timedelta
 from decimal import Decimal
 from uuid import UUID
 
+from celery import shared_task
+from django_celery_results.models import TaskResult
+from loguru import logger
+from slack_sdk.errors import SlackApiError
+
+from django.core.mail import EmailMessage
+from django.core.management import call_command
+from django.template.loader import render_to_string
+from django.utils.timezone import now
+
 from apps.stt.services.github_issues_reporter import GitHubIssuesReporter
 from apps.stt.utils import (
     calculate_price_with_expenses,
     create_ticket_created_slack_message,
     get_confirmation_link,
 )
-from celery import shared_task
 from config.components.business_related import GITHUB_ACCESS_TOKEN
 from config.components.celery import CELERY_GENERAL_COUNTDOWN, CELERY_TASK_RESULT_MAX_AGE
 from config.components.redis import redis_celery_connection
@@ -26,13 +35,6 @@ from config.components.smtp_and_email import (
     LOGO_IMG_URL,
     SMTP2GO_FROM_EMAIL,
 )
-from django.core.mail import EmailMessage
-from django.core.management import call_command
-from django.template.loader import render_to_string
-from django.utils.timezone import now
-from django_celery_results.models import TaskResult
-from loguru import logger
-from slack_sdk.errors import SlackApiError
 
 
 @shared_task

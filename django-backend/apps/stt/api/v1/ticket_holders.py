@@ -1,9 +1,10 @@
-from apps.stt.api.serializers import TicketHolderSerializer
-from apps.stt.models import TicketHolder
 from rest_flex_fields import is_expanded
 from rest_framework.mixins import DestroyModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
+
+from apps.stt.api.serializers import TicketHolderSerializer
+from apps.stt.models import TicketHolder
 
 
 class TicketHolderViewSet(

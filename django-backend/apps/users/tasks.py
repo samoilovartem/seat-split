@@ -1,7 +1,12 @@
 from uuid import UUID
 
-from apps.stt.utils import get_confirmation_link
 from celery import shared_task
+from loguru import logger
+
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+
+from apps.stt.utils import get_confirmation_link
 from config.components.smtp_and_email import (
     EMAIL_CONTENT_TYPE,
     EMAIL_FRONTEND_BASE_URL,
@@ -9,9 +14,6 @@ from config.components.smtp_and_email import (
     LOGO_IMG_URL,
     SMTP2GO_FROM_EMAIL,
 )
-from django.core.mail import EmailMessage
-from django.template.loader import render_to_string
-from loguru import logger
 
 
 @shared_task

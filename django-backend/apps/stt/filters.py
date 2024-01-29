@@ -1,6 +1,7 @@
-from apps.stt.models import TeamEvent
 from django.contrib.admin import SimpleListFilter
 from django.utils import timezone
+
+from apps.stt.models import TeamEvent
 
 
 class LeagueListFilter(SimpleListFilter):

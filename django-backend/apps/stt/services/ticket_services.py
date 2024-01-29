@@ -1,5 +1,10 @@
 import json
 
+from notifications.signals import notify
+from redis import Redis
+
+from django.utils import timezone
+
 from apps.stt.models import Purchase, Ticket
 from apps.stt.tasks import send_aggregated_slack_notification, send_slack_notification, send_ticket_sold_email
 from apps.stt.utils import (
@@ -11,9 +16,6 @@ from config.components.business_related import DELIVERY_STATUSES, MARKETPLACES
 from config.components.celery import CELERY_AGGREGATED_SLACK_NOTIFICATION_COUNTDOWN, CELERY_GENERAL_COUNTDOWN
 from config.components.redis import REDIS_NEW_TICKETS_KEY_EXPIRE
 from config.components.slack_integration import STT_NOTIFICATIONS_CHANNEL_ID
-from django.utils import timezone
-from notifications.signals import notify
-from redis import Redis
 
 
 class TicketInAppNotifier:

@@ -3,11 +3,12 @@ from timeit import default_timer as timer
 
 import pandas as pd
 import requests
-from config import config
 from events import normalize_event
 from leagues import League, get_leagues
 from loguru import logger
 from teams import Team, get_teams
+
+from config import config
 
 
 def can_fetch():

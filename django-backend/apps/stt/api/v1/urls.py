@@ -1,8 +1,9 @@
+from django.urls import path
+
 from apps.email_domains.api.v1.email_domains import generate_random_data_with_provided_domain_or_state
 from apps.stt.api.v1.authentication import CustomTokenCreateView, TokenDestroyView
 from apps.stt.api.v1.registration import RegisterView, VerifyView
 from apps.stt.api.v1.timezones import TimezoneListView
-from django.urls import path
 
 urlpatterns = [
     path(

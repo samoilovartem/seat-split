@@ -1,6 +1,7 @@
-from config.components.business_related import STT_STAFF_GROUP_NAME, STT_STAFF_GROUP_PERMISSIONS
 from django.contrib.auth.models import Group, Permission
 from django.core.management.base import BaseCommand
+
+from config.components.business_related import STT_STAFF_GROUP_NAME, STT_STAFF_GROUP_PERMISSIONS
 
 
 class Command(BaseCommand):

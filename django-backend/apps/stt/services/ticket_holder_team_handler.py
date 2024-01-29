@@ -1,11 +1,12 @@
+from loguru import logger
+from notifications.signals import notify
+
 from apps.stt.models import TicketHolderTeam
 from apps.stt.tasks import send_slack_notification, send_ticket_holder_team_confirmed
 from apps.stt.utils import create_ticket_holder_team_slack_message
 from config.components.celery import CELERY_GENERAL_COUNTDOWN
 from config.components.global_settings import DEBUG
 from config.components.slack_integration import STT_NOTIFICATIONS_CHANNEL_ID
-from loguru import logger
-from notifications.signals import notify
 
 
 class TicketHolderTeamPostSaveHandler:

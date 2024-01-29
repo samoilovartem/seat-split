@@ -2,10 +2,12 @@ import logging
 import time
 import uuid
 
-from config.settings import GENERATE_EMAILS_TOKEN, HEALTH_CHECK_TOKEN
-from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from loguru import logger
 from rollbar.contrib.django.middleware import RollbarNotifierMiddleware
+
+from django.http import HttpResponseBadRequest, HttpResponseForbidden
+
+from config.settings import GENERATE_EMAILS_TOKEN, HEALTH_CHECK_TOKEN
 
 
 class CustomRollbarNotifierMiddleware(RollbarNotifierMiddleware):
