@@ -52,7 +52,6 @@ django-querycount = "^0.8.3"
 django-extensions = "^3.2.3"
 ruff = "^0.1.14"
 
-
 [tool.ruff]
 line-length = 110
 
@@ -61,8 +60,12 @@ quote-style = "single"
 
 line-ending = "auto"
 
-
 [tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 88
 known_first_party = "apps, config, tests"
 known_django = "django"
 sections = ["FUTURE", "STDLIB", "THIRDPARTY", "DJANGO", "FIRSTPARTY", "LOCALFOLDER"]
