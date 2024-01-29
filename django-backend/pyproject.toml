@@ -52,6 +52,14 @@ django-querycount = "^0.8.3"
 django-extensions = "^3.2.3"
 ruff = "^0.1.14"
 
+[tool.ruff]
+line-length = 110
+
+[tool.ruff.format]
+quote-style = "single"
+
+line-ending = "auto"
+
 [tool.isort]
 known_first_party = "apps, config, tests"
 known_django = "django"
