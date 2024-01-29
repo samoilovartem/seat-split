@@ -14,17 +14,20 @@ jobs:
       - name: Install Ruff
         run: python -m pip install ruff
       - name: Check and Format with Ruff
-        run: ruff format .
-        continue-on-error: true
+        id: ruff_format
+        run: |
+          ruff format .
+          echo "RUFF_CHANGES=$(git status --porcelain | wc -l)" >> $GITHUB_ENV
       - name: Commit changes
-        if: ${{ steps.ruff.outputs.exit-code != '0' }}
+        if: env.RUFF_CHANGES > 0
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
           git add .
           git commit -m "Apply Ruff code formatting"
+          git push
       - name: Create Pull Request
-        if: ${{ steps.ruff.outputs.exit-code != '0' }}
+        if: env.RUFF_CHANGES > 0
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GH_PAT }}
