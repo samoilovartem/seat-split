@@ -3,9 +3,8 @@
 import datetime
 import uuid
 
-import simple_history.models
-
 import django.db.models.deletion
+import simple_history.models
 from django.conf import settings
 from django.db import migrations, models
 

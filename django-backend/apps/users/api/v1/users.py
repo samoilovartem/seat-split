@@ -1,14 +1,3 @@
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
-from rest_framework.decorators import action, api_view, permission_classes
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
-from rest_framework_simplejwt.tokens import RefreshToken
-
-from django.contrib.auth import get_user_model
-from django.db.models import Prefetch
-
 from apps.stt.models import TicketHolderTeam
 from apps.stt.utils import invalidate_user_auth_token
 from apps.users.api.serializers import (
@@ -20,6 +9,15 @@ from apps.users.api.serializers import (
 from apps.users.tasks import send_email_change_confirmation, send_password_reset_email
 from config.components.celery import CELERY_GENERAL_COUNTDOWN
 from config.components.redis import redis_general_connection
+from django.contrib.auth import get_user_model
+from django.db.models import Prefetch
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
 

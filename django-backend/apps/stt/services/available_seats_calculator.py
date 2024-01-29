@@ -1,9 +1,8 @@
 from typing import Any
 
-from django.utils.timezone import now
-
 from apps.stt.api.serializers import SimpleEventSerializer
 from apps.stt.models import Event, Ticket, TicketHolderTeam
+from django.utils.timezone import now
 
 
 class AvailableSeatsCalculator:

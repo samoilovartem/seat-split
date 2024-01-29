@@ -1,10 +1,9 @@
 import os.path
 
 import dj_database_url
+from config.components.global_settings import BASE_DIR, DEBUG
 from dotenv import load_dotenv
 from split_settings.tools import include
-
-from config.components.global_settings import BASE_DIR, DEBUG
 
 dotenv_file = os.path.join(BASE_DIR, '.env')
 if os.path.isfile(dotenv_file):

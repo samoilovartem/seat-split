@@ -1,9 +1,8 @@
+from apps.stt.models import Event, Team, TeamEvent, Venue
 from dateutil.parser import parser
 from import_export.fields import Field
 from import_export.resources import ModelResource
 from import_export.widgets import ForeignKeyWidget
-
-from apps.stt.models import Event, Team, TeamEvent, Venue
 
 
 class EventResource(ModelResource):

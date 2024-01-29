@@ -1,10 +1,9 @@
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
 from apps.stt.models import Ticket, TicketHolderTeam
 from apps.stt.services.ticket_holder_team_handler import TicketHolderTeamPostSaveHandler
 from apps.stt.services.ticket_post_save_handler import TicketPostSaveHandler
 from config.components.redis import redis_celery_connection
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 @receiver(post_save, sender=TicketHolderTeam)

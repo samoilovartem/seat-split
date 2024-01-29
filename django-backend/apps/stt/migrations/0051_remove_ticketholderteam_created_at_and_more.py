@@ -2,10 +2,9 @@
 
 import uuid
 
+import django.db.models.deletion
 import django_cryptography.fields
 import simple_history.models
-
-import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
 

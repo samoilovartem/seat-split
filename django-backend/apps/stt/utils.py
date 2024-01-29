@@ -1,12 +1,6 @@
 from decimal import Decimal
 from uuid import UUID
 
-from rest_framework.authtoken.models import Token
-
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-
 from apps.stt.models import Ticket, TicketHolderTeam
 from apps.users.models import User
 from config.components.business_related import EXPENSES_MULTIPLIER
@@ -16,6 +10,10 @@ from config.components.slack_integration import (
     STT_NOTIFICATIONS_EMOJI,
 )
 from config.components.smtp_and_email import EMAIL_FRONTEND_BASE_URL
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from rest_framework.authtoken.models import Token
 
 
 def calculate_price_with_expenses(price: Decimal | None) -> str | None:

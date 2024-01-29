@@ -2,9 +2,8 @@ from collections import namedtuple
 
 import pandas as pd
 import requests
-from loguru import logger
-
 from config import config
+from loguru import logger
 
 Team = namedtuple('Team', ['name', 'league', 'home_venue'], defaults=[''])
 

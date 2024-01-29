@@ -1,6 +1,5 @@
-from rest_flex_fields import FlexFieldsModelSerializer
-
 from apps.users.models import User
+from rest_flex_fields import FlexFieldsModelSerializer
 
 
 class ShowAllSeatsMixin:

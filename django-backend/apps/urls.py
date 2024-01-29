@@ -1,9 +1,7 @@
-from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
-
-from django.urls import include, path
-
 from apps.routers import main_router
 from apps.stt.api.v1.authentication import CustomTokenObtainPairView
+from django.urls import include, path
+from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 
 urlpatterns = [
     path('api/v1/base-auth/', include('rest_framework.urls')),

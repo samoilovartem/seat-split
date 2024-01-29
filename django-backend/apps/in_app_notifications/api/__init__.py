@@ -1,6 +1,5 @@
-from rest_framework import routers
-
 from apps.in_app_notifications.api.v1 import in_app_notifications_router_v1
+from rest_framework import routers
 
 in_app_notifications_api_router_v1 = routers.DefaultRouter()
 in_app_notifications_api_router_v1.registry.extend(in_app_notifications_router_v1.registry)

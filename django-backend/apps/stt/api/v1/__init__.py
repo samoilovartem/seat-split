@@ -1,11 +1,10 @@
-from rest_framework import routers
-
 from apps.stt.api.v1.events import EventViewSet
 from apps.stt.api.v1.purchases import PurchaseViewSet
 from apps.stt.api.v1.teams import TeamViewSet
 from apps.stt.api.v1.ticket_holder_team import TicketHolderTeamViewSet
 from apps.stt.api.v1.ticket_holders import TicketHolderViewSet
 from apps.stt.api.v1.tickets import TicketViewSet
+from rest_framework import routers
 
 stt_router_v1 = routers.DefaultRouter()
 stt_router_v1.register(r'teams', TeamViewSet, basename='teams')

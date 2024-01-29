@@ -1,9 +1,7 @@
+from apps.common_services.utils import get_model_fields
+from django.apps import apps
 from rest_framework.response import Response
 from tablib import Dataset, UnsupportedFormat
-
-from django.apps import apps
-
-from apps.common_services.utils import get_model_fields
 
 
 class CSVImporter:

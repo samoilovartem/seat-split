@@ -1,11 +1,10 @@
+from apps.stt.api.serializers import TeamSerializer
+from apps.stt.models import Team, TicketHolder
+from config.components.business_related import SUPPORTED_LEAGUES
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-
-from apps.stt.api.serializers import TeamSerializer
-from apps.stt.models import Team, TicketHolder
-from config.components.business_related import SUPPORTED_LEAGUES
 
 
 class TeamViewSet(ModelViewSet):

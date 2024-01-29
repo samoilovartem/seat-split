@@ -1,8 +1,7 @@
-from django.core.management.base import BaseCommand
-from django.db.utils import IntegrityError
-
 from apps.users.models import User
 from config.settings import GENERAL_SUPERUSER_EMAIL, GENERAL_SUPERUSER_PASSWORD
+from django.core.management.base import BaseCommand
+from django.db.utils import IntegrityError
 
 
 class Command(BaseCommand):

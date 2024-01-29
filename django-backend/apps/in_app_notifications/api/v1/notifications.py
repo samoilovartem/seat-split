@@ -1,3 +1,4 @@
+from apps.in_app_notifications.api.serializers import NotificationSerializer
 from drf_yasg.utils import no_body, swagger_auto_schema
 from notifications.models import Notification
 from rest_framework import status
@@ -6,8 +7,6 @@ from rest_framework.mixins import ListModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-
-from apps.in_app_notifications.api.serializers import NotificationSerializer
 
 
 class NotificationViewSet(ListModelMixin, GenericViewSet):

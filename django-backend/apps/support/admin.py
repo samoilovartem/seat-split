@@ -1,11 +1,9 @@
 from datetime import datetime
 
+from apps.support.models import Inquiry
+from django.contrib import admin
 from rangefilter.filters import DateRangeFilterBuilder
 from simple_history.admin import SimpleHistoryAdmin
-
-from django.contrib import admin
-
-from apps.support.models import Inquiry
 
 
 @admin.register(Inquiry)

@@ -1,6 +1,5 @@
-from import_export import resources
-
 from apps.email_domains.models import EmailDomains
+from import_export import resources
 
 
 class EmailDomainsResource(resources.ModelResource):

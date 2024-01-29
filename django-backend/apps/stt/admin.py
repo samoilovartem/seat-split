@@ -1,14 +1,5 @@
 from datetime import datetime
 
-from import_export.admin import ImportExportMixin
-from rangefilter.filters import DateRangeFilterBuilder
-from simple_history.admin import SimpleHistoryAdmin
-
-from django.contrib import admin
-from django.core.exceptions import ValidationError
-from django.forms import BaseInlineFormSet, Select
-from django.utils.html import format_html
-
 from apps.common_services.utils import show_changed_fields
 from apps.stt.filters import FutureEventsFilter, HomeAwayFilter
 from apps.stt.forms import TicketAdminForm
@@ -24,11 +15,14 @@ from apps.stt.models import (
     Venue,
 )
 from apps.stt.resources import EventResource
-from config.components.business_related import (
-    DELIVERY_STATUSES,
-    LISTING_STATUSES,
-    MARKETPLACES,
-)
+from config.components.business_related import DELIVERY_STATUSES, LISTING_STATUSES, MARKETPLACES
+from django.contrib import admin
+from django.core.exceptions import ValidationError
+from django.forms import BaseInlineFormSet, Select
+from django.utils.html import format_html
+from import_export.admin import ImportExportMixin
+from rangefilter.filters import DateRangeFilterBuilder
+from simple_history.admin import SimpleHistoryAdmin
 
 
 class BaseModelAdmin(SimpleHistoryAdmin):

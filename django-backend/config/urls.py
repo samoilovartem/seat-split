@@ -1,9 +1,8 @@
+from config.settings import MEDIA_ROOT
+from config.yasg import urlpatterns as swagger_urls
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.static import serve
-
-from config.settings import MEDIA_ROOT
-from config.yasg import urlpatterns as swagger_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),

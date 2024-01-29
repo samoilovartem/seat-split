@@ -1,11 +1,3 @@
-from pytz import timezone
-from rest_flex_fields import FlexFieldsModelSerializer
-from rest_framework import serializers
-from rest_framework.exceptions import AuthenticationFailed
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
-from django.utils.timezone import localtime
-
 from apps.serializers import ShowAllSeatsMixin
 from apps.stt.api.validators import validate_seat_range
 from apps.stt.models import (
@@ -20,6 +12,12 @@ from apps.stt.models import (
     Venue,
 )
 from apps.stt.utils import calculate_price_with_expenses
+from django.utils.timezone import localtime
+from pytz import timezone
+from rest_flex_fields import FlexFieldsModelSerializer
+from rest_framework import serializers
+from rest_framework.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):

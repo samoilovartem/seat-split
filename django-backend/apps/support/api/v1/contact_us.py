@@ -1,12 +1,11 @@
+from apps.support.api.serializers import ContactUsSerializer
+from apps.support.tasks import send_contact_us_notification
+from config.components.celery import CELERY_GENERAL_COUNTDOWN
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from apps.support.api.serializers import ContactUsSerializer
-from apps.support.tasks import send_contact_us_notification
-from config.components.celery import CELERY_GENERAL_COUNTDOWN
 
 
 class ContactView(APIView):

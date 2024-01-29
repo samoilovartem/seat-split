@@ -1,9 +1,8 @@
-from rest_framework.viewsets import ModelViewSet
-
 from apps.permissions import IsTicketHolder
 from apps.stt.api.filters import PurchaseFilterSet
 from apps.stt.api.serializers import PurchaseSerializer
 from apps.stt.models import Purchase
+from rest_framework.viewsets import ModelViewSet
 
 
 class PurchaseViewSet(ModelViewSet):
