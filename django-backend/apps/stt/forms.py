@@ -3,8 +3,6 @@ from apps.stt.models import Ticket
 from django.core.exceptions import ValidationError
 
 
-
-
 class TicketAdminForm(forms.ModelForm):
     class Meta:
         model = Ticket
