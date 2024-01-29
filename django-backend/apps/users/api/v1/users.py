@@ -17,7 +17,10 @@ from apps.users.api.serializers import (
     PasswordResetRequestSerializer,
     UserSerializer,
 )
-from apps.users.tasks import send_email_change_confirmation, send_password_reset_email
+from apps.users.tasks import (
+    send_email_change_confirmation,
+    send_password_reset_email,
+)
 from config.components.celery import CELERY_GENERAL_COUNTDOWN
 from config.components.redis import redis_general_connection
 

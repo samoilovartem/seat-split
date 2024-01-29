@@ -24,7 +24,11 @@ from apps.stt.models import (
     Venue,
 )
 from apps.stt.resources import EventResource
-from config.components.business_related import DELIVERY_STATUSES, LISTING_STATUSES, MARKETPLACES
+from config.components.business_related import (
+    DELIVERY_STATUSES,
+    LISTING_STATUSES,
+    MARKETPLACES,
+)
 
 
 class BaseModelAdmin(SimpleHistoryAdmin):

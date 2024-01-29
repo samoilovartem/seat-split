@@ -20,7 +20,10 @@ from apps.stt.utils import (
     get_confirmation_link,
 )
 from config.components.business_related import GITHUB_ACCESS_TOKEN
-from config.components.celery import CELERY_GENERAL_COUNTDOWN, CELERY_TASK_RESULT_MAX_AGE
+from config.components.celery import (
+    CELERY_GENERAL_COUNTDOWN,
+    CELERY_TASK_RESULT_MAX_AGE,
+)
 from config.components.redis import redis_celery_connection
 from config.components.slack_integration import (
     STT_NOTIFICATIONS_CHANNEL_ID,

@@ -2,7 +2,11 @@ from loguru import logger
 from redis import Redis
 
 from apps.stt.models import Ticket
-from apps.stt.services.ticket_services import TicketCacheService, TicketNotifier, TicketStatusChecker
+from apps.stt.services.ticket_services import (
+    TicketCacheService,
+    TicketNotifier,
+    TicketStatusChecker,
+)
 
 
 class TicketPostSaveHandler:

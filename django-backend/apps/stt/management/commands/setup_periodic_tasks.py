@@ -1,4 +1,8 @@
-from django_celery_beat.models import CrontabSchedule, IntervalSchedule, PeriodicTask
+from django_celery_beat.models import (
+    CrontabSchedule,
+    IntervalSchedule,
+    PeriodicTask,
+)
 
 from django.core.management.base import BaseCommand
 
