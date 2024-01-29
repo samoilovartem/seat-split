@@ -1,7 +1,7 @@
-from django import forms
-from django.core.exceptions import ValidationError
-
 from apps.stt.models import Ticket
+from django.core.exceptions import ValidationError
+from django import forms
+
 
 
 class TicketAdminForm(forms.ModelForm):
