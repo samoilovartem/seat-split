@@ -1,47 +1,23 @@
 import csv
 import json
 
-JSON_FILE_PATH = 'json_source_files/NHL2023-2024.json'
-CSV_OUTPUT_FILENAME = 'NHL20232024.csv'
+from loguru import logger
+
+JSON_FILE_PATH = 'json_source_files/MLB_2024_raw_data.json'
+CSV_OUTPUT_FILENAME = 'MLB2024_raw.csv'
 
 with open(JSON_FILE_PATH, 'r') as json_file:
     data = json.load(json_file)
 
 rows = data['rows']
 
-
 fieldnames = [
-    'id',
+    'skybox_event_id',
     'name',
-    'date',
-    'venue_id',
-    'venue_name',
-    'venue_address',
-    'venue_city',
-    'venue_state',
-    'venue_country',
-    'venue_postalCode',
-    'venue_phone',
-    'venue_timeZone',
-    'performerId',
-    'performer',
-    'keywords',
-    'chartUrl',
-    'stubhubEventId',
-    'stubhubEventUrl',
-    'tags',
-    'notes',
-    'eiEventId',
-    'optOutReplenishment',
-    'ticketCount',
-    'mySoldTickets',
-    'myCancelledTickets',
-    'disabled',
-    'quantity',
-    'cost',
-    'lastPriceUpdate',
-    'listingCount',
-    'vividSeatsEventUrl',
+    'date_time',
+    'skybox_venue_id',
+    'skybox_venue_timezone',
+    'stubhub_event_url',
 ]
 
 with open(CSV_OUTPUT_FILENAME, 'w', newline='') as csv_file:
@@ -50,17 +26,15 @@ with open(CSV_OUTPUT_FILENAME, 'w', newline='') as csv_file:
     writer.writeheader()
 
     for row in rows:
-        venue = row.pop('venue', {})
-        row['venue_id'] = venue.get('id')
-        row['venue_name'] = venue.get('name')
-        row['venue_address'] = venue.get('address')
-        row['venue_city'] = venue.get('city')
-        row['venue_state'] = venue.get('state')
-        row['venue_country'] = venue.get('country')
-        row['venue_postalCode'] = venue.get('postalCode')
-        row['venue_phone'] = venue.get('phone')
-        row['venue_timeZone'] = venue.get('timeZone')
+        csv_row = {
+            'skybox_event_id': row['id'],
+            'name': row['name'],
+            'date_time': row['date'],
+            'skybox_venue_id': row['venue']['id'],
+            'skybox_venue_timezone': row['venue']['timeZone'],
+            'stubhub_event_url': row['stubhubEventUrl'],
+        }
 
-        writer.writerow(row)
+        writer.writerow(csv_row)
 
-print(f'Data has been written to {CSV_OUTPUT_FILENAME}')
+logger.info('Data has been written to {}', CSV_OUTPUT_FILENAME)
