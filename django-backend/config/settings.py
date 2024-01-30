@@ -169,3 +169,5 @@ GENERAL_SUPERUSER_PASSWORD = os.environ.get('GENERAL_SUPERUSER_PASSWORD', 'qwert
 
 HEALTH_CHECK_TOKEN = os.environ.get('HEALTH_CHECK_TOKEN', 'health_check_token')
 GENERATE_EMAILS_TOKEN = os.environ.get('GENERATE_EMAILS_TOKEN', 'generate_emails_token')
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
