@@ -245,6 +245,7 @@ class EventAdminConfig(ImportExportMixin, BaseModelAdmin):
     list_display = (
         'name',
         'associated_teams',
+        'additional_info',
         'league',
         'date_time',
         'season',
