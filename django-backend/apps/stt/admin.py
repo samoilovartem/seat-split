@@ -324,6 +324,7 @@ class VenueAdminConfig(ImportExportMixin, admin.ModelAdmin):
     list_display_links = ('name',)
     search_fields = (
         'id',
+        'skybox_venue_id',
         'name',
         'address',
         'city',
