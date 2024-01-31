@@ -16,7 +16,7 @@ class DataProcessor:
         csv_output_filename: str,
         season: Season,
         league: str,
-        replacements: dict[str, dict[str, str]],
+        replacements: dict[str, dict[str, str]] | None = None,
     ):
         self.json_file = json_file
         self.csv_output_filename = csv_output_filename
