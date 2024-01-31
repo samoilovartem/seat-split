@@ -188,7 +188,7 @@ class TicketAdminConfig(BaseModelAdmin):
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if db_field.name == 'listing_status':
-            kwargs['widget'] = Select(choices=LISTING_STATUSES)
+            kwargs['widget'] = Select(choices=((status, status) for status in LISTING_STATUSES))
         return super().formfield_for_dbfield(db_field, request, **kwargs)
 
 
@@ -229,9 +229,9 @@ class PurchaseAdminConfig(admin.ModelAdmin):
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if db_field.name == 'delivery_status':
-            kwargs['widget'] = Select(choices=DELIVERY_STATUSES)
+            kwargs['widget'] = Select(choices=((status, status) for status in DELIVERY_STATUSES))
         if db_field.name == 'customer':
-            kwargs['widget'] = Select(choices=MARKETPLACES)
+            kwargs['widget'] = Select(choices=((customer, customer) for customer in MARKETPLACES))
         return super().formfield_for_dbfield(db_field, request, **kwargs)
 
 

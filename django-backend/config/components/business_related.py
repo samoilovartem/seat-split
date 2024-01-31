@@ -6,29 +6,29 @@ EXPENSES_MULTIPLIER = 1 - BUSINESS_TOTAL_EXPENSES
 GITHUB_ACCESS_TOKEN = os.environ.get('GITHUB_ACCESS_TOKEN', '')
 
 LISTING_STATUSES = [
-    ('Pending', 'Pending'),
-    ('Listed', 'Listed'),
-    ('Requested for delisting', 'Requested for delisting'),
-    ('Sold', 'Sold'),
-    ('Delisted', 'Delisted'),
+    'Pending',
+    'Listed',
+    'Requested for delisting',
+    'Sold',
+    'Delisted',
 ]
 
 DELIVERY_STATUSES = [
-    ('Pending', 'Pending'),
-    ('Complete', 'Complete'),
+    'Pending',
+    'Complete',
 ]
 
 MARKETPLACES = [
-    ('Event Inventory', 'Event Inventory'),
-    ('StubHub', 'StubHub'),
-    ('Mercury', 'Mercury'),
-    ('SeatGeek', 'SeatGeek'),
-    ('VividSeats', 'VividSeats'),
-    ('TicketNetwork', 'TicketNetwork'),
-    ('Viagogo', 'Viagogo'),
-    ('Ticket Evolution', 'Ticket Evolution'),
-    ('TickPick', 'TickPick'),
-    ('Gametime', 'Gametime'),
+    'Event Inventory',
+    'StubHub',
+    'Mercury',
+    'SeatGeek',
+    'VividSeats',
+    'TicketNetwork',
+    'Viagogo',
+    'Ticket Evolution',
+    'TickPick',
+    'Gametime',
 ]
 
 SUPPORTED_LEAGUES = ['NFL', 'NBA', 'NHL', 'MLB', 'MLS']
