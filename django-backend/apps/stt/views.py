@@ -22,12 +22,12 @@ def process_file_view(request):
             else:
                 dp = DataProcessor(json_file, 'output.csv', season, league)
 
-            dp.process_data()
+            csv_content = dp.process_data()
 
-            with open('output.csv', 'r') as f:
-                response = HttpResponse(f, content_type='text/csv')
-                response['Content-Disposition'] = 'attachment; filename=output.csv'
-                return response
+            response = HttpResponse(csv_content, content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="output.csv"'
+            return response
+
     else:
         form = DataProcessorForm()
 
