@@ -1,5 +1,6 @@
 import json
 import re
+from io import StringIO
 
 import pandas as pd
 import pytz
@@ -112,6 +113,11 @@ class DataProcessor:
         data_list = self._create_data_list(rows)
         df = self._create_and_prepare_dataframe(data_list)
 
-        df.to_csv(self.csv_output_filename, index=False)
+        csv_buffer = StringIO()
+        df.to_csv(csv_buffer, index=False)
+        csv_content = csv_buffer.getvalue()
+        csv_buffer.close()
 
-        logger.info('Data has been written to {}', self.csv_output_filename)
+        logger.info('Data has been processed and is ready for download.')
+
+        return csv_content
