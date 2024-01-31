@@ -16,9 +16,12 @@ def process_file_view(request):
             json_file = form.cleaned_data['json_file']
             season = form.cleaned_data['season']
             league = form.cleaned_data['league']
-            replacements = json.loads(form.cleaned_data['replacements'])
+            replacements = form.cleaned_data.get('replacements')
+            if replacements:
+                dp = DataProcessor(json_file, 'output.csv', season, league, json.loads(replacements))
+            else:
+                dp = DataProcessor(json_file, 'output.csv', season, league)
 
-            dp = DataProcessor(json_file, 'output.csv', season, league, replacements)
             dp.process_data()
 
             with open('output.csv', 'r') as f:
