@@ -29,6 +29,7 @@ class DataProcessorForm(forms.Form):
     season = forms.ModelChoiceField(queryset=Season.objects.all())
     league = forms.ChoiceField(choices=((league, league) for league in SUPPORTED_LEAGUES))
     replacements = forms.CharField(
+        required=False,
         widget=forms.Textarea,
         help_text="""The field, value of which you want to replace, should be the key.
         Provide replacements in this format:
