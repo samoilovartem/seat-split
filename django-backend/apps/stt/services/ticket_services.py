@@ -153,9 +153,9 @@ class TicketStatusChecker:
         if not Purchase.objects.filter(ticket=self.ticket).exists():
             Purchase.objects.create(
                 ticket=self.ticket,
-                customer=MARKETPLACES[0][0],
+                customer=MARKETPLACES[0],
                 purchase_price=self.ticket.price,
-                delivery_status=DELIVERY_STATUSES[0][0],
+                delivery_status=DELIVERY_STATUSES[0],
                 purchased_at=timezone.now(),
             )
 

@@ -97,6 +97,10 @@ The next step would be creating a **Pull Request** from **develop** to **main** 
 6. Screenshots (if appropriate).
 7. Questions.
 
+### Getting events data:
+
+A full instruction on how to get required data using SkyBox personal account and Postman can be found [here](docs/get_events_data.md).
+
 #### Useful notes:
 1. Heroku `python manage.py collectstatic` issue solution can be found [here](https://stackoverflow.com/questions/55330749/error-while-running-python-manage-py-collectstatic-noinput-after-changin).
 2. Django-tabulator-example is [here](https://github.com/cuauhtemoc-amdg/django-tabulator-example).

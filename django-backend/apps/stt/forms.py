@@ -1,7 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from apps.stt.models import Ticket
+from apps.stt.models import Season, Ticket
+from config.components.business_related import SUPPORTED_LEAGUES
 
 
 class TicketAdminForm(forms.ModelForm):
@@ -21,3 +22,22 @@ class TicketAdminForm(forms.ModelForm):
         if not price:
             raise ValidationError('A ticket must have a price.')
         return cleaned_data
+
+
+class DataProcessorForm(forms.Form):
+    json_file = forms.FileField()
+    season = forms.ModelChoiceField(queryset=Season.objects.all())
+    league = forms.ChoiceField(choices=((league, league) for league in SUPPORTED_LEAGUES))
+    replacements = forms.CharField(
+        required=False,
+        widget=forms.Textarea,
+        help_text="""The field, value of which you want to replace, should be the key.
+        Provide replacements in this format:
+        {
+            "name": {
+                "\\bSt Louis Cardinals\\b": "St. Louis Cardinals"
+            }
+        }
+        Note: "\\b" is used to indicate a word boundary, ensuring the replacement
+        only happens when the match is a whole word and not part of a larger word or phrase.""",
+    )
