@@ -1,0 +1,29 @@
+from import_export.admin import ImportExportMixin
+
+from django.contrib import admin
+
+from apps.stt.models import Team
+
+
+@admin.register(Team)
+class TeamAdminConfig(ImportExportMixin, admin.ModelAdmin):
+    model = Team
+    save_as = True
+    save_on_top = True
+    list_display = (
+        'name',
+        'league',
+        'city',
+        'state',
+        'id',
+    )
+    readonly_fields = ('id',)
+    list_display_links = ('name',)
+    search_fields = (
+        'id',
+        'name',
+        'league',
+        'city',
+        'state',
+    )
+    list_filter = ('league',)
