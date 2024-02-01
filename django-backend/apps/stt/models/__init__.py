@@ -6,6 +6,7 @@ from apps.stt.models.season import Season  # noqa
 from apps.stt.models.team import Team  # noqa
 from apps.stt.models.team_event import TeamEvent  # noqa
 from apps.stt.models.ticket import Ticket  # noqa
+from apps.stt.models.ticket_holder import TicketHolder  # noqa
 from apps.stt.models.ticket_holder import (
     ticket_holder_avatar_path as new_ticket_holder_avatar_path,
 )
