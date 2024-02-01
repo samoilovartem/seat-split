@@ -4,6 +4,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from django.contrib.auth import get_user_model
 from django.utils.timezone import localtime
 
 from apps.serializers import ShowAllSeatsMixin
@@ -16,10 +17,11 @@ from apps.stt.models import (
     Ticket,
     TicketHolder,
     TicketHolderTeam,
-    User,
     Venue,
 )
 from apps.stt.utils import calculate_price_with_expenses
+
+User = get_user_model()
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):

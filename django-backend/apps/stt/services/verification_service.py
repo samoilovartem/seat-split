@@ -1,15 +1,17 @@
 from uuid import UUID
 
+from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 
-from apps.stt.models import User
 from apps.stt.tasks import send_email_confirmed
 from apps.stt.utils import invalidate_user_auth_token
 from apps.users.tasks import send_email_change_confirmed
 from config.components.celery import CELERY_GENERAL_COUNTDOWN
 from config.components.redis import redis_general_connection
+
+User = get_user_model()
 
 
 class VerificationService:

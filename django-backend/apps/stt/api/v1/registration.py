@@ -4,13 +4,15 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from django.contrib.auth import password_validation
+from django.contrib.auth import get_user_model, password_validation
 
 from apps.stt.api.serializers import RegisterSerializer
-from apps.stt.models import TicketHolder, User
+from apps.stt.models import TicketHolder
 from apps.stt.services.verification_service import VerificationService
 from apps.stt.tasks import send_email_confirmation
 from config.components.celery import CELERY_GENERAL_COUNTDOWN
+
+User = get_user_model()
 
 
 class RegisterView(APIView):
