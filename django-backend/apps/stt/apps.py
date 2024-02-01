@@ -6,4 +6,5 @@ class SttConfig(AppConfig):
     name = 'apps.stt'
 
     def ready(self):
+        import apps.stt.admin  # noqa
         import apps.stt.signals  # noqa
