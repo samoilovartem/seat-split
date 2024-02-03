@@ -35,16 +35,16 @@ include(
     'components/query_count.py',
 )
 
-INSTALLED_APPS = [
-    # ---- Django standard apps ---- #
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # ---- Third party apps ---- #
-    'drf_yasg',
+]
+
+THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
@@ -62,13 +62,17 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_celery_beat',
     'notifications',
-    # ---- Project's apps ---- #
-    'apps.users.apps.UsersConfig',
-    'apps.stt.apps.SttConfig',
-    'apps.email_domains.apps.EmailDomainsConfig',
-    'apps.support.apps.SupportConfig',
-    'apps.in_app_notifications.apps.InAppNotificationsConfig',
 ]
+
+PROJECT_APPS = [
+    'apps.users',
+    'apps.stt',
+    'apps.email_domains',
+    'apps.support',
+    'apps.in_app_notifications',
+]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
 
 if DEBUG:
     INSTALLED_APPS += ['django_extensions']
