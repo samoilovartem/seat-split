@@ -65,11 +65,11 @@ THIRD_PARTY_APPS = [
 ]
 
 PROJECT_APPS = [
-    'apps.users',
-    'apps.stt',
-    'apps.email_domains',
-    'apps.support',
-    'apps.in_app_notifications',
+    'apps.users.apps.UsersConfig',
+    'apps.stt.apps.SttConfig',
+    'apps.email_domains.apps.EmailDomainsConfig',
+    'apps.support.apps.SupportConfig',
+    'apps.in_app_notifications.apps.InAppNotificationsConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
