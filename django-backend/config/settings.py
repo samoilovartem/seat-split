@@ -59,6 +59,7 @@ THIRD_PARTY_APPS = [
     'health_check.db',
     'health_check.cache',
     'health_check.contrib.celery',
+    'drf_yasg',
     'django_celery_results',
     'django_celery_beat',
     'notifications',
