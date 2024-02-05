@@ -51,7 +51,7 @@ class Command(BaseCommand):
             name='Clean Duplicate History Daily',
             defaults={
                 'crontab': crontab_schedule_daily_for_history_cleanup,
-                'task': 'apps.stt.tasks.clean_duplicate_history',
+                'task': 'apps.stt.tasks.periodic_tasks.clean_duplicate_history',
             },
         )
 
@@ -60,7 +60,7 @@ class Command(BaseCommand):
             name='Clean Old History Daily',
             defaults={
                 'crontab': crontab_schedule_daily_for_history_cleanup,
-                'task': 'apps.stt.tasks.clean_old_history',
+                'task': 'apps.stt.tasks.periodic_tasks.clean_old_history',
             },
         )
 
@@ -69,7 +69,7 @@ class Command(BaseCommand):
             name='Weekly Reports',
             defaults={
                 'crontab': crontab_schedule_weekly,
-                'task': 'apps.stt.tasks.fetch_and_send_issues_report',
+                'task': 'apps.stt.tasks.periodic_tasks.fetch_and_send_issues_report',
             },
         )
 
@@ -78,7 +78,7 @@ class Command(BaseCommand):
             name='Backend Results Cleanup',
             defaults={
                 'crontab': crontab_schedule_daily,
-                'task': 'apps.stt.tasks.custom_backend_result_cleanup',
+                'task': 'apps.stt.tasks.periodic_tasks.custom_backend_result_cleanup',
             },
         )
 
