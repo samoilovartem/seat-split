@@ -7,7 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from apps.stt.api.filters import EventFilterSet
 from apps.stt.api.serializers import AvailableSeatsSerializer, EventSerializer
-from apps.stt.models import Event, TicketHolderTeam
+from apps.stt.models import Event, TicketHolder, TicketHolderTeam
 from apps.stt.services.available_seats_calculator import AvailableSeatsCalculator
 
 
@@ -34,19 +34,23 @@ class EventViewSet(ModelViewSet):
         :return: A list of available seats for each applicable event for the ticket holder.
         """
         serializer = AvailableSeatsSerializer(data=request.data)
-        if serializer.is_valid():
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
             ticket_holder = serializer.validated_data['ticket_holder']
-            team = serializer.validated_data['team']
+        except KeyError:
+            ticket_holder = TicketHolder.objects.filter(user=self.request.user).first()
 
-            if not TicketHolderTeam.objects.filter(ticket_holder=ticket_holder, team=team).exists():
-                return Response(
-                    {'detail': 'The provided team does not belong to the ticket holder.'},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+        team = serializer.validated_data['team']
 
-            context = {'request': request}
+        if not TicketHolderTeam.objects.filter(ticket_holder=ticket_holder, team=team).exists():
+            return Response(
+                {'detail': 'The provided team does not belong to the ticket holder.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-            calculator = AvailableSeatsCalculator(ticket_holder, team)
-            return Response(calculator.calculate(context=context))
+        context = {'request': request}
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        calculator = AvailableSeatsCalculator(ticket_holder, team)
+        return Response(calculator.calculate(context=context))

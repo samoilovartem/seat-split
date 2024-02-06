@@ -41,7 +41,9 @@ class AvailableSeatsCalculator:
         :return: List of upcoming events.
         """
         return list(
-            Event.objects.filter(name__endswith=self.team.name, date_time__gte=now()).select_related('venue')
+            Event.objects.filter(name__endswith=self.team.name, date_time__gte=now()).select_related(
+                'venue', 'season'
+            )
         )
 
     def _get_tickets_for_events(self) -> list[dict[str, Any]]:
