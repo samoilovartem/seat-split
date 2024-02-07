@@ -54,7 +54,7 @@ class AvailableSeatsCalculator:
             'seat': self.ticket_holder_team.seat,
         }
 
-    def calculate(self, context=None) -> list[dict[str, Any]]:
+    def calculate(self, context: dict[str, Any] | None = None) -> list[dict[str, Any]]:
         """
         Calculate the available seats for the ticket holder for each upcoming event.
         """
@@ -71,7 +71,7 @@ class AvailableSeatsCalculator:
             if available_seats:
                 results.append(
                     {
-                        'event': SimpleEventSerializer(event, context=context).data,
+                        'event': SimpleEventSerializer(event, context=context).data if context else event,
                         'available_seats': sorted(list(available_seats), key=int),
                         'general_ticket_data': self._get_general_ticket_data(),
                     }
