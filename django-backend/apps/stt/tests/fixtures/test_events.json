@@ -1,0 +1,47 @@
+[
+  {
+    "model": "stt.Event",
+    "pk": "250dc054-0934-406a-bd0b-6e821afb5818",
+    "fields": {
+      "venue": null,
+      "season": null,
+      "skybox_event_id": "4526049",
+      "name": "Cleveland Guardians at Seattle Mariners",
+      "additional_info": "Spring Training",
+      "date_time": "2028-02-25 20:10",
+      "stubhub_event_url": "https://www.stubhub.com/seattle-mariners-peoria-tickets-2-25-2024/event/152263535/",
+      "league": "MLB",
+      "created_at": "2024-02-06T07:32:11.900646Z"
+    }
+  },
+  {
+    "model": "stt.Event",
+    "pk": "b963784a-358e-48e3-ad56-e9e21e54d969",
+    "fields": {
+      "venue": null,
+      "season": null,
+      "skybox_event_id": "4526050",
+      "name": "Kansas City Royals at Seattle Mariners",
+      "additional_info": "Spring Training",
+      "date_time": "2028-02-28 20:10",
+      "stubhub_event_url": "https://www.stubhub.com/seattle-mariners-peoria-tickets-2-28-2024/event/152263548/?",
+      "league": "MLB",
+      "created_at": "2027-02-06T07:32:12.036819Z"
+    }
+  },
+  {
+    "model": "stt.Event",
+    "pk": "fc355a7f-b03c-4a9c-8550-48081a583c3a",
+    "fields": {
+      "venue": null,
+      "season": null,
+      "skybox_event_id": "4526053",
+      "name": "Chicago White Sox at Seattle Mariners",
+      "additional_info": "Spring Training, Split Squad",
+      "date_time": "2028-02-29 20:05",
+      "stubhub_event_url": "https://www.stubhub.com/seattle-mariners-peoria-tickets-2-29-2024/event/152263572/",
+      "league": "MLB",
+      "created_at": "2024-02-06T07:32:12.057206Z"
+    }
+  }
+]

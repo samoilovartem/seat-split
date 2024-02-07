@@ -1,0 +1,18 @@
+[
+  {
+    "model": "stt.TicketHolderTeam",
+    "pk": "07144455-c666-4087-af31-07889a179989",
+    "fields": {
+      "section": "1",
+      "row": "1",
+      "seat": "1-2",
+      "seats_quantity": 1,
+      "credentials_website_username": "test",
+      "credentials_website_password": "test",
+      "is_confirmed": false,
+      "created_at": "2024-02-07T04:30:41.003778Z",
+      "ticket_holder": "5ad12fe4-163c-4e70-ba00-327d1930eee7",
+      "team": "013265b0-d824-40bb-8cd4-1b9196dd4b7d"
+    }
+  }
+]

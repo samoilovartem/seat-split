@@ -1,0 +1,30 @@
+[
+  {
+    "model": "users.User",
+    "pk": "a3442f6b-1ba3-4454-8d09-5a2f1339a94f",
+    "fields": {
+      "username": "testuser@example.com",
+      "first_name": "Test",
+      "last_name": "User",
+      "email": "testuser@example.com",
+      "password": "pbkdf2_sha256$600000$MgRrT8aD8FFvtZhdwWCAfG$paiU69Yqp9mOT031pMQjiHnvOvRnfBYE9dZG4EMfwU4=",
+      "is_active": true,
+      "is_staff": true
+    }
+  },
+    {
+    "model": "stt.TicketHolder",
+    "pk": "5ad12fe4-163c-4e70-ba00-327d1930eee7",
+    "fields": {
+      "first_name": "Test",
+      "last_name": "User",
+      "user": "a3442f6b-1ba3-4454-8d09-5a2f1339a94f",
+      "phone": "123-456-7890",
+      "address": "123 Main St, Anytown, AN",
+      "is_card_interest": false,
+      "is_season_ticket_interest": true,
+      "timezone": "UTC",
+      "created_at": "2021-01-01T00:00:00Z"
+    }
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "model": "stt.Ticket",
+    "pk": "fce2d36e-b28d-4834-8dce-bbf2f593bb69",
+    "fields": {
+      "price": "100.00",
+      "seat": "1",
+      "row": "1",
+      "section": "1",
+      "barcode": "",
+      "listing_status": "Pending",
+      "created_at": "2024-02-07T07:38:41.825203Z",
+      "sold_at": null,
+      "ticket_holder": "5ad12fe4-163c-4e70-ba00-327d1930eee7",
+      "event": "250dc054-0934-406a-bd0b-6e821afb5818"
+    }
+  }
+]
