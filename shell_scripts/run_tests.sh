@@ -20,16 +20,16 @@ fi
 
 if test "$number" -eq 1
   then
-    docker exec $docker_flags django bash -c "coverage run manage.py test -v 2 && coverage report"
+    docker exec $docker_flags stt_django bash -c "coverage run manage.py test -v 2 && coverage report"
 elif test "$number" -eq 2
   then
-    docker exec $docker_flags django bash -c "coverage run manage.py test -v 2 && coverage report && coverage html"
+    docker exec $docker_flags stt_django bash -c "coverage run manage.py test -v 2 && coverage report && coverage html"
 elif test "$number" -eq 3
   then
-    docker exec $docker_flags django bash -c "python manage.py test"
+    docker exec $docker_flags stt_django bash -c "python manage.py test"
 elif test "$number" -eq 4
   then
-    docker exec $docker_flags django bash -c "python manage.py test --parallel"
+    docker exec $docker_flags stt_django bash -c "python manage.py test --parallel"
 else
     echo "${GREEN}Wrong input. Please try again${NC}"
 fi
