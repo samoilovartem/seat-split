@@ -3,17 +3,11 @@ from typing import Any
 from django.utils.timezone import now
 
 from apps.stt.api.serializers import SimpleEventSerializer
-from apps.stt.models import Event, Ticket, TicketHolderTeam
+from apps.stt.models import Event, Team, Ticket, TicketHolder, TicketHolderTeam
 
 
 class AvailableSeatsCalculator:
-    def __init__(self, ticket_holder: int, team: str) -> None:
-        """
-        Initializes the calculator.
-
-        :param ticket_holder: ID of the ticket holder.
-        :param team: Team name associated with the ticket holder.
-        """
+    def __init__(self, ticket_holder: TicketHolder, team: Team) -> None:
         self.ticket_holder = ticket_holder
         self.team = team
         self.ticket_holder_team = TicketHolderTeam.objects.get(ticket_holder=ticket_holder, team=self.team)
@@ -24,9 +18,6 @@ class AvailableSeatsCalculator:
     def _get_seats_from_range(self, seat_range: str) -> set[str]:  # noqa
         """
         Convert a seat range (e.g., '1-5') to a set of seat numbers.
-
-        :param seat_range: Range of seats in string format.
-        :return: Set of seat numbers.
         """
         if '-' in seat_range:
             first_seat, last_seat = seat_range.split('-')
@@ -37,8 +28,6 @@ class AvailableSeatsCalculator:
     def _get_future_home_events_for_team(self) -> list[Event]:
         """
         Get all future home events for the specified team.
-
-        :return: List of upcoming events.
         """
         return list(
             Event.objects.filter(name__endswith=self.team.name, date_time__gte=now()).select_related(
@@ -49,8 +38,6 @@ class AvailableSeatsCalculator:
     def _get_tickets_for_events(self) -> list[dict[str, Any]]:
         """
         Retrieve tickets associated with the ticket holder for upcoming events.
-
-        :return: List of ticket data.
         """
         return Ticket.objects.filter(
             ticket_holder=self.ticket_holder,
@@ -70,8 +57,6 @@ class AvailableSeatsCalculator:
     def calculate(self, context=None) -> list[dict[str, Any]]:
         """
         Calculate the available seats for the ticket holder for each upcoming event.
-
-        :return: List of available seats data with the associated event.
         """
         tickets_by_event = {}
         for ticket in self.tickets:
