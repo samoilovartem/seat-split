@@ -1,11 +1,11 @@
 version: "3.8"
 
 services:
-  django:
+  stt_django:
     build:
       context: ./django-backend/
       dockerfile: "Dockerfile-prod"
-    container_name: django
+    container_name: stt_django
     env_file:
       - ./django-backend/.env.prod
     volumes:
@@ -15,9 +15,9 @@ services:
       - backend
     restart: unless-stopped
 
-  nginx:
-    image: nginx:1.19.2
-    container_name: nginx
+  stt_nginx:
+    image: nginx
+    container_name: stt_nginx
     env_file:
       - ./django-backend/.env.prod
     volumes:
@@ -30,7 +30,7 @@ services:
     networks:
       - backend
     depends_on:
-      - django
+      - stt_django
     restart: unless-stopped
 
 networks:
