@@ -1,7 +1,7 @@
 from rest_framework import routers
 
 from apps.in_app_notifications.api import in_app_notifications_api_router_v1
-from apps.stt.api import stt_api_router_v1
+from apps.stt.api.routers import stt_api_router_v1
 from apps.users.api import users_api_router_v1
 
 main_router = routers.DefaultRouter()
