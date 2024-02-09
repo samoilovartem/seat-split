@@ -7,6 +7,7 @@ from apps.stt.services.ticket_services import (
     TicketNotifier,
     TicketStatusChecker,
 )
+from config.components.global_settings import DEBUG
 
 
 class TicketPostSaveHandler:
@@ -22,9 +23,10 @@ class TicketPostSaveHandler:
         self.status_checker = TicketStatusChecker(instance)
         self.cache_service = TicketCacheService(instance, redis_celery_connection)
 
-    @staticmethod
-    def _send_debug_logger_slack_message() -> None:
-        logger.info('DEBUG MODE: Slack notification has not been sent due to DEBUG mode.')
+    def _send_debug_logger_slack_message(self) -> None:
+        logger.info(
+            f'{self.__class__.__name__}: DEBUG MODE: Slack notification has not been sent due to DEBUG mode.'
+        )
 
     def handle(self) -> None:
         if self.created:
@@ -33,6 +35,9 @@ class TicketPostSaveHandler:
 
     def _handle_ticket_creation(self) -> None:
         self.cache_service.cache_new_ticket_data()
+        if DEBUG:
+            self._send_debug_logger_slack_message()
+            return
         self.notifier.send_aggregated_slack_notification()
 
     def _handle_ticket_status_change(self) -> None:

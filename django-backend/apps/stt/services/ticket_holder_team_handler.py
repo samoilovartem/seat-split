@@ -22,7 +22,9 @@ class TicketHolderTeamPostSaveHandler:
 
     def _handle_creation(self):
         if DEBUG:
-            logger.info('DEBUG MODE: Slack notification has not been sent due to DEBUG mode.')
+            logger.info(
+                f'{self.__class__.__name__}: DEBUG MODE: Slack notification has not been sent due to DEBUG mode.'
+            )
             return
 
         message = create_ticket_holder_team_slack_message(self.instance)
