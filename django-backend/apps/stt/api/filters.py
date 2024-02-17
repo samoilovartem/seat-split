@@ -13,6 +13,9 @@ class TicketFilter(FilterSet):
     event__date_time_lte = DateTimeFilter(field_name='event__date_time', lookup_expr='lte')
     exclude_listing_status = CharFilter(method='filter_exclude_listing_status')
 
+    league = CharFilter(method='filter_by_league')
+    team = CharFilter(method='filter_by_team')
+
     class Meta:
         model = Ticket
         fields = (
@@ -25,6 +28,12 @@ class TicketFilter(FilterSet):
 
     def filter_exclude_listing_status(self, queryset, name, value):
         return queryset.exclude(listing_status=value)
+
+    def filter_by_league(self, queryset, name, value):
+        return queryset.filter(event__league=value)
+
+    def filter_by_team(self, queryset, name, value):
+        return queryset.filter(event__teamevent__team__name=value)
 
 
 class TeamFilterSet(FilterSet):
