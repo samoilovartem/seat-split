@@ -12,6 +12,7 @@ from apps.stt.api.validators import validate_seat_range
 from apps.stt.models import (
     Event,
     Purchase,
+    Season,
     Team,
     TeamEvent,
     Ticket,
@@ -199,3 +200,9 @@ class PurchaseSerializer(FlexFieldsModelSerializer):
 class AvailableSeatsSerializer(serializers.Serializer):
     ticket_holder = serializers.PrimaryKeyRelatedField(queryset=TicketHolder.objects.all(), required=False)
     team = serializers.PrimaryKeyRelatedField(queryset=Team.objects.all())
+
+
+class SeasonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Season
+        fields = '__all__'
