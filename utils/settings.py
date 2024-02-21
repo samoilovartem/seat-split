@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     stt_seasons_prefix: str = '/seasons/'
     stt_auth_token: str = Field('', env='STT_AUTH_TOKEN')
 
+    tiqassist_endpoint: str = 'https://app.tiqassist.com/api/registration/options'
+
     @property
     def get_skybox_api_headers(self):
         return {
@@ -31,6 +33,10 @@ class Settings(BaseSettings):
     @property
     def get_skybox_purchases_endpoint(self):
         return f'{self.skybox_endpoint}{self.skybox_purchases_prefix}'
+
+    @property
+    def get_stt_teams_endpoint(self):
+        return f'{self.stt_endpoint}{self.stt_teams_prefix}'
 
     @property
     def get_stt_authorization_header(self):
