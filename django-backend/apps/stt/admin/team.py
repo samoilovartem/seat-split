@@ -27,3 +27,4 @@ class TeamAdminConfig(ImportExportMixin, admin.ModelAdmin):
         'state',
     )
     list_filter = ('league',)
+    autocomplete_fields = ('home_venue',)

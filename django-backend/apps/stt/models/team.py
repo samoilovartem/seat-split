@@ -16,7 +16,7 @@ class Team(models.Model):
     state = models.CharField(max_length=255)
     home_venue = models.ForeignKey(Venue, on_delete=models.PROTECT, null=True, related_name='home_teams')
     logo = models.FileField(upload_to='logos/', null=True, blank=True)
-    ticketmaster_id = models.IntegerField()
+    ticketmaster_id = models.IntegerField(null=True, blank=True)
     timezone = models.CharField(max_length=255)
     credentials_website = models.CharField(max_length=255)
     ticketmaster_name = models.CharField(max_length=255)
