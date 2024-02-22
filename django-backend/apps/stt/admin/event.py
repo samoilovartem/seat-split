@@ -45,6 +45,7 @@ class EventAdminConfig(ImportExportMixin, BaseModelAdmin):
         HomeAwayFilter,
         FutureEventsFilter,
     )
+    autocomplete_fields = ('season', 'venue')
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
