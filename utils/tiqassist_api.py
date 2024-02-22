@@ -36,6 +36,8 @@ class TiqAssistDataProcessor:
             for team in teams:
                 if 'id' in team:
                     team['skybox_id'] = team.pop('id')
+                if 'abbrev' in team:
+                    team['abbreviation'] = team.pop('abbrev')
 
             filtered_teams = self.filter_teams(teams)
             self.export_to_csv(filtered_teams)
