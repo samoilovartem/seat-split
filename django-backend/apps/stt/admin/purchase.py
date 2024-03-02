@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from import_export.admin import ImportExportMixin
 from rangefilter.filters import DateRangeFilterBuilder
 
 from django.contrib import admin
@@ -12,7 +11,7 @@ from config.components.business_related import DELIVERY_STATUSES, MARKETPLACES
 
 
 @admin.register(Purchase)
-class PurchaseAdminConfig(ImportExportMixin, BaseModelAdmin):
+class PurchaseAdminConfig(BaseModelAdmin):
     model = Purchase
     save_as = True
     save_on_top = True
