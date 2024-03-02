@@ -1,5 +1,3 @@
-from import_export.admin import ImportExportMixin
-
 from django.contrib import admin
 
 from apps.stt.admin.base import BaseModelAdmin, TicketHolderTeamInline
@@ -7,7 +5,7 @@ from apps.stt.models import TicketHolder
 
 
 @admin.register(TicketHolder)
-class TicketHolderAdminConfig(ImportExportMixin, BaseModelAdmin):
+class TicketHolderAdminConfig(BaseModelAdmin):
     model = TicketHolder
     save_as = True
     save_on_top = True

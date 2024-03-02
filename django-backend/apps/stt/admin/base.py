@@ -1,3 +1,4 @@
+from import_export.admin import ImportExportMixin
 from simple_history.admin import SimpleHistoryAdmin
 
 from django.contrib import admin
@@ -9,7 +10,7 @@ from apps.common_services.utils import show_changed_fields
 from apps.stt.models import TeamEvent, TicketHolderTeam
 
 
-class BaseModelAdmin(SimpleHistoryAdmin):
+class BaseModelAdmin(ImportExportMixin, SimpleHistoryAdmin):
     history_list_display = ('changed_fields', 'list_changes', 'status')
 
     @staticmethod

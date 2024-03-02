@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from import_export.admin import ImportExportMixin
 from rangefilter.filters import DateRangeFilterBuilder
 
 from django.contrib import admin
@@ -12,7 +11,7 @@ from apps.stt.resources import EventResource
 
 
 @admin.register(Event)
-class EventAdminConfig(ImportExportMixin, BaseModelAdmin):
+class EventAdminConfig(BaseModelAdmin):
     model = Event
     resource_class = EventResource
     save_as = True

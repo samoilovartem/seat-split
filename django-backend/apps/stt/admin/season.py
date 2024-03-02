@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from import_export.admin import ImportExportMixin
 from rangefilter.filters import DateRangeFilterBuilder
 
 from django.contrib import admin
@@ -10,7 +9,7 @@ from apps.stt.models import Season
 
 
 @admin.register(Season)
-class SeasonAdminConfig(ImportExportMixin, BaseModelAdmin):
+class SeasonAdminConfig(BaseModelAdmin):
     model = Season
     save_as = True
     save_on_top = True
