@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from import_export.admin import ImportExportMixin
 from rangefilter.filters import DateRangeFilterBuilder
 
 from django.contrib import admin
@@ -12,7 +13,7 @@ from config.components.business_related import LISTING_STATUSES
 
 
 @admin.register(Ticket)
-class TicketAdminConfig(BaseModelAdmin):
+class TicketAdminConfig(ImportExportMixin, BaseModelAdmin):
     model = Ticket
     form = TicketAdminForm
     save_as = True

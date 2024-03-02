@@ -1,16 +1,18 @@
 from datetime import datetime
 
+from import_export.admin import ImportExportMixin
 from rangefilter.filters import DateRangeFilterBuilder
 
 from django.contrib import admin
 from django.forms import Select
 
+from apps.stt.admin.base import BaseModelAdmin
 from apps.stt.models import Purchase
 from config.components.business_related import DELIVERY_STATUSES, MARKETPLACES
 
 
 @admin.register(Purchase)
-class PurchaseAdminConfig(admin.ModelAdmin):
+class PurchaseAdminConfig(ImportExportMixin, BaseModelAdmin):
     model = Purchase
     save_as = True
     save_on_top = True

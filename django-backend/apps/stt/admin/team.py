@@ -2,11 +2,12 @@ from import_export.admin import ImportExportMixin
 
 from django.contrib import admin
 
+from apps.stt.admin.base import BaseModelAdmin
 from apps.stt.models import Team
 
 
 @admin.register(Team)
-class TeamAdminConfig(ImportExportMixin, admin.ModelAdmin):
+class TeamAdminConfig(ImportExportMixin, BaseModelAdmin):
     model = Team
     save_as = True
     save_on_top = True
