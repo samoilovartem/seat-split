@@ -2,11 +2,12 @@ from import_export.admin import ImportExportMixin
 
 from django.contrib import admin
 
+from apps.stt.admin.base import BaseModelAdmin
 from apps.stt.models import Venue
 
 
 @admin.register(Venue)
-class VenueAdminConfig(ImportExportMixin, admin.ModelAdmin):
+class VenueAdminConfig(ImportExportMixin, BaseModelAdmin):
     model = Venue
     save_as = True
     save_on_top = True
