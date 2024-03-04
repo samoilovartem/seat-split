@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.forms import Select
 
 from apps.stt.admin.base import BaseModelAdmin
 from apps.stt.models import Team
+from config.components.business_related import SUPPORTED_LEAGUES
 
 
 @admin.register(Team)
@@ -27,3 +29,8 @@ class TeamAdminConfig(BaseModelAdmin):
     )
     list_filter = ('league',)
     autocomplete_fields = ('home_venue',)
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name == 'league':
+            kwargs['widget'] = Select(choices=((league, league) for league in SUPPORTED_LEAGUES))
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
