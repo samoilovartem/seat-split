@@ -77,5 +77,5 @@ def clean_old_history(days=30):
 @shared_task
 def clean_old_notifications(max_age: int = 30) -> None:
     """Removes notifications that are older than 30 days (default value)."""
-    expiration_time = now() - max_age
+    expiration_time = now() - timedelta(days=max_age)
     Notification.objects.filter(timestamp__lt=expiration_time).delete()
