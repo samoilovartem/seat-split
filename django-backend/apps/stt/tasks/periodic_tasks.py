@@ -3,6 +3,7 @@ from datetime import timedelta
 from celery import shared_task
 from django_celery_results.models import TaskResult
 from loguru import logger
+from notifications.models import Notification
 
 from django.core.management import call_command
 from django.utils.timezone import now
@@ -71,3 +72,10 @@ def clean_old_history(days=30):
     logger.info('Cleaning old history...')
     call_command('clean_old_history', auto=True, days=days)
     logger.info('Cleaning old history finished.')
+
+
+@shared_task
+def clean_old_notifications(max_age: int = 30) -> None:
+    """Removes notifications that are older than 30 days (default value)."""
+    expiration_time = now() - max_age
+    Notification.objects.filter(timestamp__lt=expiration_time).delete()

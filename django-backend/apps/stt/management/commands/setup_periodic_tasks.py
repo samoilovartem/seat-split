@@ -82,4 +82,12 @@ class Command(BaseCommand):
             },
         )
 
+        PeriodicTask.objects.update_or_create(
+            name='Clean Old Notifications',
+            defaults={
+                'crontab': crontab_schedule_daily,
+                'task': 'apps.stt.tasks.periodic_tasks.clean_old_notifications',
+            },
+        )
+
         self.stdout.write(self.style.SUCCESS('Successfully set up periodic tasks.'))
