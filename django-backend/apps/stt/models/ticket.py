@@ -40,4 +40,4 @@ class Ticket(models.Model):
         super(Ticket, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.ticket_holder} - {self.event} - {self.id}'
+        return f'{self.ticket_holder} - {self.event}'

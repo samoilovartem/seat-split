@@ -24,4 +24,4 @@ class Purchase(models.Model):
         verbose_name_plural = 'Purchases'
 
     def __str__(self):
-        return f'{self.ticket} - {self.invoice_number}'
+        return f'{self.ticket}'
