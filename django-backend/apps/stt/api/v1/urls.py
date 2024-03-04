@@ -4,6 +4,7 @@ from apps.email_domains.api.v1.email_domains import (
     generate_random_data_with_provided_domain_or_state,
 )
 from apps.stt.api.v1.authentication import CustomTokenCreateView, TokenDestroyView
+from apps.stt.api.v1.leagues import LeagueListView
 from apps.stt.api.v1.registration import RegisterView, VerifyView
 from apps.stt.api.v1.timezones import TimezoneListView
 
@@ -17,4 +18,5 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('verify/<str:uidb64>/<str:token>/', VerifyView.as_view(), name='verify'),
     path('timezones/', TimezoneListView.as_view(), name='timezones'),
+    path('leagues/', LeagueListView.as_view(), name='leagues'),
 ]
