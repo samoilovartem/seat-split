@@ -19,6 +19,10 @@ class Team(models.Model):
     ticketmaster_id = models.IntegerField(null=True, blank=True)
     timezone = models.CharField(max_length=255)
     credentials_website = models.CharField(max_length=255)
+    automatiq_credentials_website_id = models.IntegerField(
+        null=True,
+        blank=True,
+    )
     ticketmaster_name = models.CharField(max_length=255)
     vendor_id = models.CharField(max_length=255, blank=True, default='')
     created_at = models.DateTimeField(auto_now_add=True)
