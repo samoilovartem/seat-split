@@ -20,6 +20,7 @@ class Team(models.Model):
     timezone = models.CharField(max_length=255)
     credentials_website = models.CharField(max_length=255)
     ticketmaster_name = models.CharField(max_length=255)
+    vendor_id = models.CharField(max_length=255, blank=True, default='')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
