@@ -63,6 +63,20 @@ Here is the detailed explanation of some of them (the rest are self-explanatory)
 - `GENERATE_EMAILS_TOKEN` - token for `/generate_random_data_with_provided_domain_or_state/` endpoint. Used for generating random emails with provided domain or state.
 - `GITHUB_ACCESS_TOKEN` - token for Weekly Issues Report. Used for getting all issues from Github and sending them to Slack.
 
+### Health check endpoint:
+
+We have a health check endpoint, which is used for monitoring purposes. It is located at `api//health-check/` and requires `HEALTH_CHECK_TOKEN` environment variable to be set. This is based on `django-health-check`package, so all information about it can be found [here](https://github.com/revsys/django-health-check). In order to call this endpoint, you need to provide `Authorization` header with a value, which is equal to `HEALTH_CHECK_TOKEN` environment variable:
+```
+"Authorization": "HEALTH_CHECK_TOKEN"
+```
+Example of the successful response:
+![system_status_check.png](docs/system_status_check.png)
+
+Currently it checks the following services:
+- Database (PostgreSQL)
+- Cache (Redis)
+- Celery
+
 
 ### Deployment to Heroku
 
