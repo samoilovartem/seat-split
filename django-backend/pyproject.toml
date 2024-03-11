@@ -21,7 +21,6 @@ djangorestframework-simplejwt = "^4.8.0"
 drf-flex-fields = "^1.0.0"
 faker = "^17.6.0"
 gunicorn = "^20.1.0"
-psycopg2-binary = "^2.9.9"
 python-dotenv = "^0.21.0"
 pygount = "^1.5.1"
 rollbar = "^0.16.3"
@@ -42,6 +41,7 @@ django-cryptography = "^1.1"
 ghapi = "^1.0.4"
 loguru = "^0.7.2"
 django-notifications-hq = "^1.8.3"
+psycopg = {extras = ["binary"], version = "^3.1.18"}
 
 [tool.poetry.group.dev.dependencies]
 coverage = "^7.2"
