@@ -70,6 +70,7 @@ We have a health check endpoint, which is used for monitoring purposes. It is lo
 "Authorization": "HEALTH_CHECK_TOKEN"
 ```
 Example of the successful response:
+
 ![system_status_check.png](docs/system_status_check.png)
 
 Currently it checks the following services:
