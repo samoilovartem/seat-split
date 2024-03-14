@@ -2,7 +2,7 @@ from drf_yasg.utils import no_body, swagger_auto_schema
 from notifications.models import Notification
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.mixins import ListModelMixin
+from rest_framework.mixins import CreateModelMixin, ListModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -10,7 +10,7 @@ from rest_framework.viewsets import GenericViewSet
 from apps.in_app_notifications.api.serializers import NotificationSerializer
 
 
-class NotificationViewSet(ListModelMixin, GenericViewSet):
+class NotificationViewSet(CreateModelMixin, ListModelMixin, GenericViewSet):
     serializer_class = NotificationSerializer
     permission_classes = [IsAuthenticated]
     my_tags = ['notifications']
