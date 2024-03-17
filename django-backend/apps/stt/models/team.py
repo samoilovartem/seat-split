@@ -9,6 +9,7 @@ class Team(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     skybox_id = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, default='')
     name_short = models.CharField(max_length=255)
     abbreviation = models.CharField(max_length=255)
     league = models.CharField(max_length=255)
