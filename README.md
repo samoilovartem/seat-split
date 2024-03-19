@@ -78,6 +78,9 @@ Currently it checks the following services:
 - Cache (Redis)
 - Celery
 
+### Database structure:
+
+We are using PostgreSQL as our main database. The database structure is quite simple and can be found either by this [link](https://dbdiagram.io/d/stt_backend-64b60a2202bd1c4a5e3d5a1d) or you can create a new diagram at `dbdiagram.io` by copying the code from this [file](docs/stt-dbdiagram.md). It contains all necessary information about tables, their fields and relations between them.
 
 ### Deployment to Heroku
 
