@@ -1,5 +1,7 @@
 from uuid import uuid4
 
+from simple_history.models import HistoricalRecords
+
 from django.db import models
 from django.db.models import UniqueConstraint
 
@@ -16,6 +18,7 @@ class Venue(models.Model):
     timezone = models.CharField(max_length=255)
     phone = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    history = HistoricalRecords()
 
     class Meta:
         db_table = 'content"."venue'
