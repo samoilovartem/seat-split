@@ -17,7 +17,7 @@ Current repository is a backend part of comprehensive STT project, which is a wo
 ### Installation:
 
 1. Clone the repository from GitHub.
-2. Create `.env.dev` in django-backend directory using `.env.dev.example`.
+2. Create `.env` in django-backend directory using `.env.example`.
 3. Install Docker and launch the daemon.
 4. Cd to project's root and run `docker compose up --build`.
 
@@ -41,18 +41,18 @@ Current repository is a backend part of comprehensive STT project, which is a wo
 #### Separated files:
 
 - **.dockerignore** - list of files or directories that are excluded from getting into docker container.
-- **.flake8** - custom settings for flake8 linter.
+- **ruff.toml** - just an extension of main `ruff` linter settings stored in pyproject.toml.
 - **.gitignore** - list of files or directories that are excluded from getting into git repository.
-- **.pre-commit-config.yaml** - custom settings for flake8, black and isort linters hooks.
+- **.pre-commit-config.yaml** - custom settings for ruff and isort linters hooks.
 - **docker-compose.yml** - file-constructor, that allows to build docker containers. Used for local development only.
 - **Dockerfile** - file-instruction of how to build docker image for services like Heroku and Railway.
 - **Dockerfile-dev** - file-instruction of how to build docker image for local development. This is the file, that `docker-compose.yml` is using for building docker container to run it locally.
 - **Dockerfile-prod** - file-instruction of how to build docker image for production deployment in case we use VPS.
-- **pyproject.toml** - custom project's settings. This file contains all necessary information about the project itself, dev and prod dependencies. Used to create `dev-requirements.txt` and `prod-requirements.txt` files.
+- **pyproject.toml** - custom project's settings. This file contains all necessary information about the project itself, dev and prod dependencies.
 
 ### Important environment variables:
 
-First of all, check out `.env.dev.example` file. It contains all necessary environment variables that are used in the project.
+First of all, check out `.env.example` file. It contains all necessary environment variables that are used in the project.
 Here is the detailed explanation of some of them (the rest are self-explanatory):
 - `ROLLBAR_ACCESS_TOKEN` - token for [Rollbar](https://rollbar.com/) service, which is used for error tracking.
 - `CELERY_AGGREGATED_SLACK_NOTIFICATION_COUNTDOWN` - countdown for Celery task, which aggregates all ticket created notifications and sends them to Slack.
