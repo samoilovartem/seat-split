@@ -1,5 +1,7 @@
 from uuid import uuid4
 
+from simple_history.models import HistoricalRecords
+
 from django.db import models
 
 from apps.stt.models.venue import Venue
@@ -29,6 +31,7 @@ class Team(models.Model):
     ticketmaster_name = models.CharField(max_length=255)
     vendor_id = models.CharField(max_length=255, blank=True, default='')
     created_at = models.DateTimeField(auto_now_add=True)
+    history = HistoricalRecords()
 
     class Meta:
         db_table = 'content"."team'
