@@ -54,21 +54,24 @@ ruff = "^0.3.0"
 
 [tool.ruff]
 line-length = 110
+fix = true
+
+[tool.ruff.lint]
+ignore = ["F841"]
+select = ["I"]
 
 [tool.ruff.format]
 quote-style = "single"
-
+docstring-code-format = true
 line-ending = "auto"
 
-[tool.isort]
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-use_parentheses = true
-line_length = 88
-known_first_party = "apps, config, tests"
-known_django = "django"
-sections = ["FUTURE", "STDLIB", "THIRDPARTY", "DJANGO", "FIRSTPARTY", "LOCALFOLDER"]
+[tool.ruff.lint.isort]
+length-sort-straight = true
+lines-between-types = 1
+known-local-folder = [
+    "apps",
+    "config",
+]
 
 [build-system]
 requires = ["poetry-core>=1.7.1"]
