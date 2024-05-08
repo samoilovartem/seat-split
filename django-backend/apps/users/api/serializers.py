@@ -1,8 +1,7 @@
+from django.contrib.auth import authenticate, password_validation
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-
-from django.contrib.auth import authenticate, password_validation
 
 from apps.serializers import ShowAllSeatsMixin
 from apps.stt.models import Team, TicketHolder, TicketHolderTeam

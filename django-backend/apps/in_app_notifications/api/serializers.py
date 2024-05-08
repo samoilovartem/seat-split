@@ -1,9 +1,8 @@
+from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
 from notifications.models import Notification
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-
-from django.contrib.auth import get_user_model
-from django.contrib.contenttypes.models import ContentType
 
 User = get_user_model()
 

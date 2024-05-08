@@ -1,11 +1,10 @@
+from django.contrib.auth import get_user_model
+from django.utils.timezone import localtime
 from pytz import timezone
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
-from django.contrib.auth import get_user_model
-from django.utils.timezone import localtime
 
 from apps.serializers import ShowAllSeatsMixin
 from apps.stt.api.validators import validate_seat_range

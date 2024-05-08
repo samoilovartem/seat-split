@@ -1,7 +1,6 @@
+from django.contrib.auth import get_user_model
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
-
-from django.contrib.auth import get_user_model
 
 from apps.email_domains.models import EmailDomains
 from apps.serializers import UserSerializer
