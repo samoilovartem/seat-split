@@ -1,7 +1,6 @@
-from pytz import common_timezones
-
 from django.contrib import admin
 from django.forms import Select
+from pytz import common_timezones
 
 from apps.stt.admin.base import BaseModelAdmin
 from apps.stt.models import Venue

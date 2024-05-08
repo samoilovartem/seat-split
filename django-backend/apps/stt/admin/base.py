@@ -1,10 +1,9 @@
-from import_export.admin import ImportExportMixin
-from simple_history.admin import SimpleHistoryAdmin
-
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet
 from django.utils.html import format_html
+from import_export.admin import ImportExportMixin
+from simple_history.admin import SimpleHistoryAdmin
 
 from apps.common_services.utils import show_changed_fields
 from apps.stt.models import TeamEvent, TicketHolderTeam

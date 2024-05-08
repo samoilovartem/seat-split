@@ -1,9 +1,8 @@
 from uuid import uuid4
 
-from simple_history.models import HistoricalRecords
-
 from django.db import models
 from django.db.models import UniqueConstraint
+from simple_history.models import HistoricalRecords
 
 from config.components.business_related import SUPPORTED_LEAGUES
 

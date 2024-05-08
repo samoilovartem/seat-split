@@ -1,8 +1,7 @@
 from datetime import datetime
 
-from rangefilter.filters import DateRangeFilterBuilder
-
 from django.contrib import admin
+from rangefilter.filters import DateRangeFilterBuilder
 
 from apps.stt.admin.base import BaseModelAdmin
 from apps.stt.models import Season

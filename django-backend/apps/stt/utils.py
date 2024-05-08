@@ -1,11 +1,10 @@
 from decimal import Decimal
 from uuid import UUID
 
-from rest_framework.authtoken.models import Token
-
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+from rest_framework.authtoken.models import Token
 
 from apps.stt.models import Ticket, TicketHolderTeam
 from apps.users.models import User

@@ -1,4 +1,5 @@
 import json
+
 from uuid import UUID
 
 from celery import shared_task

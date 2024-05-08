@@ -1,9 +1,8 @@
 from datetime import datetime
 
-from rangefilter.filters import DateRangeFilterBuilder
-
 from django.contrib import admin
 from django.forms import Select
+from rangefilter.filters import DateRangeFilterBuilder
 
 from apps.stt.admin.base import BaseModelAdmin
 from apps.stt.models import Purchase

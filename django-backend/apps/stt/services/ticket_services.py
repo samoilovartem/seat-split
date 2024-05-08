@@ -1,9 +1,8 @@
 import json
 
+from django.utils import timezone
 from notifications.signals import notify
 from redis import Redis
-
-from django.utils import timezone
 
 from apps.stt.models import Purchase, Ticket
 from apps.stt.tasks import (

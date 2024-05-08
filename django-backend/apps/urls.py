@@ -1,6 +1,5 @@
-from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
-
 from django.urls import include, path
+from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 
 from apps.routers import main_router
 from apps.stt.api.v1.authentication import CustomTokenObtainPairView

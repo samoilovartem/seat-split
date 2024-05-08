@@ -1,10 +1,9 @@
 from uuid import uuid4
 
-from django_cryptography.fields import encrypt
-from simple_history.models import HistoricalRecords
-
 from django.db import models
 from django.db.models import UniqueConstraint
+from django_cryptography.fields import encrypt
+from simple_history.models import HistoricalRecords
 
 from apps.stt.models.team import Team
 from apps.stt.models.ticket_holder import TicketHolder

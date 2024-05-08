@@ -1,8 +1,7 @@
 from uuid import uuid4
 
-from simple_history.models import HistoricalRecords
-
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 from apps.stt.models.ticket import Ticket
 

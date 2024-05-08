@@ -1,8 +1,7 @@
 from celery import shared_task
-from loguru import logger
-
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from loguru import logger
 
 from config.components.smtp_and_email import (
     EMAIL_CONTENT_TYPE,

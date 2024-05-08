@@ -1,12 +1,11 @@
 from datetime import timedelta
 
 from celery import shared_task
+from django.core.management import call_command
+from django.utils.timezone import now
 from django_celery_results.models import TaskResult
 from loguru import logger
 from notifications.models import Notification
-
-from django.core.management import call_command
-from django.utils.timezone import now
 
 from apps.stt.services.github_issues_reporter import GitHubIssuesReporter
 from apps.stt.tasks.send_slack_notifications import send_slack_notification

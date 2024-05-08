@@ -2,10 +2,9 @@ from decimal import Decimal
 from uuid import UUID
 
 from celery import shared_task
-from loguru import logger
-
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from loguru import logger
 
 from apps.stt.utils import calculate_price_with_expenses, get_confirmation_link
 from config.components.smtp_and_email import (

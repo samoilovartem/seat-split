@@ -1,11 +1,10 @@
 from hashlib import md5
 from uuid import uuid4
 
-from pytz import common_timezones
-from simple_history.models import HistoricalRecords
-
 from django.contrib.auth import get_user_model
 from django.db import models
+from pytz import common_timezones
+from simple_history.models import HistoricalRecords
 
 User = get_user_model()
 
