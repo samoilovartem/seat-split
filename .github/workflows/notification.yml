@@ -12,5 +12,5 @@ jobs:
         if: success()
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{
-            "text": "🚀 *Deployment Completed*: the app has been deployed to Azure Web App\n*Environment:* production\n*Deployed by:* ${{ github.actor }}\n*Commit:* ${{ github.sha }}"
+            "text": ":rocket: *Deployment Completed*: the app has been deployed to Azure Web App\n*Environment:* production\n*Deployed by:* ${{ github.actor }}\n*Commit:* <https://github.com/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha | slice(0, 7) }}>"
           }' ${{ secrets.SLACK_WEBHOOK_URL }}
