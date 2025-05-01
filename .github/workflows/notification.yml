@@ -1,4 +1,4 @@
-name: Python Linter
+name: Deployment Notification
 
 on:
   workflow_dispatch:
@@ -9,55 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send Slack notification
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          payload: |
-            {
-              "text": "🚀 *Deployment Completed*: voicebite-websocket-app has been deployed to Azure Web App",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "🚀 *Deployment Completed*"
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*App:*\nvoicebite-websocket-app"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Environment:*\nproduction"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Deployed by:*\n${{ github.actor }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Commit:*\n${{ github.sha }}"
-                    }
-                  ]
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "View App"
-                      },
-                      "url": "${{ steps.deploy-to-webapp.outputs.webapp-url }}"
-                    }
-                  ]
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        if: success()
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{
+            "text": "🚀 *Deployment Completed*: the app has been deployed to Azure Web App\n*Environment:* production\n*Deployed by:* ${{ github.actor }}\n*Commit:* ${{ github.sha }}"
+          }' ${{ secrets.SLACK_WEBHOOK_URL }}
