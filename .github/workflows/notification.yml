@@ -14,7 +14,9 @@ jobs:
           COMMIT_SHA=${{ github.event.inputs.deployed_commit || github.sha }}
           SHORT_SHA=$(echo $COMMIT_SHA | cut -c1-7)
           REPO_NAME=$(echo ${{ github.repository }} | cut -d'/' -f2)
-          WORKFLOW_FILE="${GITHUB_WORKFLOW_REF##*/}"
+
+          WORKFLOW_FILE=$(basename $GITHUB_WORKFLOW_REF)
+
           curl -X POST -H 'Content-type: application/json' --data '{
-            "text": ":rocket: *Deployment Completed*: '"$REPO_NAME"' has been deployed to Azure Web App\n*Environment:* production\n*Workflow file:* '"$WORKFLOW_FILE"'\n*Deployed by:* ${{ github.actor }}\n*Commit:* <https://github.com/${{ github.repository }}/commit/'"$COMMIT_SHA"'|'"$SHORT_SHA"'>"
+            "text": ":rocket: *Deployment Completed*: '"$REPO_NAME"' has been deployed to Azure Web App\n*Environment:* production\n*Workflow file:* '"$WORKFLOW_FILE"'\n*Workflow name:* ${{ github.workflow }}\n*Deployed by:* ${{ github.actor }}\n*Commit:* <https://github.com/${{ github.repository }}/commit/'"$COMMIT_SHA"'|'"$SHORT_SHA"'>"
           }' ${{ secrets.SLACK_WEBHOOK_URL }}
