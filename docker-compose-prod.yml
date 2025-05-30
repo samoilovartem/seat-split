@@ -1,0 +1,73 @@
+version: "3.8"
+
+services:
+  stt_django:
+    image: ghcr.io/samoilovartem/seat-split:latest
+    container_name: stt_django
+    env_file:
+      - .env
+    volumes:
+      - ./media:/app/media
+      - ./static:/app/static
+    ports:
+      - "8000:8000"
+    depends_on:
+      - stt_pgdb
+    networks:
+      - backend
+
+  stt_celery:
+    image: ghcr.io/samoilovartem/seat-split:latest
+    command: celery -A config worker --loglevel=info --concurrency=2
+    container_name: stt_celery
+    env_file:
+      - .env
+    # Keep necessary volumes
+    volumes:
+      - ./media:/app/media
+    depends_on:
+      - stt_django
+      - stt_redis
+    networks:
+      - backend
+
+  stt_celery_beat:
+    image: ghcr.io/samoilovartem/seat-split:latest
+    command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    container_name: stt_celery_beat
+    env_file:
+      - .env
+    depends_on:
+      - stt_django
+      - stt_pgdb
+    networks:
+      - backend
+
+  stt_pgdb:
+    image: postgres
+    container_name: stt_pgdb
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - backend
+
+  stt_redis:
+    image: redis
+    container_name: stt_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
+volumes:
+  pgdata:
+
+networks:
+  backend:
+    name: backend
+    driver: bridge
