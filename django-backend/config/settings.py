@@ -76,9 +76,6 @@ PROJECT_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
 
-if DEBUG:
-    INSTALLED_APPS += ['django_extensions']
-
 ROOT_URLCONF = 'config.urls'
 
 MIDDLEWARE = [
@@ -122,7 +119,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DOCKER_PGDB_URL'),
-        ssl_require=False if DEBUG else True,
         conn_max_age=600,
     )
 }
