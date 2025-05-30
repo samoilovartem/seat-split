@@ -1,86 +1,35 @@
-# Название рабочего процесса, которое будет отображаться в интерфейсе GitHub Actions
-name: Build and Push Docker Image
+name: Simple Docker Build and Push
 
-# Определяет события, которые запускают этот рабочий процесс
 on:
-  # Запускает workflow при push в ветки main или master
   push:
-    branches: [ main, master ]
-  # Запускает workflow при создании pull request в ветки main или master
-  pull_request:
-    branches: [ main, master ]
-  # Позволяет запускать workflow вручную из интерфейса GitHub
+    branches: [ main ]
   workflow_dispatch:
 
-# Определяет задачи, которые будут выполняться в рамках этого workflow
 jobs:
-  # Название задачи - сборка и отправка образа
   build-and-push:
-    # Указывает, что задача будет выполняться на виртуальной машине с Ubuntu
     runs-on: ubuntu-latest
-
-    # Устанавливает необходимые разрешения для работы с GitHub Container Registry
     permissions:
-      # Разрешение на чтение содержимого репозитория
       contents: read
-      # Разрешение на запись пакетов (необходимо для публикации образов)
       packages: write
 
-    # Шаги, которые будут выполнены в рамках задачи
     steps:
-      # Шаг 1: Клонирование кода из репозитория
+      # Checkout the repository code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Шаг 2: Настройка Docker Buildx для более эффективной сборки образов
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      # Шаг 3: Вход в GitHub Container Registry с использованием токена GitHub
+      # Login to GitHub Container Registry
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          # Указывает адрес реестра контейнеров GitHub
-          registry: ghcr.io
-          # Использует имя текущего пользователя GitHub
-          username: ${{ github.actor }}
-          # Использует автоматически созданный токен GitHub для аутентификации
-          password: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      # Шаг 4: Извлечение метаданных Docker для правильной маркировки образа
-      - name: Extract Docker metadata
-        # Задаёт ID для этого шага, чтобы можно было использовать его выходные данные в других шагах
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          # Определяет имя образа в формате ghcr.io/имя-пользователя/имя-репозитория
-          images: ghcr.io/${{ github.repository }}
-          # Определяет стратегии тегирования образа
-          tags: |
-            # Создает тег на основе имени ветки
-            type=ref,event=branch
-            # Создает тег на основе номера pull request
-            type=ref,event=pr
-            # Создает тег на основе короткого хеша коммита
-            type=sha,format=short
-            # Создает тег на основе семантической версии (если используются версионные теги)
-            type=semver,pattern={{version}}
-            # Создает тег 'latest' для образа из ветки по умолчанию
-            type=raw,value=latest,enable={{is_default_branch}}
+      # Build the Docker image
+      - name: Build Docker image
+        run: docker build -t ghcr.io/${{ github.repository }}:latest .
 
-      # Шаг 5: Сборка и отправка Docker образа в реестр
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          # Указывает контекст сборки (текущая директория)
-          context: ./django-backend/
-          # Указывает, что образ нужно отправить в реестр после сборки
-          push: true
-          # Использует теги, сгенерированные на предыдущем шаге
-          tags: ${{ steps.meta.outputs.tags }}
-          # Использует метки, сгенерированные на предыдущем шаге
-          labels: ${{ steps.meta.outputs.labels }}
-          # Использует кеш GitHub Actions для ускорения сборки
-          cache-from: type=gha
-          # Сохраняет результаты сборки в кеш для будущих запусков
-          cache-to: type=gha,mode=max
+      # Push the Docker image
+      - name: Push Docker image
+        run: docker push ghcr.io/${{ github.repository }}:latest
+
+      # Logout from registry
+      - name: Logout from GitHub Container Registry
+        if: always()
+        run: docker logout ghcr.io
