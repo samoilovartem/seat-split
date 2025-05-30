@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   stt_django:
     image: ghcr.io/samoilovartem/seat-split:latest
@@ -22,7 +20,6 @@ services:
     container_name: stt_celery
     env_file:
       - .env
-    # Keep necessary volumes
     volumes:
       - ./media:/app/media
     depends_on:
